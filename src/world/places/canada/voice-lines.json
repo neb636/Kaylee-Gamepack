@@ -538,10 +538,22 @@
   "Click and hold the marshmallow near the fire.",
   "It's on fire! Tap it to blow it out!",
   "It's on fire! Click it to blow it out!",
-  "Give it to Maple or the raccoons.",
+  "Who wants that one?",
   {
     "text": "Golden! Yummy!",
     "voice": "maple"
+  },
+  {
+    "text": "Squishy! Yay!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Crunchy! My favorite!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Mmm. Crunchy stick.",
+    "voice": "moose"
   },
   {
     "text": "Squishy! Yum anyway.",
@@ -552,7 +564,7 @@
     "voice": "maple"
   },
   {
-    "text": "Crunchy! My favorite!",
+    "text": "Yum! Crunchier next time!",
     "voice": "raccoon"
   },
   {
@@ -560,8 +572,8 @@
     "voice": "raccoon"
   },
   {
-    "text": "Mmm. Crunchy stick.",
-    "voice": "moose"
+    "text": "Best campfire ever!",
+    "voice": "maple"
   },
   "Now tap the flashlight to turn it off!",
   "Now click the flashlight to turn it off!",

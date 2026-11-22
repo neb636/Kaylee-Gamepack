@@ -143,8 +143,16 @@ lands on freezes with a silly face.
   3. 🦝 **Statues.** Roxy sneaks toward the marshmallow bag whenever the light is off her, and freezes whenever it's
      on her, in a new ridiculous pose each time ("I'm a tree." "I'm a rock." "Nobody here!"). Hold the light on her
      and she wobbles, then falls over laughing. Three of those and she gives up: "Oops, sorry! Let's share."
-- **Side verb, kept from today:** roast a marshmallow (white, golden, on fire: tap to blow it out) and hand it to
-  anyone. Maple likes golden, Roxy loves burnt, Monty eats the stick.
+- **Side verb: marshmallow orders** (reworked 2026-11-22, you found the first 3D roast awkward: the wide shot made
+  the marshmallow tiny, the flashlight beam followed the stick, and handing it to anyone had no goal). The flashlight
+  is put away and the camera comes down close to the fire; everyone round it shows the marshmallow they want in a
+  wish bubble, a picture: Maple golden, a kit squishy (just warm), Roxy burnt (let it catch fire, tap it out), then
+  two kits at once (she picks who gets which), then Monty's giant one on a thick branch (he eats the stick). Hers is
+  the right kind: their bubble glows and chimes. Given right: the bubble turns into a gold star (a row of six at the
+  top). The wrong kind they eat anyway with a shiver and keep their order, wider each time (twice wrong and anything
+  will do). Six stars, everybody cheers ("Best campfire ever!"), then the flashlight comes back for the sky.
+  Knobs (`campRoast`, ?feel=1): heat reach, golden time, burn time, squishy, giant, hand-over reach. Links:
+  `roast?order=0..4`.
 - **The end:** "Now tap the flashlight to turn it off!" Dark. The stars come out, then the northern lights. (Today's
   ending shines the light at the sky to bring out the stars, which is backwards.)
 - **Silly:** the poses. If she leaves Roxy alone, Roxy reaches the bag, takes one ("Yoink!") and scampers back to try
@@ -282,7 +290,7 @@ salmon jump past her!", and the rest of the salmon game's lines.)
 | Her statues (one each time) | 🆕 **Roxy:** I'm a tree. · I'm a rock. · Nobody here! · Just stretching! |
 | She reaches the bag | 🆕 **Roxy:** Yoink! |
 | She gives up | ♻️ **Roxy:** Oops, sorry! Let's share. |
-| The roast | ♻️ Let's roast more! · Hold the marshmallow near the fire. / Click and hold... · It's on fire! Tap it to blow it out! / ...Click it... · Golden! Yummy! · Squishy! Yum anyway. · Too crunchy for me! · Crunchy! My favorite! · Crunch, munch! · Give it to Maple or the raccoons. |
+| The roast | ♻️ Let's roast more! · Hold the marshmallow near the fire. / Click and hold... · It's on fire! Tap it to blow it out! / ...Click it... · Golden! Yummy! · Squishy! Yum anyway. · Too crunchy for me! · Crunchy! My favorite! · Crunch, munch! · ~~Give it to Maple or the raccoons.~~ 🆕 Who wants that one? · 🆕 **Roxy:** Squishy! Yay! · Yum! Crunchier next time! · 🆕 **Maple:** Best campfire ever! (marshmallow orders, 2026-11-22) |
 | Monty gets one | 🆕 **Monty:** Mmm. Crunchy stick. |
 | Light on the fire | 🆕 **Maple:** It's already bright! |
 | The end (Sparkle) | 🆕 Now tap the flashlight to turn it off! / Now click the flashlight to turn it off! |

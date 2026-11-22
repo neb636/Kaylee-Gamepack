@@ -91,6 +91,18 @@ export const camp = {
   twinkle: () => tone(1400 + Math.random() * 900, 1800, 0.18, 0.03, 'sine'),
   /** The northern lights: a soft, airy, glassy shimmer swelling up. */
   shimmer: clip(url('campfire-shimmer'), () => [0, 0.25, 0.5, 0.8, 1.1].forEach((d, i) => tone(880 * Math.pow(2, [0, 4, 7, 11, 14][i] / 12), 900 * Math.pow(2, [0, 4, 7, 11, 14][i] / 12), 0.9, 0.025, 'sine', d))),
+  /** The roast: a wish bubble pops up over somebody's head (what they want). */
+  wish: clip(url('campfire-wish'), () => {
+    tone(700, 1100, 0.1, 0.05, 'sine')
+    tone(1100, 1400, 0.12, 0.04, 'sine', 0.08)
+  }),
+  /** The marshmallow she holds is just what somebody wants: a bright little "now!" chime. */
+  ready: clip(url('campfire-ready'), () => [0, 0.08, 0.16].forEach((d, i) => tone([1319, 1568, 2093][i], [1319, 1568, 2093][i], 0.16, 0.04, 'triangle', d))),
+  /** Given right: their bubble turns into a gold star (a sparkly ta-da). */
+  star: clip(url('campfire-star'), () => {
+    sounds.sparkle()
+    tone(1047, 2093, 0.3, 0.05, 'triangle', 0.05)
+  }),
   /** A splash, a pop (a new marshmallow), a boing. */
   splash: () => sfx.splash(),
   pop: () => sounds.pop(),

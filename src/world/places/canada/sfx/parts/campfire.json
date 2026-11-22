@@ -137,5 +137,23 @@
   "label": "The northern lights shimmer",
   "prompt": "A soft airy shimmering swell of glassy chimes and gentle wind high in the sky, magical and calm, slowly rising and fading, no melody.",
   "seconds": 4
+ },
+ {
+  "id": "campfire-wish",
+  "label": "A wish bubble pops up (what they want)",
+  "prompt": "A soft cute bubbly pop with a tiny rising sparkle, like a thought bubble appearing over a cartoon character's head, gentle and light, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "campfire-ready",
+  "label": "Just the right marshmallow: now!",
+  "prompt": "A bright cheerful three-note glockenspiel chime going up, quick and twinkly, like a cartoon 'ding, it's ready!', soft and sweet, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-star",
+  "label": "Given right: a gold star",
+  "prompt": "A happy magical sparkle ta-da: a shimmering twinkle swirl rising up with a soft chime at the end, like a gold star appearing in a children's game, gentle, no voices.",
+  "seconds": 1.2
  }
 ]

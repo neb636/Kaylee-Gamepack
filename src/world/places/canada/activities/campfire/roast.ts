@@ -1,7 +1,8 @@
 // The marshmallow roast (Flashlight Statues' side verb, kept from the 2D game): a long stick with a marshmallow on the
 // end lies by the fire. She picks it up and holds it near the flames: it puffs up and goes golden, then brown, then
-// catches fire (a tap blows it out: a black, crunchy one). Then she hands it to whoever she likes. This file is the
-// stick and the marshmallow and how they toast; the world (world.ts) moves them and decides who eats.
+// catches fire (a tap blows it out: a black, crunchy one). Then she hands it to whoever ordered that kind (orders.ts:
+// their wish bubbles). This file is the stick and the marshmallow and how they toast; the world (world.ts) moves them
+// and decides who eats. Monty's order is a giant one on a thick branch (`size`): bigger, and slower to toast.
 import { Color, Group, Mesh, MeshBasicMaterial, MeshToonMaterial, Vector3 } from 'three'
 import { clamp } from '../../../../../sdk/math'
 import type { Bag } from '../../../../engine3d/dispose'
@@ -19,7 +20,14 @@ export interface RoastKnobs {
   golden: number
   burn: number
   out: number
+  /** The giant one toasts this many times slower. */
+  giant: number
+  /** A squishy one: warm at least this much (0..1 of the way to golden). */
+  squishy: number
 }
+
+/** What somebody wants: just warm and squishy, golden, burnt black, or Monty's giant one (any way at all). */
+export type Want = 'squishy' | 'golden' | 'burnt' | 'giant'
 
 const up = new Vector3(0, 1, 0)
 
@@ -42,6 +50,8 @@ export class Stick {
   readonly tip = new Vector3()
   /** A new marshmallow pops on (seconds since). */
   private popT = 9
+  /** 1, or the giant marshmallow on its thick branch. */
+  size = 1
 
   constructor(bag: Bag) {
     this.rod = solid(merge([P.cyl(0.019, 0.024, 1, '#B88A5A', { at: [0, 0.5, 0] }, 7), P.cyl(0.025, 0.025, 0.1, '#8A5A3A', { at: [0, 0.05, 0] }, 7)]), bag, 1.6)
@@ -73,8 +83,9 @@ export class Stick {
     this.root.add(this.flames)
   }
 
-  /** A fresh white marshmallow on the stick. */
-  fresh() {
+  /** A fresh white marshmallow on the stick (`size`: 1, or bigger for Monty's giant one). */
+  fresh(size = this.size) {
+    this.size = size
     this.toast = 0
     this.golden = false
     this.fire = false
@@ -85,6 +96,18 @@ export class Stick {
   get done() {
     return this.charred || this.toast >= 0.75
   }
+  /** Is it what they wanted? `miss` is how many times they've had the wrong one: once and the kind they want is
+   *  wider; twice and anything will do (she never misses over and over). */
+  matches(want: Want, k: RoastKnobs, miss = 0) {
+    if (miss >= 2) return true
+    const g = this.toast
+    const burnt = this.charred || this.fire
+    if (want === 'burnt') return burnt || (miss > 0 && g >= 1)
+    if (burnt) return want === 'giant'
+    if (want === 'squishy') return g >= (miss > 0 ? 0 : k.squishy) && g < (miss > 0 ? 0.95 : 0.8)
+    if (want === 'golden') return g >= (miss > 0 ? 0.6 : 0.85)
+    return g >= (miss > 0 ? 0.2 : 0.5)
+  }
 
   /** Lays the stick from `end` (the end she holds) to `tip` (the marshmallow's middle). */
   lay(end: Vector3, tip: Vector3) {
@@ -92,7 +115,7 @@ export class Stick {
     const len = d.length()
     this.rod.position.copy(end)
     this.rod.quaternion.setFromUnitVectors(up, d.normalize())
-    this.rod.scale.set(1, len, 1)
+    this.rod.scale.set(this.size > 1 ? 1.7 : 1, len, this.size > 1 ? 1.7 : 1)
     this.tip.copy(tip)
     this.mallow.position.copy(tip)
     this.mallow.quaternion.copy(this.rod.quaternion)
@@ -103,12 +126,12 @@ export class Stick {
     let ev: 'golden' | 'fire' | 'out' | null = null
     this.heat = this.charred || this.fire ? 0 : heat
     if (!this.fire && !this.charred) {
-      this.toast += (this.heat * dt) / Math.max(0.1, k.golden)
+      this.toast += (this.heat * dt) / Math.max(0.1, k.golden * (this.size > 1 ? k.giant : 1))
       if (!this.golden && this.toast >= 1) {
         this.golden = true
         ev = 'golden'
       }
-      if (this.toast >= 1 + k.burn / Math.max(0.1, k.golden)) {
+      if (this.toast >= 1 + k.burn / Math.max(0.1, k.golden * (this.size > 1 ? k.giant : 1))) {
         this.fire = true
         this.fireT = 0
         ev = 'fire'
@@ -126,13 +149,14 @@ export class Stick {
     else c.lerpColors(GOLD, BROWN, clamp((g - 1) * 1.4))
     // It puffs up as it toasts, jiggles while it's hot, pops on fresh.
     this.popT += dt
-    const puff = 1 + 0.25 * clamp(g) - (this.charred ? 0.12 : 0)
+    const puff = (1 + 0.25 * clamp(g) - (this.charred ? 0.12 : 0)) * this.size
     const pop = this.popT < 0.35 ? 0.4 + 0.6 * (this.popT / 0.35) + 0.25 * Math.sin((this.popT / 0.35) * Math.PI) : 1
     const jig = this.heat > 0.05 ? 1 + 0.05 * Math.sin(t * 24) * this.heat : 1
     this.mallow.scale.set(puff * pop * jig, puff * pop, puff * pop * jig)
     this.flames.visible = this.fire
     if (this.fire) {
-      this.flames.position.copy(this.tip).add(new Vector3(0, 0.07, 0))
+      this.flames.position.copy(this.tip).add(new Vector3(0, 0.07 * this.size, 0))
+      this.flames.scale.setScalar(1.4 * this.size)
       this.flames.children.forEach((m, i) => m.scale.set(1 + 0.12 * Math.sin(t * 19 + i), 1 + 0.25 * Math.sin(t * 23 + i * 2), 1))
     }
     return ev

@@ -48,11 +48,45 @@ function finger(page) {
 }
 
 const UNMET = ['owl', 'porcupine', 'deer', 'frog', 'bat', 'monty', 'maple']
-const GIVE_TO = ['maple', 'roxy', 'monty', 'kit1']
+
+/** The roast, for one order: pick the marshmallow up, hold it in the flames until it's the kind they want (their
+ *  bubble says ready; a burnt one is let catch fire and clicked out), and hand it to them. `wrong`: hand it over
+ *  straight away instead (a miss). */
+async function roastFor(page, order, q, wrong = false) {
+  const tip = q.roast.tip
+  await page.mouse.move(tip.x, tip.y)
+  await page.mouse.down()
+  const ready = () => Q(page).then((x) => ({ r: x.roast, o: x.roast?.orders.find((o) => o.who === order.who) }))
+  if (!wrong) {
+    await page.mouse.move(q.at.fire.x, q.at.fire.y - 6, { steps: 10 })
+    const t1 = Date.now()
+    while (Date.now() - t1 < 16000) {
+      const { r, o } = await ready()
+      if (!r || !o) break
+      if (order.want === 'burnt' && r.fire) {
+        await page.mouse.up()
+        const p = (await Q(page)).roast.tip
+        await page.mouse.click(p.x, p.y)
+        await page.waitForTimeout(300)
+        const p2 = (await Q(page)).roast.tip
+        await page.mouse.move(p2.x, p2.y)
+        await page.mouse.down()
+        break
+      }
+      if (order.want !== 'burnt' && o.ready && r.toast > 0.05) break
+      await page.waitForTimeout(150)
+    }
+  }
+  const dest = (await Q(page)).at[order.who]
+  await page.mouse.move(dest.x, dest.y, { steps: 12 })
+  await page.waitForTimeout(250)
+  await page.mouse.up()
+  await page.waitForTimeout(1600)
+}
 
 /** Plays the toy from wherever it is to the northern lights, the way a child would: the light swept from animal to
- *  animal, onto each kit as it peeks, held on Roxy until she topples over, then five marshmallows roasted and handed
- *  out, then the flashlight clicked off. */
+ *  animal, onto each kit as it peeks, held on Roxy until she topples over, then every marshmallow order toasted the
+ *  way they want it and handed over, then the flashlight clicked off. */
 async function playThrough(page, ms) {
   const f = finger(page)
   const t0 = Date.now()
@@ -89,34 +123,14 @@ async function playThrough(page, ms) {
       await page.waitForTimeout(250)
     } else if (q.section === 'roast' && q.roast) {
       await f.up()
-      // Pick the marshmallow up, hold it in the flames until it's golden (blow it out if it catches), hand it over.
-      const tip = q.roast.tip
-      await page.mouse.move(tip.x, tip.y)
-      await page.mouse.down()
-      await page.mouse.move(q.at.fire.x, q.at.fire.y - 6, { steps: 10 })
-      const t1 = Date.now()
-      while (Date.now() - t1 < 12000) {
-        const r = (await Q(page)).roast
-        if (!r || r.golden || r.fire) break
-        await page.waitForTimeout(250)
-      }
-      let r = (await Q(page)).roast
-      if (r?.fire) {
-        await page.mouse.up()
-        const p = (await Q(page)).roast.tip
-        await page.mouse.click(p.x, p.y)
+      if (q.roast.flashlight) fail('the flashlight should be put away in the roast', q)
+      const order = q.roast.orders.find((o) => o.showing)
+      if (!order) {
         await page.waitForTimeout(300)
-        r = (await Q(page)).roast
-        await page.mouse.move(r.tip.x, r.tip.y)
-        await page.mouse.down()
+        continue
       }
-      const to = GIVE_TO[(r?.given ?? 0) % GIVE_TO.length]
-      const dest = (await Q(page)).at[to]
-      await page.mouse.move(dest.x, dest.y - 20, { steps: 12 })
-      await page.waitForTimeout(250)
-      await page.mouse.up()
-      await page.waitForTimeout(1500)
-    } else if (q.section === 'sky') {
+      await roastFor(page, order, q)
+    } else if (q.section === 'sky') {    } else if (q.section === 'sky') {
       await f.up()
       await page.mouse.click(q.flashlight.x, q.flashlight.y)
       await page.waitForTimeout(800)
@@ -303,18 +317,40 @@ export const motion = [
     },
   },
   {
-    // The roast: held in the flames until golden, given to Maple; held until it catches fire, clicked out, given to
-    // Roxy (burnt is her favorite); one for Monty (he eats the stick).
+    // The roast (marshmallow orders): the flashlight put away, the close camera. Maple is handed a white one first (a
+    // miss: she eats it anyway and her bubble stays, wider), then every order toasted right: golden, squishy, burnt
+    // (caught fire, clicked out), two at once, Monty's giant one. Six stars, then the sky.
     name: 'canada-campfire-roast',
-    seconds: 46,
+    seconds: 80,
     setup: async (page, base) => {
       await ready(page, base, '#/world/canada/campfire/roast')
-      await page.waitForTimeout(2500)
+      await page.waitForTimeout(3000)
     },
     act: async (page) => {
-      await playThrough(page, 44000)
+      let q = await Q(page)
+      const first = q.roast.orders[0]
+      await roastFor(page, first, q, true)
+      q = await Q(page)
+      const after = q.roast.orders.find((o) => o.who === first.who)
+      if (!after || after.miss !== 1 || q.roast.stars !== 0) fail('a white marshmallow for Maple should be a miss (her order stays)', q)
+      await playThrough(page, 76000)
+      q = await Q(page)
+      if (q.section !== 'sky') fail('the marshmallow orders were not all given', q)
+    },
+  },
+  {
+    // Monty's giant one, from its link: bigger and slower; the stick is the thick branch.
+    name: 'canada-campfire-roast-giant',
+    seconds: 24,
+    setup: async (page, base) => {
+      await ready(page, base, '#/world/canada/campfire/roast?order=4')
+      await page.waitForTimeout(3000)
+    },
+    act: async (page) => {
       const q = await Q(page)
-      if (q.section !== 'sky') fail('five marshmallows were not handed out', q)
+      if (!q.roast.giant || q.roast.orders[0]?.who !== 'monty') fail('the last round should be Monty and the giant marshmallow', q)
+      await playThrough(page, 20000)
+      if ((await Q(page)).section !== 'sky') fail('Monty did not get his giant marshmallow', await Q(page))
     },
   },
   {
