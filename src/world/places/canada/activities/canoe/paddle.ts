@@ -298,11 +298,11 @@ export class RedCanoe implements World3D {
     // ---- The shore, its reflection under the see-through water, the water.
     this.shore = buildShore(bag)
     scene.add(buildSky(bag), this.shore.land, this.shore.shallows, this.shore.flour, this.shore.logs)
-    this.reflection = mirror(this.shore.land)
+    this.reflection = mirror(this.shore.land, bag)
     scene.add(this.reflection)
     // The clouds turn slowly round the sky, and so does their reflection.
     this.clouds = buildClouds(bag)
-    this.cloudsM = mirror(this.clouds)
+    this.cloudsM = mirror(this.clouds, bag)
     scene.add(this.clouds, this.cloudsM)
     this.water = new Water({ size: 1600, deep: DULL.deep, shallow: DULL.shallow, haze: SKY, hazeNear: 130, hazeFar: 760, opacity: 0.62 }, bag)
     scene.add(this.water.mesh)
