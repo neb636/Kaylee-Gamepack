@@ -1,8 +1,8 @@
 {
-  "title": "Maple in motion",
+  "title": "Maple’s wave and paddle tail",
   "checkIn": "fix",
-  "kaylee": "Maple blinks with her original eyes, opens her mouth with each syllable, and wags her paddle tail from her hips.",
+  "kaylee": "Maple lifts a brow as she waves and her cheeks move with her smile. Her new paddle tail curves up behind her.",
   "questions": [],
-  "pictures":[{"title":"Maple’s tail in profile","before":"pics/tail-before.png","after":"pics/tail-after.png"}],
-  "links":[{"label":"Pick a line for Maple to say","hash":"#/world/characters/maple?shot=face&zoom=1.45&yaw=12"},{"label":"Meet Maple at the bike trail","hash":"#/world/canada/story/bike-in"}]
+  "pictures": [{"title":"Her paddle tail","before":"pics/tail-before.png","after":"pics/tail-after.png"}],
+  "links":[{"label":"Turn Maple around","hash":"#/world/characters/maple?spin=1&secs=5&zoom=1.18"},{"label":"Pick a line for Maple","hash":"#/world/characters/maple?shot=face&zoom=1.45&yaw=12"}]
 }
