@@ -1,0 +1,16 @@
+{
+  "title": "Roxy the raccoon: a real raccoon look",
+  "checkIn": "fix",
+  "kaylee": "Roxy and her kits now look like raccoons: a bandit mask, white brows and cheek fluff, round ears and a big ringed tail.",
+  "questions": [],
+  "pictures": [
+    { "title": "Front", "before": "pics/raccoon-before-0.png", "after": "pics/raccoon-after-0.png", "caption": "Bandit mask with white brows, eye-whites and brown eyes, a pointed white snout, cheek fluff, round white-rimmed ears, a pale tummy" },
+    { "title": "Three-quarters", "before": "pics/raccoon-before-1.png", "after": "pics/raccoon-after-1.png", "caption": "The tail is one bushy tube with dark rings, curling round her side so it shows from the front" },
+    { "title": "Back", "before": "pics/raccoon-before-2.png", "after": "pics/raccoon-after-2.png", "caption": "No more stack of beads" }
+  ],
+  "links": [
+    { "label": "Roxy in the character lab", "hash": "#/world/characters/raccoon" },
+    { "label": "Roxy's kit", "hash": "#/world/characters/kit" },
+    { "label": "Hats on the whole team (fitting sheet)", "hash": "#/world/canada/cabin/dress?fit=all" }
+  ]
+}
