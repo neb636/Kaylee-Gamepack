@@ -133,25 +133,23 @@ function Camel() {
 }
 
 function Panda() {
-  // A round head with both ears showing, tilted eye patches and shiny eyes.
+  // The classic cute panda face: a wide head, plain black ears tucked behind it, slanted eye patches with one
+  // white glint each (no eye rings: they made it stare), a small nose joined to a "w" smile, cheeks under the eyes.
+  const BLACK = '#33292F'
   return (
     <>
       <rect width="100" height="100" fill="#DDD2FF" />
-      <Fit s={0.9} y={52}>
-        <circle cx="26" cy="29" r="12.5" fill="#3A3340" />
-        <circle cx="74" cy="29" r="12.5" fill="#3A3340" />
-        <circle cx="26" cy="30" r="5.5" fill="#6B6072" />
-        <circle cx="74" cy="30" r="5.5" fill="#6B6072" />
-        <ellipse cx="50" cy="55" rx="32" ry="28.5" fill="#FFFDF8" />
-        <ellipse cx="36.5" cy="53" rx="8.6" ry="11" fill="#3A3340" transform="rotate(24 36.5 53)" />
-        <ellipse cx="63.5" cy="53" rx="8.6" ry="11" fill="#3A3340" transform="rotate(-24 63.5 53)" />
-        <circle cx="38" cy="52" r="4.3" fill="#fff" />
-        <circle cx="62" cy="52" r="4.3" fill="#fff" />
-        <Eye x={38.3} y={52.3} r={3.3} />
-        <Eye x={61.7} y={52.3} r={3.3} />
-        <Cheeks x={50} y={67} gap={20.5} r={4.6} />
-        <path d="M45.8 61.6h8.4q1.6 0 .6 1.4l-3.4 3.6q-1.4 1.4-2.8 0l-3.4-3.6q-1-1.4.6-1.4z" fill="#3A3340" />
-        <path d="M44 70q3 3.6 6 0q3 3.6 6 0" fill="none" stroke={INK} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <Fit s={0.9} y={53}>
+        <circle cx="23.5" cy="33" r="12.5" fill={BLACK} />
+        <circle cx="76.5" cy="33" r="12.5" fill={BLACK} />
+        <path d="M50 27C73 27 86 41 86 57C86 73 71 83 50 83C29 83 14 73 14 57C14 41 27 27 50 27Z" fill="#FFFDF8" />
+        <ellipse cx="32.5" cy="56" rx="7.8" ry="9.8" fill={BLACK} transform="rotate(22 32.5 56)" />
+        <ellipse cx="67.5" cy="56" rx="7.8" ry="9.8" fill={BLACK} transform="rotate(-22 67.5 56)" />
+        <ellipse cx="34.8" cy="53.6" rx="2.1" ry="3.1" fill="#fff" transform="rotate(22 34.8 53.6)" />
+        <ellipse cx="65.2" cy="53.6" rx="2.1" ry="3.1" fill="#fff" transform="rotate(-22 65.2 53.6)" />
+        <Cheeks x={50} y={69} gap={23.5} r={5.2} />
+        <path d="M46.6 60.4h6.8q1.5 0 .6 1.3l-2.8 3.2q-1.2 1.2-2.4 0l-2.8-3.2q-.9-1.3.6-1.3z" fill={BLACK} />
+        <path d="M50 64.5v3M43.5 67.5q3.25 4 6.5 0q3.25 4 6.5 0" fill="none" stroke={BLACK} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
       </Fit>
     </>
   )
