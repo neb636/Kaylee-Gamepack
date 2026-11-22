@@ -1,14 +1,23 @@
 {
   "title": "Jev visual QA, behind a DimSum toggle",
   "checkIn": "fix",
-  "kaylee": "Fewer 3D glitches reach her iPad: a robot boxes props that sink into the ground or float off a paw before you have to spot them.",
-  "questions": [
-    "The toggle switches itself off after each message you send. Keep it that way, or should it stay on until you turn it off?",
-    "Each run stops at $0.50 (a full eval costs about $0.02). Is that cap OK?"
-  ],
+  "kaylee": "Fewer 3D glitches reach her iPad: a robot boxes props that sink into the ground or float off a paw before you have to spot them. Your answers are in: the toggle still switches off after each message, and a run stops at $0.75 and asks you before going further.",
+  "questions": [],
   "pictures": [
-    { "title": "Caught: Monty sunk into the ground", "after": "pics/canada-pool-ground__before-found.jpg", "caption": "The bug from before the Canada pool fix. Jev's red box sits right on it." },
-    { "title": "Caught: the pale band round the lake", "after": "pics/canoe-lake-edge__glide-before.jpg", "caption": "The Red Canoe shoreline band from before #516." },
-    { "title": "A false alarm", "after": "pics/canada-whales-shore__before-film-in-9000.jpg", "caption": "About 1 in every 10 clean frames gets a box like this. A box is a lead, not a verdict." }
+    {
+      "title": "Caught: Monty sunk into the ground",
+      "after": "pics/canada-pool-ground__before-found.jpg",
+      "caption": "The bug from before the Canada pool fix. Jev's red box sits right on it."
+    },
+    {
+      "title": "Caught: the pale band round the lake",
+      "after": "pics/canoe-lake-edge__glide-before.jpg",
+      "caption": "The Red Canoe shoreline band from before #516."
+    },
+    {
+      "title": "A false alarm",
+      "after": "pics/canada-whales-shore__before-film-in-9000.jpg",
+      "caption": "About 1 in every 10 clean frames gets a box like this. A box is a lead, not a verdict."
+    }
   ]
 }

@@ -37,7 +37,7 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 </style></head><body><main>
 <span class="chip">Check-in fix</span>
 <h1>Jev visual QA, behind a DimSum toggle</h1>
-<p class="kaylee">Fewer 3D glitches reach her iPad: a robot boxes props that sink into the ground or float off a paw before you have to spot them.</p>
+<p class="kaylee">Fewer 3D glitches reach her iPad: a robot boxes props that sink into the ground or float off a paw before you have to spot them. Your answers are in: the toggle still switches off after each message, and a run stops at $0.75 and asks you before going further.</p>
 
 
 <h2>Pictures</h2><div class="pics"><figure class="solo"><img src="pics/canada-pool-ground__before-found.jpg" alt="Caught: Monty sunk into the ground" loading="lazy">
@@ -48,12 +48,11 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <figcaption><b>A false alarm</b>: About 1 in every 10 clean frames gets a box like this. A box is a lead, not a verdict.</figcaption></figure></div>
 
 
-<h2>Your call</h2><ol><li><p>The toggle switches itself off after each message you send. Keep it that way, or should it stay on until you turn it off?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>Each run stops at $0.50 (a full eval costs about $0.02). Is that cap OK?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+
 
 </main>
 <script>
-const qs=["The toggle switches itself off after each message you send. Keep it that way, or should it stay on until you turn it off?","Each run stops at $0.50 (a full eval costs about $0.02). Is that cap OK?"],titles=[]
+const qs=[],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
