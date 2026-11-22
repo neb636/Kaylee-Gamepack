@@ -1547,11 +1547,11 @@
     "file": "73f9ff33d2be.mp3"
   },
   {
-    "text": "Give it to Maple or the raccoons.",
+    "text": "Who wants that one?",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3004,
-    "file": "ee0f223855b5.mp3"
+    "ms": 1464,
+    "file": "86bb1300cc1e.mp3"
   },
   {
     "text": "Golden! Yummy!",
@@ -1559,6 +1559,27 @@
     "sig": "cafd002559",
     "ms": 1416,
     "file": "6827436a1467.mp3"
+  },
+  {
+    "text": "Squishy! Yay!",
+    "voice": "raccoon",
+    "sig": "124402ef75",
+    "ms": 2184,
+    "file": "41733ce6d749.mp3"
+  },
+  {
+    "text": "Crunchy! My favorite!",
+    "voice": "raccoon",
+    "sig": "124402ef75",
+    "ms": 2208,
+    "file": "737bc14df0eb.mp3"
+  },
+  {
+    "text": "Mmm. Crunchy stick.",
+    "voice": "moose",
+    "sig": "d36b94299b",
+    "ms": 3168,
+    "file": "3a2db3ba19bb.mp3"
   },
   {
     "text": "Squishy! Yum anyway.",
@@ -1575,11 +1596,11 @@
     "file": "ec08bb418f39.mp3"
   },
   {
-    "text": "Crunchy! My favorite!",
+    "text": "Yum! Crunchier next time!",
     "voice": "raccoon",
     "sig": "124402ef75",
-    "ms": 2208,
-    "file": "737bc14df0eb.mp3"
+    "ms": 2856,
+    "file": "ae37b74b5383.mp3"
   },
   {
     "text": "Crunch, munch!",
@@ -1589,11 +1610,11 @@
     "file": "e0b0489833c6.mp3"
   },
   {
-    "text": "Mmm. Crunchy stick.",
-    "voice": "moose",
-    "sig": "d36b94299b",
-    "ms": 3168,
-    "file": "3a2db3ba19bb.mp3"
+    "text": "Best campfire ever!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 1776,
+    "file": "9c3f9813fb81.mp3"
   },
   {
     "text": "Now tap the flashlight to turn it off!",
