@@ -65,7 +65,7 @@ const T = L.campfire
 
 /** Her flashlight, and the games played with it. */
 const TORCH = knobs('torch', 'The flashlight', FILE, {
-  radius: { value: 0.6, min: 0.3, max: 2, step: 0.05, label: 'Light size', unit: 'm', note: 'the disc of light’s radius in the middle of the clearing (smaller far off, bigger near)', main: true },
+  radius: { value: 1.15, min: 0.3, max: 2.5, step: 0.05, label: 'Light size', unit: 'm', note: 'the disc of light’s radius on the ground in the middle of the clearing, the same on every screen (a phone sees it smaller, like everything else)', main: true },
   follow: { value: 16, min: 2, max: 60, step: 1, label: 'Follows her finger', unit: '/s', note: 'how tightly the light keeps up (lower = it swings behind like a heavy flashlight)', main: true },
   lift: { value: 34, min: 0, max: 120, step: 2, label: 'Light above finger', unit: 'px', note: 'on a touch screen, how far above her fingertip the light lands, so her finger doesn’t cover what she finds (a mouse: none)', main: true },
   speed: { value: 0.45, min: 0.15, max: 1.5, step: 0.05, label: 'Roxy sneaks', unit: 'm/s', note: 'how fast Roxy creeps toward the bag while the light is off her', main: true },
@@ -1851,7 +1851,7 @@ export class FlashlightStatues implements World3D {
       section: this.section,
       film: this.films.now,
       films: { done: this.films.done, skipped: this.films.skipped },
-      light: { x: Math.round(this.light.at.x), y: Math.round(this.light.at.y), on: this.light.on, ground: this.light.onGround },
+      light: { x: Math.round(this.light.at.x), y: Math.round(this.light.at.y), on: this.light.on, ground: this.light.onGround, beamPx: Math.round((this.h * Math.tan(this.light.half)) / Math.tan((this.rig.camera.fov * Math.PI) / 360) / 2), camM: +this.light.mid.toFixed(2) },
       lit: this.spots.filter((s) => s.lit).map((s) => s.id),
       met: [...this.met],
       kits: { at: this.kits.map((k) => ({ state: k.state, ...scr(k.a.at(0.62, new Vector3())) })), home: this.kitsHome, peeking: this.kits.filter((k) => k.state === 'out').map((k) => `kit${k.seat}`), stuck: this.stuck ? `kit${this.stuck.seat}` : null, peeks: this.peekN },

@@ -4,16 +4,18 @@
 // inside the beam is lit: `covers()` says so, by the angle from the camera, so what she sees lit is what counts.
 // The light follows her finger (a little behind it, like a real flashlight, and a little above it so her fingertip
 // doesn't cover what she finds) and stays where she left it. The disc's size and how it follows are feel knobs.
+// The disc's size is in meters on the ground, not an angle: a phone in portrait pulls the camera far back to fit the
+// clearing, and a fixed angle there made the light so wide it lit three animals at once.
 import { AdditiveBlending, BufferAttribute, CylinderGeometry, DoubleSide, Group, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Quaternion, SpotLight, Vector3, type PerspectiveCamera } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P } from '../../../../engine3d/geo'
 import { makeHull } from '../../../../engine3d/outline'
 import { glowTexture } from '../../story/sets/campfire'
 
-/** How far the camera is from the middle of the clearing: the knob's radius is the disc's size there. */
-const MID = 6.6
-/** Further than this, the light is up in the trees (no disc on the ground). */
-const FAR = 13
+/** The middle of the clearing, on the ground: the knob's radius is the disc's size there, whatever the screen. */
+const MID = new Vector3(0.45, 0, -1.55)
+/** Further than this past the middle of the clearing, the light is up in the trees (no disc on the ground). */
+const BEYOND = 6.4
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -68,6 +70,8 @@ export class Flashlight {
   onGround = true
   /** Half the beam's angle (radians). */
   half = 0.12
+  /** How far the camera is from the middle of the clearing (m). */
+  mid = 6.6
   readonly spot: SpotLight
   readonly toy: Group
   private lensMat: MeshBasicMaterial
@@ -141,12 +145,14 @@ export class Flashlight {
     this.at.x += (this.aim.x - this.at.x) * f
     this.at.y += (this.aim.y - this.at.y) * f
     const cam = camera.position
-    this.half = Math.atan(this.knobs.radius / MID)
+    this.mid = Math.max(1, cam.distanceTo(MID))
+    this.half = Math.atan(this.knobs.radius / this.mid)
+    const far = this.mid + BEYOND
     // Her finger's ray: onto the ground, or (up in the trees, the sky) a way out along it.
     const dir = tmp.set((this.at.x / w) * 2 - 1, -(this.at.y / h) * 2 + 1, 0.5).unproject(camera).sub(cam).normalize()
     const t = dir.y < -0.02 ? -cam.y / dir.y : Infinity
-    this.onGround = t < FAR
-    this.target.copy(cam).addScaledVector(dir, Math.min(t, FAR * 0.85))
+    this.onGround = t < far
+    this.target.copy(cam).addScaledVector(dir, Math.min(t, far * 0.85))
     // The toy, in the bottom corner, pointing at the light.
     const lens = tmp2.set(this.corner.x, this.corner.y, 0.5).unproject(camera).sub(cam).normalize().multiplyScalar(this.corner.d).add(cam)
     this.toy.position.copy(lens)
