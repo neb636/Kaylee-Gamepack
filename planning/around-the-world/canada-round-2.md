@@ -163,6 +163,8 @@ lands on freezes with a silly face.
 **One line:** a whale's spout blew Ollie's lucky rock out to sea; the whales come up to the boat one by one, she
 plays with each, and the baby orca has the rock.
 
+- **Art pass:** Ollie's 3D sea-otter look has a pale face and throat, small side ears, long whiskers and broad hind flippers.
+  Her lucky pebble has a quartz vein in the surface, and the sea lions haul out on a low, layered rock ledge.
 - **The reason (a real one):** every sea otter has a favorite rock, keeps it in a pocket of skin under her arm, and
   juggles it. That's why Ollie has the fastest pass. The opening film shows her juggling it, higher and higher,
   until a whale comes up underneath.

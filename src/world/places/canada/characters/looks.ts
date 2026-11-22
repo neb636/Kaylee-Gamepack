@@ -49,7 +49,7 @@ export const CANADA_LOOKS: Record<CanadaFriend, Look> = {
   /** One of Roxy's three kits: the team's fans. */
   kit: { species: 'raccoon', height: 0.42, chub: 1.15, fur: '#A9A4B6', light: C.raccoonLight, dark: C.raccoonDark, ear: '#FFB8CC', open: true },
   /** Ollie the sea otter: floats on her back, spins like a top. */
-  otter: { species: 'otter', height: 0.8, chub: 1.1, fur: C.otterFur, light: C.otterLight, dark: C.otterDark, ear: '#54433F', open: true, lashes: true },
+  otter: { species: 'sea-otter', height: 0.8, chub: 1.1, fur: C.otterFur, light: C.otterLight, dark: C.otterDark, ear: '#65504C' },
   /** Misty the spirit bear: a black bear born with cream-white fur, big and soft and a little shy. */
   spirit: { species: 'bear', height: 1.3, chub: 1.18, fur: C.spiritFur, light: C.spiritLight, dark: C.spiritDark, ear: '#F8C8C0', lashes: true, plainChest: true },
 }
