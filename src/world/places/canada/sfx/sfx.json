@@ -401,6 +401,24 @@
   "seconds": 1.6
  },
  {
+  "id": "salmon-mudslide",
+  "label": "Bottom-slide down the muddy bank",
+  "prompt": "A cartoon bear sliding down a wet muddy bank on its bottom: a long squelchy, slippery mud slide getting faster, soft squishes and a few wet flicks. Funny and soft, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "salmon-bubbles",
+  "label": "Bubbles under the water",
+  "prompt": "Big bubbles coming up from under a pool of water: a few soft, round blub-blub-blub bubble pops at the surface, cute and gentle.",
+  "seconds": 1
+ },
+ {
+  "id": "salmon-popup",
+  "label": "Pops up out of the pool",
+  "prompt": "Something bobbing up out of a pool of water: a round watery sploosh upward and water streaming and dripping off, soft and funny.",
+  "seconds": 0.9
+ },
+ {
   "id": "salmon-swing",
   "label": "A big swish",
   "prompt": "A big soft swish of a furry paw swiping through the air, a gentle cartoon whoosh.",

@@ -484,8 +484,9 @@ export const L = {
     rub: onDevice('Rub the bear to make bubbles!', 'Click and wiggle on the bear to make bubbles!'),
     rubHint: onDevice('Rub the muddy spots!', 'Click and wiggle on the muddy spots!'),
     rain: onDevice('Now the rain! Rub the bubbles away.', 'Now the rain! Click and wiggle the bubbles away.'),
-    // White shows through (once): the sticker's fact, then Misty.
-    spirit: 'The spirit bear is a black bear with white fur.',
+    // White shows through (once): Sparkle, then Misty. (Not the sticker's fact: the stamp screen says that one, and the
+    // same line twice in a row sounded like a repeat.)
+    spirit: 'Look! White fur under all that mud!',
     whiteAgain: misty("I'm white again!"),
     towel: onDevice('Now the towel! Rub her fluffy.', 'Now the towel! Click and wiggle her fluffy.'),
     // Rubbed into a giant puffball.
