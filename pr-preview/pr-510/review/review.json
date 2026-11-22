@@ -1,0 +1,98 @@
+{
+ "title": "Misty's Bubble Bath: the polish",
+ "checkIn": "fix",
+ "kaylee": "A sunnier waterfall pool, a cute muddy white bear, soft foam, soap bubbles to pop, a pink unicorn rubber duck that squeaks, and a sparkly ding as each patch comes clean.",
+ "questions": [
+  "The pink unicorn rubber duck: keep it?",
+  "At the mirror Misty now just beams (no silly eyes on her or Maple anywhere in the bath). Right call?"
+ ],
+ "reels": [
+  {
+   "name": "bath-before",
+   "moments": [
+    "canada-bath-suds",
+    "canada-bath-pokes"
+   ]
+  },
+  {
+   "name": "bath-after",
+   "moments": [
+    "canada-bath-suds",
+    "canada-bath-bubbles",
+    "canada-bath-pokes"
+   ]
+  }
+ ],
+ "pictures": [
+  {
+   "title": "The waterfall and the pool",
+   "before": "pics/wash-before.jpg",
+   "after": "pics/wash-after.jpg",
+   "caption": "Falling water that curls over its lip, a round forest pool with ripples round her legs, a sunny morning, and splats of mud on a white bear"
+  },
+  {
+   "title": "The foam",
+   "before": "pics/suds-before.jpg",
+   "after": "pics/suds-after.jpg",
+   "caption": "Soft foam clusters with no black outlines, tan over thick mud and whitening as she scrubs; see-through rainbow soap bubbles float up to pop"
+  },
+  {
+   "title": "Her tummy",
+   "before": "pics/clean-before.jpg",
+   "after": "pics/clean-after.jpg",
+   "caption": "The sun bear's cream crescent is off (Misty is a spirit bear)"
+  },
+  {
+   "title": "The whole river",
+   "before": "pics/wide-before.jpg",
+   "after": "pics/wide-after.jpg",
+   "caption": "A winding river with pebbly banks, lily pads, pink wildflowers and sunbeams"
+  },
+  {
+   "title": "The mirror",
+   "after": "pics/mirror-after.jpg",
+   "caption": "She sees herself and beams with her own happy eyes"
+  },
+  {
+   "title": "On an upright iPad",
+   "after": "pics/tall-after.jpg"
+  }
+ ],
+ "links": [
+  {
+   "label": "Play the bath",
+   "hash": "#/world/canada/bath/wash"
+  },
+  {
+   "label": "The mirror",
+   "hash": "#/world/canada/bath/mirror?look="
+  },
+  {
+   "label": "The film in",
+   "hash": "#/world/canada/story/bath-in"
+  }
+ ],
+ "listens": [
+  {
+   "title": "New bath sounds",
+   "audio": "sfx/bath.mp3",
+   "items": [
+    {
+     "text": "A soap bubble pops",
+     "at": 0,
+     "end": 0.48
+    },
+    {
+     "text": "The rubber duck squeaks",
+     "at": 1.18,
+     "end": 1.98
+    },
+    {
+     "text": "A patch comes clean",
+     "at": 2.68,
+     "end": 3.48
+    }
+   ]
+  }
+ ]
+}
