@@ -811,7 +811,7 @@ export class CanadaMapWorld implements World3D {
         break
       }
       case 'campfire': {
-        // Roxy peeks out round the tent, then ducks back.
+        // Roxy sidles out from beside the tent, then back.
         const out = clamp(Math.sin(t * 0.8) * 1.6, 0, 1)
         m.spot.position.lerpVectors(this.camp.peek.hide, this.camp.peek.out, out)
         m.actor.lean = out * 0.25
