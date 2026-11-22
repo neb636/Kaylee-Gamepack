@@ -268,7 +268,7 @@ export const BIKE_OUT: StoryFilm = {
         hold: 0.35,
         start: () => {
           // (It hangs right over his bare antler.)
-          const a = monty.rig.head.localToWorld(tmp.set(1.12 * monty.rig.face.R, monty.rig.face.headY + 1.29 * monty.rig.face.R, -0.35 * monty.rig.face.R))
+          const a = monty.rig.head.localToWorld(tmp.set(1.12 * monty.rig.face.R, monty.rig.face.headY + 1.39 * monty.rig.face.R, -0.30 * monty.rig.face.R))
           set.cone.position.set(a.x, set.coneAt.y, a.z)
           set.cone.userData.hit = a.y
           bikeSfx.pinecone()

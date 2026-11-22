@@ -439,8 +439,8 @@ export class MapMoves {
       const side = i ? 1 : -1
       const t0 = 0.6 + i * 0.2
       const from = new Vector3(side * 3.6 * R, hy + 2.8 * R, 0.4 * R)
-      // In the first hollow between the rounded tines.
-      const perch = new Vector3(side * 1.12 * R, hy + 1.29 * R, -0.35 * R)
+      // On the rounded palm, just inside the first tine.
+      const perch = new Vector3(side * 1.12 * R, hy + 1.39 * R, -0.30 * R)
       const top = new Vector3(side * 0.3 * R, hy + 0.97 * R, 0.05 * R)
       const away = new Vector3(side * 3.4 * R, hy + 3.8 * R, -1.2 * R)
       const p = g.root.position

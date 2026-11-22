@@ -883,15 +883,15 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     case 'moose': {
       // The high brow leads down a sloping bridge to a heavy, soft nose and a smaller lower lip.
       head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [0.94, 1.04, 1] }, 26))
-      head.push(P.sphere(R, look.fur, { at: [0, headY - 0.21 * R, 0.76 * R], rot: [0.46, 0, 0], scale: [0.48, 0.43, 0.60] }, 24))
-      head.push(P.sphere(R, look.light, { at: [0, headY - 0.65 * R, 0.92 * R], scale: [0.44, 0.23, 0.45] }, 24))
-      head.push(P.sphere(R, look.light, { at: [0, headY - 0.36 * R, 1.00 * R], rot: [0.20, 0, 0], scale: [0.60, 0.42, 0.55] }, 26))
-      mouthAt = mouthPoint(-0.69 * R, 1.36 * R)
+      head.push(P.sphere(R, look.fur, { at: [0, headY - 0.20 * R, 0.71 * R], rot: [0.46, 0, 0], scale: [0.48, 0.43, 0.51] }, 24))
+      head.push(P.sphere(R, look.light, { at: [0, headY - 0.63 * R, 0.79 * R], scale: [0.44, 0.23, 0.45] }, 24))
+      head.push(P.sphere(R, look.light, { at: [0, headY - 0.34 * R, 0.87 * R], rot: [0.20, 0, 0], scale: [0.60, 0.42, 0.55] }, 26))
+      mouthAt = mouthPoint(-0.67 * R, 1.23 * R)
       rest.push(P.torus(0.26 * R, 0.023 * R, MOUTH, { at: [0, 0.04 * R, -0.05 * R], rot: [-0.80, 0, Math.PI], scale: [1, 0.65, 1] }, Math.PI))
       head.push(P.sphere(0.19 * R, look.dark, { at: [0, headY - 0.96 * R, 0.38 * R], rot: [-0.25, 0, 0], scale: [0.82, 1.55, 0.82] }))
       for (const s of [-1, 1]) {
-        headPlain.push(P.sphere(0.085 * R, look.dark, { at: [s * 0.30 * R, headY - 0.28 * R, 1.45 * R], rot: [-0.15, s * 0.52, -s * 0.20], scale: [0.78, 1.28, 0.36] }))
-        headPlain.push(P.sphere(0.18 * R, look.dark, { at: on(s * eyeX, eyeY + 0.28 * R), rot: [0, s * 0.38, -s * 0.15], scale: [1, 0.34, 0.43] }))
+        headPlain.push(P.sphere(0.085 * R, look.dark, { at: [s * 0.255 * R, headY - 0.26 * R, 1.34 * R], rot: [-0.15, s * 0.52, -s * 0.20], scale: [0.78, 1.28, 0.36] }))
+        headPlain.push(P.sphere(0.18 * R, look.dark, { at: on(s * eyeX, eyeY + (s < 0 ? 0.34 : 0.27) * R), rot: [0, s * 0.38, -s * 0.15], scale: [1, 0.34, 0.43] }))
         const earRotation: V3 = [0, -s * 0.18, -s * 1.22]
         head.push(P.sphere(R, look.fur, { at: [s * 0.99 * R, headY + 0.48 * R, -0.10 * R], rot: earRotation, scale: [0.20, 0.46, 0.14] }))
         headPlain.push(P.sphere(R, look.ear ?? look.light, { at: [s * 1.04 * R, headY + 0.49 * R, 0.01 * R], rot: earRotation, scale: [0.12, 0.32, 0.06] }))
