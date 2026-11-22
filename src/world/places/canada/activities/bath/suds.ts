@@ -278,7 +278,7 @@ export class Floaters {
   }
 
   /** A bubble lets go at `at` (world) and drifts up; `r` its radius (m). Full: no new one. */
-  emit(at: Vector3, r = 0.06 + Math.random() * 0.05, v?: Vector3) {
+  emit(at: Vector3, r = Math.random() < 0.2 ? 0.15 + Math.random() * 0.04 : 0.09 + Math.random() * 0.05, v?: Vector3) {
     if (this.list.length >= this.max) return
     this.list.push({ p: at.clone(), v: v?.clone() ?? new Vector3((Math.random() - 0.5) * 0.25, 0.22 + Math.random() * 0.18, 0.08 + Math.random() * 0.12), r, age: 0, life: 7 + Math.random() * 4, seed: Math.random() * 10, popT: -1 })
   }
@@ -299,7 +299,7 @@ export class Floaters {
       if (Math.hypot(sx - x, sy - y) > Math.max(px, rp + px * 0.4)) continue
       out.push({ p: f.p.clone(), r: f.r })
       this.popped++
-      if (f.r > 0.085 && Math.random() < 0.35) {
+      if (f.r > 0.13 && Math.random() < 0.5) {
         // Splits: two little ones fly apart.
         f.popT = 0
         for (const s2 of [-1, 1]) this.emit(f.p.clone().add(t1.set(s2 * f.r * 0.5, 0, 0)), f.r * 0.55, new Vector3(s2 * 0.4, 0.35, 0.05))

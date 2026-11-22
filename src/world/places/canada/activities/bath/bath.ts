@@ -943,7 +943,7 @@ export class BubbleBathWorld implements World3D {
       if (moved > 0) this.suds.whiten(hit.world, FEEL.reach, Math.min(1, moved * 0.004))
       // Now and then a soap bubble lets go and floats up.
       this.floatAcc += moved
-      if (this.floatAcc > 170) {
+      if (this.floatAcc > 130) {
         this.floatAcc = 0
         this.floaters.emit(tmp3.copy(hit.world).addScaledVector(this.ray.ray.direction, -0.08))
       }
@@ -1523,7 +1523,7 @@ export class BubbleBathWorld implements World3D {
       fx.duck()
       this.duck.hop = 0
       this.duck.poke = 0
-      this.floaters.emit(tmp3.copy(this.duck.root.position).add(tmp2.set(0, 0.15, 0)), 0.05)
+      this.floaters.emit(tmp3.copy(this.duck.root.position).add(tmp2.set(0, 0.15, 0)), 0.08)
       if (!this.act && Math.random() < 0.5) (fx.grumble(), this.misty.pull('happy'))
       return true
     }
@@ -1548,7 +1548,7 @@ export class BubbleBathWorld implements World3D {
       for (const p of off.slice(0, 50)) this.bits.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 3, 1 + Math.random() * 2, 1 + Math.random() * 2, 0.9, 0.04, 1)
       const nose = this.misty.head(tmp2)
       // A whole flurry of soap bubbles out of her nose.
-      for (let i = 0; i < 7; i++) this.floaters.emit(tmp3.set(nose.x + (Math.random() - 0.5) * 0.2, nose.y - 0.05, nose.z + 0.25), 0.05 + Math.random() * 0.06, new Vector3((Math.random() - 0.5) * 1.2, 0.3 + Math.random() * 0.5, 0.4 + Math.random() * 0.4))
+      for (let i = 0; i < 7; i++) this.floaters.emit(tmp3.set(nose.x + (Math.random() - 0.5) * 0.2, nose.y - 0.05, nose.z + 0.25), 0.08 + Math.random() * 0.07, new Vector3((Math.random() - 0.5) * 1.2, 0.3 + Math.random() * 0.5, 0.4 + Math.random() * 0.4))
       for (let i = 0; i < 24; i++) this.bits.emit(nose.x, nose.y - 0.1, nose.z + 0.3, (Math.random() - 0.5) * 3, Math.random() * 2, 2 + Math.random() * 2, 0.8, 0.045, i % 2)
       // Some of it on Maple's chin.
       const head = this.maple.rig.head
@@ -1566,7 +1566,7 @@ export class BubbleBathWorld implements World3D {
     s.from.copy(s.g.position)
     s.to.set(AT.x + 0.55, 0.55, AT.z + 0.55)
     fx.soap()
-    for (let i = 0; i < 4; i++) this.floaters.emit(tmp3.copy(s.from).add(tmp2.set((Math.random() - 0.5) * 0.15, 0.08, 0)), 0.04 + Math.random() * 0.04)
+    for (let i = 0; i < 4; i++) this.floaters.emit(tmp3.copy(s.from).add(tmp2.set((Math.random() - 0.5) * 0.15, 0.08, 0)), 0.07 + Math.random() * 0.05)
     if (!this.act) {
       this.misty.turnTo(AT.x + 1.5, AT.z + 1.5)
       this.doAct('swing', 1.4, 'soap')
