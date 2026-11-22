@@ -18,7 +18,7 @@ export const TUNED: Record<string, '*' | string[]> = {
   'poles/night': ['edge', 'fly', 'goodbye', 'huddle', 'together', 'whiteout'],
   'poles/slide': ['bumps', 'dive', 'top'],
   'thailand/boat-trip': ['map'],
-  'thailand/hub': ['bangkok', 'map'],
+  'thailand/hub': ['bangkok', 'candy', 'chutes', 'colors', 'map', 'table', 'unicorn'],
   'thailand/nan-trip': ['drive', 'map', 'race'],
   'thailand/samet-trip': ['deck', 'fireshow', 'hideseek', 'island', 'jetski', 'sandcastle', 'snorkel', 'speedboat', 'sunset'],
 }

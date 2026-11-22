@@ -2,8 +2,8 @@
 // calls), without running the games: its id, title, the file it says it's in, its scope (activity, sections, shared)
 // and its knobs (which are `main`). Used by scripts/check-knobs.mjs and the README's feel lab list
 // (scripts/sections-readme.mjs).
-import { readFileSync } from 'node:fs'
-import { globSync } from 'node:fs'
+import { existsSync, globSync, readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 
 /** The text from `open` (an index of `(`, `{` or `[`) to its matching close, strings and comments skipped. */
 function balanced(src, open) {
@@ -62,8 +62,26 @@ function resolve(src, t) {
 }
 const strings = (t) => (t ? [...t.matchAll(/(['"`])([^'"`]*)\1/g)].map((m) => m[2]) : undefined)
 
+/** A list of section ids: string literals, a const, or `...NAME` spread from this file or one it imports. Anything
+ *  else throws (so check-knobs can't skip a list it couldn't read). */
+function sectionList(src, file, text) {
+  const own = resolve(src, text) ?? text
+  if (!own.startsWith('[')) throw new Error(`${file}: can't read the sections list ${text}`)
+  return parts(own).flatMap((p) => {
+    const lit = str(p)
+    if (lit !== undefined) return [lit]
+    const spread = p.match(/^\.\.\.([A-Za-z_$][\w$]*)$/)?.[1]
+    if (!spread) throw new Error(`${file}: can't read '${p}' in a sections list`)
+    if (resolve(src, spread)) return sectionList(src, file, spread)
+    const from = src.match(new RegExp(`import\\s*\\{[^}]*\\b${spread}\\b[^}]*\\}\\s*from\\s*['"](\\.[^'"]+)['"]`))?.[1]
+    const target = from && [`${from}.ts`, `${from}.tsx`, `${from}/index.ts`].map((f) => join(dirname(file), f)).find((f) => existsSync(f))
+    if (!target) throw new Error(`${file}: can't find where ${spread} (a sections list) comes from`)
+    return sectionList(readFileSync(target, 'utf8'), target, spread)
+  })
+}
+
 /** The scope object's fields. */
-function scopeOf(src, t, fallback = {}) {
+function scopeOf(src, file, t, fallback = {}) {
   const text = resolve(src, t)
   if (!text) return fallback
   const field = (name) => {
@@ -73,7 +91,7 @@ function scopeOf(src, t, fallback = {}) {
     return text[at] === '[' ? balanced(text, at) : resolve(src, text.slice(at).match(/^[^,}\n]+/)[0].trim())
   }
   const sections = field('sections')
-  return { activity: str(field('activity')), sections: sections ? strings(resolve(src, sections) ?? sections) : undefined, shared: /\bshared\s*:\s*true/.test(text) }
+  return { activity: str(field('activity')), sections: sections ? sectionList(src, file, sections) : undefined, shared: /\bshared\s*:\s*true/.test(text) }
 }
 
 function knobsOf(src, t) {
@@ -97,7 +115,7 @@ export function scanKnobs() {
       const title = str(resolve(src, args[1]))
       const file = str(resolve(src, args[2]))
       const map = m[1] === 'mapCamKnobs'
-      const scope = scopeOf(src, args[4], map ? { sections: ['map'] } : {})
+      const scope = scopeOf(src, declaredIn, args[4], map ? { sections: ['map'] } : {})
       const place = file?.match(/\/places\/([^/]+)\//)?.[1]
       const activity = scope.activity ?? file?.match(/\/places\/[^/]+\/activities\/([^/]+)\//)?.[1]
       const knobs = map ? [] : knobsOf(src, args[3])
