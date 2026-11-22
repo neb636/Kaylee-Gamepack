@@ -14,6 +14,9 @@ const eyes = (x: number, y: number, z: number, r = 0.03, c: string = PAL.ink) =>
   P.sphere(r * 0.35, '#FFFFFF', { at: [-x + r * 0.3, y + r * 0.4, z + r * 0.7] }),
 ]
 
+/** Where the sea lion's head sits (above her chest). */
+const HEAD_Y = 0.86
+
 /** Something with a little action: `t` counts up from 0 while it plays. */
 abstract class Critter {
   readonly root = new Group()
@@ -37,19 +40,76 @@ abstract class Critter {
 
 // ---------------------------------------------------------------- the shore's animals
 
-/** A sea lion lying on the rock; poked, she lifts her head and barks; `slide()` sends her down into the water and
- *  back up onto the rock. */
+/** A sea lion hauled out on the rock, propped up on her front flippers the way they sit: a sleek body tapering to her
+ *  back flippers, a lighter chest, a little dog-like head with a pale muzzle, whiskers, tiny ear flaps and big shiny
+ *  eyes. Poked, she lifts her head, flaps and barks; `slide()` sends her down into the water and back up onto the rock.
+ *  She faces +z. */
 export class SeaLion extends Critter {
   readonly height = 1
   private head = new Group()
+  private flips: Group[] = []
   private slideT = -1
   constructor(bag: Bag) {
     super()
-    const brown = '#9A6E4E'
-    this.root.add(solid(merge([P.capsule(0.32, 0.9, brown, { at: [0, 0.3, 0], rot: [Math.PI / 2 - 0.35, 0, 0] }), P.sphere(0.2, '#7E5840', { at: [0.32, 0.05, 0.25], scale: [1.4, 0.3, 0.8] }), P.sphere(0.2, '#7E5840', { at: [-0.32, 0.05, 0.25], scale: [1.4, 0.3, 0.8] }), P.cone(0.2, 0.4, '#7E5840', { at: [0, 0.12, -0.75], rot: [-Math.PI / 2, 0, 0] }, 8)]), bag, 2))
-    this.head.position.set(0, 0.75, 0.42)
+    const back = '#8A6248'
+    const belly = '#C9A07A'
+    const flip = '#5E4433'
+    const muzzle = '#D8B391'
+    // The body (children[0]: it breathes): hips low on the rock, the chest up, the neck leaning forward, the tail
+    // end tapering back to the hind flippers spread out behind.
+    this.root.add(
+      solid(
+        merge([
+          P.sphere(0.3, back, { at: [0, 0.24, -0.36], scale: [1, 0.78, 1.45] }),
+          P.sphere(0.3, back, { at: [0, 0.36, -0.03], scale: [1.02, 1, 1.15] }),
+          P.sphere(0.27, back, { at: [0, 0.53, 0.17], rot: [-0.35, 0, 0], scale: [0.95, 1.15, 0.95] }),
+          P.capsule(0.165, 0.2, back, { at: [0, 0.72, 0.28], rot: [0.4, 0, 0] }),
+          P.sphere(0.2, belly, { at: [0, 0.5, 0.3], rot: [-0.3, 0, 0], scale: [0.8, 1.25, 0.55] }),
+          P.cone(0.13, 0.34, back, { at: [0, 0.13, -0.84], rot: [-Math.PI / 2, 0, 0] }, 10),
+          ...[-1, 1].map((s) => P.sphere(0.2, flip, { at: [s * 0.15, 0.05, -1.04], rot: [0, -s * 0.5, 0], scale: [0.38, 0.09, 1] })),
+        ]),
+        bag,
+        2,
+      ),
+    )
+    // Front flippers, each its own piece hung from the shoulder (a flap when she barks): an arm down the side of her
+    // chest to a long flat flipper splayed forward on the rock.
+    for (const s of [-1, 1]) {
+      const f = new Group()
+      f.position.set(s * 0.17, 0.42, 0.2)
+      f.add(
+        solid(
+          merge([
+            P.capsule(0.075, 0.26, back, { at: [s * 0.05, -0.18, 0.05], rot: [0.3, 0, s * 0.28] }),
+            P.sphere(0.2, flip, { at: [s * 0.12, -0.36, 0.17], rot: [0, s * 0.45, s * 0.12], scale: [0.45, 0.1, 1] }),
+          ]),
+          bag,
+          2,
+        ),
+      )
+      this.flips.push(f)
+      this.root.add(f)
+    }
+    // The head: round, a pale muzzle with a dark nose, whiskers, little ear flaps, big eyes with shines, pink cheeks.
+    this.head.position.set(0, HEAD_Y, 0.36)
     this.root.add(this.head)
-    this.head.add(solidMix([P.sphere(0.2, brown, { at: [0, 0.08, 0.05] }), P.sphere(0.11, '#B48A69', { at: [0, 0.03, 0.22], scale: [1, 0.8, 1] }), P.sphere(0.035, PAL.ink, { at: [0, 0.06, 0.32] })], eyes(0.08, 0.16, 0.18, 0.03), bag, 2))
+    this.head.add(
+      solidMix(
+        [
+          P.sphere(0.16, back, { at: [0, 0.02, 0], scale: [0.95, 0.9, 1.05] }),
+          P.sphere(0.095, muzzle, { at: [0, -0.04, 0.13], scale: [1.15, 0.8, 1.15] }),
+          ...[-1, 1].map((s) => P.cone(0.026, 0.07, flip, { at: [s * 0.135, 0.06, -0.03], rot: [0, 0, -s * 1.2] }, 6)),
+        ],
+        [
+          P.sphere(0.034, PAL.ink, { at: [0, -0.005, 0.235], scale: [1.35, 0.8, 0.9] }),
+          ...eyes(0.072, 0.045, 0.125, 0.036),
+          ...[-1, 1].map((s) => P.sphere(0.03, '#F4A7B9', { at: [s * 0.105, -0.035, 0.12], scale: [1, 0.6, 0.4] })),
+          ...[-1, 1].flatMap((s) => [-0.02, -0.055].map((y, i) => P.cyl(0.004, 0.004, 0.17, '#FFFFFF', { at: [s * 0.15, y - 0.02, 0.16], rot: [0, 0, s * (1.45 + i * 0.25)] }, 4))),
+        ],
+        bag,
+        2,
+      ),
+    )
   }
   slide() {
     if (this.slideT < 0) this.slideT = 0
@@ -61,7 +121,9 @@ export class SeaLion extends Critter {
     const k = this.tick(dt, 0.9)
     const bark = k < 0 ? 0 : bell(k)
     this.head.rotation.x = -0.7 * bark + Math.sin(t * 0.8 + this.phase) * 0.06
-    this.head.position.y = 0.75 + 0.08 * bark
+    this.head.rotation.y = Math.sin(t * 0.37 + this.phase) * 0.25 * (1 - bark)
+    this.head.position.y = HEAD_Y + 0.08 * bark
+    this.flips.forEach((f, i) => (f.rotation.z = (i ? 1 : -1) * 0.5 * bark * Math.abs(Math.sin((this.t < 0 ? 0 : this.t) * 14))))
     this.root.children[0].scale.y = 1 + Math.sin(t * 1.4 + this.phase) * 0.03
     if (this.slideT >= 0) {
       this.slideT += dt

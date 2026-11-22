@@ -483,6 +483,7 @@ export class WhaleWatch implements World3D {
     ] as const) {
       const ang = yaw + Math.PI + a + Math.sin(a * 3) * 0.35
       o.root.position.set(this.d.x + Math.sin(ang) * r, 0, this.d.z + Math.cos(ang) * r)
+      keepOff(o.root.position, o.len * 0.5 + 0.6)
       o.root.rotation.y = ang + Math.PI / 2
       o.surfaceNow()
     }
@@ -846,6 +847,7 @@ export class WhaleWatch implements World3D {
     const rz = -Math.sin(yaw)
     const out = (bp.x - this.d.x) * rx + (bp.z - this.d.z) * rz >= 0 ? 1 : -1
     g.root.position.set(bp.x + rx * out * 3.4 - Math.sin(yaw) * 1.6, 0, bp.z + rz * out * 3.4 - Math.cos(yaw) * 1.6)
+    keepOff(g.root.position, g.len * 0.5 + 0.6)
     g.root.rotation.y = Math.atan2(bp.x - g.root.position.x, bp.z - g.root.position.z)
     g.pop()
     whaleSfx.peek()
@@ -1549,13 +1551,17 @@ export class WhaleWatch implements World3D {
     ] as const) {
       if (!o.visible || o.doing('pop') || o.doing('drop') || this.phase === 'finale') continue
       const a = yaw + Math.PI + a0 + Math.sin(this.orcaSwim * 0.16 + a0 * 3) * 0.35
-      const tx = d.x + Math.sin(a) * r
-      const tz = d.z + Math.cos(a) * r
+      // (Round the rocks, never through them: the spot it swims for is kept off every island, and so is the orca
+      // itself, nose to tail, so near the sea lions' rock it slides round the edge instead of into the stone.)
+      const pad = o.len * 0.5 + 0.6
+      const to = { x: d.x + Math.sin(a) * r, z: d.z + Math.cos(a) * r }
+      keepOff(to, pad)
       const p = o.root.position
-      const dx = tx - p.x
-      const dz = tz - p.z
+      const dx = to.x - p.x
+      const dz = to.z - p.z
       p.x += dx * damp(dt, 0.8)
       p.z += dz * damp(dt, 0.8)
+      keepOff(p, pad)
       if (Math.hypot(dx, dz) > 0.05) o.root.rotation.y += wrapAngle(Math.atan2(dx, dz) - o.root.rotation.y) * damp(dt, 2)
       // (A short bushy puff, not a tall plume: from out here a tall thin one reads as a trail of dots in the sky.)
       if (Math.random() < dt * 0.3) this.spout(o.body.localToWorld(o.hull.at(0.85, 0, 0, tA)), 0.5, false, 0.05, 3.4)

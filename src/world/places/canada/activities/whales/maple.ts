@@ -5,10 +5,10 @@
 // shut, then shakes the water off). Every action eases in and settles; her face blinks and her mouth opens with her
 // own voice (engine3d/characters/face.ts).
 //
-// Soaked by a whale she pulls a silly face (the kit's `sillyFaces`, engine3d/characters/face.ts) with what the water
-// left on her: three in order of how big the splash was (`soakedFace(1..3)`): eyes pointing different ways with her
-// tongue out; crossed eyes with her wet fur sticking up in spikes; dizzy eyes with seaweed on her head. For the
-// close-up she turns round in the boat to face the camera (`turn`).
+// Soaked by a whale she keeps her own sweet face (no crossed or dizzy eyes: the user found them too wacky,
+// 2026-11-22) and wears what the water left on her, by how big the splash was (`soakedFace(1..3)`): drips; her wet fur
+// sticking up in spikes; seaweed on her head. Then she shakes it off. For the close-up she turns round in the boat to
+// face the camera (`turn`).
 //
 // Rig frame: she faces +z; armR is on +x (her left), armL on -x. A positive rotation.z swings armR out and up (armL
 // takes a negative one); a negative rotation.x swings either arm forward.
@@ -150,11 +150,11 @@ export class Maple {
     this.sillyT = seconds
     this.sillies.show(seconds > 0 ? face : null)
   }
-  /** Soaked by a splash this big (1 small .. 3 the biggest): her face for it, the water's leftovers on her, drips, a
-   *  droop; `seconds` how long the face stays. */
+  /** Soaked by a splash this big (1 small .. 3 the biggest): the water's leftovers on her, drips, a droop; `seconds` how long the face stays. */
   soakedFace(size: 1 | 2 | 3, seconds = 2.4) {
-    const face: Silly = size === 1 ? 'soaked' : size === 2 ? 'crossed' : 'dizzy'
-    this.silly(face, seconds)
+    // (Her own face, not a silly one: held for `seconds`, then the shake.)
+    this.sillyT = seconds
+    this.sillies.show(null)
     this.spikes.visible = size >= 2
     this.weed.visible = size >= 3
     this.wetT = seconds + 2.5
