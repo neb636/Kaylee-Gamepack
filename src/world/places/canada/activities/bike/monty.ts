@@ -38,7 +38,7 @@ export function lilyPad(rig: Rig, bag: Bag): Object3D {
     ),
   )
   // Draped over the top of his right antler (as he faces us, on our left), tipped and a little askew.
-  g.position.set(-1.14 * R, headY + 1.36 * R, -0.06 * R)
+  g.position.set(-1.39 * R, headY + 1.58 * R, -0.51 * R)
   g.rotation.set(0.22, 0.6, 0.3)
   rig.head.add(g)
   return g

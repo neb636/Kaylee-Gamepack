@@ -44,7 +44,8 @@ export class Moose {
   }
   /** His chin in the world (water drips from it). */
   chin(out: Vector3) {
-    return this.rig.head.localToWorld(out.set(0, this.rig.face.headY - this.rig.face.R * 0.95, this.rig.face.R * 0.6))
+    const { R, mouth } = this.rig.face
+    return this.rig.head.localToWorld(out.set(mouth[0], mouth[1] - 0.16 * R, mouth[2] - 0.13 * R))
   }
 
   update(dt: number, t: number) {
