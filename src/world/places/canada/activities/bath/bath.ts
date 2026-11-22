@@ -153,7 +153,7 @@ const SKY_CLOUD = new Vector3(-0.55, 1.72, -2.6)
 const SALMON_POOL = new Vector3(0.95, 0.05, FALLS_Z + 0.8)
 const FALLS_AT = new Vector3(-0.55, 1.05, FALLS_Z + 0.2)
 /** Where the rubber duck bobs about (it drifts in a slow loop round here). */
-const DUCK_AT = new Vector3(-0.42, 0.035, -1.0)
+const DUCK_AT = new Vector3(0.78, 0.035, -0.82)
 /** The order her patches come clean in doesn't matter: each one rings a step higher. These are the ones that ding. */
 const DING_ZONES: MistyZone[] = ['head', 'earL', 'earR', 'muzzle', 'chest', 'tummy', 'armL', 'armR', 'legL', 'legR']
 
@@ -578,6 +578,11 @@ export class BubbleBathWorld implements World3D {
     this.dings(dt)
     this.bits.update(dt)
     this.drops.update(dt)
+    // The rings round her legs follow her (and fade when she's out on the bank by the cedar).
+    const wd = this.river.wade
+    wd.x = this.misty.pos.x
+    wd.z = this.misty.pos.z
+    wd.k += ((Math.hypot(wd.x - AT.x, wd.z - AT.z) < 0.6 ? 1 : 0) - wd.k) * Math.min(1, dt * 4)
     updateRiver(this.river, dt, t, this.rig.camera, (x, y, z, n) => this.splash(x, y, z, n))
     this.hint(dt)
 

@@ -232,6 +232,30 @@ export const motion = [
     },
   },
   {
+    // The bubbles: rubbing lets soap bubbles float up, her finger pops them (a tap, a swipe through), a sneeze blows a
+    // flurry of them, and the pink rubber duck squeaks and hops. It must pop at least one.
+    name: 'canada-bath-bubbles',
+    seconds: 18,
+    setup: (page, base) => ready(page, base, '#/world/canada/bath/wash', 1500),
+    act: async (page) => {
+      let q = await game(page)
+      for (const z of ['tummy', 'chest', 'head']) await rub(page, q.zones[z], 3)
+      await tapAnchor(page, 'duck')
+      await page.waitForTimeout(700)
+      await tapAnchor(page, 'nose')
+      await page.waitForTimeout(1200)
+      for (let i = 0; i < 6; i++) {
+        q = await game(page)
+        const f = q.floats[0]
+        if (f) await page.mouse.click(f.x, f.y)
+        await page.waitForTimeout(450)
+      }
+      q = await game(page)
+      if (!q.popped) throw new Error('no soap bubble popped')
+      await page.waitForTimeout(1200)
+    },
+  },
+  {
     // The payoff: the pool glows, Misty sees herself (the close-up), Maple brings the sweater, THUMP, she pulls it on.
     name: 'canada-bath-mirror',
     seconds: 16,
@@ -245,8 +269,8 @@ export const motion = [
     },
   },
   {
-    // The silly pokes: her nose (a sneeze of suds), the soap (batted over the cedars), the salmon (a swing and a miss),
-    // the cedar (a back scratch).
+    // The silly pokes: her nose (a sneeze of suds and bubbles), the soap (batted over the cedars), the salmon (a swing and
+    // a miss), the cedar (a back scratch), the rubber duck (a squeak and a hop).
     name: 'canada-bath-pokes',
     seconds: 16,
     setup: (page, base) => ready(page, base, '#/world/canada/bath/wash', 1500),
@@ -261,6 +285,8 @@ export const motion = [
       await page.waitForTimeout(2500)
       await tapAnchor(page, 'cedar')
       await page.waitForTimeout(5000)
+      await tapAnchor(page, 'duck')
+      await page.waitForTimeout(1200)
     },
   },
   {
