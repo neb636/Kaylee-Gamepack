@@ -48,20 +48,22 @@ import type { HuddleSection } from './sections'
 import { huddleSfx } from './sounds'
 
 const FILE = 'src/world/places/poles/activities/huddle/world.ts'
+/** Where she carries the dads: the sections these knobs tune. */
+const CARRYING = ['small', 'blizzard', 'hatch']
 /** Her finger on a penguin (live in the feel lab: ?feel=1). */
 const DRAG = knobs('huddleDrag', 'Carry a penguin', FILE, {
-  follow: { value: 14, min: 2, max: 40, step: 1, label: 'Follow her finger', unit: '/s', note: 'how quickly a held penguin catches up with her finger (low = floaty)' },
+  follow: { value: 14, min: 2, max: 40, step: 1, label: 'Follow her finger', unit: '/s', note: 'how quickly a held penguin catches up with her finger (low = floaty)', main: true },
   lift: { value: 0.4, min: 0, max: 1.2, step: 0.02, label: 'Lift', unit: 'm', note: 'how high a held penguin is lifted off the snow' },
-  grab: { value: 1.25, min: 0.8, max: 2, step: 0.05, label: 'Grab reach', unit: '×', note: 'how far outside a penguin her finger still picks him up (times his size on screen)' },
+  grab: { value: 1.25, min: 0.8, max: 2, step: 0.05, label: 'Grab reach', unit: '×', note: 'how far outside a penguin her finger still picks him up (times his size on screen)', main: true },
   pushHeld: { value: 0.45, min: 0, max: 1, step: 0.05, label: 'Push while held', note: 'how hard a held penguin shoves the others aside (0 = he floats over them)' },
-  squish: { value: 9, min: 1, max: 30, step: 0.5, label: 'Squish', unit: '/s', note: 'how quickly the huddle makes room (low = soft and slow)' },
+  squish: { value: 9, min: 1, max: 30, step: 0.5, label: 'Squish', unit: '/s', note: 'how quickly the huddle makes room (low = soft and slow)', main: true },
   snug: { value: 0.55, min: 0, max: 2, step: 0.05, label: 'Huddle together', unit: 'm/s', note: 'how fast warm penguins shuffle up to touch the huddle (cold ones are too frozen to move)' },
   drift: { value: 0.22, min: 0, max: 1, step: 0.02, label: 'Back to the middle', unit: 'm/s', note: 'how fast the whole huddle shuffles back to the middle of the ice' },
   cork: { value: 0.38, min: 0.1, max: 0.9, step: 0.02, label: 'Cork pop', note: 'squeezed this far into another when let go (0.2 is a careful drop, 0.4 a hard shove), the other pops out the top' },
-})
+}, { sections: CARRYING })
 const WARM = knobs('huddle', 'Wind and warmth', FILE, {
-  warm: { value: 3, min: 0.5, max: 12, step: 0.5, label: 'Warm-up time', unit: 's', note: 'cold to warm, out of the wind in the huddle' },
-  cool: { value: 15, min: 4, max: 60, step: 1, label: 'Cool-down time', unit: 's', note: 'warm to cold on the windy edge' },
+  warm: { value: 3, min: 0.5, max: 12, step: 0.5, label: 'Warm-up time', unit: 's', note: 'cold to warm, out of the wind in the huddle', main: true },
+  cool: { value: 15, min: 4, max: 60, step: 1, label: 'Cool-down time', unit: 's', note: 'warm to cold on the windy edge', main: true },
   blizzard: { value: 1.4, min: 1, max: 3, step: 0.1, label: 'Blizzard is colder', unit: '×', note: 'how much faster they cool in the blizzard' },
   alone: { value: 1.8, min: 1, max: 4, step: 0.1, label: 'Alone is colder', unit: '×', note: 'how much faster one touching nobody cools' },
   shiver: { value: 0.4, min: 0.1, max: 0.8, step: 0.05, label: 'Shivers below', note: 'how cold before he shivers (warmed up from there, he counts)' },
@@ -73,8 +75,8 @@ const WARM = knobs('huddle', 'Wind and warmth', FILE, {
   egg: { value: 5, min: 1, max: 20, step: 0.5, label: 'Egg hatches after', unit: 's', note: "of Papa being warm" },
   gusts: { value: 3, min: 1, max: 8, step: 1, label: 'Gusts', note: "times the wind blows Pebble out before Papa's song" },
   gustEvery: { value: 7, min: 2, max: 20, step: 0.5, label: 'Gust after', unit: 's', note: 'once Pebble is tucked back in' },
-  tuck: { value: 0.9, min: 0.3, max: 2, step: 0.05, label: 'Tuck reach', unit: 'm', note: "how near Papa's feet Pebble must be let go to tuck in" },
-})
+  tuck: { value: 0.9, min: 0.3, max: 2, step: 0.05, label: 'Tuck reach', unit: 'm', note: "how near Papa's feet Pebble must be let go to tuck in", main: true },
+}, { sections: CARRYING })
 
 /** What Sparkle says to do at each moment (L.huddle): spoken when it changes, and her hint when stuck. */
 export type Cue = 'small' | 'more' | 'blizzard' | 'turned' | 'hatch' | 'hatched' | 'blown' | 'song' | 'done'

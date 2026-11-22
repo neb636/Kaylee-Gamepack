@@ -46,34 +46,34 @@ import { TO_DEG } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/activities/slide/slide.ts'
 /** The finger wheel: Dad's numbers from the Nan drive's feel lab (2026-10-27), as the start for a penguin on ice. */
-const STEER = knobs('steer', 'Steering', FILE, {
-  slide: { value: 6.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides him across the slope' },
-  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
+const STEER = knobs('slideSteer', 'Steering', FILE, {
+  slide: { value: 6.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides him across the slope', main: true },
+  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)', main: true },
   dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
   curve: { value: 1.3, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
   ease: { value: 0.08, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
   aim: { value: 10, min: 3, max: 24, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'the nearest point he steers toward: closer = sharper, but he swings back and forth' },
   pull: { value: 1.2, min: 0, max: 4, step: 0.1, label: 'Aim closer when far off', note: 'per meter he is from where she steers: a full push swerves more' },
-  turn: { value: 0.6, min: 0.2, max: 1.2, step: 0.02, label: 'Sharpest swerve', unit: 'rad', note: 'how steeply he can cut across the slope' },
+  turn: { value: 0.6, min: 0.2, max: 1.2, step: 0.02, label: 'Sharpest swerve', unit: 'rad', note: 'how steeply he can cut across the slope', main: true },
   back: { value: 1.2, min: 0.3, max: 4, step: 0.1, label: 'Back to the middle', unit: 's', note: 'how slowly he drifts back to the middle of the valley (or his run) after she lets go' },
-})
+}, { sections: ['top', 'bumps', 'dive'] })
 /** The slide down the ice. */
 const SLIDE = knobs('slide', 'The slide', FILE, {
-  speed: { value: 17.5, min: 4, max: 28, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'on the bumps; the gentle slope is a share of it' },
+  speed: { value: 17.5, min: 4, max: 28, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'on the bumps; the gentle slope is a share of it', main: true },
   gentle: { value: 0.8, min: 0.4, max: 1, step: 0.05, label: 'Gentle slope', unit: '×', note: 'top speed on the first stretch, as a share' },
   accel: { value: 6.5, min: 1, max: 16, step: 0.25, label: 'Speeding up', unit: 'm/s²', note: 'how fast he gets going' },
-  gravity: { value: 16, min: 6, max: 30, step: 0.5, label: 'Gravity in the air', unit: 'm/s²', note: 'lower = floatier hops off the bumps' },
-  bank: { value: 1.8, min: 0, max: 3, step: 0.1, label: 'Up the snowbank', unit: 'm', note: 'how far past the edge of the ice she can steer him' },
+  gravity: { value: 16, min: 6, max: 30, step: 0.5, label: 'Gravity in the air', unit: 'm/s²', note: 'lower = floatier hops off the bumps', main: true },
+  bank: { value: 1.8, min: 0, max: 3, step: 0.1, label: 'Up the snowbank', unit: 'm', note: 'how far past the edge of the ice she can steer him', main: true },
   stuck: { value: 1.3, min: 0.4, max: 3, step: 0.1, label: 'Stuck in the snow', unit: 's', note: 'how long his feet wiggle before he pops out' },
   dodge: { value: 7, min: 2, max: 14, step: 0.5, label: 'Adélies hop aside at', unit: 'm', note: 'how far ahead the wide-awake ones see him coming (the sleepy ones never do: bump!)' },
-})
+}, { sections: ['top', 'bumps'] })
 /** Under the sea. */
 const SWIM = knobs('swim', 'Under the sea', FILE, {
-  speed: { value: 11, min: 3, max: 20, step: 0.5, label: 'Swim speed', unit: 'm/s', note: 'how fast he flies through the water' },
-  slide: { value: 5.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push moves him across' },
-  magnet: { value: 1.4, min: 0, max: 4, step: 0.1, label: 'Krill come to him', unit: 'm', note: 'a swarm this close drifts into his beak (0 = only dead on)' },
+  speed: { value: 11, min: 3, max: 20, step: 0.5, label: 'Swim speed', unit: 'm/s', note: 'how fast he flies through the water', main: true },
+  slide: { value: 5.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push moves him across', main: true },
+  magnet: { value: 1.4, min: 0, max: 4, step: 0.1, label: 'Krill come to him', unit: 'm', note: 'a swarm this close drifts into his beak (0 = only dead on)', main: true },
   leap: { value: 3.5, min: 1, max: 7, step: 0.25, label: 'Leap out', unit: 'm', note: 'how high he rockets out onto the ice at the end' },
-})
+}, { sections: ['dive'] })
 
 export interface SlideStart {
   section: SlideSection

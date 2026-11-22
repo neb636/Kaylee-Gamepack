@@ -37,15 +37,15 @@ const FILE = 'src/world/places/poles/activities/coats/SnowCoats.tsx'
 /** Her finger's brush (live in the feel lab: ?feel=1). Sizes are stage units: the wide stage is 1600 x 1000, the tall
  *  one 1000 x 1500 (on an iPad a stage unit is about 0.65 px). */
 const BRUSH = knobs('coatsBrush', 'Rub the coat', FILE, {
-  size: { value: 84, min: 20, max: 240, step: 2, label: 'Brush size', unit: 'u', note: 'how wide her finger paints (the stage is 1600 wide)' },
+  size: { value: 84, min: 20, max: 240, step: 2, label: 'Brush size', unit: 'u', note: 'how wide her finger paints (the stage is 1600 wide)', main: true },
   smoothing: { value: 0.6, min: 0, max: 1, step: 0.05, label: 'Smoothing', note: "how soft and round the stroke's edge is" },
   streamline: { value: 0.4, min: 0, max: 0.95, step: 0.05, label: 'Streamline', note: 'how much the stroke lags behind to even out a wobbly finger' },
   thinning: { value: 0.15, min: 0, max: 0.9, step: 0.05, label: 'Thinning', note: 'how much a fast rub gets thinner (0 = always the full size)' },
   spacing: { value: 4, min: 1, max: 30, step: 1, label: 'Point spacing', unit: 'u', note: 'how far her finger moves before the stroke takes a new point' },
-  reach: { value: 0.9, min: 0.4, max: 1.3, step: 0.05, label: 'Counts as painted', note: "share of the brush's width that counts toward how done a coat is" },
+  reach: { value: 0.9, min: 0.4, max: 1.3, step: 0.05, label: 'Counts as painted', note: "share of the brush's width that counts toward how done a coat is", main: true },
 })
 const COAT = knobs('coats', 'Coats and hiding', FILE, {
-  finish: { value: 0.78, min: 0.3, max: 1, step: 0.02, label: 'Finishes itself at', note: 'once this share of a coat is done, the rest puffs on by itself' },
+  finish: { value: 0.78, min: 0.3, max: 1, step: 0.02, label: 'Finishes itself at', note: 'once this share of a coat is done, the rest puffs on by itself', main: true },
   fluff: { value: 14, min: 0, max: 30, step: 1, label: 'Fluff', unit: 'u', note: 'how big the fluffy tufts grow on a white coat' },
   settle: { value: 35, min: 5, max: 120, step: 1, label: 'Snow settles', unit: 's', note: 'how long the ground takes to go white by itself while she paints the fox' },
   bearWait: { value: 4, min: 1, max: 15, step: 0.5, label: 'Bear comes after', unit: 's', note: 'seconds without rubbing (every animal at least half white) before the polar bear comes looking' },

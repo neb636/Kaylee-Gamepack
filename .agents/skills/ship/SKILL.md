@@ -23,7 +23,7 @@ below. Never paste fifteen links or a page of prose at them.
    - `title`, `checkIn` ("2 of 4: hear the script", or "fix"), `kaylee`: one line on what she gets, in her terms.
    - `questions`: **at most three**, each about taste, family or Kaylee, answerable in a word. Anything you could
      check yourself is not a question. No questions is fine.
-   - `tableReads`, `reels`, `links` (a `?feel=1` link when there are feel knobs), `pitches` at check-in 1.
+   - `tableReads`, `reels`, `links` (a `?feel=1` link when there are feel knobs, to the section where the `main` ones are: the README's generated feel lab list has it), `pitches` at check-in 1.
    - `listens` for recorded sound effects: made by `scripts/sfx-listens.mjs` (`sfx` skill), with each sound's times.
 2. `npm run build && node scripts/review.mjs --reels` (`--chromium` where WebKit isn't installed; film 3D on the Mac,
    `reel` skill). Then open `review/index.html` at phone width and look at it: does it make sense in ten seconds?

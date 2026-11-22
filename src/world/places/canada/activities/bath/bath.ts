@@ -68,15 +68,15 @@ const FILE = 'src/world/places/canada/activities/bath/bath.ts'
 /** How the bath feels: Dad tunes these by hand in the feel lab (?feel=1). */
 export const FEEL = knobs('bath', "Misty's bubble bath", FILE, {
   suds: { value: 1, min: 0.2, max: 3, step: 0.1, label: 'Suds per stroke', unit: '×', note: 'how many bubbles the sponge leaves as she rubs' },
-  mud: { value: 0.4, min: 0.05, max: 2, step: 0.05, label: 'Mud per stroke', note: 'how much mud the sponge loosens per 100 px of rubbing (it leaves a little for the rain)' },
-  rinse: { value: 1.4, min: 0.2, max: 4, step: 0.1, label: 'Rain rinse', unit: '/s', note: 'how fast the rain washes the mud off under the cloud' },
-  puff: { value: 0.25, min: 0.02, max: 0.5, step: 0.01, label: 'Puff per stroke', note: 'how much fluffier the towel makes her per 100 px of rubbing' },
-  paint: { value: 0.3, min: 0.05, max: 1, step: 0.05, label: 'Color per stroke', note: 'how much berry color goes on per 100 px of rubbing' },
-  reach: { value: 0.15, min: 0.05, max: 0.4, step: 0.01, label: "A tool's reach", unit: 'm', note: 'how far round her finger a tool works' },
+  mud: { value: 0.4, min: 0.05, max: 2, step: 0.05, label: 'Mud per stroke', note: 'how much mud the sponge loosens per 100 px of rubbing (it leaves a little for the rain)', main: true },
+  rinse: { value: 1.4, min: 0.2, max: 4, step: 0.1, label: 'Rain rinse', unit: '/s', note: 'how fast the rain washes the mud off under the cloud', main: true },
+  puff: { value: 0.25, min: 0.02, max: 0.5, step: 0.01, label: 'Puff per stroke', note: 'how much fluffier the towel makes her per 100 px of rubbing', main: true },
+  paint: { value: 0.3, min: 0.05, max: 1, step: 0.05, label: 'Color per stroke', note: 'how much berry color goes on per 100 px of rubbing', main: true },
+  reach: { value: 0.15, min: 0.05, max: 0.4, step: 0.01, label: "A tool's reach", unit: 'm', note: 'how far round her finger a tool works', main: true },
   tap: { value: 1.0, min: 0.3, max: 2.5, step: 0.1, label: "A tap's short go", unit: 's', note: 'how long a tool works by itself after a tap' },
   glow: { value: 16, min: 4, max: 40, step: 1, label: 'Strokes before the pool glows', note: 'strokes and decorations in the colors part before the mirror' },
   idle: { value: 14, min: 6, max: 40, step: 1, label: 'Moves on by itself after', unit: 's', note: 'with nothing done for this long, the next tool comes anyway' },
-})
+}, { sections: ['wash', 'fluff', 'colors'] })
 
 export interface BathStart {
   section: BathSection

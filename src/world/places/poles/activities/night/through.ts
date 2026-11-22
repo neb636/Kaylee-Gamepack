@@ -50,19 +50,19 @@ import { huddleSfx3 as sfx, voice, type Singer } from './sounds'
 const FILE = 'src/world/places/poles/activities/night/through.ts'
 /** Leading Pebble (live in the feel lab: ?feel=1). */
 const LEAD = knobs('lead', 'Through the Huddle: leading Pebble', FILE, {
-  walk: { value: 1.7, min: 0.4, max: 5, step: 0.1, label: 'Waddle speed', unit: 'm/s', note: 'how fast Pebble waddles after her finger' },
-  follow: { value: 5, min: 1, max: 20, step: 0.5, label: 'Turn to follow', unit: '/s', note: 'how quickly he changes direction (low = lazy)' },
-  pull: { value: 0.45, min: 0, max: 1.5, step: 0.05, label: 'Pull to Papa', unit: 'm/s', note: 'the gentle pull toward the gold notes while she leads him roughly that way' },
+  walk: { value: 1.7, min: 0.4, max: 5, step: 0.1, label: 'Waddle speed', unit: 'm/s', note: 'how fast Pebble waddles after her finger', main: true },
+  follow: { value: 5, min: 1, max: 20, step: 0.5, label: 'Turn to follow', unit: '/s', note: 'how quickly he changes direction (low = lazy)', main: true },
+  pull: { value: 0.45, min: 0, max: 1.5, step: 0.05, label: 'Pull to Papa', unit: 'm/s', note: 'the gentle pull toward the gold notes while she leads him roughly that way', main: true },
   squish: { value: 7, min: 1, max: 20, step: 0.5, label: 'Squish', unit: '/s', note: 'how quickly the dads he walks into make room' },
   back: { value: 0.9, min: 0.1, max: 4, step: 0.1, label: 'Shuffle back', unit: '/s', note: 'how quickly a squished dad shuffles back to his spot' },
-  flick: { value: 900, min: 300, max: 3000, step: 50, label: 'Flick speed', unit: 'px/s', note: 'a finger this fast when let go sends him on a tummy slide' },
+  flick: { value: 900, min: 300, max: 3000, step: 50, label: 'Flick speed', unit: 'px/s', note: 'a finger this fast when let go sends him on a tummy slide', main: true },
   slide: { value: 3.2, min: 1, max: 8, step: 0.1, label: 'Slide distance', unit: 'm' },
   churn: { value: 0.045, min: 0, max: 0.3, step: 0.005, label: 'Churn', unit: 'rad/s', note: 'how fast the huddle turns in the churn (halved after the gust)' },
   gold: { value: 3, min: 1, max: 10, step: 0.25, label: 'Gold notes for', unit: 's', note: "how long Papa's gold notes stay up the first time (a second longer each time after)" },
   close: { value: 1.5, min: 0.6, max: 3, step: 0.1, label: 'Close to Papa', unit: 'm', note: 'how near Pebble gets before the huddle shuffles Papa away (and before the gust)' },
-  tuck: { value: 0.95, min: 0.4, max: 2, step: 0.05, label: 'Tuck reach', unit: 'm', note: "how near Papa's feet Pebble must get to tuck in" },
+  tuck: { value: 0.95, min: 0.4, max: 2, step: 0.05, label: 'Tuck reach', unit: 'm', note: "how near Papa's feet Pebble must get to tuck in", main: true },
   songs: { value: 3, min: 1, max: 6, step: 1, label: 'Songs to open', note: 'songs in the packed middle before the dads step aside' },
-})
+}, { sections: ['huddle'] })
 
 export type ThroughPart = 'near' | 'churn' | 'middle'
 export interface ThroughStart {

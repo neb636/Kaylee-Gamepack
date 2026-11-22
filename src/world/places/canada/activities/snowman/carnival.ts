@@ -46,28 +46,30 @@ import type { BallSize, SnowmanSection } from './sections'
 import { damp } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/snowman/carnival.ts'
+/** Where she rolls snowballs: the sections these knobs tune. */
+const ROLLING = ['roll', 'stack', 'dress']
 /** Her finger pushing a ball. */
 const PUSH = knobs('snowPush', 'Pushing a snowball', FILE, {
-  follow: { value: 5, min: 1, max: 15, step: 0.25, label: 'Follows her finger', unit: '/s', note: 'how eagerly the ball rolls to her finger (its speed = this × the gap)' },
-  speed: { value: 6, min: 1, max: 12, step: 0.1, label: 'Top speed (little ball)', unit: 'm/s', note: 'the fastest a fresh little ball rolls' },
+  follow: { value: 5, min: 1, max: 15, step: 0.25, label: 'Follows her finger', unit: '/s', note: 'how eagerly the ball rolls to her finger (its speed = this × the gap)', main: true },
+  speed: { value: 6, min: 1, max: 12, step: 0.1, label: 'Top speed (little ball)', unit: 'm/s', note: 'the fastest a fresh little ball rolls', main: true },
   heavy: { value: 0.55, min: 0, max: 1.5, step: 0.05, label: 'Big balls are slower', note: '0 = every ball as fast; 1 = twice as big, half as fast' },
   grip: { value: 9, min: 1, max: 30, step: 0.5, label: 'Grip', unit: '/s', note: 'how quickly the ball takes up her finger’s speed (low = it lags behind and swings)' },
   coast: { value: 2.4, min: 0.3, max: 8, step: 0.1, label: 'Rolls on after letting go', unit: '/s', note: 'how fast a ball she let go of slows down (lower = rolls further)' },
-  grab: { value: 56, min: 0, max: 160, step: 2, label: 'Grab around the ball', unit: 'px', note: 'a finger this far outside the ball’s edge still grabs it' },
-})
+  grab: { value: 56, min: 0, max: 160, step: 2, label: 'Grab around the ball', unit: 'px', note: 'a finger this far outside the ball’s edge still grabs it', main: true },
+}, { sections: ROLLING })
 /** The ball growing as it rolls. */
 const GROW = knobs('snowGrow', 'Growing', FILE, {
-  rate: { value: 0.06, min: 0.005, max: 0.2, step: 0.005, label: 'Grows', unit: 'm per m', note: 'how much a little ball’s radius grows for every meter it rolls' },
+  rate: { value: 0.06, min: 0.005, max: 0.2, step: 0.005, label: 'Grows', unit: 'm per m', note: 'how much a little ball’s radius grows for every meter it rolls', main: true },
   slow: { value: 0.7, min: 0, max: 2, step: 0.05, label: 'Big ones grow slower', note: '0 = always the same; 1 = twice as big, half the growth' },
   fresh: { value: 0.3, min: 0.15, max: 0.6, step: 0.01, label: 'A new ball', unit: 'm', note: 'the radius of a ball she or Maple pats together' },
   max: { value: 1.75, min: 0.8, max: 3, step: 0.05, label: 'Biggest', unit: 'm', note: 'no ball grows past this radius' },
   squish: { value: 0.12, min: 0, max: 0.3, step: 0.01, label: 'Big ones squish', note: 'how much the biggest balls squash down' },
-})
+}, { sections: ROLLING })
 /** Rolling a ball into a box. */
 const AIM = knobs('snowAim', 'Into the box', FILE, {
-  reach: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'Help from', unit: 'm', note: 'a ball rolling toward a box this close is drawn in' },
-  pull: { value: 7, min: 0, max: 20, step: 0.5, label: 'Help', unit: 'm/s²', note: 'how hard it’s drawn toward the box' },
-})
+  reach: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'Help from', unit: 'm', note: 'a ball rolling toward a box this close is drawn in', main: true },
+  pull: { value: 7, min: 0, max: 20, step: 0.5, label: 'Help', unit: 'm/s²', note: 'how hard it’s drawn toward the box', main: true },
+}, { sections: ['dress'] })
 
 export interface SnowStart {
   section: SnowmanSection
