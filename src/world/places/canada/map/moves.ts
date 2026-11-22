@@ -24,7 +24,7 @@ import { Lulu } from '../characters/lulu'
 import { ToyActor, type Performer } from '../characters/toy'
 import { Tuque } from '../characters/tuque'
 import type { ChapterId } from '../story/chapters'
-import { makePuck } from '../story/props'
+import { makePuck, stickFit, stickParts } from '../story/props'
 import { moveSfx } from './sounds'
 
 const TAU = Math.PI * 2
@@ -192,17 +192,10 @@ function rock(bag: Bag) {
   return solid(merge([P.sphere(0.055, ROCK, { scale: [1, 0.78, 0.92] }, 12), P.sphere(0.02, '#CBC8D8', { at: [0.022, 0.022, 0.032] }, 6), P.sphere(0.012, '#8E8AA0', { at: [-0.025, -0.005, 0.038] }, 6)]), bag, 1.4)
 }
 
-/** Misty's stick on the map: the game's hockey stick (story/props.ts makeStick), but twice as thick, in a darker wood
- *  and with a bigger pink blade, so it reads from the board's high camera against the snow. */
+/** Misty's stick on the map: the game's hockey stick (story/props.ts), but twice as thick, in a darker wood and with
+ *  a bigger blade, so it reads from the board's high camera against the snow. */
 function mapStick(H: number, bag: Bag) {
-  return solid(
-    merge([
-      P.cyl(0.032 * H, 0.032 * H, 0.52 * H, '#C99A6E', { at: [0.09 * H, -0.25 * H, 0.1 * H], rot: [0.42, 0, 0] }, 8),
-      P.rbox(0.07 * H, 0.05 * H, 0.24 * H, 0.016 * H, CANADA_COLORS.scarf, { at: [0.09 * H, -0.46 * H, 0.28 * H] }),
-    ]),
-    bag,
-    2.2,
-  )
+  return solid(merge(stickParts({ ...stickFit(H, CANADA_COLORS.scarf, 2, '#C99A6E'), blade: 0.25 * H })), bag, 2.2)
 }
 
 /** A pinecone about 0.15 long, lying along z: a brown egg with three rings of scales and a stalk. */

@@ -14,12 +14,15 @@
 // `buildRiver` makes it (the film stage and the game both call it), `updateRiver` keeps it moving.
 import { AdditiveBlending, BufferGeometry, CircleGeometry, CylinderGeometry, Float32BufferAttribute, Group, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, RingGeometry, Sprite, SpriteMaterial, Vector3, type Camera, type Object3D } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
-import { bake, merge, P, solid, type V3 } from '../../../../engine3d/geo'
+import { bake, merge, P, solid, solidMix, type V3 } from '../../../../engine3d/geo'
 import { radialAlpha, softTexture } from '../../../../engine3d/softTexture'
 import { bed, clip } from '../../../../kit/clips'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import { url } from '../../sfx'
 import type { FilmSet, SetLook } from '../stage'
+import { berry, leaf, type BerryParts } from './berries'
+import { BigSplash } from './bathSplash'
+import { forestDepth, GREEN, groundTufts, mossMound, mossyCedar, nurseLog, swordFern } from './bathForest'
 import { edgePoints, lowSdf, makeBeams, makeFalls, makePuffs, makeWater, outward, rng, upSdf, type Puff } from './bathWater'
 
 /** The falls' face (z) and how high the upper river is. */
@@ -42,8 +45,8 @@ const WATER_Y = 0.04
 const STEP_GAP = 1.7
 
 // The river's colors.
-const MOSS = '#86C268'
-const MOSS_DARK = '#68A955'
+const MOSS = GREEN.moss
+const MOSS_DARK = GREEN.mossDark
 const ROCK = '#ABA4B8'
 const ROCK_DARK = '#918AA0'
 const STONES = ['#B9B2C6', '#A79FB5', '#CCC5D6', '#C2B6A8', '#9E97AE']
@@ -57,10 +60,7 @@ const LILIES: [number, number, number, number][] = [
   [1.32, -0.55, 0.1, 4],
   [-2.02, -1.38, 0.09, 1.3],
 ]
-const BARK = '#9A5A44'
 const BARK_DARK = '#7A4434'
-const CEDAR = ['#47895A', '#55A063', '#66B470']
-const FERN = '#6AB45A'
 const BERRY = '#7B5BC4'
 const SALMONBERRY = '#FF8A5C'
 /** Sockeye on their way home: a bright red body, an olive-green head (the game's SOCKEYE). */
@@ -109,8 +109,9 @@ export interface RiverSet {
   salmon: ReturnType<typeof makeSalmon>[]
   /** Throws salmon `i` from `from` to `to` (a parabola `arc` meters over the higher end) in `dur` seconds. */
   leap(i: number, from: V3, to: V3, dur: number, arc?: number): void
-  /** The enormous splash (a white column of water that grows and falls back) at x, z on the pool. */
-  bigSplash(x: number, z: number): void
+  /** The enormous splash (a crown of water, a jet, drops flying, rings spreading: bathSplash.ts) at x, z on the pool;
+   *  `size` 1 is a bear landing. */
+  bigSplash(x: number, z: number, size?: number): void
   /** Maple's umbrella: a big leaf on a stem (add it to her root). */
   leaf: Group
   /** A paw full of berries (add it to Misty's right arm), and the purple round her mouth (her head). */
@@ -129,54 +130,39 @@ export interface RiverSet {
   foam: Group
   mist: Sprite[]
   rain: LineSegments
-  splash: { g: Group; t: number }
+  splash: BigSplash
   /** Where the rings round her legs spread from on the pool, and how strong they are (0: none, when she's out). */
   wade: { x: number; z: number; k: number }
   /** The shaders' clocks (the water, the falls, the spray, the sunbeams). */
   fx: { update(t: number): void; wade(x: number, z: number, k: number): void }
 }
 
-/** A cedar `h` meters tall at (x, y, z): a red-brown trunk with a flared foot and moss on it, drooping green tiers. */
-function cedar(x: number, y: number, z: number, h: number, r: number) {
-  const parts = [P.cyl(r * 0.5, r, h, BARK, { at: [x, y + h / 2, z] }, 10), P.cone(r * 1.7, r * 2.2, BARK_DARK, { at: [x, y + r * 1.1, z] }, 10)]
-  for (let i = 0; i < 4; i++) {
-    const a = i * 1.9 + x
-    const yy = y + 0.6 + i * 0.9
-    parts.push(P.sphere(r * 0.45, i % 2 ? MOSS : MOSS_DARK, { at: [x + Math.cos(a) * r * 0.85, yy, z + Math.sin(a) * r * 0.85], scale: [1, 1.5, 1] }, 8))
-  }
-  const tiers = 7
-  for (let i = 0; i < tiers; i++) {
-    const k = i / (tiers - 1)
-    const rr = (2.5 - 1.9 * k) * (r / 0.9)
-    parts.push(P.cone(rr, h * 0.16, CEDAR[i % 3], { at: [x, y + h * (0.42 + 0.56 * k), z] }, 9))
-  }
-  return parts
-}
+/** A giant cedar in the rainforest: moss up its trunk, moss beards on its branches (bathForest.ts). */
+const cedar = (x: number, y: number, z: number, h: number, r: number) => mossyCedar(x, y, z, h, r, 0.1, Math.round(Math.abs(x * 5 + z * 3)) + 1)
 
-/** A fern: eight fronds round a middle, arching up and out. */
-function fern(x: number, z: number, s = 1, y = 0) {
-  const parts = []
-  for (let i = 0; i < 8; i++) {
-    const a = (i / 8) * Math.PI * 2 + x * 3
-    parts.push(P.sphere(0.5 * s, i % 2 ? FERN : MOSS_DARK, { at: [x + Math.cos(a) * 0.3 * s, y + 0.16 * s, z - Math.sin(a) * 0.3 * s], rot: [0, a, 0.42], order: 'YZX', scale: [0.75, 0.05, 0.17] }, 8))
-  }
-  return parts
-}
+/** A fern: a sword fern with real fronds (bathForest.ts). */
+const fern = (x: number, z: number, s = 1, y = 0) => swordFern(x, z, s * 1.35, y, 9, Math.round(x * 7 + z * 13))
 
-/** A berry bush: round dark leaves, purple huckleberries and orange salmonberries all over. */
-function bush(x: number, z: number, s = 1, y = 0) {
-  const parts = [
+/** A berry bush: a leafy mound with real-looking berries hanging off it (story/sets/berries.ts): orange salmonberries
+ *  (bumpy, like raspberries) and purple huckleberries (round, with a little crown). */
+function bush(x: number, z: number, s = 1, y = 0, out: BerryParts) {
+  out.lined.push(
     P.sphere(0.5 * s, MOSS_DARK, { at: [x, y + 0.42 * s, z] }, 12),
     P.sphere(0.38 * s, '#4E8F4A', { at: [x + 0.42 * s, y + 0.32 * s, z + 0.1 * s] }, 10),
     P.sphere(0.36 * s, '#4E8F4A', { at: [x - 0.44 * s, y + 0.3 * s, z - 0.05 * s] }, 10),
-  ]
-  for (let i = 0; i < 16; i++) {
-    const a = i * 2.4
-    const up = 0.25 + (i % 5) * 0.14
-    const rr = 0.5 * s * Math.cos(up)
-    parts.push(P.sphere(0.05 * s, i % 3 ? BERRY : SALMONBERRY, { at: [x + Math.cos(a) * (rr + 0.06 * s) * (i % 2 ? 1.3 : 1), y + 0.42 * s + Math.sin(up) * 0.5 * s, z + Math.sin(a) * rr + 0.05 * s] }, 6))
+  )
+  for (let i = 0; i < 18; i++) {
+    const a = i * 2.39
+    const up = 0.1 + (i % 4) * 0.33
+    const rr = 0.52 * s
+    leaf(i % 2 ? '#5FB356' : '#4E9A45', 0.26 * s, [x + Math.cos(a) * rr * Math.cos(up), y + 0.42 * s + Math.sin(up) * 0.5 * s, z + Math.sin(a) * rr * Math.cos(up) * 0.85], -a, -0.3 - up * 0.3, out)
   }
-  return parts
+  for (let i = 0; i < 10; i++) {
+    const a = i * 2.4 + 0.3
+    const up = 0.2 + (i % 4) * 0.18
+    const rr = 0.55 * s * Math.cos(up)
+    berry(i % 3 ? 'crown' : 'bumpy', i % 3 ? BERRY : SALMONBERRY, (i % 3 ? 0.065 : 0.08) * s, [x + Math.cos(a) * rr * (i % 2 ? 1.2 : 1), y + 0.42 * s + Math.sin(up) * 0.5 * s, z + Math.sin(a) * rr * 0.7 + 0.12 * s], out, 5)
+  }
 }
 
 /** A skunk cabbage: big bright leaves standing up round a yellow hood. */
@@ -214,8 +200,9 @@ function flowers(x: number, z: number, n: number, y = 0, seed = 1) {
   return parts
 }
 
-/** A sunny rainforest morning: a pastel sky, warm light, a soft haze far off (the films' stage and the game's sky). */
-export const RIVER_LOOK: SetLook = { sky: ['#94CEF2', '#BEE3F5', '#E6F4EE'], fog: ['#DEEFE6', 20, 85], light: [1.14, 1.12], tint: '#FFFBF6', clouds: false }
+/** A bright morning in the Great Bear Rainforest: a minty sky up through the canopy, the forest going back into a soft
+ *  green haze, warm light (the films' stage and the game's sky). */
+export const RIVER_LOOK: SetLook = { sky: ['#A9DCC8', '#BFE6CC', '#B4DDB8'], fog: ['#B4DDB8', 12, 52], light: [1.12, 1.08], tint: '#FFFBF0', clouds: false }
 
 /** Builds the river in `root`: everything the films and the game see. */
 export function buildRiver(bag: Bag, root: Group): RiverSet {
@@ -352,9 +339,6 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
       ...fern(2.4, -5, 1.1, TOP),
       ...fern(-5.6, -4.6, 1.3, TOP),
       ...fern(5, -4.4, 1.2, TOP),
-      ...bush(-4.4, -1.4, 1.1),
-      ...bush(-5.6, 1.8, 0.9),
-      ...bush(4.3, -1.6, 0.95),
       ...skunk(-2.85, -1.25, 1.1),
       ...skunk(2.75, -1.05, 0.95),
       ...skunk(-3.35, -0.1, 1.2),
@@ -368,6 +352,36 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
       P.sphere(0.025, '#FFD95A', { at: [LILIES[1][0], WATER_Y + 0.05, LILIES[1][1]] }, 6),
     ]
     root.add(solid(merge(plants), bag, 1.4))
+    const bushes: BerryParts = { lined: [], plain: [] }
+    bush(-4.4, -1.4, 1.1, 0, bushes)
+    bush(-5.6, 1.8, 0.9, 0, bushes)
+    bush(4.3, -1.6, 0.95, 0, bushes)
+    root.add(solidMix(bushes.lined, bushes.plain, bag, 1.4))
+
+    // ---- The Great Bear Rainforest round it all (bathForest.ts): trunks going back into the haze, moss mounds and
+    // fallen trees gone green on both floors, tufts of moss on the open ground.
+    /** Spots the films and the game stand on (never under a mound): Maple's marks, Misty's bank and her slide, the
+     *  bath-out pair, the soap rock. */
+    const marks: [number, number][] = [[-2.55, -0.6], [-1.85, -0.5], [-1.4, -0.1], [-3.55, -0.05], [-4.6, 0.75], [-5.1, 0.95], [2.15, -0.55], [1.25, -1.15], [-1.25, -1.6], [-0.66, -1.55], [-1.2, 0.8], [-0.82, -0.95]]
+    const clear = (x: number, z: number, r: number) => marks.every(([mx, mz]) => Math.hypot(x - mx, z - mz) > r)
+    const lowOk = (x: number, z: number) => lowSdf(x, z) > 0.7 && clear(x, z, 1.1) && !(Math.abs(x) < 3.3 && z > -0.6)
+    const upOk = (x: number, z: number) => upSdf(x, z) > 0.9 && Math.hypot(x - TALLEST.x, z - TALLEST.z) > 2.6
+    const depth = forestDepth(3, (x, z) => (z < FALLS_Z - 1 ? upOk(x, z) : lowSdf(x, z) > 1.5))
+    const floor: BufferGeometry[] = []
+    const mr = rng(21)
+    for (let i = 0; i < 46; i++) {
+      const up = i % 2 === 0
+      const x = (mr() - 0.5) * (up ? 26 : 22)
+      const z = up ? FALLS_Z - 1.5 - mr() * 13 : FALLS_Z + 0.5 + mr() * 12
+      if (up ? !upOk(x, z) : !lowOk(x, z)) continue
+      floor.push(...mossMound(x, z, 0.35 + mr() * 0.45, up ? TOP : 0, i + 1))
+    }
+    floor.push(...nurseLog(-5.2, -8.6, 5.5, 0.42, 0.25, TOP, 2), ...nurseLog(6.2, -6.4, 4.5, 0.38, -0.5, TOP, 3), ...nurseLog(-7.6, 3.4, 4.2, 0.4, 1.2, 0, 4))
+    for (const [x, z, sc, y] of [[-4.2, -6.8, 1.1, TOP], [-7.2, -5.4, 1.2, TOP], [4.4, -8.6, 1.0, TOP], [7.4, -4.6, 1.2, TOP], [0.2, -9.4, 0.9, TOP], [-3, -11, 1.1, TOP], [-6.8, -0.2, 1.3, 0], [7.2, 1.8, 1.2, 0], [-8.4, 6.2, 1.3, 0], [8.8, 6.4, 1.2, 0], [5.4, 3.4, 1.0, 0]] as const) {
+      floor.push(...swordFern(x, z, sc * 1.35, y, 9, Math.round(x * 3 - z)))
+    }
+    root.add(solid(merge(depth), bag, 1.2), solid(merge(floor), bag, 1.4))
+    root.add(solid(merge([...groundTufts(31, 90, [-12, 12, FALLS_Z + 0.4, 12], lowOk), ...groundTufts(32, 70, [-14, 14, -16, FALLS_Z - 1], upOk, TOP)]), bag, 0))
     root.add(
       solid(
         merge([
@@ -437,21 +451,8 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
     twinkle.add(solid(P.prism(star, 0.06, '#FFE27A'), bag, 1.6))
     twinkle.visible = false
     root.add(twinkle)
-    const splashG = solid(
-      // A crown of water: a fat foot, a fountain that opens out as it goes up, and a few fat drops on top.
-      merge(
-        Array.from({ length: 16 }, (_, i) => {
-          const up = i / 15
-          const a = i * 2.4
-          const out = 0.15 + up * 0.6
-          return P.sphere(0.2 + (1 - up) * 0.14, i % 3 ? '#FFFFFF' : '#DDF2FB', { at: [Math.cos(a) * out, 0.2 + up * 1.9, Math.sin(a) * out * 0.6], scale: [1, 0.75, 1] }, 9)
-        }),
-      ),
-      bag,
-      1.6,
-    )
-    splashG.visible = false
-    root.add(splashG)
+    const big = new BigSplash(bag, WATER_Y)
+    root.add(big.root)
 
     // The river, the falls and the rain on the leaves (one seamless bed, until the film is over).
     bag.add({ dispose: bed(url('salmon-river'), 0.3) })
@@ -467,10 +468,8 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
         f.root.visible = true
         f.root.position.set(...from)
       },
-      bigSplash(x, z) {
-        this.splash.t = 0
-        this.splash.g.position.set(x, 0, z)
-        this.splash.g.visible = true
+      bigSplash(x, z, size = 1) {
+        this.splash.start(x, z, size)
       },
       leaf,
       berries,
@@ -483,7 +482,7 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
       foam,
       mist,
       rain,
-      splash: { g: splashG, t: 9 },
+      splash: big,
       wade: { x: BATH.x, z: BATH.z, k: 1 },
       fx: {
         update(t) {
@@ -533,21 +532,8 @@ export function updateRiver(set: RiverSet, dt: number, t: number, camera: Camera
         riverSfx.splash()
       }
     }
-    // The big splash: up fast, then falling back.
-    const sp = set.splash
-    if (sp.t < 9) {
-      sp.t += dt
-      const k = sp.t / 1.1
-      if (k >= 1) sp.g.visible = false
-      else {
-        // (The column's height rises and falls, but its blobs stay round: they grow in at the start and shrink away at
-        // the end, never squashed into flat white plates on the water.)
-        const up = Math.sin(Math.min(1, k * 1.6) * Math.PI * 0.5) * (1 - Math.max(0, k - 0.45) / 0.55)
-        const f = Math.min(1, k / 0.12) * (k > 0.6 ? 1 - (k - 0.6) / 0.4 : 1)
-        const w = (0.6 + k * 0.9) * f
-        sp.g.scale.set(w, (0.9 + up * 1.4) * f, w)
-      }
-    }
+    // The big splash plays itself out.
+    set.splash.update(dt)
     // The twinkle faces the camera and pulses.
     if (set.twinkle.visible) {
       set.twinkle.quaternion.copy(camera.quaternion)
@@ -602,6 +588,10 @@ export const riverSfx = {
   leap: clip(url('salmon-leap'), () => noise(0.22, 0.08, 'bandpass', 1500, 3400, 0, 1.5)),
   splash: clip(url('salmon-splash'), () => noise(0.25, 0.1, 'bandpass', 2000, 700, 0, 1)),
   bigSplash: clip(url('salmon-splash-big'), () => (sfx.splash(), tone(120, 60, 0.3, 0.2, 'sine'))),
+  /** Misty sliding down the muddy bank on her bottom; bubbles where she went under; her bob back up out of the pool. */
+  mudslide: clip(url('salmon-mudslide'), () => noise(0.9, 0.1, 'bandpass', 400, 1200, 0, 1)),
+  bubbles: clip(url('salmon-bubbles'), () => [0, 0.2, 0.45].forEach((d) => tone(300, 520, 0.08, 0.08, 'sine', d))),
+  popup: clip(url('salmon-popup'), () => noise(0.3, 0.1, 'bandpass', 900, 2200, 0, 1)),
   /** A big paw (or a hockey stick) swishing through the air. */
   swing: clip(url('salmon-swing'), () => noise(0.3, 0.12, 'bandpass', 600, 2400, 0, 1)),
   /** The stick hitting the pinecone: thwock. */
