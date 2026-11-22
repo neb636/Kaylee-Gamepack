@@ -61,5 +61,5 @@ in `salt/layout.ts`, wired into `salt3d.ts` like the rice farm's films (`docs/fi
 
 ## Next
 
-Kaylee plays it (check-in 3): does she follow the story,
+You play it (check-in 3): does she follow the story,
 and is the dinner long enough? Own music and sounds after the script is heard.

@@ -49,6 +49,7 @@ One line each; the header comment at the top of every script says how to run it.
 | `contact-sheet.mjs` | Every image in a folder on one sheet, to check cutouts |
 | `shelf-sheet.mjs` | The game shelf's banners and icons on one sheet (`src/world/shelf/STYLE.md`) |
 | `thailand-map-land.mjs` | Writes the 3D Thailand map's coasts and borders from Natural Earth |
+| `bangkok-map-land.mjs` | Writes the Bangkok map's river, khlongs, main roads and parks from OpenStreetMap |
 
 ## Build plugins (`vite.config.ts`)
 

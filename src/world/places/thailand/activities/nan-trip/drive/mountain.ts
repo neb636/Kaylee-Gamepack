@@ -808,9 +808,10 @@ export class NanDrive implements World3D {
       F.z += F.vz * dt
       F.spin += dt * (4 + F.t * 3)
       c.root.position.set(F.x, F.y, F.z)
-      // Rolling out over its side, nose bobbing, wheels spinning in the air.
-      c.tilt.rotation.set(0, 0, 0)
-      c.body.rotation.set(Math.sin(F.t * 9) * 0.35, F.spin * 0.3, -F.side * F.spin)
+      // Rolling out over its side, nose bobbing, wheels spinning in the air. (The tumble turns `tilt`, not `body`: the
+      // wheels hang off `tilt` so the body can lean on bends, and turning only the body left them behind.)
+      c.tilt.rotation.set(Math.sin(F.t * 9) * 0.35, F.spin * 0.3, -F.side * F.spin)
+      c.body.rotation.set(0, 0, 0)
       c.body.position.y = 0
       c.body.scale.setScalar(1)
       for (const w of c.wheels) w.rotation.x += dt * 25
@@ -852,6 +853,7 @@ export class NanDrive implements World3D {
     this.y = p.y
     const c = this.car
     c.root.visible = true
+    c.tilt.rotation.set(0, 0, 0)
     c.body.rotation.set(0, 0, 0)
     this.pitch.x = this.pitch.v = this.roll.x = this.roll.v = 0
     this.drop = 1

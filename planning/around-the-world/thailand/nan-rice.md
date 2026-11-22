@@ -472,7 +472,7 @@ turning in and out, last year's afternoon (a bed), and two music cues (`rice-sto
 "Aroi mak!" without "That means so yummy!" (Kaylee speaks Thai). Recorded by the PR's voices job (no working OpenAI
 key locally).
 
-**Next.** Kaylee plays it (check-in 3). If she likes it,
+**Next.** You play it (check-in 3). If she likes it,
 the user will use this as the pattern for every story and cutscene (`docs/films.md`).
 
 **Lung's bench and look (2026-11-12, fix).** Last year's nap is now on a plank bench just left of the scarecrow

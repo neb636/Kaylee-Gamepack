@@ -78,31 +78,11 @@
   "influence": 0.7
  },
  {
-  "id": "krabi-street",
-  "label": "Krabi's street (loop)",
-  "prompt": "A sunny tropical roadside in southern Thailand outside a small airport: tropical birds chirping, soft cicadas, a warm breeze in palm leaves, a scooter far away now and then. Calm and happy. Seamless loop, no music, no voices.",
-  "seconds": 15,
-  "loop": true
- },
- {
   "id": "krabi-horn",
   "label": "the songthaew's horn",
   "prompt": "Two short friendly beeps of a small pickup truck taxi horn, beep beep. Recorded outdoors, realistic, cheerful, no music, no voices.",
   "seconds": 1,
   "influence": 0.7
- },
- {
-  "id": "krabi-pullaway",
-  "label": "the songthaew pulls away",
-  "prompt": "A small diesel pickup truck taxi pulling away from the curb, engine revving up softly and driving off down the road. Clean close recording, no music, no voices.",
-  "seconds": 3.5
- },
- {
-  "id": "krabi-engine",
-  "label": "the songthaew's engine (loop)",
-  "prompt": "A small diesel pickup truck engine idling steadily, gentle chugging rumble, heard from the back bench. Seamless loop, no music, no voices.",
-  "seconds": 4,
-  "loop": true
  },
  {
   "id": "house-thump",

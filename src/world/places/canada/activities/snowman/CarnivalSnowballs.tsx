@@ -3,7 +3,8 @@
 // with the story (Maple waves and asks for snowmen, in the scene; a touch skips it). Sparkle, in the corner, says the one
 // instruction for each part when it begins and helps when Kaylee is stuck; tap her or the line to hear it again. The
 // address bar follows her from part to part (sections.ts) and keeps how many snowmen she has made. After the parade the
-// stamp (onDone); "again" starts a fresh park.
+// stamp (onDone); "again" starts a fresh park. After the chapter's film in (`filmed`), the story's own hello is skipped:
+// the film has just told it, so she starts rolling at once with Sparkle's one instruction.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -31,11 +32,11 @@ const DEFAULT_SNOWMEN: Partial<Record<SnowmanSection, number>> = { dress: 1, par
 /** Sparkle doesn't repeat a hint sooner than this (s). */
 const HINT_GAP = 16
 
-export function CarnivalSnowballs({ onDone, setProgress }: Partial<CanadaActivityProps> = {}) {
+export function CarnivalSnowballs({ onDone, setProgress, filmed }: Partial<CanadaActivityProps> = {}) {
   const timers = useTimers()
   const { start, param, enter } = useSections(SNOWMAN_SECTIONS)
   const [run, setRun] = useState<SnowStart & { n: number }>(() => {
-    const section = (start ?? 'story') as SnowmanSection
+    const section = (start ?? (filmed ? 'roll' : 'story')) as SnowmanSection
     const n = Number(param('snowmen')) || DEFAULT_SNOWMEN[section] || 0
     return { section, size: param('size') as BallSize, snowmen: n, n: 0 }
   })

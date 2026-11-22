@@ -127,7 +127,6 @@ export class GoodbyeWorld implements World3D {
 
   private held = false
   private lastHold = 0
-  private nextBurner = 0
   private warmSaid = false
   private home = false
   private poked = new Set<string>()
@@ -254,10 +253,7 @@ export class GoodbyeWorld implements World3D {
       this.events.talk(F.warm, 'friend')
     }
     if (!this.home && this.s >= this.route.length - 0.5 * DEG) this.arrive()
-    if (this.held && t >= this.nextBurner) {
-      this.nextBurner = t + 1.1
-      flySfx.burner()
-    }
+    if (this.held) flySfx.burner()
     this.flame.visible = this.held
     // The balloon at the top of the globe; the friends turn to the camera.
     this.balloonG.position.set(0, 1 + this.alt, 0)
@@ -332,7 +328,6 @@ export class GoodbyeWorld implements World3D {
     this.held = true
     this.lastHold = this.time
     this.counts.holds++
-    this.nextBurner = this.time
     this.events.hint(null)
   }
   pointerMove() {}

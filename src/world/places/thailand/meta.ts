@@ -10,7 +10,8 @@ import { MALL_FACTS, NAN_FACTS, SAMET_FACTS, TRIP_FACTS } from './trip/facts'
 // the fiddler crab sticker, and its tap-to-hear facts are on the stamp screen and the passport. The second is the mall
 // day at ICONSIAM (thailand/mall-trip.md (retired; in git history)): it earns the pizza slice sticker. The third is the Nan road trip
 // (thailand/nan-trip.md), the pink mushroom sticker. The fourth is the Koh Samet island trip (thailand/samet-trip.md (retired; in git history)),
-// the pink mermaid sticker. Krabi's, Nan's and Koh Samet's pins on the map start those three; the mall starts in the house.
+// the pink mermaid sticker. Krabi's, Nan's and Koh Samet's pins on the map start those three; Bangkok's pin opens the
+// Bangkok map (thailand/bangkok-map.md), where the house and ICONSIAM (the mall day) each have a pin.
 const meta: PlaceMeta = {
   id: 'thailand',
   name: 'Thailand',

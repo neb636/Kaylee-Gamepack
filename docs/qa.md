@@ -1,8 +1,8 @@
-# QA: what the robots check, and what only Kaylee can
+# QA: what the robots check, and what only playing can
 
 The robots make sure the user and Kaylee never meet a broken, confusing or talky build, so nobody spends their few minutes
-on something a script could have caught. **Passing QA means it works, not that it's fun.** Fun is Kaylee's playtest
-(check-in 3 in `AGENTS.md`). Lip sync and sound can't be heard by automated browsers either: the user hears them on the iPad.
+on something a script could have caught. **Passing QA means it works, not that it's fun.** Fun is for playing it
+(check-in 3 in `AGENTS.md`) and, once it ships, her play data (`docs/play-data.md`). Lip sync and sound can't be heard by automated browsers either: the user hears them on the iPad.
 
 ## Every change, however small
 

@@ -8,7 +8,8 @@ with a friend who needs her help, a handful of activities, passport stamps, stic
 Agong's shophouse as a unicorn, the whole family are animal characters who talk in their own voices, and the places
 the family loves become day trips (the boat trip in Phang Nga Bay, the mall day at ICONSIAM, Nan, Koh Samet). Its guide
 is `docs/thailand-3d.md`. Australia, Italy, China, Egypt and Peru are 2D countries; Australia is the 2D reference.
-Canada (a 3D toy-table map) and the Poles (a 3D globe) mix 3D and 2D activities.
+Canada (a 3D toy map; one story, Maple's Team) and the Poles (a 3D globe; one story, Pebble's Long Way Home) mix
+3D and 2D activities and tell their stories with films.
 
 Kaylee loves **unicorns, the color pink, winning, and trophies.** She **cannot read yet**.
 
@@ -25,22 +26,22 @@ buttons, aria text and sections. (The user asked for this 2026-11-12.)
 
 ## How we work (read this first)
 
-**The user is the director. Kaylee is the playtester. You are the rest of the studio:** designer, builder, artist, voice
-director, QA and producer.
+**The user is the director and the first tester. Kaylee is who it's for. You are the rest of the studio:** designer,
+builder, artist, voice director, QA and producer.
 
 **The user's attention is the scarcest thing in this studio.** Making things is cheap for you; their minutes are not. When they
 were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging without really seeing them. So:
 
-1. **Keep reviews visual and concise.** They pick from pictures, listen to a table read, watch a reel, watch Kaylee. No plan
+1. **Keep reviews visual and concise.** They pick from pictures, listen to a table read, watch a reel, play the build. No plan
    documents for them, no walls of PR text, no list of fifteen links. Words they do get: one line per idea.
-2. **Ask only what only they can answer:** taste (is it funny, does it feel right), family facts, what Kaylee did. Every
+2. **Ask only what only they can answer:** taste (is it funny, does it feel right), family facts, how it felt to play. Every
    question a robot can answer, you answer: check it yourself (`docs/qa.md`).
 3. **Let them choose, not approve.** Bring options they can compare (three pitch cards, A or B clips), never one thing to
    rubber-stamp. At most three questions per check-in, each answerable in a word.
 4. **One toy at a time.** One toy in the works (one branch, one PR), plus small fixes. The next toy starts when this
    one ships or the user shelves it.
-5. **Kaylee decides what's fun.** Not you, not a critic agent, not the user guessing for her. Her playtest and her play
-   diary (what she replays, where she quits) decide what gets built, fixed or retired.
+5. **Kaylee's play decides what's fun.** Not you, not a critic agent. Her play data (what she replays, where she
+   quits, what she never opens) decides what gets built, fixed or retired (`docs/play-data.md`).
 
 ### The toy loop: four check-ins of a few minutes
 
@@ -48,8 +49,8 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
 |---|---|---|---|
 | 1 | **Pick** (3 min) | Three pitch cards on one page (`pitch` skill): a picture each, the verb in a line, how it grows in three panels | Toy notes from `planning/around-the-world/ACTIVITY-TEMPLATE.md`; build it on one branch; robot-play it; record its lines as scratch |
 | 2 | **Hear** (3 min) | The review page: the table read (every line in its real voice, in play order) and a first reel | Fix what they said. Lines they heard are locked; new or reworded ones go in the next table read |
-| 3 | **Watch Kaylee** (10 min) | A build she can play, and the one-line playtest how-to (`playtest` skill) | Turn their recording and notes into fixes; finish the art, story and payoff |
-| 4 | **Ship** (2 min) | The review page: the reel of the finished toy, what changed since her playtest, at most three questions | After they merge it's on her iPad; the play diary shows what she does with it |
+| 3 | **Play it** (10 min) | A build they can play: its link and every section's link | Turn their notes into fixes; finish the art, story and payoff |
+| 4 | **Ship** (2 min) | The review page: the reel of the finished toy, what changed since they played it, at most three questions | After they merge it's on her iPad; her play data shows what she does with it |
 
 - **Between check-ins, don't stop to ask.** Make the reasonable call, say which on the review page, and keep going.
   Stop only for: family facts (the user decides who each person is, which animal, who comes on a trip), anything sacred
@@ -59,8 +60,8 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
   ElevenLabs yourself (`sfx` skill): no need to ask first. Say how many seconds you made on the review page.
   Character voices stay on OpenAI (`docs/voices.md`); ElevenLabs is for sound effects, ambience and music cues only.
 - **No grey boxes for the user or Kaylee.** Greybox privately if it helps you, with robots and numbers (`docs/qa.md`). What
-  Kaylee plays at check-in 3 is bright and voiced (scratch voices are fine; in 3D the toon look comes free), its core
-  verb works and every section has a link. If her playtest says the toy isn't fun, change the toy, not the decoration.
+  the user plays at check-in 3 is bright and voiced (scratch voices are fine; in 3D the toon look comes free), its core
+  verb works and every section has a link. If playing says the toy isn't fun, change the toy, not the decoration.
 - **Feel numbers are knobs.** When a verb's feel hangs on numbers (steering, dragging, a hop), declare them with
   `knobs()` and put a `?feel=1` link on the review page (`docs/thailand-3d.md`, the feel lab). A "Copy for agent" note
   from the user gets baked into the knobs' values.
@@ -71,13 +72,12 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
   folded, for whoever reads code.
 - **Codex reviews every PR.** Handle its findings yourself (`ship` skill); never pass them to the user.
 
-### Kaylee's loop
+### Her play data
 
-- **Her playtest** (check-in 3): the user hands her the iPad, says little, screen-records. You pull her words and stuck
-  moments from the recording (`playtest` skill). Recordings of Kaylee never go in this repo: it's public.
-- **Her play diary:** the main site tells PostHog which section she's in, how long, how many taps, when a hint fires
-  and when she leaves before the stamp. No names, no pictures. `kaylee-week` turns a week of it into her favorites,
-  where she quits and what she never opens.
+- **The main site tells PostHog** which section she's in, how long, how many taps, when a hint fires and when she
+  leaves before the stamp, including what she plays offline (it waits on the iPad and goes when she's back online).
+  No names, no pictures. Her devices are tagged `target_audience`; the user's devices are `tester` and send errors
+  only. Ask it with the PostHog MCP: `docs/play-data.md` has who's who, the events and the queries.
 - **What it decides:** her favorites shape the next pitches (she loved the haircut game, so the snowman became a
   decorating game); a section she keeps leaving is the next fix; a toy untouched for three weeks comes off her map (the
   code stays).
@@ -139,6 +139,10 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
    with offerings). Don't put a temple or a Buddha in a new game or country: not as a stop, an activity, a prop, a
    landmark on a map or road, or a fact. If a plan or a real place the family visited calls for one, leave it out and
    tell the user instead of building it. (Wat Phumin was dropped from the Nan trip for this, 2026-10-25.)
+   The one exception is scenery on a map, when the user asks for it: Wat Arun stands on the Bangkok map so it
+   reads as Bangkok (2026-11-19). Scenery like that is never a toy: no pin, no activity, nothing that moves it or
+   plays with it, and still no Buddha image. A tap may name it, if the user asks: its gold glints, a soft chime,
+   and Sparkle says its name and one respectful fact (Wat Arun does, 2026-11-19).
 9. **Family and privacy.** The user decides the family: who each person is, which animal, who comes on a trip. Ask, don't
    invent family facts. Photos and recordings of Kaylee stay out of this public repo; describe them in words.
    Thailand's house is the family's real home: read `docs/thailand-3d.md` before touching it.
@@ -164,11 +168,12 @@ and `docs/3d-characters.md`.
 | Writing or recording lines | `docs/voices.md` (the cast, `lines.ts`, recording, the table read) |
 | Making art | `docs/art.md` (style, one camera per scene, white patches) |
 | Checking your work | `docs/qa.md` (robots, the fresh-eyes agent, the time budget) |
+| Finding out what she plays | `docs/play-data.md` (who's who in PostHog, the events, offline play, storage, queries) |
 | Continuing a country or trip | its notes: `planning/around-the-world/<country>.md`, or `<country>/<trip>.md` and `<country>/known-issues.md` (Thailand). Australia, Egypt, Italy, China and Peru are finished and have none: read their code |
 
 **Skills** (in `.agents/skills/`, shared by Claude Code and Codex): `pitch` (three pitch cards), `table-read` (hear a
-script), `reel` (film the game), `ship` (the review page and the PR, fixes too), `playtest` (a recording of Kaylee into
-fixes), `kaylee-week` (the play diary), `sfx` (ElevenLabs sound effects for every new or changed game or level). **Agent:** `fresh-eyes` reviews a toy it hasn't seen before check-ins 3 and 4.
+script), `reel` (film the game), `ship` (the review page and the PR, fixes too), `sfx` (ElevenLabs sound effects for
+every new or changed game or level). **Agent:** `fresh-eyes` reviews a toy it hasn't seen before check-ins 3 and 4.
 
 ## Rules the checks enforce
 
@@ -191,11 +196,11 @@ fixes), `kaylee-week` (the play diary), `sfx` (ElevenLabs sound effects for ever
 - Don't run `npm run test` or `npm run check` locally; CI runs the specs on the PR.
 - **Floating 3D maps are framed like CSS `object-fit`.** Any board that floats in the sky (the Thailand map, the Nan
   map, a new trip's map, any 3D toy board) frames its real box with `objectFit: 'contain'` on its `Shot`
-  (`engine3d/camera.ts`), built with `trayBox()` (`trip/sky.ts`), so it sits whole and centered below the top bar on
+  (`engine3d/camera.ts`), built with `trayBox()` (`engine3d/board.ts`), so it sits whole and centered below the top bar on
   an iPad either way round, an iPhone and a wide Mac window. Don't hand-tune a center or box per screen shape; per
   shape, change only the angle (yaw, pitch). Check it in all of those shapes.
 - **Every floating 3D map turns like the Thailand map.** She swings the board round with a drag and pinches it closer:
-  build the overview with `boardShot()` (`trip/sky.ts`), which frames the `trayBox` and adds `roam: MAP_ROAM`. A
+  build the overview with `boardShot()` (`engine3d/board.ts`), which frames the `trayBox` and adds `roam: MAP_ROAM`. A
   `Stage`-based map turns whenever its shot allows it; something she drags on the board (Nan's car) says so with
   `roamGrabbed()`, so that drag isn't a turn.
 

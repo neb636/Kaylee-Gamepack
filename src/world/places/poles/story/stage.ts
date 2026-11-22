@@ -8,7 +8,7 @@
 // Nothing here takes taps (FilmOverlay sparkles where her finger was and holds the ⏭). When the film ends or is
 // skipped, `events.done()` moves on; the stage is thrown away, so a film's `finish()` has nothing to put back.
 import { BufferAttribute, Color, Fog, Group, IcosahedronGeometry, InstancedMesh, Matrix4, Mesh, PerspectiveCamera, Quaternion, Scene, SphereGeometry, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
-import type { Line } from '../../../../sdk'
+import { stopSpeaking, type Line } from '../../../../sdk'
 import type { AnchorInfo } from '../../../engine3d/Anchors'
 import { CameraRig } from '../../../engine3d/camera'
 import { Letterbox } from '../../../engine3d/cinema'
@@ -640,6 +640,8 @@ export class StoryStage implements World3D {
     return { ...this.renderer.info.memory }
   }
   dispose() {
+    // Left in the middle of a film (the top bar's back button): its line mustn't go on talking over the map.
+    if (!this.ended) stopSpeaking()
     this.sfx.stop()
     this.scene.clear()
     this.bag.dispose()

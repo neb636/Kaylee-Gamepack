@@ -37,7 +37,7 @@ import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
 import { wearing } from '../../../trip/packing'
-import { buildSki, HIS } from '../jetski/ski'
+import { BENCH, buildBoat, buildFlyFish, buildPasser, FLOOR, flyFish, HALF_W, type FlyFishParts, type PassId } from './boats'
 import { at as atFrame, BAN_PHE, FRAMES, PIER, SPEEDBOAT_DOCK } from '../island/layout'
 import { buildProps } from '../island/props'
 import { buildIsland, DAY, palmGeo, rng, type Island, type TimeOfDay } from '../island/scenery'
@@ -117,12 +117,6 @@ const SCENES: Beat[] = [
 /** The captain: a pelican in a navy captain's cap (cast.ts). */
 const CAPTAIN_LOOK = CAPTAIN
 
-/** The boat: 7.2 m, faces +z. Where the hull's sides are (local x), its floor, and the seats. */
-const HALF_W = 1.2
-const FLOOR = 0.72
-const BENCH = 1.14
-const STERN_Z = -3.3
-
 export type BoatPhase = 'pier' | 'ride' | 'dock' | 'off'
 
 export interface BoatStart {
@@ -153,12 +147,13 @@ export const BOAT_ANCHORS: AnchorInfo[] = [
   ...[0, 1, 2, 3].map((i) => ({ id: `fish:${i}`, label: 'A flying fish', kind: 'thing' as const })),
 ]
 
-type PassId = 'ferry' | 'longtail' | 'ski' | 'speed'
 interface Passer {
   id: PassId
   root: Group
   /** The people on it (they bounce and wave when she taps it). */
   crew: Group
+  /** Their small life: blinks, looks about, and waving (as it goes by, or when she taps it). */
+  life: (dt: number, t: number, waving: boolean) => void
   /** Where along the route it meets her boat (0..1), which side (+1: her right) and how far off, its speed. */
   meet: number
   side: number
@@ -177,6 +172,7 @@ interface Passer {
 
 interface FlyFish {
   root: Group
+  parts: FlyFishParts
   t: number
   /** Where it starts, and its velocity. */
   p: Vector3
@@ -188,57 +184,6 @@ interface FlyFish {
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 const tmp3 = new Vector3()
-
-/** The family's speedboat: white with a pink stripe, a blue sun canopy over the back, a console up front. */
-function buildBoat(bag: Bag, stripe: string = PAL.hotpink) {
-  const root = new Group()
-  const tilt = new Group()
-  const body = new Group()
-  root.add(tilt)
-  tilt.add(body)
-  const W = '#FFFFFF'
-  const cushion = '#FFB6D3'
-  const parts = [
-    P.rbox(2.4, 0.9, 6.8, 0.36, W, { at: [0, 0.27, -0.1] }),
-    P.cone(1.2, 1.7, W, { at: [0, 0.27, 3.9], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.38] }, 12),
-    P.box(2.42, 0.16, 6.6, stripe, { at: [0, 0.45, -0.1] }),
-    P.box(2.42, 0.07, 6.6, PAL.sky, { at: [0, 0.3, -0.1] }),
-    P.box(2.05, 0.06, 6.2, '#F1E6D8', { at: [0, FLOOR, -0.2] }),
-    // The sides (gunwales) and the rail along them.
-    ...[-1, 1].flatMap((s) => [P.rbox(0.14, 0.42, 6.2, 0.05, W, { at: [s * (HALF_W - 0.07), FLOOR + 0.2, -0.2] }), P.box(0.06, 0.06, 5.6, '#D8DEEA', { at: [s * (HALF_W - 0.07), FLOOR + 0.62, -0.4] }), ...[-2.6, -0.6, 1.4].map((z) => P.cyl(0.03, 0.03, 0.24, '#D8DEEA', { at: [s * (HALF_W - 0.07), FLOOR + 0.5, z] }, 5))]),
-    // The console with its windscreen and wheel.
-    P.rbox(1.0, 0.95, 0.8, 0.14, '#F6F3FA', { at: [0.45, FLOOR + 0.47, 1.3] }),
-    P.rbox(1.1, 0.42, 0.07, 0.03, '#9FD5F2', { at: [0.45, FLOOR + 1.12, 1.66], rot: [-0.45, 0, 0] }),
-    P.torus(0.17, 0.035, '#5C5468', { at: [0.45, FLOOR + 1.05, 0.88], rot: [0.9, 0, 0] }),
-    // The back bench (Mom and Dad) and the side benches (Kaylee).
-    P.rbox(2.0, 0.42, 0.62, 0.1, cushion, { at: [0, BENCH - 0.2, -2.55] }),
-    P.rbox(2.0, 0.55, 0.14, 0.06, cushion, { at: [0, BENCH + 0.16, -2.9] }),
-    ...[-1, 1].map((s) => P.rbox(0.5, 0.38, 2.6, 0.08, cushion, { at: [s * 0.8, BENCH - 0.2, -0.45] })),
-    // A little blue sun top over the console, on two posts (the camera sees the family from behind, so it stays forward).
-    ...[-1, 1].map((s) => P.cyl(0.035, 0.035, 1.5, '#D8DEEA', { at: [0.45 + s * 0.55, FLOOR + 1.45, 0.95] }, 6)),
-    P.rbox(1.5, 0.1, 1.4, 0.04, '#3F8FE8', { at: [0.45, FLOOR + 2.2, 1.2] }),
-    P.rbox(1.52, 0.04, 1.42, 0.02, '#FFFFFF', { at: [0.45, FLOOR + 2.14, 1.2] }),
-    // Two outboard motors at the stern.
-    ...[-0.5, 0.5].flatMap((x) => [P.rbox(0.42, 0.75, 0.55, 0.12, '#5C5468', { at: [x, 0.95, STERN_Z - 0.35] }), P.box(0.12, 0.9, 0.16, '#3E3848', { at: [x, 0.2, STERN_Z - 0.45] })]),
-  ]
-  body.add(solid(merge(parts), bag, 2.5))
-  // The pink flag at the stern (it flutters). Its pole stands in a socket on the back corner of the left gunwale, out
-  // past the end of the back bench, so it clears Mom's head and reaches all the way down to the boat.
-  const flag = new Group()
-  flag.position.set(-(HALF_W - 0.07), FLOOR + 0.42, STERN_Z + 0.12)
-  flag.add(solid(merge([P.cyl(0.07, 0.08, 0.14, '#D8DEEA', { at: [0, 0.07, 0] }, 8), P.cyl(0.03, 0.03, 2.3, '#D8DEEA', { at: [0, 1.15, 0] }, 6)]), bag, 2))
-  const cloth = new Group()
-  cloth.position.y = 2.12
-  cloth.add(solid(P.box(0.02, 0.32, 0.5, PAL.pink, { at: [0, 0, -0.25] }), bag, 1.5))
-  flag.add(cloth)
-  body.add(flag)
-  // The life ring on the side.
-  const ring = new Group()
-  ring.position.set(HALF_W + 0.02, FLOOR + 0.25, -1.6)
-  ring.add(solid(merge([P.torus(0.28, 0.08, '#FF8A2E', { rot: [0, Math.PI / 2, 0] }), ...[0, 1, 2, 3].map((k) => P.torus(0.28, 0.085, '#FFFFFF', { rot: [(k * Math.PI) / 2, Math.PI / 2, 0] }, 0.45))]), bag, 2))
-  body.add(ring)
-  return { root, tilt, body, flag, cloth, ring }
-}
 
 /** The Ban Phe pier on the mainland: a strip of shore, the town behind, and a long pier out into the sea (its south
  *  end at the ride's start). No temples or shrines (AGENTS.md rule 7): shops, palms, boats. */
@@ -280,39 +225,6 @@ function buildBanPhe(bag: Bag) {
     g.add(lt)
   }
   return g
-}
-
-/** A boat coming the other way. */
-function buildPasser(bag: Bag, id: PassId) {
-  const root = new Group()
-  const crew = new Group()
-  root.add(crew)
-  const person = (x: number, y: number, z: number, c: string) => [P.capsule(0.22, 0.4, c, { at: [x, y + 0.42, z] }), P.sphere(0.22, '#F3D3B5', { at: [x, y + 0.95, z] }, 10)]
-  if (id === 'ferry') {
-    // The big wooden ferry to Na Dan, white and blue with a roof, a row of passengers.
-    root.add(solid(merge([P.rbox(4, 1.6, 15, 0.4, '#FFFFFF', { at: [0, 0.4, 0] }), P.box(4.02, 0.35, 15.02, '#3F8FE8', { at: [0, 0.7, 0] }), P.cone(2, 2.6, '#FFFFFF', { at: [0, 0.4, 8.6], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.4] }, 10), P.rbox(3.6, 0.2, 10, 0.06, '#F06A6A', { at: [0, 3.4, -1] }), ...[-1, 1].flatMap((s) => [-5.5, -1, 3.5].map((z) => P.cyl(0.07, 0.07, 2.2, '#F4EEE6', { at: [s * 1.6, 2.3, z] }, 6)))]), bag, 2.5))
-    crew.add(solid(merge([-4, -2, 0, 2].flatMap((z, i) => person(1.4 * (i % 2 ? 1 : -1), 1.2, z, ['#FF9AC8', '#8FD3FF', '#FFE07A', '#9EE6B8'][i]))), bag, 2))
-  } else if (id === 'longtail') {
-    root.add(solid(merge([P.rbox(1.2, 0.55, 7, 0.22, '#9A6B44', { at: [0, 0.15, 0] }), P.box(1.22, 0.12, 7.02, '#4FA3C9', { at: [0, 0.38, 0] }), P.cone(0.22, 1.8, '#9A6B44', { at: [0, 1.0, 3.6], rot: [0.5, 0, 0] }, 6), P.sphere(0.24, PAL.hotpink, { at: [0, 1.6, 4] }, 8), P.sphere(0.2, PAL.butter, { at: [0.1, 1.45, 3.95] }, 8), P.box(0.2, 0.2, 2, '#5C5468', { at: [0, 0.55, -4.2], rot: [0.25, 0, 0] })]), bag, 2))
-    crew.add(solid(merge([...person(0, 0.3, -2.6, '#FFB36B'), ...person(0, 0.3, 0.4, '#C7A8F0')]), bag, 2))
-  } else if (id === 'ski') {
-    const ski = buildSki(bag, HIS)
-    root.add(ski.root)
-    crew.add(solid(merge(person(0, 0.62, -0.2, '#FF8A2E')), bag, 2))
-  } else {
-    const b = buildBoat(bag, PAL.mint)
-    root.add(b.root)
-    crew.add(solid(merge([...person(0.45, FLOOR, 0.6, '#FFFFFF'), ...person(-0.5, FLOOR, -2.4, '#FF9AC8'), ...person(0.5, FLOOR, -2.4, '#8FD3FF')]), bag, 2))
-  }
-  return { root, crew }
-}
-
-/** A flying fish: a silver-blue body with long wing fins. */
-function buildFlyFish(bag: Bag) {
-  const root = new Group()
-  root.add(solid(merge([P.sphere(0.13, '#8FB8E8', { scale: [1, 0.8, 2.4] }, 10), P.sphere(0.1, '#E8F2FF', { at: [0, -0.03, 0.02], scale: [0.9, 0.6, 2.2] }, 8), ...[-1, 1].map((s) => P.box(0.5, 0.015, 0.22, '#B9D7FF', { at: [s * 0.3, 0.02, 0.05], rot: [0, s * 0.25, s * 0.12] })), P.cone(0.12, 0.2, '#8FB8E8', { at: [0, 0, -0.38], rot: [-Math.PI / 2, 0, 0], scale: [0.3, 1, 1] }, 6)]), bag, 1.5))
-  root.visible = false
-  return root
 }
 
 export class SametSpeedboat implements World3D {
@@ -450,12 +362,12 @@ export class SametSpeedboat implements World3D {
       const b = buildPasser(bag, id)
       b.root.visible = false
       scene.add(b.root)
-      this.passers.push({ id, root: b.root, crew: b.crew, meet, side, off, speed, s: -1, across: 0, wave: -1, bumped: false, heard: false, h: 0 })
+      this.passers.push({ id, root: b.root, crew: b.crew, life: b.update, meet, side, off, speed, s: -1, across: 0, wave: -1, bumped: false, heard: false, h: 0 })
     }
     for (let i = 0; i < 4; i++) {
-      const root = buildFlyFish(bag)
-      scene.add(root)
-      this.fish.push({ root, t: 0, p: new Vector3(), v: new Vector3(), flip: -1, live: false })
+      const parts = buildFlyFish(bag)
+      scene.add(parts.root)
+      this.fish.push({ root: parts.root, parts, t: 0, p: new Vector3(), v: new Vector3(), flip: -1, live: false })
     }
 
     this.splash = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#EAFBFF', '#BFEFFF'], gravity: 9 }, bag)
@@ -719,6 +631,7 @@ export class SametSpeedboat implements World3D {
       f.root.position.set(x, this.waterAt(x, z) + arc + 0.1, z)
       f.root.rotation.y = Math.atan2(f.v.x, f.v.z)
       f.root.rotation.x = -Math.cos(Math.PI * clamp(f.t / T, 0, 1)) * 0.4
+      flyFish(f.parts, clamp(f.t / T, 0, 1), this.time)
       if (f.flip >= 0) {
         f.flip += dt
         f.root.rotation.z = f.flip * 14
@@ -823,6 +736,8 @@ export class SametSpeedboat implements World3D {
       p.root.rotation.z = Math.sin(t * 1.3 + p.meet * 10) * 0.03
       // Their bow wave.
       if (Math.random() < dt * 12) this.splash.emit(x + Math.sin(yaw) * 3, p.h + 0.2, z + Math.cos(yaw) * 3, (Math.random() - 0.5) * 2, 1.2 + Math.random(), (Math.random() - 0.5) * 2, 0.6, 0.16)
+      // Everyone aboard waves as they go by (alongside, a few seconds), and when she taps them.
+      p.life(dt, t, p.wave >= 0 || Math.abs(p.s - this.s) < (p.id === 'ferry' ? 14 : 8))
       // They wave back (a bounce of the crew).
       if (p.wave >= 0) {
         p.wave += dt

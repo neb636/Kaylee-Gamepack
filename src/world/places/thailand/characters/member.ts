@@ -4,7 +4,7 @@
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
-import { buildAnimal, Wind, type Rig } from '../../../engine3d/characters/animal'
+import { buildAnimal, hipsOf, sitBack, Wind, type Rig } from '../../../engine3d/characters/animal'
 import { FaceLife } from '../../../engine3d/characters/face'
 import { automated } from '../../../engine3d/flags'
 import type { FamilyMember } from './family'
@@ -114,6 +114,10 @@ export class Member implements Character {
     this.pose = pose
     if (pose !== 'sit' && this.driving) this.drive(false)
     const { body, legL, legR } = this.chibi
+    if (this.leaning) {
+      this.leaning = false
+      sitBack(this.chibi, 0)
+    }
     body.rotation.set(pose === 'lie' ? -Math.PI / 2 : 0, 0, 0)
     body.position.set(0, pose === 'lie' ? this.chibi.radius : 0, 0)
     // A toy with legs of its own (a modelled one) sits on its hips with its legs out over the seat.
@@ -125,6 +129,20 @@ export class Member implements Character {
       if (this.chibi.tail) this.chibi.tail.visible = !sit
     }
   }
+
+  /** Sitting back against a bench, legs out over its edge (animal.ts sitBack): the island taxi. Put them on the seat
+   *  first with place(x, y, z, face, 'sit'), y = the cushion's top - hips(). A modelled toy sits on its own legs
+   *  already, so this leaves it as it is. Standing up again (setPose) undoes it. */
+  sitBack(lean = 0.6) {
+    if (this.chibi.legL || this.pose !== 'sit') return
+    sitBack(this.chibi, lean)
+    this.leaning = true
+  }
+  /** How high a code-built toy's hips are above its feet. */
+  hips() {
+    return hipsOf(this.chibi)
+  }
+  private leaning = false
 
   react(kind: 'hop' | 'wiggle' | 'wave') {
     // Too busy with the phone to hop or wave: a quick look up, then back to the screen.

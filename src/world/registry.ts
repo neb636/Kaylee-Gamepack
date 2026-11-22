@@ -1,5 +1,6 @@
 // Finds every country automatically: each folder in src/world/places/ with a meta.ts and Place.tsx.
 import type { ComponentType } from 'react'
+import { useFlags } from '../flags'
 import type { ActivitySections } from './kit/sections'
 import type { PlaceMeta, PlaceProps } from './types'
 
@@ -24,10 +25,14 @@ export const places: PlaceEntry[] = Object.entries(metas)
   .filter((p): p is PlaceEntry => p !== null)
   .sort((a, b) => a.meta.createdAt.localeCompare(b.meta.createdAt))
 
-/** The places on the world map and the game shelf: every place except a `hidden` one (not ready to play), unless the
- *  link has `?all=1`. Read once at startup. Hidden places still open from their links (#/world/canada). */
+/** The places on the world map and the game shelf: every place except a `hidden` one (not ready to play) or one whose
+ *  feature flag is off (`src/flags.ts`), unless the link has `?all=1` (read once at startup). Hidden places still open
+ *  from their links (#/world/canada). Re-renders when the flags load. */
 const showAll = [location.search, location.hash.split('?')[1] ?? ''].some((q) => new URLSearchParams(q).get('all') === '1')
-export const listed: PlaceEntry[] = showAll ? places : places.filter((p) => !p.meta.hidden)
+export function useListed(): PlaceEntry[] {
+  const on = useFlags()
+  return showAll ? places : places.filter((p) => !p.meta.hidden && (!p.meta.featureFlag || on(p.meta.featureFlag)))
+}
 
 export const findPlace = (id: string) => places.find((p) => p.meta.id === id)
 

@@ -22,7 +22,6 @@
     "canvas-confetti": "^1.9.4",
     "motion": "^13.4.2",
     "perfect-freehand": "^1.2.3",
-    "phaser": "^4.2.1",
     "posthog-js": "^1.447.12",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

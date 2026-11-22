@@ -1,7 +1,7 @@
-// Kaylee's play diary: which section she's in, for how long, how many taps, how many hints the game showed her (a soft
+// Her play data: which section she's in, for how long, how many taps, how many hints the game showed her (a soft
 // sign she was stuck: most hints come after a while with nothing touched), and whether she left before the end. It goes
 // to PostHog on the main site only (src/posthog.ts; previews and local builds send nothing), with no names and no
-// pictures. The `kaylee-week` skill turns a week of it into her favorites, where she quits and what she never opens.
+// pictures, and waits on the iPad when she plays offline. docs/play-data.md says how to read it.
 // Sections report themselves through kit/sections.ts's enter().
 import posthog, { isPostHogEnabled } from '../posthog'
 

@@ -24,6 +24,10 @@ export const screens = [
   // use), and the party card.
   { name: 'thailand-map', hash: '#/world/thailand', reset: true, wait: 3000 },
   { name: 'thailand-map-home', hash: '#/world/thailand/hub/map?stamp=boat-trip', stampAll: 'thailand', wait: 3200 },
+  // The Bangkok map (bangkok-map.md: what Bangkok's pin opens): fresh, and back from the mall day (the stamp lands
+  // beside ICONSIAM's pin).
+  { name: 'bangkok-map', hash: '#/world/thailand/hub/bangkok', reset: true, wait: 5200 },
+  { name: 'bangkok-map-stamp', hash: '#/world/thailand/hub/bangkok?stamp=mall-trip', stampAll: 'thailand', wait: 5600 },
   { name: 'thailand-arrive', hash: '#/world/thailand/hub/arrive', reset: true, wait: 1400 },
   ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'downstairs?at=photos', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
     name: `thailand-${to.replace('?at=', '-')}`,
@@ -915,6 +919,41 @@ motion.push(
     await page.waitForTimeout(800)
   }),
   thaiMap('thai-map-pin', 4, mapTaps([['pin:krabi', 3200]])),
+)
+
+// The Bangkok map (3D, activities/hub/bangkok/): the city alive (the skytrain, the boats, the wheel), a few things
+// poked (the wheel spins, the lanterns swing, petals fly, the crane lowers its box, the birds fly up, the skytrain
+// zooms; the taxi zips, the fruit boat spins), the board swung round with a drag, ICONSIAM's pin tapped (the fountain dances, the camera dives, the mall
+// day opens), and Sparkle's balloon (poked: it roars, climbs and spins).
+const bangkokMap = (name, seconds, act) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/hub/bangkok`)
+    await page.waitForFunction(() => window.__thaiBangkokQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(1500)
+  },
+  act,
+})
+motion.push(
+  bangkokMap('bangkok-map-alive', 6, async (page) => page.waitForTimeout(6000)),
+  bangkokMap('bangkok-map-pokes', 13, mapTaps([['spot:asiatique', 3000], ['spot:chinatown', 1700], ['spot:flowers', 1600], ['spot:port', 2500], ['spot:krachao', 2600], ['train', 1600]])),
+  // The city's own things: the pink taxi zips, the fruit boat spins.
+  bangkokMap('bangkok-map-thai', 7, mapTaps([['taxi', 2000], ['fruit', 2000]])),
+  // The corners: the night market's tents hop, the floating market's boats bob, oranges fly, the khlong boat races.
+  bangkokMap('bangkok-map-corners', 10, mapTaps([['spot:tents', 2600], ['spot:floating', 2600], ['spot:orchard', 2400], ['canal', 2200]])),
+  bangkokMap('bangkok-map-spin', 5, async (page) => {
+    const y = vp.height * 0.3
+    await page.mouse.move(vp.width * 0.9, y)
+    await page.mouse.down()
+    await page.mouse.move(vp.width * 0.55, y - 20, { steps: 30 })
+    await page.mouse.move(vp.width * 0.92, y + 30, { steps: 40 })
+    await page.mouse.up()
+    await page.waitForTimeout(800)
+  }),
+  bangkokMap('bangkok-map-mall', 4, mapTaps([['pin:iconsiam', 3400]])),
+  bangkokMap('bangkok-map-house', 4, mapTaps([['pin:house', 3400]])),
+  bangkokMap('bangkok-map-balloon', 4, mapTaps([['balloon', 3400]])),
 )
 
 // Agong's house (Thailand, 3D): Kaylee's hop-trot across the floor, hopping up the stairs (the camera follows her to

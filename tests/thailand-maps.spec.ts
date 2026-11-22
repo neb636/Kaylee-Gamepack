@@ -1,13 +1,16 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Thailand's floating 3D maps (the Thailand map, the Krabi map, the Nan map): every one turns like the Thailand map
-// (a drag swings the board round, trip/sky.ts boardShot), and no rock on the Krabi map stands half on the beach.
+// Thailand's floating 3D maps (the Thailand map, the Bangkok map, the Krabi map, the Nan map): every one turns like the
+// Thailand map (a drag swings the board round, trip/sky.ts boardShot) and zooms in with a scroll (a Mac trackpad), no rock on the Krabi map stands half on the
+// beach, and on the Bangkok map nothing stands in the river, no pin's tap target covers a toy, and a tap on a pin
+// opens its place.
 // Read-only state comes from each map's QA hook (no jump hooks: tests open section links).
 
-type MapQA = { mode?: string; yaw?: number; stranded?: string[]; held?: boolean; car?: [number, number] }
+type MapQA = { mode?: string; yaw?: number; stranded?: string[]; held?: boolean; car?: [number, number]; wet?: string[]; covered?: string[]; towers?: [number, number]; arrived?: string | null; poked?: string[] }
 
 const MAPS = [
   { name: 'the Thailand map', link: 'hub/map', key: '__thaiMapQA' },
+  { name: 'the Bangkok map', link: 'hub/bangkok', key: '__thaiBangkokQA' },
   { name: 'the Krabi map', link: 'boat-trip/map', key: '__thaiBoatQA' },
   { name: 'the Nan map', link: 'nan-trip/map', key: '__thaiNanQA' },
 ] as const
@@ -46,9 +49,38 @@ for (const map of MAPS) {
   })
 }
 
+for (const map of MAPS) {
+  test(`${map.name} zooms in with a scroll`, async ({ page }) => {
+    await open(page, map.link, map.key)
+    const far = () => page.evaluate(() => (window as unknown as { __kaylee3d?: { camera: { position: { y: number } } } }).__kaylee3d?.camera.position.y ?? 0)
+    const before = await far()
+    const { width, height } = page.viewportSize()!
+    await page.mouse.move(width / 2, height / 2)
+    for (let i = 0; i < 6; i++) await page.mouse.wheel(0, -120)
+    await expect.poll(far, { timeout: 15_000 }).toBeLessThan(before * 0.85)
+  })
+}
+
 test('no rock on the Krabi map stands half on the beach', async ({ page }) => {
   await open(page, 'boat-trip/map', '__thaiBoatQA')
   expect((await qa(page, '__thaiBoatQA'))!.stranded).toEqual([])
+})
+
+test('the Bangkok map: nothing stands in the river, no pin covers a toy, and the skyline is up', async ({ page }) => {
+  await open(page, 'hub/bangkok', '__thaiBangkokQA')
+  const q = (await qa(page, '__thaiBangkokQA'))!
+  expect(q.wet).toEqual([])
+  expect(q.covered).toEqual([])
+  // (A tower that would stand on a place, a toy or the water is left out: most of them stand.)
+  expect(q.towers![0]).toBeGreaterThan(q.towers![1] * 0.6)
+})
+
+test('the Bangkok map: a poke answers, and a tap on a pin opens its place', async ({ page }) => {
+  await open(page, 'hub/bangkok', '__thaiBangkokQA')
+  await page.locator('[data-anchor="spot:asiatique"]').click({ force: true })
+  await expect.poll(async () => (await qa(page, '__thaiBangkokQA'))?.poked ?? []).toContain('spot:asiatique')
+  await page.locator('[data-anchor="pin:house"]').click({ force: true })
+  await expect(page).toHaveURL(/#\/world\/thailand\/hub\/(arrive|street)/, { timeout: 20_000 })
 })
 
 test("a drag on the Nan map's car drives it instead of turning the board", async ({ page }) => {

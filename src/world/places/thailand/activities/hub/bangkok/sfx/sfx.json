@@ -1,0 +1,95 @@
+[
+ {
+  "id": "city-bed",
+  "label": "The city by the river (the bed)",
+  "prompt": "Busy but friendly big city ambience heard from a rooftop: a steady hum of traffic on wide roads, cars and scooters passing, a tuk-tuk puttering by, a few soft distant car horns, an elevated train rumbling past far away, a river boat motor chugging below, a faint murmur of a crowd with no clear words. Warm, lively, not harsh. Seamless loop, no music.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "skytrain",
+  "label": "The skytrain zooms by",
+  "prompt": "A modern electric city train glides quickly past on an elevated track, smooth rising whoosh with a soft electric hum, then fades away. Clean, gentle, toy-like, no music, no voices.",
+  "seconds": 2.5
+ },
+ {
+  "id": "skytrain-chime",
+  "label": "The skytrain's door chime",
+  "prompt": "A friendly two-note train door chime, ding dong, soft and bright like a toy. No music, no voices.",
+  "seconds": 1.5,
+  "influence": 0.6
+ },
+ {
+  "id": "boat-horn",
+  "label": "A river boat toots",
+  "prompt": "A small river ferry boat toots its horn twice, short and friendly, toot toot, over gently lapping water. Soft, toy-like, no music, no voices.",
+  "seconds": 1.8,
+  "influence": 0.6
+ },
+ {
+  "id": "wheel",
+  "label": "Asiatique's big wheel spins",
+  "prompt": "A cheerful little fairground organ jingle, light, sweet and sparkly, like a carousel starting to spin, ending on a happy note. No voices.",
+  "seconds": 3
+ },
+ {
+  "id": "lion-drum",
+  "label": "Chinatown's drum and cymbals",
+  "prompt": "A small festive Chinese lion dance drum with little cymbals, a quick happy rhythm of five beats, bouncy and playful. Soft, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "lizard",
+  "label": "The monitor lizard plops into the lake",
+  "prompt": "A big friendly lizard slides off a grassy bank into a pond: a soft scuffle, a gentle plop and a little splash with ripples. Calm, no music, no voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "crane",
+  "label": "The port's crane lowers a box",
+  "prompt": "A toy harbor crane: an electric motor whirs down for a second, then a hollow metal box lands with one soft clunk. Gentle, not loud, no music, no voices.",
+  "seconds": 2.2
+ },
+ {
+  "id": "petals",
+  "label": "The flower market puffs petals",
+  "prompt": "A soft magical poof with a light twinkling sparkle, like a burst of flower petals thrown in the air. Short, sweet, gentle, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "fountain",
+  "label": "ICONSIAM's fountain dances",
+  "prompt": "A dancing water fountain shoots a tall jet up with a soft whoosh, then the water patters and splashes back down into a pool. Fresh and gentle, no music, no voices.",
+  "seconds": 3
+ },
+ {
+  "id": "birds",
+  "label": "Bang Krachao's birds fly up",
+  "prompt": "Three small songbirds flutter up from a tree with quick soft wing flaps and chirp happily. Bright, gentle, close, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "night-market",
+  "label": "The night market's tents hop",
+  "prompt": "A cheerful little night market moment: a few bright toy bell notes going up, a soft sizzle from a food stall, a happy bustle with no words. Warm, playful, toy-like, no voices.",
+  "seconds": 2.2
+ },
+ {
+  "id": "floating-market",
+  "label": "The floating market's boats bob",
+  "prompt": "Small wooden boats knock gently together and slap the water, a paddle dips and splashes twice. Soft, close, friendly, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "oranges",
+  "label": "Oranges pop off the trees",
+  "prompt": "A handful of oranges pop off a tree and bounce softly on grass, four quick round plops with a rustle of leaves. Cute, toy-like, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "dawn-shimmer",
+  "label": "Wat Arun's gold catches the light",
+  "prompt": "A soft magical shimmer of tiny glass wind chimes rising gently upward, like morning sunlight sparkling on gold. Warm, delicate, toy-like. No bells ringing, no melody, no music, no voices.",
+  "seconds": 1.5
+ }
+]
