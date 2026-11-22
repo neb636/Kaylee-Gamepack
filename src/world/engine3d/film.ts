@@ -126,9 +126,6 @@ export function beatSeconds(b: Beat) {
   return Math.max(b.dur ?? 1.2, talk)
 }
 
-/** Planned seconds of a whole film. */
-export const filmSeconds = (f: Film) => f.beats.reduce((n, b) => n + beatSeconds(b), 0)
-
 export class FilmPlayer {
   private film: Film | null = null
   private i = 0

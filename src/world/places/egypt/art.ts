@@ -32,7 +32,6 @@ import sarcophagus from './assets/sarcophagus.webp'
 import sauce from './assets/sauce.webp'
 import scarab from './assets/scarab.webp'
 import sphinx from './assets/sphinx.webp'
-import stoneBlock from './assets/stone-block.webp'
 import teapot from './assets/teapot.webp'
 import tutu from './assets/tutu.webp'
 
@@ -71,7 +70,6 @@ export const art = {
   sauce,
   scarab,
   sphinx,
-  stoneBlock,
   teapot,
   tutu,
 }

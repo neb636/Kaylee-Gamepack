@@ -2,7 +2,8 @@
 // shots without filming a reel:
 //   npm run build && node scripts/film-strip.mjs '#/world/poles/story/intro' ['#/...'] [--every=2.5] [--seconds=60] [--portrait] [--out=qa-output/films] [--at=12,23]
 // `--at` also saves a full-size frame at those seconds (<name>-<seconds>s.png).
-// A film link stops by itself when the film ends (window.__polesStoryQA().ended, or the story's overlay going away).
+// A film link stops by itself when the film ends (the film stage's QA readout says `ended`: window.__polesStoryQA or
+// window.__canadaStoryQA; or the story's overlay going away).
 import { mkdirSync } from 'node:fs'
 import path from 'node:path'
 import sharp from 'sharp'
@@ -33,7 +34,7 @@ try {
     const t0 = Date.now()
     await page.waitForTimeout(900)
     while ((Date.now() - t0) / 1000 < seconds) {
-      const state = await page.evaluate(() => ({ q: window.__polesStoryQA?.() ?? null, on: !!document.querySelector('[data-story-film]') }))
+      const state = await page.evaluate(() => ({ q: (window.__polesStoryQA ?? window.__canadaStoryQA)?.() ?? null, on: !!document.querySelector('[data-story-film]') }))
       const film = state.q?.film?.film
       first ??= film
       // (Over: the stage says so, the overlay is gone, or another film has begun.)

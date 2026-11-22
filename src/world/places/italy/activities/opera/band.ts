@@ -87,9 +87,6 @@ export function stopBand() {
   lupaSinging = false
 }
 
-/** Which beat of the tune comes next (for the band's bounce timing in the scene). */
-export const nextBeat = () => beatIndex
-
 export function setSolo(part: Part | null) {
   solo = part
   mixParts()

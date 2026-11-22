@@ -1,5 +1,6 @@
 // Around the World: every country is one folder in src/world/places/<id>/ with a meta.ts + Place.tsx.
 import type { ReactNode, Ref } from 'react'
+import type { FeatureFlag } from '../flags'
 import type { Line, PuppetHandle } from '../sdk'
 import type { FlagId } from './kit/Flag'
 
@@ -78,6 +79,9 @@ export interface PlaceMeta {
   /** Not ready to play: off the world map and the game shelf (`listed` in registry.ts). Its links still work, and
    *  `?all=1` puts it back on the map and shelf to try. Remove the line (or set false) to show it again. */
   hidden?: boolean
+  /** Off the world map and the game shelf unless this feature flag is on (`src/flags.ts`): testers only, off by
+   *  default and offline. Like `hidden`, its links still work and `?all=1` shows it. Remove it when it ships. */
+  featureFlag?: FeatureFlag
 }
 
 export interface PlaceProps {

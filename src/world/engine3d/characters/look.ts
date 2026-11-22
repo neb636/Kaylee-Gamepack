@@ -58,6 +58,8 @@ export interface Look {
   extras?: Extra[]
   /** Lashes on the eyes. */
   lashes?: boolean
+  /** A plain chest: no species marking on it (a spirit bear is a black bear, so no sun bear's cream crescent). */
+  plainChest?: boolean
   /** A big open happy mouth instead of a small smile. */
   open?: boolean
 }

@@ -66,7 +66,11 @@ async function fillOnce() {
       const res = await fetch(INDEX, { cache: 'no-cache' }).catch(() => null)
       const copy = await whole(INDEX, res)
       if (!copy || (await sha256(await copy.clone().arrayBuffer())) !== INDEX_SHA256) return
-      await cache.put(INDEX, copy)
+      try {
+        await cache.put(INDEX, copy)
+      } catch (error) {
+        return saveFailed(error)
+      }
       missing.splice(missing.indexOf(INDEX), 1)
     }
     let stop = false
@@ -109,8 +113,22 @@ async function whole(url, res) {
 /** Saves `res` as `url` in `cache` if it is whole. Returns whether it did. */
 async function save(cache, url, res) {
   const copy = await whole(url, res)
-  if (copy) await cache.put(url, copy)
-  return !!copy
+  if (!copy) return false
+  try {
+    await cache.put(url, copy)
+  } catch (error) {
+    await saveFailed(error) // the iPad is out of room (QuotaExceededError): this fill stops, the last copy keeps working
+    return false
+  }
+  return true
+}
+
+/** Tells the open app that a copy couldn't be saved, so it reaches the play data (src/offline/register.ts). */
+async function saveFailed(error) {
+  const estimate = await self.navigator.storage?.estimate?.().catch(() => undefined)
+  const mb = (bytes) => (bytes == null ? null : Math.round(bytes / 1e5) / 10)
+  const message = { type: 'offline-save-failed', error: error?.name ?? String(error), build: BUILD, usage_mb: mb(estimate?.usage), quota_mb: mb(estimate?.quota) }
+  for (const client of await self.clients.matchAll({ includeUncontrolled: true })) client.postMessage(message)
 }
 
 /** An answer to use or save: a wifi login page is a 200 too, but it's HTML where a script, model or sound should be.

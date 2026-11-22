@@ -1,78 +1,88 @@
-// Direct activity selection on Canada’s 3D map.
+// Canada's home base: the map of Canada (map/world.ts), a toy tray floating in the sky with her friends standing where
+// they live. Tap a place (or its friend): the camera closes in and the chapter opens. Ottawa's rink is the story's
+// home: Maple and the Cup, the geese skating rings, and every friend she has brought home standing in a row in the
+// team's pink scarf. With the whole team there, the rink glows: the big game.
+//
+// A quiet hub (docs/voices.md): Sparkle says her one line once a visit on the first look, counts the team when a new
+// friend pops in at the rink (once each), and names a few things the first time she pokes them. It never talks when
+// she's idle: after ~8 s with no touch the places still to do pulse softly instead. The new friend shows their move
+// (map/moves.ts) and then Gus, at the rink, has his say about how many they are now (by how many, not who), while the
+// map stays hers to tap. The team's skate hut by the canal opens the Team Cabin.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { lineText, lineVoice, say, stopSpeaking, useAlive, wait, type Line, useTimers } from '../../../../../sdk'
+import { lineText, lineVoice, say, sounds, stopSpeaking, useAlive, useTimers, wait, type Line } from '../../../../../sdk'
+import { onDevice } from '../../../../../sdk/device'
+import { Anchors } from '../../../../engine3d/Anchors'
+import { MapCover } from '../../../../engine3d/MapCover'
+import { View3D, type AnchorInput, type RenderMode } from '../../../../engine3d/View3D'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
-import { Anchors } from '../../../../engine3d/Anchors'
-import type { AnchorInput } from '../../../../engine3d/View3D'
-import { View3D, type RenderMode } from '../../../../engine3d/View3D'
 import type { AnimalId } from '../../book/animals'
 import { Book } from '../../book/Book'
 import { meet } from '../../book/met'
 import { L } from '../../lines'
-import type { Region } from '../../map/canada'
-import { STOPS } from '../../map/canada'
-import { CanadaMap, MAP_ANCHORS, type MapEvents } from '../../map/map'
+import { hubSfx } from '../../map/sounds'
+import { CanadaMapWorld, MAP_ANCHORS, MAP_CAM, type MapEvents, type PlaceId, type PokeId, type Spot } from '../../map/world'
+import { CHAPTERS, teamOf, TEAM, type ChapterId } from '../../story/chapters'
 import { Guide, type GuideHandle } from './Guide'
 import HUB_SECTIONS from './sections'
 
 /** Who goes into Maple's book when she pokes them on the map. */
-const MEETS: Record<string, AnimalId> = {
-  'animal:moose': 'moose',
-  'animal:bison': 'bison',
-  'animal:geese': 'canada-goose',
-  'poke:flock': 'canada-goose',
-  'poke:polar': 'polar-bear',
-  'poke:orca': 'orca',
-  'poke:beluga': 'beluga',
-  'poke:mountie': 'mountie-horse',
-}
+const MEETS: Partial<Record<PokeId, AnimalId>> = { geese: 'canada-goose', owl: 'snowy-owl', orca: 'orca', bison: 'bison', beluga: 'beluga' }
 
-// Keep the invitation to once per visit to the app.
+/** The places, east to west, as the page lists their targets. */
+const PLACE_IDS: PlaceId[] = ['bike', 'snowman', 'party', 'campfire', 'canoe', 'bath', 'whales']
+
+// Once a visit to the app: Sparkle's first line, each count, the team's cheer, each fact; and the stamps she had when
+// she last looked at the map (a new one means a new friend arriving).
 const session = {
   told: false,
-  /** The destination she most recently selected. */
-  lastAt: null as Region | null,
-  stamps: null as number | null,
-  said: new Set<string>(),
+  stamps: null as string[] | null,
+  counted: new Set<number>(),
+  gus: new Set<number>(),
+  facts: new Set<string>(),
 }
-const once = (key: string) => (session.said.has(key) ? false : (session.said.add(key), true))
 
 export function Hub({ meta, openActivity, stamps }: PlaceProps) {
   const timers = useTimers()
-  const { start, param, enter } = useSections(HUB_SECTIONS)
   const alive = useAlive()
-  const [initial] = useState(() => {
-    const back = !start && session.lastAt
-    return { at: (back ? session.lastAt : param('at')) as Region }
+  const { start, param, enter } = useSections(HUB_SECTIONS)
+  const [book, setBook] = useState(start === 'book')
+  // Who stands at the rink (the link's team, or one friend per stamp), and who is arriving.
+  const [setup] = useState(() => {
+    const asked = param('team')
+    const list = asked === 'all' ? [...CHAPTERS] : asked === 'none' ? [] : asked ? asked.split(',') : teamOf(stamps)
+    let arriving = (param('new') || null) as ChapterId | null
+    if (!arriving && !asked && session.stamps) {
+      const fresh = teamOf(stamps).filter((c) => !session.stamps!.includes(c))
+      arriving = fresh[fresh.length - 1] ?? null
+    }
+    session.stamps = stamps.slice()
+    const team = CHAPTERS.filter((c) => list.includes(c) || c === arriving)
+    return { team, arriving, asked }
   })
+  const whole = setup.team.length === CHAPTERS.length
+  // A link's team stays in the address bar as the team it made (the friend arriving included), so a reload keeps them.
+  // With real stamps the team comes from the stamps and the link stays bare.
+  const [linkTeam] = useState(() => (setup.asked || param('new') ? (whole ? 'all' : setup.team.length ? setup.team.join(',') : 'none') : null))
+  useEffect(() => enter(book ? 'book' : 'map', linkTeam ? { team: linkTeam } : {}), [book])
+
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
-  const worldRef = useRef<CanadaMap | null>(null)
-  const at = useRef(initial.at)
-  const [book, setBook] = useState(start === 'book')
-  useEffect(() => enter(book ? 'book' : 'map', { at: at.current, team: teamParam }), [book])
-
-  const allDone = meta.activities.every((a) => stamps.includes(a.id))
-  const ready = useRef(new Set<string>())
-  ready.current.clear()
-  for (const activity of meta.activities) ready.current.add(activity.id)
-  if (allDone) ready.current.add('party')
-  // Her hockey team: one friend per stamp (or the link's `team`, to see it without playing everything).
-  const teamParam = param('team')
-  const team = useRef(teamParam ? teamParam.split(',').filter(Boolean) : stamps.slice())
-  const icons = Object.fromEntries([...meta.activities, ...(meta.inTheWorks ?? [])].map((a) => [a.id, { icon: a.icon, name: a.name }]))
-  icons.party = { icon: '🏒', name: 'Pond Hockey' }
+  const worldRef = useRef<CanadaMapWorld | null>(null)
+  const [revealed, setRevealed] = useState(false)
+  const [picked, setPicked] = useState<PlaceId | 'cabin' | null>(null)
+  const lastTouch = useRef(performance.now() + 3000)
 
   // ---- Talking: one line at a time, Sparkle's words beside her, a friend's at the bottom.
   const guide = useRef<GuideHandle>(null)
   const [sparkleLine, setSparkleLine] = useState<Line | null>(null)
   const [friendLine, setFriendLine] = useState<Line | null>(null)
-  const lastSparkle = useRef<Line>(L.hub.bubbles)
+  const lastSparkle = useRef<Line>(L.hub.first)
   const gen = useRef(0)
   const queue = useRef<Promise<void>>(Promise.resolve())
-  const talk = (l: Line, now = false) => {
+  /** Says a line after whatever is being said (`now`: instead of it); `onStart` runs as it begins. */
+  const talk = (l: Line, now = false, onStart?: () => void) => {
     if (now) {
       gen.current++
       stopSpeaking()
@@ -84,6 +94,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       const sparkle = lineVoice(l) === 'sparkle'
       const show = sparkle ? setSparkleLine : setFriendLine
       show(l)
+      onStart?.()
       if (sparkle) {
         lastSparkle.current = l
         guide.current?.wave()
@@ -95,71 +106,141 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
     queue.current = queue.current.then(run)
     return queue.current
   }
-
-  // One short invitation per visit; all pins are already available while she hears it.
-  useEffect(() => {
-    if (session.told) return
-    const timer = timers.later(() => {
-      session.told = true
-      void talk(L.hub.bubbles)
-    }, 0)
-    return () => window.clearTimeout(timer)
-  }, [])
-  useEffect(() => () => {
-    gen.current++
-    stopSpeaking()
-  }, [])
-
-  // ---- Back from an activity with a new stamp: a new friend on the team.
-  useEffect(() => {
-    if (session.stamps !== null && stamps.length > session.stamps) timers.later(() => alive() && void talk(L.hub.newFriend), 900)
-    session.stamps = stamps.length
-  }, [])
-
-  const mapleTaps = useRef(0)
-  const lastSoon = useRef(0)
-  const events = useRef<MapEvents>({
-    open: (id) => {
-      const stop = STOPS.find((s) => s.acts.includes(id))
-      session.lastAt = stop?.id ?? at.current
+  const once = (key: string, l: Line) => {
+    if (session.facts.has(key)) return
+    session.facts.add(key)
+    void talk(l, true)
+  }
+  useEffect(
+    () => () => {
       gen.current++
       stopSpeaking()
-      openActivity(id)
     },
-    soon: (act) => {
-      if (performance.now() - lastSoon.current < 2500) return
-      lastSoon.current = performance.now()
-      void talk(act === 'party' ? L.hub.locked : L.hub.soon, true)
+    [],
+  )
+  // The breeze under the map.
+  useEffect(() => hubSfx.wind(), [])
+
+  useEffect(() => {
+    // (If the board never draws, the cover still goes.)
+    const safety = timers.later(() => setRevealed(true), 6000)
+    return () => clearTimeout(safety)
+  }, [])
+
+  // Once she can see the board: the new friend's count (or the whole team, and the rink), else the first line.
+  useEffect(() => {
+    if (!revealed) return
+    lastTouch.current = Math.max(lastTouch.current, performance.now() + 3000)
+    const n = setup.team.length
+    if (setup.arriving) {
+      // (Gus's line, and with the whole team Sparkle's "tap the rink", come when the newcomer's move is done.)
+      timers.later(() => {
+        if (session.counted.has(n)) return
+        session.counted.add(n)
+        void talk(n < CHAPTERS.length ? L.hub.count[n - 1] : L.hub.all)
+      }, 1500)
+    } else if (!session.told) {
+      session.told = true
+      timers.later(() => void talk(whole ? L.hub.rink : L.hub.first), 500)
+    }
+    // After ~8 s with nothing touched the places still to do pulse. No voice: it's a quiet hub.
+    const idle = timers.every(() => {
+      if (performance.now() - lastTouch.current > 8000) worldRef.current?.setHint(true)
+    }, 1000)
+    return () => clearInterval(idle)
+  }, [revealed])
+
+  useEffect(() => worldRef.current?.setGlow(whole), [engine])
+
+  const lockedTaps = useRef(0)
+  const gusTaps = useRef(0)
+  const events = useRef<MapEvents>(null!)
+  events.current = {
+    revealed: () => setRevealed(true),
+    touched: () => {
+      lastTouch.current = performance.now()
+      worldRef.current?.setHint(false)
+    },
+    pick: (id) => {
+      setPicked(id)
+      gen.current++
+      stopSpeaking()
+      timers.later(() => sounds.sparkle(), 120)
+      // The camera closes in, then it opens.
+      timers.later(() => openActivity(id), 650)
+    },
+    locked: () => {
+      // Maple: the team isn't whole yet (and now and then a word of her own); the places still to do bounce.
+      const n = lockedTaps.current++
+      void talk(n % 2 === 0 ? L.hub.locked : L.hub.maple[(n >> 1) % L.hub.maple.length], true)
+    },
+    team: (id) => void talk(L.hub.team[id], true),
+    moved: (_id, arrival) => {
+      if (!arrival) return
+      // Gus, at the rink, after Sparkle's count and the newcomer's move: by how many are on the team now.
+      const n = setup.team.length
+      if (session.gus.has(n)) return worldRef.current?.release()
+      session.gus.add(n)
+      void talk(L.hub.gusCount[n - 1], false, () => worldRef.current?.gusSays(n))
+      if (n === CHAPTERS.length) void talk(L.hub.rink)
+    },
+    cabin: () => {
+      // The hut's door is open and the camera is closing in: the Team Cabin.
+      setPicked('cabin')
+      gen.current++
+      stopSpeaking()
+      timers.later(() => sounds.sparkle(), 120)
+      timers.later(() => openActivity('cabin'), 750)
     },
     poked: (id) => {
-      const animal = MEETS[id.replace(/:off$/, '')]
+      const animal = MEETS[id]
       if (animal) meet(animal)
-      const fact = L.hub.pokes[id.slice(5) as keyof typeof L.hub.pokes]
-      if (id.startsWith('poke:') && fact && once(id)) void talk(fact, true)
-      if (id.startsWith('team:')) {
-        const cheer = L.hub.team[id.slice(5) as keyof typeof L.hub.team]
-        if (cheer) void talk(cheer, true)
-      }
-      if (id === 'maple') void talk(L.hub.maple[mapleTaps.current++ % L.hub.maple.length], true)
+      if (id === 'geese') void talk(L.hub.gus[gusTaps.current++ % L.hub.gus.length], true)
+      if (id === 'balloon') once('balloon', L.hub.pokes.balloon)
     },
-  })
+    spot: (id: Spot) => once(id, L.hub.pokes[id]),
+  }
+
+  const acts = Object.fromEntries([...meta.activities, ...(meta.inTheWorks ?? [])].map((a) => [a.id, a.name]))
+  const label = (id: PlaceId) => (id === 'party' ? 'Pond Hockey' : `${acts[id] ?? id}: ${TEAM[id as ChapterId].name}`)
 
   return (
-    <div style={{ position: 'absolute', inset: 0, background: '#E3F3FF', overflow: 'clip' }}>
+    <div style={{ position: 'absolute', inset: 0, background: '#CFE9FF', overflow: 'clip' }}>
       <View3D
         key={engine}
-        name="Canada’s map"
+        name="The map of Canada"
         qaKey="__canadaMapQA"
         worldRef={worldRef}
         onMode={setMode}
-        make={(renderer) => new CanadaMap(renderer, { at: at.current, team: team.current }, events.current, ready.current)}
+        make={(renderer) => {
+          const world = new CanadaMapWorld(
+            renderer,
+            {
+              pick: (id) => events.current.pick(id),
+              locked: () => events.current.locked(),
+              team: (id) => events.current.team(id),
+              poked: (id) => events.current.poked(id),
+              spot: (id) => events.current.spot(id),
+              moved: (id, arrival) => events.current.moved(id, arrival),
+              cabin: () => events.current.cabin(),
+              touched: () => events.current.touched(),
+              revealed: () => events.current.revealed(),
+            },
+            setup.team,
+            setup.arriving,
+          )
+          world.setGlow(whole)
+          return world
+        }}
         anchors={(input, els) => (
           <>
             <Anchors list={MAP_ANCHORS} els={els} {...input} />
-            <Pins input={input} els={els} icons={icons} stamps={stamps} allDone={allDone} />
+            <PlaceTargets input={input} els={els} label={label} picked={picked} />
           </>
         )}
       />
+      {/* The same screen as the place's loading screen (PlaceFrame), so the cut from it is invisible. */}
+      <MapCover show={!revealed && mode !== 'lost'} fade={MAP_CAM.fade} />
       {mode === 'lost' && (
         <button
           onClick={() => {
@@ -168,28 +249,23 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
           }}
           style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(227,243,255,.88)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}
         >
-          🍁 Tap to wake the map
+          🍁 {onDevice('Tap to wake the map', 'Click to wake the map')}
         </button>
       )}
       <Guide ref={guide} line={sparkleLine} onTap={() => void talk(lastSparkle.current, true)} />
       <button
         aria-label="Maple's animal book"
         onClick={() => setBook(true)}
-        style={{ position: 'absolute', right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', zIndex: 25, width: 'var(--target)', height: 'var(--target)', borderRadius: 24, border: '5px solid #C98A55', background: '#FFF6E6', boxShadow: 'var(--shadow)', fontSize: 'clamp(34px, 5vmin, 48px)', display: 'grid', placeItems: 'center' }}
+        style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 14px)', bottom: 'calc(var(--safe-bottom) + 14px)', zIndex: 25, width: 64, height: 64, borderRadius: 20, border: '4px solid #C98A55', background: '#FFF6E6', boxShadow: 'var(--shadow)', fontSize: 32, display: 'grid', placeItems: 'center', padding: 0 }}
       >
         📒
       </button>
       {book && <Book onClose={() => setBook(false)} />}
-      <div style={{ position: 'absolute', left: 'calc(min(120px, 16vh, 24vw) + 24px)', right: 'calc(var(--target) + 28px)', bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', justifyContent: 'center', pointerEvents: 'none', zIndex: 20 }}>
-        <AnimatePresence mode="popLayout">
-          {friendLine ? (
-            <motion.div key={`say-${lineText(friendLine)}`} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={{ ...PILL, background: '#FFF6E6', border: '4px solid #C98A55' }}>
-              {lineVoice(friendLine) === 'maple' ? '🦫 ' : ''}
+      <div style={{ position: 'absolute', left: 'calc(min(120px, 16vh, 24vw) + 24px)', right: 92, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', justifyContent: 'center', pointerEvents: 'none', zIndex: 20 }}>
+        <AnimatePresence>
+          {friendLine && (
+            <motion.div key={`say-${lineText(friendLine)}`} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
               {lineText(friendLine)}
-            </motion.div>
-          ) : (
-            <motion.div key="canada" initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-              🍁 Canada
             </motion.div>
           )}
         </AnimatePresence>
@@ -198,39 +274,38 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
   )
 }
 
-// Every activity has a visible pin, with a check for a stamp already earned.
-function Pins({ input, els, icons, stamps, allDone }: { input: AnchorInput; els: Map<string, HTMLElement>; icons: Record<string, { icon: string; name: string }>; stamps: string[]; allDone: boolean }) {
+/** The places' tap targets: see-through buttons the world keeps over each diorama and its friend. The rink's is the
+ *  big game's (`data-finale`). */
+function PlaceTargets({ input, els, label, picked }: { input: AnchorInput; els: Map<string, HTMLElement>; label: (id: PlaceId) => string; picked: PlaceId | 'cabin' | null }) {
   return (
     <>
-      {STOPS.flatMap((s) => s.acts).map((id) => (
-        <div key={id}>
-          <div ref={(el) => { if (el) els.set(`line:${id}`, el); else els.delete(`line:${id}`) }} aria-hidden style={{ position: 'absolute', left: 0, top: 0, height: 3, background: '#A783B8', transformOrigin: '0 50%', pointerEvents: 'none', opacity: 0.7 }} />
-          <button
-            ref={(el) => {
-              if (el) els.set(`go:${id}`, el)
-              else els.delete(`go:${id}`)
-            }}
-            aria-label={icons[id]?.name ?? id}
-            data-anchor={`go:${id}`}
-            onPointerDown={(e) => {
-              e.preventDefault()
-              input.onDown(e, `go:${id}`)
-            }}
-            onClick={(e) => e.detail === 0 && input.onKey(`go:${id}`)}
-            style={{ position: 'absolute', left: 0, top: 0, display: 'none', padding: 0, border: '5px solid var(--hotpink)', borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'clamp(34px, 5vmin, 48px)', lineHeight: 1, touchAction: 'none', cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}
-          >
-            {icons[id]?.icon ?? '❓'}
-            <span style={{ position: 'absolute', top: -8, right: -5, fontSize: 24 }}>{stamps.includes(id) ? '✅' : id === 'party' && !allDone ? '🔒' : ''}</span>
-            <span style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: 6, width: 'max-content', maxWidth: 'min(110px, 18vw)', padding: '3px 5px', borderRadius: 10, background: 'rgba(255,255,255,.95)', fontSize: 'clamp(11px, 1.8vmin, 16px)', lineHeight: 1.05, fontWeight: 600, color: 'var(--ink)', pointerEvents: 'none' }}>{icons[id]?.name}</span>
-          </button>
-        </div>
+      {PLACE_IDS.map((id) => (
+        <button
+          key={id}
+          ref={(el) => {
+            if (el) els.set(`go:${id}`, el)
+            else els.delete(`go:${id}`)
+          }}
+          aria-label={label(id)}
+          data-anchor={`go:${id}`}
+          data-activity={id}
+          data-finale={id === 'party' || undefined}
+          data-picked={picked === id || undefined}
+          onPointerDown={(e) => {
+            e.preventDefault()
+            input.onDown(e, `go:${id}`)
+          }}
+          onClick={(e) => e.detail === 0 && input.onKey(`go:${id}`)}
+          style={{ position: 'absolute', left: 0, top: 0, display: 'none', padding: 0, border: 'none', borderRadius: 28, background: 'transparent', touchAction: 'none', cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}
+        />
       ))}
     </>
   )
 }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
+  background: '#FFF6E6',
+  border: '4px solid #C98A55',
   color: 'var(--ink)',
   borderRadius: 999,
   padding: '8px 20px',

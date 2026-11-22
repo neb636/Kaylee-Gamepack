@@ -4,7 +4,7 @@ Full loop built, on for Kaylee · Nan trip stop · updated 2026-11-09
 
 At the end of the city road, Nan town's market square becomes the race ground for the **Nan Mountain Cup**. Kaylee drives her own pink kart against three mountain racers on three tracks, each one different: a misty mushroom forest, the rice steps and the climb into the clouds. She wins two races and loses one. Which one she loses is rolled fresh every time she plays. Winning two makes her the champion, so the Cup with CHAMPION on it is hers.
 
-**Next:** Kaylee plays it (check-in 3): [the board](#/world/thailand/nan-trip/cup) is the way in, or the city road from the Nan map. The kart's feel numbers are settled ([the feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1)); only her playtest reopens them.
+**Next:** You play it (check-in 3): [the board](#/world/thailand/nan-trip/cup) is the way in, or the city road from the Nan map. The kart's feel numbers are settled ([the feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1)); only playing it or her play data reopens them.
 
 - tracks, any order: 3
 - rolled each time: 2 wins, 1 loss

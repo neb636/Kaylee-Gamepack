@@ -1,5 +1,4 @@
 import basil from './assets/basil.webp'
-import basketOlives from './assets/basket-olives.webp'
 import bgAqueductTall from './assets/bg-aqueduct-tall.webp'
 import bgAqueduct from './assets/bg-aqueduct.webp'
 import bgNaples1889 from './assets/bg-naples-1889.webp'
@@ -12,7 +11,6 @@ import bgPizzaOvenTall from './assets/bg-pizza-oven-tall.webp'
 import bgPizzaOven from './assets/bg-pizza-oven.webp'
 import bgPizzeriaFrontTall from './assets/bg-pizzeria-front-tall.webp'
 import bgPizzeriaFront from './assets/bg-pizzeria-front.webp'
-import bgPizzeriaKitchenTall from './assets/bg-pizzeria-kitchen-tall.webp'
 import bgPizzeriaKitchen from './assets/bg-pizzeria-kitchen.webp'
 import bgTreviDryTall from './assets/bg-trevi-dry-tall.webp'
 import bgTreviDry from './assets/bg-trevi-dry.webp'
@@ -41,7 +39,6 @@ import nino from './assets/nino.webp'
 import mushroom from './assets/mushroom.webp'
 import oilJug from './assets/oil-jug.webp'
 import oliveBowl from './assets/olive-bowl.webp'
-import oliveNet from './assets/olive-net.webp'
 import oliveTree from './assets/olive-tree.webp'
 import olive from './assets/olive.webp'
 import peel from './assets/peel.webp'
@@ -69,7 +66,6 @@ export const art = {
   romanHorn,
   tortoise,
   basil,
-  basketOlives,
   bgAqueduct,
   bgAqueductTall,
   bgNaples1889,
@@ -83,7 +79,6 @@ export const art = {
   bgPizzeriaFront,
   bgPizzeriaFrontTall,
   bgPizzeriaKitchen,
-  bgPizzeriaKitchenTall,
   bgTreviDry,
   bgTreviDryTall,
   bgTreviFull,
@@ -113,7 +108,6 @@ export const art = {
   oilJug,
   olive,
   oliveBowl,
-  oliveNet,
   oliveTree,
   peel,
   pepper,

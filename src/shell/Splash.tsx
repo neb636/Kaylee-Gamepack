@@ -4,6 +4,7 @@ import { pick, SparklePuppet, sounds, useLandscape, type PuppetHandle, type Spar
 import { unlockSpeech } from '../sdk/speech'
 import { unlockSounds } from '../sdk/sounds'
 import { Balloon, Cloud, HiKaylee, Pill, Rainbow, Sky, Wave } from './Sky'
+import { isTester } from '../posthog'
 
 import { useHalloween } from './seasonal/season'
 import { HalloweenGuest } from './seasonal/Halloween'
@@ -25,6 +26,16 @@ export function Splash({ onStart }: { onStart: () => void }) {
   const h = landscape ? 'min(44vh, 380px, 34vw)' : 'min(39vh, 440px, 60vw)'
   return (
     <div className={`screen${halloween ? ' halloween' : ''}`} style={{ padding: 0, overflow: 'hidden', background: CREAM }}>
+      {isTester && (
+        // Only on the user's devices (docs/play-data.md): opening the app shows the tag worked, even in a Home Screen
+        // app that has no address bar. A tester sends errors only, so the data can't show it.
+        <div
+          aria-label="Tester device: this device sends errors only"
+          style={{ position: 'absolute', zIndex: 5, top: 'calc(var(--safe-top) + 10px)', left: 12, padding: '4px 10px', borderRadius: 999, background: 'rgba(255, 255, 255, 0.85)', color: '#7a5a8c', font: '600 13px/1.2 system-ui, sans-serif', pointerEvents: 'none' }}
+        >
+          🧪 Tester: errors only
+        </div>
+      )}
       <Sky>
         {halloween ? <>
           <HalloweenGuest kind="pumpkin" style={{ left: '3%', top: landscape ? '15%' : '22%' }} />

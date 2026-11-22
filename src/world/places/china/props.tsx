@@ -232,21 +232,6 @@ export function Stool({ style }: { style?: CSSProperties }) {
   )
 }
 
-export function Teapot({ style }: { style?: CSSProperties }) {
-  return (
-    <svg viewBox="-8 -8 176 136" style={{ width: '100%', display: 'block', overflow: 'visible', ...style }}>
-      <path d="M130 60 Q170 44 160 20" fill="none" {...S} strokeWidth={9} />
-      <path d="M130 60 Q170 44 160 20" fill="none" stroke="#7CCBA2" strokeWidth={3} strokeLinecap="round" />
-      <path d="M30 56 Q4 60 10 84 Q16 100 34 96" fill="none" {...S} strokeWidth={9} />
-      <path d="M30 56 Q4 60 10 84 Q16 100 34 96" fill="none" stroke="#7CCBA2" strokeWidth={3} strokeLinecap="round" />
-      <path d="M28 60 Q28 30 80 30 Q132 30 132 60 Q134 112 80 112 Q26 112 28 60Z" fill="#9EDCC0" {...S} />
-      <path d="M40 84 Q80 96 120 84" {...thin} />
-      <path d="M52 32 Q80 14 108 32Z" fill="#7CCBA2" {...S} />
-      <circle cx={80} cy={14} r={8} fill="#FFC83D" {...S} strokeWidth={4} />
-    </svg>
-  )
-}
-
 export function Cup({ tea, style }: { tea?: boolean; style?: CSSProperties }) {
   return (
     <svg viewBox="-6 -6 92 72" style={{ width: '100%', display: 'block', overflow: 'visible', ...style }}>
