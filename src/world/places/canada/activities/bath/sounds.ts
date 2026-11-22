@@ -3,7 +3,7 @@
 // (the falls, a salmon leaping, the raven) are the set's (story/sets/bath.ts riverSfx); Misty's sneeze, her boop and
 // her happy grumble kept their salmon names.
 import { sounds } from '../../../../../sdk'
-import { clip, held } from '../../../../kit/clips'
+import { clip, held, playClip } from '../../../../kit/clips'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import { url } from '../../sfx'
 
@@ -42,6 +42,17 @@ export const bathSfx = {
   deco: clip(url('bath-deco'), () => (sounds.pop(), tone(1800, 2400, 0.12, 0.03, 'sine', 0.05))),
   /** The bar of soap slipping out and flying: a slippery squirt. */
   soap: clip(url('bath-soap'), () => (noise(0.1, 0.06, 'bandpass', 1800, 3400, 0, 2), sounds.pop())),
+  /** A floating soap bubble popped by her finger: a tiny wet plip. */
+  plip: clip(url('bath-plip'), () => tone(1400 + Math.random() * 500, 2400, 0.05, 0.05, 'sine'), { jitter: 0.15 }),
+  /** The pink rubber duck squeaking. */
+  duck: clip(url('bath-duck'), () => [0, 0.14].forEach((d) => tone(1100, 1500, 0.08, 0.06, 'square', d)), { jitter: 0.06 }),
+  /** A patch of her comes clean: a sparkly ding, a step higher for each one (`n` 0, 1, 2...). */
+  ding: (n: number) => {
+    const rate = Math.pow(2, [0, 2, 4, 7, 9, 12, 14][Math.min(6, n)] / 12)
+    if (!playClip(url('bath-ding'), { vol: 0.8, rate })) tone(880 * rate, 1320 * rate, 0.25, 0.06, 'sine')
+  },
+  /** (Loads the ding before the first patch comes clean.) */
+  warm: () => void playClip(url('bath-ding'), { vol: 0 }),
   /** Misty sneezing (her own clip from the salmon days). */
   sneeze: clip(url('salmon-sneeze'), () => (noise(0.3, 0.12, 'bandpass', 1200, 600, 0.25, 1), tone(500, 300, 0.2, 0.06, 'triangle'))),
   /** A boop on her big round nose. */

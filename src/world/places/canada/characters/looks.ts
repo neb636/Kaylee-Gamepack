@@ -51,5 +51,5 @@ export const CANADA_LOOKS: Record<CanadaFriend, Look> = {
   /** Ollie the sea otter: floats on her back, spins like a top. */
   otter: { species: 'otter', height: 0.8, chub: 1.1, fur: C.otterFur, light: C.otterLight, dark: C.otterDark, ear: '#54433F', open: true, lashes: true },
   /** Misty the spirit bear: a black bear born with cream-white fur, big and soft and a little shy. */
-  spirit: { species: 'bear', height: 1.3, chub: 1.18, fur: C.spiritFur, light: C.spiritLight, dark: C.spiritDark, ear: '#F8C8C0', lashes: true },
+  spirit: { species: 'bear', height: 1.3, chub: 1.18, fur: C.spiritFur, light: C.spiritLight, dark: C.spiritDark, ear: '#F8C8C0', lashes: true, plainChest: true },
 }

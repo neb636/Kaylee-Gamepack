@@ -14,17 +14,23 @@
 //   colors  three berry bushes: squash one and rub, and the fur there takes the color, as much or as little as she
 //           likes (on her head the hairdo takes it too); then ferns, flowers, bows and a crown come up on the log
 //           one after another: drop one on her (or tap it) and it goes on the nearest spot (the side verb).
-// Then the still pool in front of her glows: a tap and Misty sees herself, the camera goes close and she pulls her big
-// face (characters/closeup.ts sillyFilm). Maple holds up the white team sweater; one tap and Misty presses her paw on
-// it, THUMP, in whatever berries are on that paw, and pulls it on. The look is saved (looks.ts) for the films, the map
-// and the big game.
+// Then the still pool in front of her glows: a tap and Misty sees herself, the camera goes close and she beams (the
+// close-up shot of characters/closeup.ts, with her own happy face, no silly eyes). Maple holds up the white team
+// sweater; one tap and Misty presses her paw on it, THUMP, in whatever berries are on that paw, and pulls it on. The
+// look is saved (looks.ts) for the films, the map and the big game.
 //
-// Silly, any time: tap her nose and she sneezes suds everywhere; tickle her tummy and she kicks the water; rub suds on
-// Maple and Maple has a foam beard; tap the soap and Misty bats it clean over the cedars; when the rain is done she
-// shakes like a dog and soaks Maple; tap the big cedar and she scratches her back on it. Pokeables: the salmon at the
-// falls (she swings, misses, and the splash rinses her), the falls, the cedar, the banana slug, the raven, the rain
-// cloud, the soap, Maple. Nothing fails: no clean meter; a muddy patch she's missed sparkles after 8 s; if she does
-// nothing the rain finishes the mud and the next tool comes by itself; any amount of color is enough.
+// Bubbles (suds.ts): the sponge's lather is soft foam that piles up where she rubs (a mohawk, horns, a beard), muddy
+// tan over thick mud and whitening as she scrubs; soap bubbles float up out of it (and out of a sneeze, the soap, the
+// rain) and her finger pops them, a tap or just passing through. Each patch of her the rain rinses clean rings a
+// sparkly ding, a step higher each time.
+//
+// Silly, any time: tap her nose and she sneezes suds and bubbles everywhere; tickle her tummy and she kicks the water;
+// rub suds on Maple and Maple has a foam beard; tap the soap and Misty bats it clean over the cedars; when the rain is
+// done she shakes like a dog and soaks Maple; tap the big cedar and she scratches her back on it; tap the pink rubber
+// duck and it squeaks and hops. Pokeables: the salmon at the falls (she swings, misses, and the splash rinses her),
+// the falls, the cedar, the banana slug, the raven, the rain cloud, the soap, the duck, Maple. Nothing fails: no clean
+// meter; a muddy patch she's missed sparkles after 8 s; if she does nothing the rain finishes the mud and the next
+// tool comes by itself; any amount of color is enough.
 //
 // Misty is the rig's spirit bear built plain (story/cast.ts Friend), her coat (characters/mistyLook.ts) changed live:
 // the same code dresses her in the films, on the map and in the big game. Sparkle's lines and Misty's and Maple's
@@ -46,17 +52,17 @@ import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { meet } from '../../book/met'
-import { sillyFilm } from '../../characters/closeup'
+import { sillyBeat } from '../../characters/closeup'
 import { mistyCoat, muddyMisty, type CoatPart, type MistyCoat } from '../../characters/mistyLook'
 import { L } from '../../lines'
 import { BERRY_IDS, DECOS, DECO_SPOTS, encodeMisty, MISTY_ZONES, saveMisty, type Berry, type Deco, type DecoSpot, type HairStyle, type MistyLook, type MistyZone } from '../../looks'
 import { Friend } from '../../story/cast'
 import { BATH as AT, buildRiver, FALLS_Z, MIRROR, RIVER_LOOK, riverSfx, SCRATCH, TALLEST, TOP, updateRiver, type RiverSet } from '../../story/sets/bath'
 import { storySfx } from '../../story/sounds'
-import { heldSweater, makeBerry, makeBush, makeCloud, makeComb, makeDecoProp, makeLog, makeRaven, makeSlug, makeSoap, makeSoapRock, makeSponge, makeTowel, pawPrint, type LogItem, type Prop, type ToolId } from './props'
+import { heldSweater, makeBerry, makeBush, makeCloud, makeComb, makeDecoProp, makeDuck, makeLog, makeRaven, makeSlug, makeSoap, makeSoapRock, makeSponge, makeTowel, pawPrint, type LogItem, type Prop, type ToolId } from './props'
 import type { BathSection } from './sections'
 import { bathSfx as fx } from './sounds'
-import { Suds } from './suds'
+import { Floaters, Suds } from './suds'
 
 const FILE = 'src/world/places/canada/activities/bath/bath.ts'
 /** How the bath feels: Dad tunes these by hand in the feel lab (?feel=1). */
@@ -109,6 +115,7 @@ export const BATH_ANCHORS: AnchorInfo[] = [
   { id: 'slug', label: 'The banana slug', kind: 'thing' },
   { id: 'raven', label: 'The raven', kind: 'thing' },
   { id: 'sky-cloud', label: 'The rain cloud', kind: 'thing' },
+  { id: 'duck', label: 'The rubber duck', kind: 'thing' },
 ]
 
 /** Px a finger rubs for one stroke (the plan's counts: about 40-60 strokes and taps in all). */
@@ -145,6 +152,10 @@ const RAVEN_AT = new Vector3(SCRATCH.x - SCRATCH.r - 0.36, 1.72, SCRATCH.z + 0.1
 const SKY_CLOUD = new Vector3(-0.55, 1.72, -2.6)
 const SALMON_POOL = new Vector3(0.95, 0.05, FALLS_Z + 0.8)
 const FALLS_AT = new Vector3(-0.55, 1.05, FALLS_Z + 0.2)
+/** Where the rubber duck bobs about (it drifts in a slow loop round here). */
+const DUCK_AT = new Vector3(-0.42, 0.035, -1.0)
+/** The order her patches come clean in doesn't matter: each one rings a step higher. These are the ones that ding. */
+const DING_ZONES: MistyZone[] = ['head', 'earL', 'earR', 'muzzle', 'chest', 'tummy', 'armL', 'armR', 'legL', 'legR']
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -185,6 +196,13 @@ export class BubbleBathWorld implements World3D {
   readonly coat: MistyCoat
   readonly maple: Friend
   private suds: Suds
+  private floaters: Floaters
+  private duck: ReturnType<typeof makeDuck> & { poke: number; spin: number; hop: number }
+  /** Patches of her that have come clean (each rang its ding), and when they were last checked. */
+  private cleaned = new Set<MistyZone>()
+  private cleanCheck = 0
+  /** Px of sponge rubbing toward the next floating bubble. */
+  private floatAcc = 0
   private bits: Particles
   private drops: Particles
   private films: FilmPlayer
@@ -298,7 +316,9 @@ export class BubbleBathWorld implements World3D {
     this.maple.place(...MAPLE_WIDE, 25)
     scene.add(this.misty.root, this.maple.root)
 
-    this.suds = new Suds(380, scene, bag)
+    this.suds = new Suds(720, scene, bag)
+    this.floaters = new Floaters(18, scene, bag)
+    fx.warm()
     this.bits = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#FFE3F0', '#FF8FB8', '#7FB2FF', '#B48CF2', '#FFD86B', '#8FD3F7', '#FFFAF0'], gravity: 4 }, bag)
     this.drops = new Particles({ kind: 'spray', count: 220, colors: ['#8FD3F7', '#FFFFFF', '#C9ECFA'], gravity: 9 }, bag)
     scene.add(this.bits.mesh, this.drops.mesh)
@@ -331,6 +351,11 @@ export class BubbleBathWorld implements World3D {
     slug.root.rotation.y = 0.5
     scene.add(slug.root)
     this.slug = { ...slug, poke: -1 }
+    const duck = makeDuck(bag)
+    duck.root.position.copy(DUCK_AT)
+    duck.root.scale.setScalar(1.0)
+    scene.add(duck.root)
+    this.duck = { ...duck, poke: -1, spin: 0, hop: -1 }
     const raven = makeRaven(bag)
     raven.root.position.copy(RAVEN_AT)
     raven.root.rotation.y = -0.5
@@ -549,6 +574,8 @@ export class BubbleBathWorld implements World3D {
     this.progress(dt)
     this.pokeables(dt, t)
     this.suds.update(dt, t)
+    this.floaters.update(dt, t)
+    this.dings(dt)
     this.bits.update(dt)
     this.drops.update(dt)
     updateRiver(this.river, dt, t, this.rig.camera, (x, y, z, n) => this.splash(x, y, z, n))
@@ -764,6 +791,8 @@ export class BubbleBathWorld implements World3D {
   pointerMove(x: number, y: number, _dx: number, _dy: number, held: boolean) {
     if (!held) return
     this.finger.set(x, y)
+    // A finger passing through a floating bubble pops it.
+    if (!this.films.on) this.popFloaters(x, y, 22)
   }
   pointerUp() {
     if (this.held) this.dropDeco()
@@ -774,6 +803,8 @@ export class BubbleBathWorld implements World3D {
   tap(x: number, y: number, id?: string) {
     if (this.films.on || this.stage === 'done') return
     this.idle = 0
+    // A tap on a floating soap bubble pops it (before anything behind it).
+    if (!id?.startsWith('tool:') && this.popFloaters(x, y, 40)) return
     if (id?.startsWith('tool:')) {
       const item = this.itemOf(id)
       if (!item) return
@@ -896,13 +927,20 @@ export class BubbleBathWorld implements World3D {
     if (onMisty && tool !== 'comb') this.stroke(moved)
     if (tool === 'sponge') {
       this.acc.suds += moved * FEEL.suds
-      while (this.acc.suds >= 16) {
-        this.acc.suds -= 16
-        const j = tmp2.set((Math.random() - 0.5) * 0.05, (Math.random() - 0.5) * 0.05, (Math.random() - 0.5) * 0.05)
-        const size = (hit.who === 'maple' ? 0.026 : 0.036) + Math.random() * 0.016
-        this.suds.add(hit.pivot, hit.local.clone().add(j), hit.normal, size)
-        // (A little bubble beside most big ones, so it reads as foam, not a row of marshmallows.)
-        if (Math.random() < 0.6) this.suds.add(hit.pivot, hit.local.clone().add(j.multiplyScalar(-1.4)), hit.normal, size * (0.4 + Math.random() * 0.2))
+      // (Over thick mud the lather comes out muddy tan; it whitens as she keeps scrubbing there.)
+      const mud = onMisty ? this.coat.mudNear(hit.part!, hit.local) : 0
+      while (this.acc.suds >= 20) {
+        this.acc.suds -= 20
+        const j = tmp2.set((Math.random() - 0.5) * 0.06, (Math.random() - 0.5) * 0.06, (Math.random() - 0.5) * 0.06)
+        const size = (hit.who === 'maple' ? 0.02 : 0.026) + Math.random() * 0.016
+        this.suds.lather(hit.pivot, hit.local.clone().add(j), hit.normal, size, mud)
+      }
+      if (moved > 0) this.suds.whiten(hit.world, FEEL.reach, Math.min(1, moved * 0.004))
+      // Now and then a soap bubble lets go and floats up.
+      this.floatAcc += moved
+      if (this.floatAcc > 170) {
+        this.floatAcc = 0
+        this.floaters.emit(tmp3.copy(hit.world).addScaledVector(this.ray.ray.direction, -0.08))
       }
       if (moved > 0.5 && this.beat('suds', 0.14)) fx.suds(Math.min(1, moved / 20))
       this.acc.squeak += moved
@@ -1024,8 +1062,10 @@ export class BubbleBathWorld implements World3D {
       return Math.max(col, at)
     }, k)
     const popped = this.suds.pop((w) => Math.abs(w.x - cx) < r && w.y < top && Math.random() < dt * 9)
-    if (popped) fx.pop()
-    if (off > 0 || popped) for (const z of MISTY_ZONES) if (coat.zones[z].wet < 0.8 && Math.random() < dt * 4) coat.wet(z, 0.8)
+    if (popped.length) fx.pop()
+    // (Some of the rinsed lather lets go as soap bubbles.)
+    for (const p of popped) if (Math.random() < 0.08) this.floaters.emit(p)
+    if (off > 0 || popped.length) for (const z of MISTY_ZONES) if (coat.zones[z].wet < 0.8 && Math.random() < dt * 4) coat.wet(z, 0.8)
     if (near && Math.random() < dt * 20) this.splashOn(near)
   }
   /** The cloud raining by itself (she let it be): it drifts across her and back. */
@@ -1117,7 +1157,7 @@ export class BubbleBathWorld implements World3D {
     }
     this.coat.wet('all', 0.5)
     this.timers.later(() => {
-      this.maple.silly('soaked', 2.2)
+      this.maple.pull('wow')
       this.maple.shake()
       const m = this.maple.head(tmp2)
       this.splash(m.x, m.y, m.z, 14)
@@ -1135,19 +1175,24 @@ export class BubbleBathWorld implements World3D {
     const s = this.misty.head(tmp2)
     this.sparkleAt(s, 14)
     fx.shimmer()
+    // The close-up of her face (the silly-face shot), but her own happy face: a big smile, sparkles all round.
+    const beat = sillyBeat(this.misty, 'dazzled', { id: 'mirror', say: B.mirror, side: 0.2, back: 2.05, sound: () => fx.shimmer() })
+    beat.start = () => {
+      this.misty.pull('happy')
+      this.misty.hop()
+      this.sparkleAt(this.misty.head(tmp3), 18)
+    }
+    beat.cues = [[0.5, () => this.sparkleAt(this.misty.head(tmp3), 12)], [1.2, () => this.misty.pull('happy')]]
     this.films.play(
-      sillyFilm(this.misty, 'crossed', {
+      {
         id: 'mirror',
-        say: B.mirror,
-        side: 0.2,
-        back: 2.05,
-        start: () => this.sparkleAt(this.misty.head(tmp3), 10),
-        done: () => {
+        beats: [beat],
+        finish: () => {
           this.misty.lean = 0
           this.river.mirror.goal = 0
           this.go('sweater')
         },
-      }),
+      },
       undefined,
       this.rig.camera,
     )
@@ -1468,6 +1513,15 @@ export class BubbleBathWorld implements World3D {
       meet('raven')
       return true
     }
+    if (id === 'duck') {
+      // Squeak! It hops, spins round once and plops back, and a couple of bubbles come up.
+      fx.duck()
+      this.duck.hop = 0
+      this.duck.poke = 0
+      this.floaters.emit(tmp3.copy(this.duck.root.position).add(tmp2.set(0, 0.15, 0)), 0.05)
+      if (!this.act && Math.random() < 0.5) (fx.grumble(), this.misty.pull('happy'))
+      return true
+    }
     if (id === 'sky-cloud') {
       this.fact('rain', B.rainPoke)
       this.skyCloudT = -2
@@ -1488,6 +1542,8 @@ export class BubbleBathWorld implements World3D {
       const off = this.suds.clear().filter((_, i) => i % 2 === 0)
       for (const p of off.slice(0, 50)) this.bits.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 3, 1 + Math.random() * 2, 1 + Math.random() * 2, 0.9, 0.04, 1)
       const nose = this.misty.head(tmp2)
+      // A whole flurry of soap bubbles out of her nose.
+      for (let i = 0; i < 7; i++) this.floaters.emit(tmp3.set(nose.x + (Math.random() - 0.5) * 0.2, nose.y - 0.05, nose.z + 0.25), 0.05 + Math.random() * 0.06, new Vector3((Math.random() - 0.5) * 1.2, 0.3 + Math.random() * 0.5, 0.4 + Math.random() * 0.4))
       for (let i = 0; i < 24; i++) this.bits.emit(nose.x, nose.y - 0.1, nose.z + 0.3, (Math.random() - 0.5) * 3, Math.random() * 2, 2 + Math.random() * 2, 0.8, 0.045, i % 2)
       // Some of it on Maple's chin.
       const head = this.maple.rig.head
@@ -1505,6 +1561,7 @@ export class BubbleBathWorld implements World3D {
     s.from.copy(s.g.position)
     s.to.set(AT.x + 0.55, 0.55, AT.z + 0.55)
     fx.soap()
+    for (let i = 0; i < 4; i++) this.floaters.emit(tmp3.copy(s.from).add(tmp2.set((Math.random() - 0.5) * 0.15, 0.08, 0)), 0.04 + Math.random() * 0.04)
     if (!this.act) {
       this.misty.turnTo(AT.x + 1.5, AT.z + 1.5)
       this.doAct('swing', 1.4, 'soap')
@@ -1555,6 +1612,32 @@ export class BubbleBathWorld implements World3D {
         this.sparkleAt(s.g.position, 8)
         storySfx.pop()
       }
+    }
+    // The duck: drifts round a slow loop, bobbing; a tap makes it hop, spin and plop back with a splash.
+    const dk = this.duck
+    dk.root.position.x = DUCK_AT.x + Math.sin(t * 0.23) * 0.1
+    dk.root.position.z = DUCK_AT.z + Math.sin(t * 0.31 + 1) * 0.06
+    let hy = 0
+    if (dk.hop >= 0) {
+      dk.hop += dt / 0.55
+      const k = Math.min(1, dk.hop)
+      hy = Math.sin(k * Math.PI) * 0.22
+      dk.spin = k * Math.PI * 2
+      if (k >= 1) {
+        dk.hop = -1
+        dk.spin = 0
+        this.splash(dk.root.position.x, 0.05, dk.root.position.z, 8)
+        riverSfx.splash()
+      }
+    }
+    dk.root.position.y = DUCK_AT.y + Math.sin(t * 2.2) * 0.008 + hy
+    dk.root.rotation.y = -0.6 + Math.cos(t * 0.23) * 0.5 + dk.spin
+    dk.body.rotation.z = Math.sin(t * 1.7) * 0.06
+    if (dk.poke >= 0) {
+      dk.poke += dt
+      const sq = bell(Math.min(1, dk.poke / 0.25))
+      dk.body.scale.set(1 + sq * 0.18, 1 - sq * 0.22, 1 + sq * 0.18)
+      if (dk.poke > 0.25) dk.poke = -1
     }
     // The slug: its eye stalks stretch out, it inches along and back.
     const sl = this.slug
@@ -1630,6 +1713,37 @@ export class BubbleBathWorld implements World3D {
 
   // ---------------------------------------------------------------- little effects
 
+  /** Pops the floating soap bubbles near a screen point: a plip, a ring of drops and a twinkle each. */
+  private popFloaters(x: number, y: number, px: number) {
+    const hits = this.floaters.popAt(x, y, px, this.rig.camera, this.w, this.h)
+    for (const h of hits) {
+      fx.plip()
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2
+        this.bits.emit(h.p.x + Math.cos(a) * h.r, h.p.y + Math.sin(a) * h.r, h.p.z, Math.cos(a) * 1.1, Math.sin(a) * 1.1 + 0.4, 0, 0.35, 0.018, i % 2 ? 0 : 1)
+      }
+      this.idle = 0
+    }
+    return hits.length > 0
+  }
+  /** Each patch of her that comes clean in the wash rings a sparkly ding (a step higher each time) and twinkles. */
+  private dings(dt: number) {
+    if (this.stage !== 'sponge' && this.stage !== 'rain') return
+    this.cleanCheck -= dt
+    if (this.cleanCheck > 0) return
+    this.cleanCheck = 0.25
+    for (const z of DING_ZONES) {
+      if (this.cleaned.has(z) || this.coat.mudOf(z) > 0.12) continue
+      this.cleaned.add(z)
+      fx.ding(this.cleaned.size - 1)
+      const p = this.zoneWorld(z, tmp3)
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2
+        this.bits.emit(p.x, p.y, p.z + 0.08, Math.cos(a) * 0.9, Math.sin(a) * 0.9 + 0.5, 0.3, 0.7, 0.03, i % 2 ? 5 : 7)
+      }
+      break
+    }
+  }
   private splash(x: number, y: number, z: number, n: number) {
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2
@@ -1699,6 +1813,7 @@ export class BubbleBathWorld implements World3D {
       else if (id === 'falls') place(el, FALLS_AT.clone(), 0)
       else if (id === 'slug') place(el, SLUG_AT.clone().setY(SLUG_AT.y + 0.06), 0)
       else if (id === 'raven') place(el, tmp.copy(RAVEN_AT).setY(RAVEN_AT.y + 0.2), 0)
+      else if (id === 'duck') place(el, tmp.copy(this.duck.root.position).setY(0.12), 0)
       else if (id === 'sky-cloud') place(el, this.skyCloud.visible && this.skyCloudT < 0 ? this.skyCloud.position.clone() : null, px(this.skyCloud.position.clone(), 0.7))
     }
   }
@@ -1718,6 +1833,11 @@ export class BubbleBathWorld implements World3D {
       stageStrokes: this.stageStrokes,
       mud: +coat.mudOf().toFixed(2),
       suds: this.suds.count,
+      floaters: this.floaters.count,
+      popped: this.floaters.popped,
+      cleaned: [...this.cleaned],
+      floats: this.floaters.list.filter((f) => f.popT < 0 && f.age > 0.3).map((f) => scr(f.p)),
+      duck: scr(this.duck.root.position),
       puff: +coat.puff.toFixed(2),
       hair: coat.hairGroup ? `${coat.hair.style}${coat.hair.color ? '.' + coat.hair.color : ''}` : null,
       colors: Object.keys(look.fur).length,
