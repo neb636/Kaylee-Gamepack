@@ -3,7 +3,8 @@
 // (critters.ts) and the films' cast.monty (story/cast.ts). This dresses him for his bath (a lily pad stuck on one
 // antler, a little pink flower on it) and, in the films, keeps his jaw going round whenever he isn't talking. The
 // comedy is how little he moves: everything else here is slow.
-import { Group, Vector3, type Object3D } from 'three'
+import { Group, type Object3D } from 'three'
+import { speakingVoice } from '../../../../../sdk/speech'
 import type { FilmActor } from '../../../../engine3d/characters/actor'
 import type { Rig } from '../../../../engine3d/characters/animal'
 import type { Bag } from '../../../../engine3d/dispose'
@@ -44,23 +45,12 @@ export function lilyPad(rig: Rig, bag: Bag): Object3D {
   return g
 }
 
-const base = new WeakMap<FilmActor, Vector3>()
-/** His jaw goes round and round (call it after his `update`): the mouth slides side to side and squashes, his head
- *  bobs a little with each chew. Not while he talks. `k`: how hard he chews, 0..1. */
+/** A shallow, slow chew between lines. FaceLife drives this same jaw during speech. */
 export function chew(monty: FilmActor, t: number, k = 1) {
-  const r = monty.rig
-  let b = base.get(monty)
-  if (!b) base.set(monty, (b = r.mouth.position.clone()))
-  if (!monty.root.visible || r.talk.visible || k <= 0) {
-    r.mouth.position.copy(b)
-    return
-  }
-  const R = r.face.R
-  const c = Math.sin(t * 5.2)
-  r.mouth.position.set(b.x + c * 0.07 * R * k, b.y - Math.abs(c) * 0.03 * R * k, b.z)
-  r.mouth.scale.y = 1 - Math.abs(c) * 0.35 * k
-  r.head.rotation.x += Math.abs(Math.sin(t * 5.2)) * 0.035 * k
-  r.head.rotation.z += c * 0.02 * k
+  if (!monty.root.visible || speakingVoice() === 'moose') return
+  const cycle = (1 - Math.cos(t * 5.2)) / 2
+  monty.rig.chew?.(cycle * k)
+  monty.rig.head.rotation.x += cycle * 0.025 * k
 }
 
 /** A pinecone (it falls out of a tree and bonks off his antlers), lying on its side, about `s` meters long. */

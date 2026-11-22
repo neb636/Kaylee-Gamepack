@@ -633,8 +633,9 @@ export function LineBar({ lab }: { lab: LabApi }) {
     setText('')
   }, [entry.id])
   const q = text.trim().toLowerCase()
-  const matching = q ? lines.filter((l) => lineText(l).toLowerCase().includes(q)) : lines
-  const chosen: Line | undefined = lines.find((l) => lineText(l) === text) ?? matching[0]
+  const selected = lines.find((l) => lineText(l) === text)
+  const matching = q && !selected ? lines.filter((l) => lineText(l).toLowerCase().includes(q)) : lines
+  const chosen: Line | undefined = selected ?? matching[0]
   const voice = voiceLabel(entry.voice)
   const mute = !lines.length
   const play = () => chosen && lab.studio.current?.speak(lineText(chosen))

@@ -135,7 +135,7 @@ const critters: CastEntry[] = CRITTERS.map((id) => ({ id, name: CRITTER_INFO[id]
 
 const canada: CastEntry[] = [
   person('maple', 'Maple', "Canada: the beaver who captains Maple's Team", 'canada', CANADA_LOOKS.maple, '../canada/characters/looks.ts', 'maple', 'beavers'),
-  person('moose', 'Monty', 'Canada: the moose, the goalie who fills the whole net', 'canada', CANADA_LOOKS.moose, '../canada/characters/looks.ts'),
+  person('moose', 'Monty', 'Canada: the moose, the goalie who fills the whole net', 'canada', CANADA_LOOKS.moose, '../canada/characters/looks.ts', 'moose'),
   person('raccoon', 'Roxy', 'Canada: the raccoon with the quickest paws', 'canada', CANADA_LOOKS.raccoon, '../canada/characters/looks.ts', undefined, 'raccoons'),
   person('kit', "Roxy's kit", "Canada: one of Roxy's three babies, the team's fans", 'canada', CANADA_LOOKS.kit, '../canada/characters/looks.ts', undefined, 'raccoons'),
   person('otter', 'Ollie', 'Canada: the sea otter who spins like a top', 'canada', CANADA_LOOKS.otter, '../canada/characters/looks.ts'),
@@ -177,13 +177,13 @@ export function linesFor(voice: string | undefined): Line[] {
     }
     for (const k of Object.keys(o)) walk(o[k])
   }
-  walk(voice === 'maple' ? canadaLines : L)
+  walk(voice === 'maple' || voice === 'moose' ? canadaLines : L)
   return out
 }
 
 /** Their OpenAI voice and pitch (cast.json), for the line bar's label. */
 export function voiceLabel(voice: string | undefined): string | null {
-  const speakers = voice === 'maple' ? canadaCast.speakers : cast.speakers
+  const speakers = voice === 'maple' || voice === 'moose' ? canadaCast.speakers : cast.speakers
   const s = voice ? (speakers as Record<string, { voice: string; pitch?: number }>)[voice] : undefined
   if (!s) return null
   const p = s.pitch ?? 0

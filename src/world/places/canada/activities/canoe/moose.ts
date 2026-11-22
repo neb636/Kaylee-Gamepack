@@ -49,7 +49,7 @@ export class Moose {
   }
 
   update(dt: number, t: number) {
-    const { body, head, armL, armR, tail, mouth } = this.rig
+    const { body, head, armL, armR, tail } = this.rig
     const ease = (r: number) => 1 - Math.exp(-dt * r)
     this.life.update(dt)
     // Grazing: head down for a few seconds, up for a few (always while poked).
@@ -85,7 +85,7 @@ export class Moose {
     head.rotation.x += (0.85 * down - 0.35 * poke + chew - head.rotation.x) * ease(6)
     head.rotation.y += (yaw * this.up - head.rotation.y) * ease(3)
     head.rotation.z = shake
-    mouth.scale.y = 1 + chew * 8
+    this.rig.chew?.(this.up * (1 - Math.cos(t * 7)) / 2)
     // His front legs (the rig's arms) shift as he leans; the little tail flicks.
     armL.rotation.x = -0.35 * down
     armR.rotation.x = -0.35 * down + Math.sin(t * 0.9) * 0.03
