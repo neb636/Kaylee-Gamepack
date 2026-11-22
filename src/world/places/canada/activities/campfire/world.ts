@@ -17,8 +17,11 @@
 //             time, the camera goes close on her silly face and her whole pose (`statueShot`). Hold the light on her and she wobbles, then falls over laughing;
 //             three of those and she gives up. Left alone she reaches the bag ("Yoink!") and scampers back to try
 //             again, a little slower each time.
-// The side verb is the roast (roast.ts): hold the marshmallow near the fire, hand it to anyone. And the end: tap the
-// flashlight to turn it off; the stars come out, then the northern lights (sky.ts).
+// The side verb is the roast (roast.ts, orders.ts): the flashlight is put away and the camera comes down close to the
+// fire. Everyone round it wants a marshmallow and shows which kind in a wish bubble (squishy, golden, burnt, Monty's
+// giant one); she toasts it until it's that kind (their bubble glows) and hands it over: a gold star. The wrong kind
+// they eat anyway, and their bubble stays (easier each time). And the end: the flashlight comes back; tap it to turn
+// it off; the stars come out, then the northern lights (sky.ts).
 //
 // The clearing is the films' campsite (story/sets/campfire.ts) with the game's own things round it (clearing.ts). The
 // feel is knobs (?feel=1): the light's size and swing, Roxy's speed, how long the kits peek. QA: `?statue=tree` stands
@@ -50,7 +53,8 @@ import { Cast, type Friend } from '../../story/cast'
 import { buildCamp, CAMP, updateCamp, type CampSet } from '../../story/sets/campfire'
 import { buildClearing, CLEARING, FALLEN, kitTail } from './clearing'
 import { Flashlight } from './light'
-import { Stick } from './roast'
+import { OrderBubble } from './orders'
+import { Stick, type Want } from './roast'
 import { NightShade, RIM_FIRE, RIM_MOON } from './shade'
 import { NightSky } from './sky'
 import { camp } from './sounds'
@@ -78,14 +82,17 @@ const ROAST = knobs('campRoast', 'Roast a marshmallow', FILE, {
   burn: { value: 2.5, min: 0.5, max: 10, step: 0.25, label: 'Catches fire after golden', unit: 's', main: true },
   out: { value: 4, min: 1, max: 12, step: 0.5, label: 'Goes out by itself', unit: 's' },
   grab: { value: 90, min: 40, max: 200, step: 5, label: 'Grab reach', unit: 'px', note: 'how near the marshmallow her finger has to land to pick the stick up', main: true },
+  squishy: { value: 0.2, min: 0, max: 0.7, step: 0.05, label: 'Squishy after', note: 'how warm a squishy one has to be (of the way to golden); it stops being squishy at 0.8' },
+  giant: { value: 1.5, min: 1, max: 3, step: 0.1, label: 'Giant one slower', unit: '×', note: 'Monty’s giant marshmallow toasts this many times slower' },
+  give: { value: 0.45, min: 0.2, max: 1, step: 0.05, label: 'Hand-over reach', note: 'how near somebody the marshmallow has to be to give it (of their height, round their whole body)', main: true },
 }, { sections: ['roast'] })
 
 export interface CampStart {
   section: CampSection
-  /** Peek: kits already at the fire. Statues: times Roxy has fallen over laughing. Roast: marshmallows handed out. */
+  /** Peek: kits already at the fire. Statues: times Roxy has fallen over laughing. Roast: which round of orders. */
   kits: number
   laughs: number
-  roasted: number
+  order: number
   /** Maple says goodnight at the end (not when the film out follows). */
   goodnight: boolean
 }
@@ -99,6 +106,8 @@ export interface CampEvents {
   /** The silly close-up: its words and its state, for the film overlay. */
   filmLine(l: Line | null): void
   film(s: FilmState | null): void
+  /** The roast's stars: orders given right so far, of how many (null: not in the roast). */
+  stars(s: { done: number; of: number } | null): void
   /** The northern lights have danced: the stamp. */
   done(): void
 }
@@ -136,7 +145,27 @@ const GIGGLE_AFTER = 4
 const EYES_MIN_S = 22
 const KITS = 3
 const LAUGHS = 3
-const ROASTS = 5
+/** The roast's rounds of orders, easiest first: who wants which kind. (Two at once in the fourth: she picks who
+ *  gets which.) Monty's giant one is last. */
+const ORDERS: { who: string; want: Want }[][] = [
+  [{ who: 'maple', want: 'golden' }],
+  [{ who: 'kit1', want: 'squishy' }],
+  [{ who: 'roxy', want: 'burnt' }],
+  [
+    { who: 'kit0', want: 'golden' },
+    { who: 'kit2', want: 'burnt' },
+  ],
+  [{ who: 'monty', want: 'giant' }],
+]
+/** In the roast, everybody round the fire where the close camera sees them all ([x, z, facing degrees]): Maple stays
+ *  on her log (left), Roxy beside the fire, Monty at the back, a kit in front of the log and two on the right. */
+const ROAST_SEATS: Record<string, [number, number, number]> = {
+  roxy: [0.72, -0.62, -15],
+  monty: [0.45, -2.5, -5],
+  kit0: [-0.42, 0.85, 22],
+  kit1: [1.5, 0.3, -45],
+  kit2: [1.45, -0.95, -30],
+}
 /** The kits a little bigger than in the films: they peek out from far across the clearing. */
 const KIT_SCALE = 1.5
 /** Her statue lines, by pose. */
@@ -274,6 +303,9 @@ export class FlashlightStatues implements World3D {
   private stickTip = new Vector3()
   private stickBack = 1
   private roasted = 0
+  private step = 0
+  private orders: { who: string; want: Want; bubble: OrderBubble; done: boolean; miss: number; step: number }[] = []
+  private readyWas = false
   private toastedSaid = false
   private eaten: string | null = null
   private sizzleAt = 0
@@ -394,7 +426,14 @@ export class FlashlightStatues implements World3D {
     })
     if (at > ORDER.indexOf('statues')) this.roxyGaveUp(true)
     if (start.section === 'statues') this.laughs = start.laughs
-    if (start.section === 'roast') this.roasted = start.roasted
+    if (start.section === 'roast') this.step = clamp(Math.round(start.order), 0, ORDERS.length - 1)
+    ORDERS.forEach((round, i) =>
+      round.forEach((o) => {
+        const bubble = new OrderBubble(bag, o.want)
+        scene.add(bubble.root)
+        this.orders.push({ ...o, bubble, done: i < this.step, miss: 0, step: i })
+      }),
+    )
     if (at >= ORDER.indexOf('roast')) {
       this.monty.place(CLEARING.montyFire[0], 0, CLEARING.montyFire[1], CLEARING.montyFire[2])
       this.wearShades(true)
@@ -425,6 +464,8 @@ export class FlashlightStatues implements World3D {
     }))
   }
   private lightSpeed = 0
+  /** 0..1: the roast's warmer, brighter fireside light (the flashlight put away). */
+  private roastLit = 0
   private aimed = false
   private lastAt = { x: 0, y: 0 }
 
@@ -578,7 +619,7 @@ export class FlashlightStatues implements World3D {
   private state(s: CampSection): Record<string, string> {
     if (s === 'peek') return { kits: String(Math.min(2, this.kitsHome)) }
     if (s === 'statues') return { laughs: String(Math.min(2, this.laughs)) }
-    if (s === 'roast') return { roasted: String(Math.min(3, this.roasted)) }
+    if (s === 'roast') return { order: String(Math.min(ORDERS.length - 1, this.step)) }
     return {}
   }
   private progress(n: number) {
@@ -605,13 +646,24 @@ export class FlashlightStatues implements World3D {
       this.sparkle(T.sneak, true)
     } else if (s === 'roast') {
       this.progress(3)
+      // The flashlight is put away: the fire lights everyone, and the camera comes down close (shot()).
+      this.light.set(false)
+      this.light.toy.visible = false
+      this.toRoastSeats()
+      this.stick.fresh(this.giantNext() ? 2 : 1)
       this.stick.visible = true
       this.stickBack = 1
       this.friend(T.roast, true)
       this.sparkle(T.marshmallow, true)
+      this.timers.later(() => this.openStep(), 900)
     } else if (s === 'sky') {
       this.progress(4)
       this.stick.visible = false
+      for (const o of this.orders) if (o.bubble.showing) o.bubble.starred()
+      this.events.stars(null)
+      this.light.toy.visible = true
+      camp.click()
+      this.light.set(true)
       this.sparkle(T.off, true)
     }
   }
@@ -1034,6 +1086,44 @@ export class FlashlightStatues implements World3D {
     const { tip, end } = CLEARING.stickRest
     return { tip: tmp2.set(...tip), end: tmp3.set(...end) }
   }
+  /** Everybody comes round the fire where the close camera sees them (Maple stays on her log). */
+  private toRoastSeats(snap = false) {
+    const go = (a: FilmActor, [x, z, f]: [number, number, number]) => (snap ? a.place(x, 0, z, f) : a.walkTo(x, z, Math.max(0.6, a.pos.distanceTo(tmp.set(x, 0, z)) / 1.6), f))
+    go(this.roxy, ROAST_SEATS.roxy)
+    go(this.monty, ROAST_SEATS.monty)
+    this.kits.forEach((k, i) => go(k.a, ROAST_SEATS[`kit${i}`]))
+  }
+  /** The orders out now (this round's, not yet given right). */
+  private active() {
+    return this.orders.filter((o) => o.step === this.step && !o.done)
+  }
+  /** Is the next marshmallow Monty's giant one? */
+  private giantNext() {
+    return ORDERS[this.step]?.some((o) => o.want === 'giant') ?? false
+  }
+  /** A round of orders: their wish bubbles pop up. */
+  private openStep() {
+    if (this.dead || this.section !== 'roast') return
+    const now = this.active()
+    now.forEach((o, i) =>
+      this.timers.later(() => {
+        if (this.dead || this.section !== 'roast') return
+        o.bubble.show()
+        camp.wish()
+        this.receivers()
+          .find(([id]) => id === o.who)?.[1]
+          .hop()
+      }, i * 450),
+    )
+    this.lastNew = this.time
+    // (The line at the bottom goes back to what to do: not "It's on fire!" from the last one.)
+    this.events.line(T.marshmallow)
+    this.events.stars({ done: this.starCount(), of: this.orders.length })
+  }
+  private starCount() {
+    return this.orders.filter((o) => o.done).length
+  }
+
   private updateStick(dt: number) {
     if (!this.stick.root.visible) return
     const rest = this.stickRest()
@@ -1042,7 +1132,7 @@ export class FlashlightStatues implements World3D {
       // the flames); the stick comes back toward her from it.
       const p = this.fingerAt(this.finger.x, this.finger.y, tmp)
       if (p) {
-        p.set(clamp(p.x, -3.4, 3.4), clamp(p.y, 0.22, 2.2), 0)
+        p.set(clamp(p.x, -2.6, 2.6), clamp(p.y, 0.22, 2.4), 0)
         this.stickTip.lerp(p, damp(dt, 22))
       }
       this.stickBack = Math.max(0, this.stickBack - dt * 6)
@@ -1098,7 +1188,24 @@ export class FlashlightStatues implements World3D {
     if (!this.held && this.time - this.lastTouch > HINT_S && this.sectionT > 6) this.hint(T.marshmallow)
   }
   private mouthOpen = new Set<string>()
-  /** Who can be handed a marshmallow, with their mouths. */
+  /** The wish bubbles: over their heads, glowing while the marshmallow she holds is the kind they want (a chime the
+   *  moment it is); a star floating up from one just given right. */
+  private updateBubbles(dt: number) {
+    let ready = false
+    const roast = this.section === 'roast' && this.stick.root.visible && this.held
+    for (const o of this.orders) {
+      const a = this.receivers().find(([id]) => id === o.who)?.[1]
+      if (!a) continue
+      const r = roast && o.bubble.showing && this.stick.matches(o.want, ROAST, o.miss) && (this.stick.toast > 0.02 || this.stick.charred || o.miss >= 2)
+      ready ||= r
+      const head = a.at(1, tmp2)
+      head.y += 0.3
+      o.bubble.update(dt, this.time, this.rig.camera, head, r)
+    }
+    if (ready && !this.readyWas) camp.ready()
+    this.readyWas = ready
+  }
+  /** Who can be handed a marshmallow. */
   private receivers(): [string, FilmActor][] {
     const list: [string, FilmActor][] = [
       ['maple', this.maple],
@@ -1108,14 +1215,27 @@ export class FlashlightStatues implements World3D {
     this.kits.forEach((k, i) => k.state === 'fire' && list.push([`kit${i}`, k.a]))
     return list
   }
+  /** Who the marshmallow is near on the screen: anywhere on them, feet to the top of the head (somebody with an order
+   *  out first, then the nearest). */
   private receiverNear(): string | null {
     let best: string | null = null
     let bd = Infinity
+    // (Down in the flames it's toasting: letting go there isn't giving it to Monty behind them. Higher up, over the
+    // fire, it's on Monty.)
+    const t = this.stick.tip
+    if (Math.hypot(t.x - CAMP.fire[0], Math.max(0, t.y - 0.35), t.z - CAMP.fire[2]) < 0.5) return null
     const tip = this.toScreen(this.stick.tip)
+    const want = new Set(this.active().map((o) => o.who))
     for (const [id, a] of this.receivers()) {
-      const m = this.toScreen(a.head(tmp))
-      const d = Math.hypot(m.x - tip.x, m.y - tip.y)
-      const reach = Math.max(90, this.pxPerM(a.head(tmp)) * a.height * 0.55)
+      const lo = this.toScreen(a.at(0.15, tmp))
+      const loX = lo.x
+      const loY = lo.y
+      const hi = this.toScreen(a.at(1, tmp))
+      const ux = hi.x - loX
+      const uy = hi.y - loY
+      const k = clamp(((tip.x - loX) * ux + (tip.y - loY) * uy) / Math.max(1, ux * ux + uy * uy))
+      const d = Math.hypot(tip.x - (loX + ux * k), tip.y - (loY + uy * k)) - (want.has(id) ? 30 : 0)
+      const reach = clamp(Math.hypot(ux, uy) * ROAST.give, 48, 110)
       if (d < reach && d < bd) {
         bd = d
         best = id
@@ -1123,8 +1243,9 @@ export class FlashlightStatues implements World3D {
     }
     return best
   }
-  /** She lets go of the stick: near someone's mouth, they eat it (anyone takes any marshmallow; they each like
-   *  their own kind); anywhere else, it goes back by the fire. */
+  /** She lets go of the stick: near somebody, they eat it. The kind they ordered: a gold star (the round's last one:
+   *  the next round's bubbles). Another kind: they eat it anyway, with a silly face, and their order stays (wider each
+   *  time). Somebody with no order out: a happy munch. Anywhere else, it goes back by the fire. */
   private give() {
     const who = this.receiverNear()
     for (const id of this.mouthOpen) this.receivers().find(([r]) => r === id)?.[1].cheer()
@@ -1141,14 +1262,36 @@ export class FlashlightStatues implements World3D {
     a.hop()
     camp.munch(0)
     this.burst(a.head(tmp), 10)
-    const kit = who.startsWith('kit') || who === 'roxy'
-    if (who === 'maple') this.friend(s.charred ? T.tooCrunchy : s.toast >= 0.75 ? T.golden : T.squishy, true)
-    else if (kit) {
+    const kit = who.startsWith('kit')
+    const order = this.active().find((o) => o.who === who)
+    if (order && s.matches(order.want, ROAST, order.miss)) {
+      // Just what they wanted: a gold star.
+      order.done = true
+      order.bubble.starred()
+      camp.star()
+      this.burst(a.at(1, tmp), 22)
+      a.wave()
+      const line = order.want === 'golden' ? (who === 'maple' ? T.golden : null) : order.want === 'squishy' ? T.kitSquishy : order.want === 'burnt' ? T.burntYum : T.montyStick
+      if (line) this.friend(line, true)
+      if (kit || who === 'roxy') {
+        camp.kits(0)
+        for (const k of this.kits) if (k.a !== a) k.a.hop()
+      }
+      if (who === 'monty') this.monty.nod()
+      this.events.stars({ done: this.starCount(), of: this.orders.length })
+    } else if (order) {
+      // Not that kind: they eat it anyway (a funny shiver), and still want theirs.
+      order.miss++
+      this.timers.later(() => a.shake(), 350)
+      if (who === 'maple') this.friend(s.charred ? T.tooCrunchy : T.squishy, true)
+      else if (who === 'roxy') this.friend(T.moreCrunchy, true)
+      else if (kit) camp.kits(0)
+      else this.monty.nod()
+    } else if (who === 'maple') this.friend(s.charred ? T.tooCrunchy : s.toast >= 0.75 ? T.golden : T.squishy, true)
+    else if (kit || who === 'roxy') {
       this.friend(s.charred ? T.burntYum : T.munch, true)
-      if (s.charred) for (const k of this.kits) k.a.hop()
       camp.kits(0)
-    } else if (who === 'monty') {
-      // Monty eats the stick too.
+    } else {
       this.friend(T.montyStick, true)
       this.monty.nod()
     }
@@ -1157,18 +1300,34 @@ export class FlashlightStatues implements World3D {
     this.counts.roasted++
     this.lastNew = this.time
     this.toastedSaid = false
-    this.events.section('roast', this.state('roast'))
+    // The round is done: the next one's bubbles (or, all done, everybody cheers and on to the sky).
+    const roundDone = this.active().length === 0
+    if (roundDone) this.step++
+    const allDone = this.step >= ORDERS.length
+    if (roundDone) this.events.section('roast', this.state('roast'))
     // A fresh marshmallow on a stick, back by the fire (Monty's stick is gone: a new one).
     s.visible = false
     this.held = false
     this.stickBack = 1
     this.timers.later(() => {
       if (this.dead || this.section !== 'roast') return
-      s.fresh()
+      if (allDone) return this.allServed()
+      s.fresh(this.giantNext() ? 2 : 1)
       s.visible = true
       camp.pop()
-      if (this.roasted >= ROASTS) this.timers.later(() => this.enter('sky'), 900)
-    }, who === 'monty' ? 1100 : 700)
+      if (roundDone) this.openStep()
+    }, who === 'monty' ? 1100 : roundDone ? 1300 : 700)
+  }
+  /** Every order given: everybody cheers, Maple says so, and on to the sky. */
+  private allServed() {
+    camp.kits(0)
+    for (const [, a] of this.receivers()) {
+      a.hop()
+      a.cheer()
+    }
+    this.maple.wave()
+    this.burst(tmp.set(CAMP.fire[0], 1.2, CAMP.fire[2]), 30)
+    void this.talk(T.best, true).then(() => this.timers.later(() => this.enter('sky'), 700))
   }
 
   // ---------------------------------------------------------------- the end: lights off
@@ -1222,6 +1381,16 @@ export class FlashlightStatues implements World3D {
     }
   }
   private shot(): Shot {
+    // The roast: down close to the fire, everybody round it in the frame (and their wish bubbles over them).
+    if (this.section === 'roast' && !this.lookId) {
+      return {
+        center: new Vector3(0.15, 1.05, -0.55),
+        half: this.tall ? new Vector3(2.05, 1.35, 1.2) : new Vector3(2.15, 1.25, 1.2),
+        yaw: 0,
+        pitch: this.tall ? 16 : 10,
+        objectFit: 'contain',
+      }
+    }
     return {
       center: new Vector3(0.45, 0.95, -1.55),
       half: this.tall ? new Vector3(3.3, 1.3, 2.4) : new Vector3(4.1, 1.25, 2.5),
@@ -1281,7 +1450,8 @@ export class FlashlightStatues implements World3D {
     const off = this.skyT >= 0 ? clamp(this.skyT / 2) : 0
     this.lights.follow(0.5, 0.6, -1.5)
     this.lights.ambient.color.set('#7480E0')
-    this.lights.ambient.intensity *= 0.64 - 0.2 * off
+    this.roastLit += ((this.section === 'roast' ? 1 : 0) - this.roastLit) * damp(dt, 2)
+    this.lights.ambient.intensity *= 0.64 - 0.2 * off + 0.14 * this.roastLit
     this.lights.sun.color.set('#A9B4FF')
     this.lights.sun.intensity *= 0.66 - 0.2 * off
     this.lights.sun.position.set(-5.5, 9, 1.5)
@@ -1291,6 +1461,7 @@ export class FlashlightStatues implements World3D {
     this.rig.setShot(this.shot())
     this.rig.setCine(cine ?? this.skyFrame() ?? this.lookFrame())
     this.rig.update(dt)
+    this.updateBubbles(dt)
     this.light.update(dt, this.rig.camera, this.w, this.h)
     this.aimed = true
     // (At the end the flashlight itself is what to tap: it bounces gently, asking.)
@@ -1421,7 +1592,7 @@ export class FlashlightStatues implements World3D {
         m.armsUp = 0
       }
     }
-    if (this.section !== 'roast' || !this.held) {
+    if (this.section !== 'roast') {
       const tgt = this.light.target
       const want = clamp(Math.atan2(tgt.x - m.pos.x, tgt.z - m.pos.z) - m.root.rotation.y, -0.7, 0.7)
       m.headTurn += (want - m.headTurn) * damp(dt, 4)
@@ -1525,8 +1696,40 @@ export class FlashlightStatues implements World3D {
         return
       }
     }
+    // (In the roast, a poke at somebody or the fire: they do a little something.)
+    if (this.section === 'roast') return this.poke(x, y, id)
     if (this.section === 'story') this.enter('eyes')
     this.light.point(x, y, !IS_MOUSE)
+  }
+  /** The roast: a poke at somebody round the fire (a hop and a giggle), or at the fire (sparks). */
+  private poke(x: number, y: number, id?: string) {
+    let who: string | null = id && this.receivers().some(([r]) => r === id) ? id : null
+    if (!who) {
+      let bd = Infinity
+      for (const [r, a] of this.receivers()) {
+        const m = this.toScreen(a.at(0.6, tmp))
+        const d = Math.hypot(m.x - x, m.y - y)
+        if (d < Math.max(60, this.pxPerM(a.at(0.6, tmp)) * a.height * 0.45) && d < bd) {
+          bd = d
+          who = r
+        }
+      }
+    }
+    if (who) {
+      const a = this.receivers().find(([r]) => r === who)![1]
+      a.hop()
+      a.pull('happy')
+      if (who === 'maple') camp.giggle()
+      else if (who === 'monty') this.monty.nod()
+      else camp.chitter(0)
+      return
+    }
+    const f = this.toScreen(tmp.set(CAMP.fire[0], 0.35, CAMP.fire[2]))
+    if (id === 'fire' || Math.hypot(f.x - x, f.y - y) < Math.max(70, this.pxPerM(tmp) * 0.5)) {
+      this.set.flare = 0.6
+      camp.sparks(0.1)
+      for (let i = 0; i < 14; i++) this.sparks.emit(CAMP.fire[0], 0.5, CAMP.fire[2], (Math.random() - 0.5) * 0.6, 1.2 + Math.random(), (Math.random() - 0.5) * 0.6, 0.9, 0.05, 0)
+    }
   }
   pointerMove(x: number, y: number, _dx: number, _dy: number, held: boolean) {
     // (A mouse moving with no button down leaves the light where it is: click and hold, then move.)
@@ -1534,10 +1737,8 @@ export class FlashlightStatues implements World3D {
     this.lastTouch = this.time
     this.counts.moves++
     this.finger = { x, y }
-    if (this.held) {
-      this.light.point(x, y, false)
-      return
-    }
+    // (In the roast the flashlight is put away: her finger is only the marshmallow.)
+    if (this.held || this.section === 'roast') return
     this.light.point(x, y, !IS_MOUSE)
   }
   pointerUp() {
@@ -1551,6 +1752,7 @@ export class FlashlightStatues implements World3D {
     this.counts.taps++
     // The flashlight itself: off at the end; any other time, a click off and on (a blink).
     if (id === 'flashlight') {
+      if (this.section === 'roast') return
       if (this.section === 'sky') this.lightsOff()
       else {
         camp.click()
@@ -1612,7 +1814,7 @@ export class FlashlightStatues implements World3D {
       if (id === 'flashlight') {
         // (The flashlight is the thing to tap at the end: a big target, over the toy.)
         const p = this.light.toy.position
-        const show = !this.films.on && this.skyT < 0
+        const show = !this.films.on && this.skyT < 0 && this.light.toy.visible
         if (show) {
           const s = Math.max(min, 110)
           const q = this.toScreen(p)
@@ -1654,7 +1856,7 @@ export class FlashlightStatues implements World3D {
       met: [...this.met],
       kits: { at: this.kits.map((k) => ({ state: k.state, ...scr(k.a.at(0.62, new Vector3())) })), home: this.kitsHome, peeking: this.kits.filter((k) => k.state === 'out').map((k) => `kit${k.seat}`), stuck: this.stuck ? `kit${this.stuck.seat}` : null, peeks: this.peekN },
       roxy: { state: this.roxyState, pose: statueOf(this.roxy), pos: this.roxy.pos.toArray().map((v) => +v.toFixed(2)), laughs: this.laughs, yoinks: this.yoinks, speed: +(TORCH.speed * this.roxySpeed).toFixed(2), along: +this.roxyS.toFixed(2), of: +this.pathLen.toFixed(2), hold: +this.roxyHold.toFixed(2) },
-      roast: this.section === 'roast' ? { held: this.held, toast: +this.stick.toast.toFixed(2), golden: this.stick.golden, fire: this.stick.fire, charred: this.stick.charred, given: this.roasted, ate: this.eaten, tip: scr(this.stick.tip) } : null,
+      roast: this.section === 'roast' ? { held: this.held, toast: +this.stick.toast.toFixed(2), golden: this.stick.golden, fire: this.stick.fire, charred: this.stick.charred, giant: this.stick.size > 1, given: this.roasted, ate: this.eaten, tip: scr(this.stick.tip), step: this.step, stars: this.starCount(), of: this.orders.length, orders: this.active().map((o) => ({ who: o.who, want: o.want, miss: o.miss, showing: o.bubble.showing, ready: this.stick.matches(o.want, ROAST, o.miss) })), flashlight: this.light.toy.visible } : null,
       sky: this.skyT >= 0 ? { t: +this.skyT.toFixed(1), stars: +this.sky.full.toFixed(2), lights: +this.sky.lights.toFixed(2) } : null,
       flashlight: scr(this.light.toy.position),
       // (How far above her finger the light lands: a robot puts its finger this far below what it wants lit.)

@@ -334,18 +334,26 @@ export const L = {
     yoink: roxy('Yoink!'),
     // She has fallen over laughing three times: she gives up.
     sorry: roxy("Oops, sorry! Let's share."),
-    // The roast: Maple, then Sparkle; on fire (Sparkle); her hint with a toasted one in hand.
+    // The roast: the flashlight is put away, the camera comes close to the fire, and everyone shows which marshmallow
+    // they want in a wish bubble (a picture: squishy, golden, burnt, Monty's giant one). Maple, then Sparkle; on fire
+    // (Sparkle); her hint with a toasted one and nobody given it.
     roast: maple("Let's roast more!"),
     marshmallow: onDevice('Hold the marshmallow near the fire.', 'Click and hold the marshmallow near the fire.'),
     onFire: onDevice("It's on fire! Tap it to blow it out!", "It's on fire! Click it to blow it out!"),
-    marshmallowHint: 'Give it to Maple or the raccoons.',
-    // Who gets it: Maple likes golden, Roxy and the kits love burnt, Monty eats the stick.
+    marshmallowHint: 'Who wants that one?',
+    // Who gets it: Maple wants golden, a kit squishy, Roxy and a kit burnt, Monty the giant one (he eats the stick).
     golden: maple('Golden! Yummy!'),
+    kitSquishy: roxy('Squishy! Yay!'),
+    burntYum: roxy('Crunchy! My favorite!'),
+    montyStick: monty('Mmm. Crunchy stick.'),
+    // The wrong kind: they eat it anyway, and still want theirs (Maple: too white, or burnt; Roxy: not burnt yet).
     squishy: maple('Squishy! Yum anyway.'),
     tooCrunchy: maple('Too crunchy for me!'),
-    burntYum: roxy('Crunchy! My favorite!'),
+    moreCrunchy: roxy('Yum! Crunchier next time!'),
+    // Somebody with no order out gets one anyway.
     munch: roxy('Crunch, munch!'),
-    montyStick: monty('Mmm. Crunchy stick.'),
+    // Every order given right.
+    best: maple('Best campfire ever!'),
     // The end (Sparkle): the flashlight goes off; the stars come out (Maple), then the northern lights (Sparkle).
     off: onDevice('Now tap the flashlight to turn it off!', 'Now click the flashlight to turn it off!'),
     fullSky: maple('Look! The sky is full of stars!'),
