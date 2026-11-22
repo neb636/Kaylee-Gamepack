@@ -67,6 +67,25 @@ recently used first, unless the site is in persistent mode (`navigator.storage.p
 PostHog id and her stamps with it. `app_storage.persisted` says whether her iPad granted it. A page can't read the
 iPad's free space; `offline_save_failed` is the real "out of space" signal.
 
+## Feature flags
+
+Unfinished work can merge to main behind a PostHog feature flag, so the live site doesn't show it yet (`src/flags.ts`).
+
+- **Off by default.** A flag is on only when PostHog said so during this launch: off in builds without PostHog (PR
+  previews, local builds), off while offline, off until the flags have loaded and off if loading them failed. Her
+  iPad, often offline, never sees something half-built.
+- **On for testers.** Each flag is released to the person property `tester = true`. Testers send no events, so a
+  `?tester=1` browser sends `tester: true` with its flags request instead (`posthog.ts`, `setPersonPropertiesForFlags`).
+- **A place behind a flag:** `featureFlag` in its `meta.ts` keeps it off the world map and the game shelf until the
+  flag is on. Its links still work, and `?all=1` shows it anywhere (that's how PR previews and robots see it).
+- **Adding one:** create it in PostHog (key in kebab case, one release condition: person `tester` exactly `true`,
+  100%), add the key to `FLAGS`, check it with `useFlag()`. **Shipping it:** delete the check and the `FLAGS`
+  entry, then delete the flag in PostHog.
+
+| Flag | Gates | Since |
+|---|---|---|
+| `new-canada-pin` | The new Canada (Maple's Team) on the world map and the game shelf | 2026-11-21 |
+
 ## Asking it
 
 Every query needs a time range. Hers:

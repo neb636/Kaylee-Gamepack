@@ -1,4 +1,4 @@
-// Maple's animal book, opened from the 📒 button on the train map (and the hub's `book` section): one page per stop,
+// Maple's animal book, opened from the 📒 button on the map (and the hub's `book` section): one page per place,
 // every animal she's met in color, the ones still to find as grey shapes. Tap an animal to hear its fact again (a grey
 // one gets a wiggle and a hint of where it lives). Nothing here is required: it's the collection she fills by poking.
 import { motion } from 'motion/react'
@@ -27,7 +27,7 @@ export function Book({ onClose, page: first = 'quebec' }: { onClose: () => void;
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
           <div style={{ fontSize: 'clamp(20px, 3.4vmin, 30px)', fontWeight: 700, flex: '1 1 auto' }}>
-            📒 Maple's animals <span style={{ color: 'var(--lavender-dark)', fontSize: '0.75em' }}>{met.length} / {ANIMALS.length}</span>
+            📒 Maple's animals <span style={{ color: 'var(--lavender-dark)', fontSize: '0.75em' }}>{ANIMALS.filter((a) => met.includes(a.id)).length} / {ANIMALS.length}</span>
           </div>
           <button aria-label="Close the book" onClick={onClose} style={{ ...ROUND, background: 'var(--pink)' }}>
             ✖️

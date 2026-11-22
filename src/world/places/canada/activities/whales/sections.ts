@@ -1,27 +1,18 @@
-// Whale Watch (plan: planning/around-the-world/canada.md): Maple has never seen a whale; steer the little boat out of Tofino's harbour
-// to the sea otters in the kelp, follow the spouts to the whales, swim with the orca family, and listen under the water.
-// #/world/canada/whales/<section>?steer=wheel&found=2. A section link sets the sea up as if she had played to there.
+// Whale Peek-a-Boo (plan: planning/around-the-world/canada-round-2.md, section 3): a whale's spout blew Ollie's lucky
+// rock out to sea. Bubbles come up by Maple's boat; touch them and a whale comes up right there, and then the whale is
+// the toy: the grey whale, the humpback, and the orca family whose baby has the rock.
+// #/world/canada/whales/<section>. A section link sets the sea up as if she had played to there.
 // Loaded at startup by the section index (keep three.js out of this file).
 import { defineSections } from '../../../../kit/sections'
 
 const WHALE_SECTIONS = defineSections('canada', 'whales', {
-  params: {
-    steer: {
-      default: 'finger',
-      values: ['finger', 'wheel'],
-      doc: 'how her finger steers the boat: finger (she holds the water where the boat should go and it follows, like the Thai bay) or wheel (the Mountain Bike\'s finger wheel: a finger down goes, pushing it left or right turns)',
-    },
-    found: { default: '0', values: ['0', '1', '2', '3'], doc: 'how many whales she has already found when a spouts link starts (0: the first grey whale; 2: the humpback; 3: the humpback that jumps)' },
-  },
+  params: {},
   sections: [
-    { id: 'story', name: 'Maple has never seen a whale', params: ['steer'] },
-    { id: 'harbour', name: 'The harbour', params: ['steer'], links: [{ label: 'The harbour', also: [{ label: 'steering with the wheel instead', params: { steer: 'wheel' } }] }] },
-    { id: 'otters', name: 'The otters in the kelp', params: ['steer'] },
-    { id: 'spouts', name: 'Follow the spouts', params: ['steer', 'found'], links: [{ label: 'Follow the spouts', also: [{ label: 'the humpback', params: { found: '2' } }, { label: 'the humpback that jumps', params: { found: '3' } }] }] },
-    { id: 'orcas', name: 'The orca family', params: ['steer'] },
-    { id: 'listen', name: 'Listen under the water', params: ['steer'] },
+    { id: 'story', name: 'Ollie on the rope: "My rock! The whale took it!"' },
+    { id: 'grey', name: 'Bubbles, and the grey whale: its blowhole, back, barnacles and tail' },
+    { id: 'humpback', name: 'The humpback: hold it down and let go, it jumps (the biggest: a ride on its back)', links: [{ label: 'The humpback', also: [{ label: 'feel lab', flags: { feel: '1' } }] }] },
+    { id: 'orcas', name: 'The orca family: peek-a-boo with the baby, who has the rock' },
   ],
 })
 export default WHALE_SECTIONS
 export type WhaleSection = (typeof WHALE_SECTIONS)['sections'][number]['id']
-export type SteerMode = 'finger' | 'wheel'

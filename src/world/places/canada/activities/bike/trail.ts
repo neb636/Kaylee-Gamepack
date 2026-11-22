@@ -373,6 +373,22 @@ export class Course {
     return h
   }
 
+  /** The trail's drawn dirt (m up) at s, lat (world x, z): its own ground, except where its far end runs into the
+   *  waterfall's pool, where it dips with the pool's rim and bowl instead of lying over the water like a lid. */
+  ribbon(s: number, lat: number, x: number, z: number) {
+    const h = this.ground(s, lat)
+    if (s < END - 40 || Math.hypot(x - this.pool.x, z - this.pool.z) > POOL.r + 2.5) return h
+    return Math.min(h, this.land(x, z, s) + 0.03)
+  }
+
+  /** What anyone standing at a world point stands on: the trail's dirt where it's drawn, else the land. */
+  surface(x: number, z: number, hint?: number) {
+    const land = this.land(x, z, hint)
+    const { s, lat } = this.trail.locate(x, z, hint)
+    if (s < START - 6 || s > END + 6 || Math.abs(lat) > half(s) + 2.6) return land
+    return Math.max(land, this.ribbon(s, lat, x, z))
+  }
+
   /** The trail's ground (m up) at s, lat: banked, bumpy, dipping into the creek; off the edge, a grassy shoulder. */
   ground(s: number, lat: number) {
     const t = this.trail

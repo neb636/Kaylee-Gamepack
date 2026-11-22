@@ -5,12 +5,17 @@
 // shut, then shakes the water off). Every action eases in and settles; her face blinks and her mouth opens with her
 // own voice (engine3d/characters/face.ts).
 //
+// Soaked by a whale she pulls a silly face (the kit's `sillyFaces`, engine3d/characters/face.ts) with what the water
+// left on her: three in order of how big the splash was (`soakedFace(1..3)`): eyes pointing different ways with her
+// tongue out; crossed eyes with her wet fur sticking up in spikes; dizzy eyes with seaweed on her head. For the
+// close-up she turns round in the boat to face the camera (`turn`).
+//
 // Rig frame: she faces +z; armR is on +x (her left), armL on -x. A positive rotation.z swings armR out and up (armL
 // takes a negative one); a negative rotation.x swings either arm forward.
 import { Euler, Group, Quaternion, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../../sdk'
 import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
-import { FaceLife } from '../../../../engine3d/characters/face'
+import { FaceLife, sillyFaces, type Silly, type SillyFaces } from '../../../../engine3d/characters/face'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../../engine3d/geo'
 import { CANADA_LOOKS } from '../../characters/looks'
@@ -62,6 +67,15 @@ export class Maple {
   private pitch = 0
   /** A tail slap hits the deck this frame (the world thumps). */
   slapped = false
+  /** Her own turn on the spot, radians (+ to her left): she turns round in the boat to face the camera. */
+  turn = 0
+  private turned = 0
+  private sillies: SillyFaces
+  private sillyT = 0
+  /** What a big splash left on her: wet fur in spikes, a strand of seaweed over her head. */
+  private spikes: Group
+  private weed: Group
+  private wetT = 0
 
   constructor(bag: Bag) {
     this.rig = buildAnimal({ ...CANADA_LOOKS.maple, height: MAPLE_H }, bag)
@@ -101,6 +115,66 @@ export class Maple {
       2,
     )
     this.rig.head.add(this.binos)
+    this.sillies = sillyFaces(this.rig, bag)
+    // Wet fur: little spikes on the top of her head. Seaweed: two green ribbons over her head and down one side.
+    const R = this.rig.face.R
+    const hy = this.rig.face.headY
+    this.spikes = solid(
+      merge(
+        [-0.5, -0.2, 0.1, 0.4, -0.35, 0.25].map((x, i) => {
+          const back = i > 3 ? -0.35 : 0
+          return P.cone(0.13 * R, 0.42 * R, CANADA_LOOKS.maple.fur, { at: [x * R, hy + R * (0.92 - Math.abs(x) * 0.3) + 0.12 * R, back * R], rot: [back * 0.8, 0, -x * 1.3] }, 6)
+        }),
+      ),
+      bag,
+      1.5,
+    )
+    this.spikes.visible = false
+    this.rig.head.add(this.spikes)
+    const weed = '#5FAF5A'
+    this.weed = solid(
+      merge([
+        P.rbox(1.5 * R, 0.07 * R, 0.4 * R, 0.03 * R, weed, { at: [0.05 * R, hy + 0.98 * R, 0.05 * R], rot: [0, 0.3, 0.12] }),
+        P.rbox(0.36 * R, 0.07 * R, 1.0 * R, 0.03 * R, '#4E9A4B', { at: [0.88 * R, hy + 0.45 * R, 0.0], rot: [0.15, 0, -1.25] }),
+        P.rbox(0.3 * R, 0.07 * R, 0.8 * R, 0.03 * R, weed, { at: [-0.6 * R, hy + 0.8 * R, -0.35 * R], rot: [0.6, 0.4, 0.8] }),
+      ]),
+      bag,
+      1.5,
+    )
+    this.weed.visible = false
+    this.rig.head.add(this.weed)
+  }
+
+  /** A silly face for `seconds` (0: her own face back). */
+  silly(face: Silly, seconds = 1.6) {
+    this.sillyT = seconds
+    this.sillies.show(seconds > 0 ? face : null)
+  }
+  /** Soaked by a splash this big (1 small .. 3 the biggest): her face for it, the water's leftovers on her, drips, a
+   *  droop; `seconds` how long the face stays. */
+  soakedFace(size: 1 | 2 | 3, seconds = 2.4) {
+    const face: Silly = size === 1 ? 'soaked' : size === 2 ? 'crossed' : 'dizzy'
+    this.silly(face, seconds)
+    this.spikes.visible = size >= 2
+    this.weed.visible = size >= 3
+    this.wetT = seconds + 2.5
+    this.shakeAfter = true
+  }
+  private shakeAfter = false
+  /** Water still dripping off her (the world drips it). */
+  get dripping() {
+    return this.wetT > 0 || this.soaked
+  }
+  /** A wet-dog shake. */
+  shake() {
+    if (this.soakT < 0 || this.soakT < SOAK_S * 0.5) this.soakT = SOAK_S * 0.5
+  }
+  /** Her face, in the world (a close-up's look point). */
+  head(out = new Vector3()) {
+    return this.headAt(out)
+  }
+  get sillyNow() {
+    return this.sillyT > 0 ? this.sillies.face : null
   }
 
   // ---- Actions (each one plays by itself; a new one takes over smoothly).
@@ -149,6 +223,20 @@ export class Maple {
   update(dt: number, t: number, pose: MaplePose) {
     const { body, head, armL, armR, tail } = this.rig
     this.life.update(dt)
+    if (this.sillyT > 0) {
+      this.sillyT -= dt
+      this.sillies.update(dt)
+      if (this.sillyT <= 0) {
+        this.sillies.show(null)
+        // (The face over, she shakes the water off.)
+        if (this.shakeAfter) this.shake()
+        this.shakeAfter = false
+      }
+    }
+    if (this.wetT > 0 && (this.wetT -= dt) <= 0) this.spikes.visible = this.weed.visible = false
+    // Turning round on the spot (to face the camera for a close-up), eased.
+    this.turned += (this.turn - this.turned) * (1 - Math.exp(-dt * 7))
+    this.root.rotation.y = this.turned
     const tick = (v: number, len: number) => (v < 0 ? -1 : v + dt > len ? -1 : v + dt)
     const wasSlap = this.slapT
     this.waveT = tick(this.waveT, WAVE_S)

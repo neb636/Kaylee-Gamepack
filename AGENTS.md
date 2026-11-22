@@ -8,7 +8,8 @@ with a friend who needs her help, a handful of activities, passport stamps, stic
 Agong's shophouse as a unicorn, the whole family are animal characters who talk in their own voices, and the places
 the family loves become day trips (the boat trip in Phang Nga Bay, the mall day at ICONSIAM, Nan, Koh Samet). Its guide
 is `docs/thailand-3d.md`. Australia, Italy, China, Egypt and Peru are 2D countries; Australia is the 2D reference.
-Canada (a 3D toy-table map) and the Poles (a 3D globe) mix 3D and 2D activities.
+Canada (a 3D toy map; one story, Maple's Team) and the Poles (a 3D globe; one story, Pebble's Long Way Home) mix
+3D and 2D activities and tell their stories with films.
 
 Kaylee loves **unicorns, the color pink, winning, and trophies.** She **cannot read yet**.
 
@@ -195,11 +196,11 @@ every new or changed game or level). **Agent:** `fresh-eyes` reviews a toy it ha
 - Don't run `npm run test` or `npm run check` locally; CI runs the specs on the PR.
 - **Floating 3D maps are framed like CSS `object-fit`.** Any board that floats in the sky (the Thailand map, the Nan
   map, a new trip's map, any 3D toy board) frames its real box with `objectFit: 'contain'` on its `Shot`
-  (`engine3d/camera.ts`), built with `trayBox()` (`trip/sky.ts`), so it sits whole and centered below the top bar on
+  (`engine3d/camera.ts`), built with `trayBox()` (`engine3d/board.ts`), so it sits whole and centered below the top bar on
   an iPad either way round, an iPhone and a wide Mac window. Don't hand-tune a center or box per screen shape; per
   shape, change only the angle (yaw, pitch). Check it in all of those shapes.
 - **Every floating 3D map turns like the Thailand map.** She swings the board round with a drag and pinches it closer:
-  build the overview with `boardShot()` (`trip/sky.ts`), which frames the `trayBox` and adds `roam: MAP_ROAM`. A
+  build the overview with `boardShot()` (`engine3d/board.ts`), which frames the `trayBox` and adds `roam: MAP_ROAM`. A
   `Stage`-based map turns whenever its shot allows it; something she drags on the board (Nan's car) says so with
   `roamGrabbed()`, so that drag isn't a turn.
 
