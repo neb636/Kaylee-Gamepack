@@ -69,15 +69,15 @@ const tmp2 = new Vector3()
 // ---------------------------------------------------------------- the people
 
 /** Lung Kwai: a big jolly water buffalo uncle in a sky-blue tee and an apron (the noodle soup). */
-const KWAI: Look = { species: 'buffalo', height: 1.38, chub: 1.22, fur: '#77708A', light: '#CFC6D6', dark: '#45405A', ear: '#FFC2C8', outfit: { kind: 'tee', color: '#8FC6F2' }, extras: ['apron'], open: true }
+export const KWAI: Look = { species: 'buffalo', height: 1.38, chub: 1.22, fur: '#77708A', light: '#CFC6D6', dark: '#45405A', ear: '#FFC2C8', outfit: { kind: 'tee', color: '#8FC6F2' }, extras: ['apron'], open: true }
 /** Pa Kai: a plump cream hen auntie in a lilac blouse (the salty eggs). */
-const KAI: Look = { species: 'hen', height: 1.12, chub: 1.18, fur: '#FFF1DE', light: '#FFFFFF', dark: '#FFC83D', ear: '#FFB45C', outfit: { kind: 'blouse', color: '#C9B6F5' }, lashes: true, open: true }
+export const KAI: Look = { species: 'hen', height: 1.12, chub: 1.18, fur: '#FFF1DE', light: '#FFFFFF', dark: '#FFC83D', ear: '#FFB45C', outfit: { kind: 'blouse', color: '#C9B6F5' }, lashes: true, open: true }
 /** Yai Nak: a little old otter grandma with round glasses and a white bun (the grilled fish). */
-const NAK: Look = { species: 'otter', height: 1.08, chub: 1.12, fur: '#9A7A66', light: '#EAD9C8', dark: '#5A4436', outfit: { kind: 'blouse', color: '#FFC2A8' }, extras: ['round-glasses', 'bun'], lashes: true }
+export const NAK: Look = { species: 'otter', height: 1.08, chub: 1.12, fur: '#9A7A66', light: '#EAD9C8', dark: '#5A4436', outfit: { kind: 'blouse', color: '#FFC2A8' }, extras: ['round-glasses', 'bun'], lashes: true }
 /** In the memory: little Pa Kluea (a filly in a pink dress, no hat yet) and her grandma (a grey-maned pony in Pa
  *  Kluea's sun hat and apron: the hat is hers now). */
-const FILLY: Look = { ...SALT_AUNTY, height: 0.82, chub: 1.0, outfit: { kind: 'dress', color: '#FFB3D6' }, extras: [], open: true }
-const GRANDMA: Look = { ...SALT_AUNTY, height: 1.32, chub: 1.16, fur: '#EAD6C0', light: '#FFF6EC', mane: ['#F2EEF4', '#D9D3E0'], outfit: { kind: 'blouse', color: '#B9A6F5' }, extras: ['sunhat', 'apron', 'round-glasses'], open: false }
+export const FILLY: Look = { ...SALT_AUNTY, height: 0.82, chub: 1.0, outfit: { kind: 'dress', color: '#FFB3D6' }, extras: [], open: true }
+export const GRANDMA: Look = { ...SALT_AUNTY, height: 1.32, chub: 1.16, fur: '#EAD6C0', light: '#FFF6EC', mane: ['#F2EEF4', '#D9D3E0'], outfit: { kind: 'blouse', color: '#B9A6F5' }, extras: ['sunhat', 'apron', 'round-glasses'], open: false }
 
 const COOK_IDS = ['kwai', 'kai', 'nak'] as const
 const COOK_LOOKS = [KWAI, KAI, NAK]

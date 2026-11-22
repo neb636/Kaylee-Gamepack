@@ -9,7 +9,7 @@ import { WEARABLES, type Look } from '../characters/looks'
 import { formatLook, ITEMS, PAINT_COLORS, PAINT_PARTS, PAINTS, paintOf, parseLook, SLOTS, withItem, withPaint, type ShowPose } from '../characters/style'
 import type { Pose } from '../characters/types'
 import { TUNE } from '../../../engine3d/tune'
-import { CAST, GROUPS, linesFor, variantsFor, voiceLabel, type CastEntry, type Variant } from './catalog'
+import { CAST, castIn, COUNTRIES, GROUPS, linesFor, variantsFor, voiceLabel, type CastEntry, type Variant } from './catalog'
 import { POSES, type Action, type Hideable, type Studio, type StudioView } from './studio'
 import { Field, Icon, IconButton, Section, Segmented, Select, Slider, Toggle, type IconName } from '../../../labs/ui'
 
@@ -19,6 +19,8 @@ export interface LabApi {
   select: (id: string) => void
   toggleLineup: (id: string) => void
   step: (dir: 1 | -1) => void
+  /** Shows one country's cast (`all`: everyone), and picks its first character if the one on stage is elsewhere. */
+  setCountry: (to: StudioView['country']) => void
   entry: CastEntry
   studio: RefObject<Studio | null>
   toast: (text: string) => void
@@ -58,7 +60,10 @@ export function LeftPanel({ lab, onClose, onPicked, searchRef }: { lab: LabApi; 
   const [q, setQ] = useState('')
   const [popover, setPopover] = useState<{ id: string; top: number; left: number } | null>(null)
   const query = q.trim().toLowerCase()
-  const shown = CAST.filter((c) => !query || `${c.name} ${c.who} ${c.id} ${c.look?.species ?? ''}`.toLowerCase().includes(query))
+  const country = lab.view.country
+  const inCountry = castIn(country)
+  const countryName = COUNTRIES.find((c) => c.id === country)!.name
+  const shown = inCountry.filter((c) => !query || `${c.name} ${c.who} ${c.id} ${c.look?.species ?? ''}`.toLowerCase().includes(query))
   const current = useRef<HTMLButtonElement>(null)
   useEffect(() => {
     // (Braces: Chrome's scrollIntoView returns a promise, and an effect may only return its cleanup.)
@@ -72,10 +77,22 @@ export function LeftPanel({ lab, onClose, onPicked, searchRef }: { lab: LabApi; 
           🦄
         </button>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="cl-title">Thailand Characters</div>
-          <div className="cl-sub">3D cast · {CAST.length} characters</div>
+          <div className="cl-title">{country === 'all' ? 'Characters' : `${countryName} characters`}</div>
+          <div className="cl-sub">3D cast · {inCountry.length} characters</div>
         </div>
         <IconButton icon="panel" label="Hide panel" small onClick={onClose} />
+      </div>
+      <div className="cl-country" style={{ padding: '0 12px 8px' }} data-country={country}>
+        <Select
+          value={country}
+          label={<span style={{ flex: 1, textAlign: 'left' }}>{country === 'all' ? 'All countries' : countryName}</span>}
+          icon={<Icon name="users" size={15} />}
+          options={COUNTRIES.map((c) => ({ id: c.id, label: `${c.id === 'all' ? 'All countries' : c.name} · ${castIn(c.id).length}` }))}
+          onChange={(to) => {
+            lab.setCountry(to)
+            setTab('cast')
+          }}
+        />
       </div>
       <div style={{ padding: '0 12px 10px' }}>
         <Segmented
@@ -141,7 +158,7 @@ export function LeftPanel({ lab, onClose, onPicked, searchRef }: { lab: LabApi; 
                 </div>
               )
             })}
-            {!shown.length && <div className="cl-empty">Nobody called “{q}”</div>}
+            {!shown.length && <div className="cl-empty">Nobody called “{q}”{country !== 'all' ? ` in ${countryName}` : ''}</div>}
           </>
         ) : (
           <SceneList lab={lab} />
@@ -519,7 +536,7 @@ function DesignTab({ lab }: { lab: LabApi }) {
             </>
           )}
           <span>Voice</span>
-          <span>{entry.voice ? `${entry.voice} (${voiceLabel(entry.voice) ?? '?'})` : 'none'}</span>
+          <span>{entry.voice ? `${entry.voice} (${voiceLabel(entry) ?? '?'})` : 'none'}</span>
           <span>File</span>
           <button style={{ textAlign: 'left', display: 'flex', gap: 4, alignItems: 'center', overflow: 'hidden' }} onClick={() => copy(`src/world/places/thailand/${entry.src}`, 'Path')} title="Copy the path">
             <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{entry.src}</span>
@@ -627,7 +644,7 @@ function Colors({ look, copy }: { look: Look; copy: (text: string, what: string)
 
 export function LineBar({ lab }: { lab: LabApi }) {
   const { entry } = lab
-  const lines = useMemo(() => linesFor(entry.voice), [entry.voice])
+  const lines = useMemo(() => linesFor(entry), [entry])
   const [text, setText] = useState('')
   useEffect(() => {
     setText('')
@@ -636,7 +653,7 @@ export function LineBar({ lab }: { lab: LabApi }) {
   const selected = lines.find((l) => lineText(l) === text)
   const matching = q && !selected ? lines.filter((l) => lineText(l).toLowerCase().includes(q)) : lines
   const chosen: Line | undefined = selected ?? matching[0]
-  const voice = voiceLabel(entry.voice)
+  const voice = voiceLabel(entry)
   const mute = !lines.length
   const play = () => chosen && lab.studio.current?.speak(lineText(chosen))
   const placeholder = entry.kind === 'kaylee' ? "Your unicorn doesn't talk (she giggles)" : !entry.voice ? `${entry.name} has no voice` : mute ? `No lines for ${entry.name} yet` : `Pick a line for ${entry.name} to say...`

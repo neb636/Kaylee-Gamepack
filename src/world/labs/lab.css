@@ -949,7 +949,7 @@
   top: calc(var(--safe-top, 0px) + 8px);
   right: calc(var(--safe-right, 0px) + 8px);
   bottom: calc(var(--safe-bottom, 0px) + 8px);
-  width: min(320px, 42vw);
+  width: min(320px, calc(100% - 16px));
   z-index: 300;
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 20px 60px rgba(20, 20, 30, 0.22);
