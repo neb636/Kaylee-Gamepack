@@ -12,21 +12,21 @@
       "name": "canada-bath-suds",
       "where": "canada-bath-suds",
       "seconds": 14,
-      "fps": 50.7,
+      "fps": 22.1,
       "status": "ok"
     },
     {
       "name": "canada-bath-bubbles",
       "where": "canada-bath-bubbles",
       "seconds": 18,
-      "fps": 54,
+      "fps": 23.3,
       "status": "ok"
     },
     {
       "name": "canada-bath-pokes",
       "where": "canada-bath-pokes",
       "seconds": 16,
-      "fps": 57.1,
+      "fps": 15,
       "status": "ok"
     }
   ]
