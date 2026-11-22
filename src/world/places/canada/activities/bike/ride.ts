@@ -522,6 +522,12 @@ export class MountainBike implements World3D {
     this.hintEl = el
   }
 
+  /** Just out of the station's door (the side shot): until she's a little way down, or weaving there a while (the
+   *  cabins swing past that shot's camera). */
+  private get atDoor() {
+    return this.mode === 'ride' && this.s < 3 && this.modeT < 2.4
+  }
+
   /** In her gondola cabin (the story, and the ride up). */
   private get inCabin() {
     return this.mode === 'gondola' || this.mode === 'story'
@@ -1163,10 +1169,11 @@ export class MountainBike implements World3D {
     const pitch = this.air ? Math.atan2(-this.vy, Math.max(1, this.d.speed)) * 0.7 : Math.atan((ga - gb) / (2 * fwd))
     this.pitch += (clamp(pitch, -0.9, 0.9) - this.pitch) * k(10)
     const across = c.ground(this.s, this.lat + 0.4) - c.ground(this.s, this.lat - 0.4)
-    const tilt = this.air ? 0 : Math.atan(across / 0.8) * RIDE.bank
+    // (The ground's tilt: square to a berm, but never more than a little on the trail's sloped shoulders.)
+    const tilt = this.air ? 0 : clamp(Math.atan(across / 0.8) * RIDE.bank, -0.6, 0.6)
     // Into her push at once (+ = right), then into the turn the bike is making; more the faster she goes.
     const into = this.air ? 0 : clamp(0.6 * this.push - 0.4 * (this.d.yawRate / TURN), -1, 1)
-    const roll = clamp(into * clamp(this.d.speed / RIDE.speed, 0, 1.4) * RIDE.lean - tilt, -0.9, 0.9)
+    const roll = clamp(into * clamp(this.d.speed / RIDE.speed, 0, 1.4) * RIDE.lean - tilt, -0.8, 0.8)
     this.roll += (roll - this.roll) * k(12)
     this.rider.lean.rotation.set(this.pitch, 0, this.roll)
     const g = c.ride(this.s, this.lat, this.onBridge)
@@ -1214,7 +1221,7 @@ export class MountainBike implements World3D {
     const at = t.locate(p.x, p.z, this.s)
     const g = c.ride(at.s, clamp(at.lat, -half(at.s) - SHOULDER, half(at.s) + SHOULDER), this.onBridge) - this.camDip
     const lift = this.air ? Math.max(0, this.y - c.ride(this.s, this.lat, this.onBridge)) * 0.45 : 0
-    if (this.s < 3) {
+    if (this.atDoor) {
       // Out of the station's door: from the side, the station and the gondola behind her.
       const q = t.spot(this.s + 2, 0)
       return { center: new Vector3(q.x, H0 + 1.4, q.z), half: tall ? new Vector3(3, 1.6, 4) : new Vector3(4.5, 1.6, 3.5), yaw: -this.camYaw * TO_DEG + 125, pitch: 14, minDist: 6 }
@@ -1236,7 +1243,8 @@ export class MountainBike implements World3D {
     const a = t.spot(this.s - 4, this.lat * 0.9)
     const b = t.spot(this.s + 3 + v * 0.3, this.lat * 0.85)
     const chord = Math.atan2(b.x - a.x, -(b.z - a.z))
-    return chord + wrapAngle(Math.PI - this.d.heading - chord) * STEER.chase
+    // (Out of the station's door the shot is from the side: it stays put while she weaves, clear of the cabins.)
+    return chord + wrapAngle(Math.PI - this.d.heading - chord) * (this.atDoor ? 0 : STEER.chase)
   }
 
   /** Never inside the hillside: the camera rises over the ground (and over a bank between it and Maple). */
