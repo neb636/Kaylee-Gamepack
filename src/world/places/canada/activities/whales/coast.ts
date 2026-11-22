@@ -76,6 +76,45 @@ function isle(s: Isle, bag: Bag, seed: number) {
   return g
 }
 
+/** A wave-cut ledge. The top stays flat under the sea lions, and the sides break into slanted strata. */
+function seaLionLedge(s: Isle, bag: Bag) {
+  const angles = [0.00, 0.57, 1.03, 1.77, 2.33, 2.96, 3.51, 4.18, 4.67, 5.41, 5.89]
+  const edge = [0.96, 1.07, 0.9, 0.99, 1.05, 0.89, 1.07, 0.92, 1.05, 0.86, 0.95]
+  const rings = [
+    [-0.52, 1.06, 0],
+    [0.22, 1, 0.11],
+    [0.35, 0.96, 0.12],
+    [0.63, 0.97, 0.08],
+    [0.72, 0.93, 0.07],
+    [0.98, 0.90, 0.04],
+    [s.h - 0.25, 0.76, 0],
+  ].map(([y, width, slope], layer) => ({
+    z: y,
+    pts: angles.map((a, i): [number, number] => {
+      const r = s.r * edge[i] * width
+      return [r * Math.cos(a) + layer * 0.055, r * Math.sin(a) * 0.9]
+    }),
+    slope,
+  }))
+  // Loft along +z first, then stand it up. The cap is flat; the exposed layers dip along the ledge.
+  const stone = loft(rings, '#82807D', { rot: [-Math.PI / 2, 0, 0], at: [s.x, 0, s.z] })
+  const pos = stone.attributes.position
+  const colors = stone.attributes.color
+  const shades = ['#53575C', '#77746F', '#696968', '#8B8780', '#797773', '#9B958B', '#ABA598'].map((c) => new Color(c))
+  const tint = new Color()
+  for (let i = 0; i < pos.count; i++) {
+    const y = pos.getY(i)
+    const x = pos.getX(i) - s.x
+    const z = pos.getZ(i) - s.z
+    const layer = rings.findIndex((ring) => Math.abs(y - ring.z) < 0.001)
+    pos.setY(i, y + (x * 0.52 - z * 0.26) * rings[layer].slope)
+    tint.copy(shades[layer]).multiplyScalar(0.96 + 0.10 * Math.sin(x * 2 + z))
+    colors.setXYZ(i, tint.r, tint.g, tint.b)
+  }
+  stone.computeVertexNormals()
+  return solid(stone, bag, 1.5, '#4F4C52')
+}
+
 const KELP_BLADES = ['#9C8E38', '#8A8A3A', '#A89842', '#7E8237']
 
 /** One bull-kelp blade lying on the water: a long thin ribbon along +z from its float, wavy, wider in the middle and
@@ -136,7 +175,7 @@ export function buildCoast(bag: Bag): Coast {
   land.add(solid(merge(dock), bag, 2))
 
   // ---- The islands and points.
-  ISLES.forEach((s, i) => land.add(isle(s, bag, 40 + i)))
+  ISLES.forEach((s, i) => land.add(s === SEALION_ROCK ? seaLionLedge(s, bag) : isle(s, bag, 40 + i)))
 
   // ---- The lighthouse: white with red bands, a lamp on top and a beam that turns.
   const lhY = ISLES[0].h - 0.2

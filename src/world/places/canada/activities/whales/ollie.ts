@@ -31,7 +31,7 @@ export function addClam(actor: FilmActor, bag: Bag) {
     bag,
     1.5,
   )
-  clam.position.set(0, 0.36 * H, 0.21 * H * c)
+  clam.position.set(0, 0.36 * H, 0.185 * H * c)
   clam.rotation.x = 1.25
   actor.rig.body.add(clam)
   return clam
@@ -71,6 +71,8 @@ export class Floater {
     a.root.rotation.set(0, this.face + turn, Math.sin(t * 0.9 + this.phase) * 0.07)
     // Lying back in the water, a slow bob on the swell, lifted a little in the middle of a spin.
     a.root.position.y = this.y - 0.2 * a.height + Math.sin(t * 1.6 + this.phase) * 0.03 + bell(k) * 0.08 * a.height
+    // Tuck her chin up from the water so her eyes and whiskers face past her flippers.
+    a.rig.head.rotation.x += 0.27
     if (this.sleepy) a.rig.eyes.scale.y = 0.12
     if (this.paws) {
       a.rig.armR.rotation.x = -0.9
@@ -164,8 +166,9 @@ export class Juggle {
     if (this.gone) return
     if (this.show) {
       // Up in her left paw, beside her cheek (never in front of her face).
-      this.rock.position.set(0.36 * H, 0.66 * H, 0.2 * H * c)
-      a.rig.armR.rotation.set(-0.5, 0, 1.25 + Math.sin(t * 5) * 0.06)
+      this.rock.position.set(0.355 * H, 0.575 * H, 0.145 * H)
+      this.rock.rotation.set(0.8, -0.1, 0.16)
+      a.rig.armR.rotation.set(-0.35, -0.72, 1.62 + Math.sin(t * 5) * 0.06)
     } else if (this.tuck) {
       // Tucked in the pocket of skin under her left arm, the arm down over it.
       this.rock.position.set(0.25 * H, 0.42 * H, 0.1 * H * c)
