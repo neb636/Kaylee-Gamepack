@@ -8,7 +8,7 @@
 import { Box3, CircleGeometry, Color, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { clamp, say } from '../../../../sdk'
 import { applyPose, clearPose } from '../activities/boat-trip/bay/poses'
-import { buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskipper, buildNeedlefish, buildPorpoise, type Blink, type CritterId } from '../activities/boat-trip/bay/critters'
+import { Blink, buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskipper, buildNeedlefish, buildPorpoise, type CritterId } from '../activities/boat-trip/bay/critters'
 import { Avatar, SHOW_SECS } from '../characters/avatar'
 import { FAMILY } from '../characters/family'
 import { buildDadCandidate } from '../characters/dad-candidates'
@@ -25,7 +25,8 @@ import { applyBands, makeLights } from '../../../engine3d/toon'
 import { TUNE } from '../../../engine3d/tune'
 import type { World3D } from '../../../engine3d/View3D'
 import { sfx } from '../sfx'
-import { castById, linesFor, type CastEntry, type Variant } from './catalog'
+import { castById, linesFor, type CastEntry, type Country, type Variant } from './catalog'
+import { TOYS, type LabToy } from './toys'
 
 export type Tool = 'select' | 'pan' | 'look'
 export type ShotKind = 'body' | 'face' | 'lineup'
@@ -66,6 +67,8 @@ export interface StudioView {
   fov: number
   bg: string
   hide: Hideable[]
+  /** The cast list's country (the lab's panel only: the studio shows whoever is in `ids`). */
+  country: Country | 'all'
 }
 
 interface CritterRig {
@@ -83,6 +86,8 @@ interface Actor {
   bag: Bag
   char: Member | Avatar | null
   critter: CritterRig | null
+  /** A hand-built character (toys.ts), inside `critter.root` (which takes the studio's plain hop and wiggle). */
+  toy: LabToy | null
   height: number
   width: number
   depth: number
@@ -189,7 +194,14 @@ export class Studio implements World3D {
     const holder = new Group()
     let char: Member | Avatar | null = null
     let critter: CritterRig | null = null
-    if (entry.kind === 'kaylee') {
+    let toy: LabToy | null = null
+    if (entry.toy) {
+      toy = TOYS[entry.toy](bag)
+      const wrap = new Group()
+      wrap.add(toy.root)
+      toy.update(1 / 60, 0)
+      critter = { root: wrap, blink: new Blink(new Group()), wavers: [] }
+    } else if (entry.kind === 'kaylee') {
       // The vinyl toy (CharacterLab waits for her GLB before the studio builds).
       const k = new Avatar(bag)
       k.place(0, 0, 0, 0)
@@ -225,6 +237,7 @@ export class Studio implements World3D {
       bag,
       char,
       critter,
+      toy,
       height: box.max.y - box.min.y,
       width: Math.max(0.25, box.max.x - box.min.x),
       depth: Math.max(0.25, box.max.z - box.min.z),
@@ -306,6 +319,7 @@ export class Studio implements World3D {
 
   act(kind: Action, user = true) {
     for (const a of this.actors) {
+      if (a.toy && (kind === 'hop' || kind === 'wave' || kind === 'wiggle') && a.toy.act(kind)) continue
       if (a.critter) a.poke = { kind, t: 0 }
       else if (kind === 'hop' || kind === 'wave' || kind === 'wiggle') a.char?.react(kind)
       // (The big cousins' hands stay on their phones.)
@@ -440,6 +454,7 @@ export class Studio implements World3D {
       return
     }
     const cr = a.critter!
+    a.toy?.update(dt, this.time)
     cr.blink.update(dt)
     const breath = 1 + Math.sin(this.time * 2.4 + a.holder.position.x) * 0.02
     cr.root.scale.set(1 / Math.sqrt(breath), breath, 1 / Math.sqrt(breath))
@@ -591,11 +606,10 @@ export class Studio implements World3D {
     const a = hit && this.actors.find((x) => isIn(hit.object, x.holder))
     if (!a) return
     this.onPick?.(a.entry.id)
-    if (a.char) {
-      a.char.react('hop')
-      const lines = linesFor(a.entry.voice)
-      if (lines.length) void say(lines[Math.floor(Math.random() * lines.length)])
-    } else a.poke = { kind: 'hop', t: 0 }
+    if (a.char) a.char.react('hop')
+    else if (!a.toy?.act('hop')) a.poke = { kind: 'hop', t: 0 }
+    const lines = linesFor(a.entry)
+    if (lines.length) void say(lines[Math.floor(Math.random() * lines.length)])
     sfx.boing()
   }
 

@@ -128,7 +128,7 @@ export function buildBoat(bag: Bag, stripe: string = PAL.hotpink) {
 
 /** The people out on the water (toy animals, nobody in the family): ferry passengers, a longtail's driver, a jet
  *  skier, another speedboat's captain and riders. Sun hats and sunglasses: they're on holiday. */
-const SEA_FOLK: Look[] = [
+export const SEA_FOLK: Look[] = [
   { species: 'otter', height: 1.05, fur: '#B07A55', light: '#F6DCC0', dark: '#6E4A3A', ear: '#FFC2B0', outfit: { kind: 'tee', color: '#FF9AC8' }, extras: ['sunhat'], lashes: true, open: true },
   { species: 'raccoon', height: 1.05, fur: '#A9A3B8', light: '#F4F0FA', dark: '#4A4458', ear: '#FFC2C8', outfit: { kind: 'shirt', color: '#8FD3FF' }, extras: ['sunglasses'], open: true },
   { species: 'monkey', height: 1.0, fur: '#C08A5E', light: '#FFE6CC', dark: '#7A5340', ear: '#FFC2B0', outfit: { kind: 'dress', color: '#FFE07A' }, lashes: true, open: true },

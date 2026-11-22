@@ -1,5 +1,6 @@
 // #/world/characters/<id>?<state>: the character lab, for Dad and for whoever builds the next character. Every 3D
-// character in Thailand (Kaylee, the family, the trips' extras, the bay's critters) on a turntable in a plain studio:
+// character in every 3D country (Thailand's family, trips' extras, crowds and critters; the Poles and Canada's friends
+// and wildlife), switched by country (`country=`, default All), on a turntable in a plain studio:
 // pick one or line several up, pose them, play their actions in slow motion and film them, play any line they say in
 // their own voice, dress Kaylee, change the light, the backdrop and the lens, and export a PNG. Everything you set is
 // in the address bar, so a link opens the same view. Not something Kaylee plays: World.tsx loads it lazily, so only
@@ -13,7 +14,7 @@ import { dadCandidatesReady } from '../characters/dad-candidates'
 import { momReady } from '../characters/mom-model'
 import type { Pose } from '../characters/types'
 import { View3D, type RenderMode } from '../../../engine3d/View3D'
-import { CAST, castById } from './catalog'
+import { castById, castIn, countryOf, COUNTRIES, type Country } from './catalog'
 import { BACKDROPS, LeftPanel, LineBar, RightPanel, Toolbar, TopRight, type LabApi } from './Panels'
 import { Studio, type Hideable, type ShotKind, type StudioView, type Tool } from './studio'
 import { IconButton } from '../../../labs/ui'
@@ -39,6 +40,7 @@ const DEFAULTS: StudioView = {
   fov: 30,
   bg: BACKDROPS[0].color,
   hide: [],
+  country: 'all',
 }
 
 const num = (v: string | undefined, d: number) => (v !== undefined && v !== '' && !isNaN(+v) ? +v : d)
@@ -69,6 +71,7 @@ function fromLink(id: string | undefined, p: Record<string, string>): StudioView
     fov: num(p.fov, DEFAULTS.fov),
     bg: BACKDROPS.find((b) => b.id === p.bg)?.color ?? DEFAULTS.bg,
     hide: list(p.hide) as Hideable[],
+    country: (COUNTRIES.find((c) => c.id === p.country)?.id ?? DEFAULTS.country) as Country | 'all',
   }
 }
 
@@ -93,6 +96,7 @@ function toLink(v: StudioView) {
   if (v.fov !== DEFAULTS.fov) p.fov = String(v.fov)
   if (v.bg !== DEFAULTS.bg) p.bg = BACKDROPS.find((b) => b.color === v.bg)?.id ?? 'studio'
   if (v.hide.length) p.hide = v.hide.join(',')
+  if (v.country !== DEFAULTS.country) p.country = v.country
   const q = Object.entries(p)
     .map(([k, val]) => `${k}=${encodeURIComponent(val).replace(/%2C/g, ',')}`)
     .join('&')
@@ -167,20 +171,30 @@ export default function CharacterLab({ id, params = {} }: { id?: string; params?
       }),
     [],
   )
+  // ← → step through the country's cast (all of it on All).
   const step = useCallback(
     (dir: 1 | -1) => {
-      const i = CAST.findIndex((c) => c.id === viewRef.current.selected)
-      select(CAST[(i + dir + CAST.length) % CAST.length].id)
+      const cast = castIn(viewRef.current.country)
+      const i = cast.findIndex((c) => c.id === viewRef.current.selected)
+      select(cast[i < 0 ? 0 : (i + dir + cast.length) % cast.length].id)
     },
     [select],
+  )
+  const setCountry = useCallback(
+    (to: Country | 'all') => {
+      const sel = castById(viewRef.current.selected)
+      set({ country: to })
+      if (to !== 'all' && sel && countryOf(sel) !== to) select(castIn(to)[0].id)
+    },
+    [set, select],
   )
   const setLoop = (on: boolean) => {
     setLoopState(on)
     if (studio.current) studio.current.loop = on
   }
 
-  const entry = castById(view.selected) ?? CAST[0]
-  const lab: LabApi = useMemo(() => ({ view, set, select, toggleLineup, step, entry, studio, toast: showToast }), [view, set, select, toggleLineup, step, entry, showToast])
+  const entry = castById(view.selected) ?? castIn('all')[0]
+  const lab: LabApi = useMemo(() => ({ view, set, select, toggleLineup, step, setCountry, entry, studio, toast: showToast }), [view, set, select, toggleLineup, step, setCountry, entry, showToast])
 
   // Keys: ⌘K searches, ← → step through the cast.
   useEffect(() => {

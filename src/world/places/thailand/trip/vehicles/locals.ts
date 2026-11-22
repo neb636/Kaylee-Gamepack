@@ -28,7 +28,7 @@ const RED = '#FF5C7A'
 const WICKER = '#D9A066'
 
 /** Nan folk on the road (toy animals, nobody in the family). */
-const FOLK: Look[] = [
+export const FOLK: Look[] = [
   { species: 'monkey', height: 1.05, fur: '#C08A5E', light: '#FFE6CC', dark: '#7A5340', ear: '#FFC2B0', outfit: { kind: 'tee', color: '#8FC9F5' }, open: true },
   { species: 'raccoon', height: 1.05, fur: '#A9A3B8', light: '#F4F0FA', dark: '#4A4458', ear: '#FFC2C8', outfit: { kind: 'shirt', color: '#FBE78A' }, lashes: true, open: true },
   { species: 'beaver', height: 1.1, chub: 1.15, fur: '#B07A55', light: '#F6DCC0', dark: '#6E4A3A', ear: '#FFC2B0', outfit: { kind: 'polo', color: '#A7EBD0' }, open: true },
@@ -36,7 +36,7 @@ const FOLK: Look[] = [
   { species: 'bear', height: 1.15, chub: 1.2, fur: '#5E4440', light: '#FFD48A', dark: '#3A2A30', ear: '#FFB8A8', outfit: { kind: 'shirt', color: '#C9B5F7' }, open: true },
 ]
 /** The little ones riding pillion. */
-const KIDS: Look[] = [
+export const KIDS: Look[] = [
   { species: 'monkey', height: 0.75, fur: '#D49A6A', light: '#FFEEDB', dark: '#7A5340', ear: '#FFC2B0', outfit: { kind: 'dress', color: '#FF9CC8' }, lashes: true, open: true },
   { species: 'raccoon', height: 0.75, fur: '#B9B3C8', light: '#F8F5FC', dark: '#4A4458', ear: '#FFC2C8', outfit: { kind: 'tee', color: '#8FE3C8' }, open: true },
 ]
