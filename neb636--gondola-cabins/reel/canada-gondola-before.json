@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "canada-gondola-before",
+  "title": "Canada gondola before",
+  "video": "canada-gondola-before.mp4",
+  "gif": "canada-gondola-before.gif",
+  "seconds": 13,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Canada bike gondola",
+      "where": "#/world/canada/bike/gondola",
+      "seconds": 11,
+      "fps": 47.3,
+      "status": "ok"
+    }
+  ]
+}
