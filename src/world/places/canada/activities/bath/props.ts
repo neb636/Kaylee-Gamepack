@@ -13,7 +13,6 @@ const INK = '#2E2233'
 const MOSS = '#7DB563'
 const MOSS_DARK = '#5E9A4E'
 const BARK = '#9A5A44'
-const BARK_DARK = '#7A4434'
 
 export type ToolId = 'sponge' | 'cloud' | 'towel' | 'comb' | Berry
 /** What the log holds: a tool, or a decoration to put on her. */
@@ -77,8 +76,13 @@ export function makeTowel(bag: Bag): Prop {
   const g = new Group()
   g.add(
     solidMix(
-      [P.capsule(0.07, 0.15, '#C9B5F7', { rot: [0, 0, Math.PI / 2] }), P.cyl(0.04, 0.04, 0.01, '#B39CEB', { at: [0.148, 0, 0], rot: [0, 0, Math.PI / 2] }, 14)],
-      [P.cyl(0.072, 0.072, 0.025, '#FF9EC6', { at: [-0.05, 0, 0], rot: [0, 0, Math.PI / 2] }, 18), P.cyl(0.072, 0.072, 0.025, '#FF9EC6', { at: [0.05, 0, 0], rot: [0, 0, Math.PI / 2] }, 18)],
+      // A fluffy pink towel folded in three (each fold a soft slab, a little shorter than the one under it), with two
+      // white stripes across its end and a fringe.
+      [P.rbox(0.26, 0.05, 0.17, 0.024, '#FFA8CF', { at: [0, -0.04, 0] }), P.rbox(0.25, 0.05, 0.165, 0.024, '#FFB8D8', { at: [0.004, 0.004, 0] }), P.rbox(0.24, 0.05, 0.16, 0.024, '#FFC6E0', { at: [0.008, 0.048, 0] })],
+      [
+        ...[-0.07, -0.045].map((x) => P.box(0.012, 0.145, 0.172, '#FFFFFF', { at: [x, 0.004, 0] })),
+        ...Array.from({ length: 7 }, (_, i) => P.box(0.012, 0.012, 0.03, '#FFFFFF', { at: [0.132, -0.04 + (i % 2) * 0.01, -0.07 + i * 0.023] })),
+      ],
       bag,
       2.4,
     ),
@@ -143,7 +147,6 @@ export function makeLog(bag: Bag): Group {
     P.cyl(0.11, 0.11, 1, BARK, { rot: [0, 0, Math.PI / 2] }, 18),
     ...[-0.5, 0.5].map((x) => P.cyl(0.095, 0.095, 0.012, '#D9A77F', { at: [x, 0, 0], rot: [0, 0, Math.PI / 2] }, 18)),
     ...[-0.38, -0.12, 0.15, 0.4].map((x, i) => P.sphere(0.1, i % 2 ? MOSS : MOSS_DARK, { at: [x, 0.07, 0.01], scale: [1.5, 0.45, 1.05] }, 12)),
-    ...[-0.25, 0.28].map((x) => P.box(0.012, 0.16, 0.01, BARK_DARK, { at: [x, 0, 0.108] })),
   ]
   return solid(merge(parts), bag, 2.4)
 }

@@ -105,7 +105,8 @@ export class Suds {
     let h = 0
     for (const s of this.list) if (s.parent === parent && s.goal > 0 && s.base.distanceTo(local) < size * 1.2) h = Math.max(h, s.h + s.size * 0.5)
     h = Math.min(h, size * 3)
-    const color = CLEAN[this.n++ % CLEAN.length].clone().lerp(MUDDY, Math.min(1, Math.max(0, (mud - 0.3) / 0.6)) * 0.85)
+    // (Only a hint of tan: lather the color of her muddy fur would vanish on it.)
+    const color = CLEAN[this.n++ % CLEAN.length].clone().lerp(MUDDY, Math.min(1, Math.max(0, (mud - 0.3) / 0.6)) * 0.4)
     this.list.push({ parent, base: local.clone(), n: normal.clone().normalize(), h, size, k: 0, goal: 1, color, seed: Math.random() * 6 })
   }
   /** A little cluster of lather: one bubble and two or three small ones packed round it on the surface (so it reads

@@ -152,8 +152,10 @@ const RAVEN_AT = new Vector3(SCRATCH.x - SCRATCH.r - 0.36, 1.72, SCRATCH.z + 0.1
 const SKY_CLOUD = new Vector3(-0.55, 1.72, -2.6)
 const SALMON_POOL = new Vector3(0.95, 0.05, FALLS_Z + 0.8)
 const FALLS_AT = new Vector3(-0.55, 1.05, FALLS_Z + 0.2)
-/** Where the rubber duck bobs about (it drifts in a slow loop round here). */
-const DUCK_AT = new Vector3(0.78, 0.035, -0.82)
+/** Where the rubber duck bobs about (it drifts in a slow loop round here): off to the left by the lily pads on a wide
+ *  screen, in front of the mirror pool on an upright one (clear of the pool, the soap's rock and the log). */
+const DUCK_WIDE = new Vector3(-1.5, 0.035, -0.85)
+const DUCK_TALL = new Vector3(0.5, 0.035, -0.6)
 /** The order her patches come clean in doesn't matter: each one rings a step higher. These are the ones that ding. */
 const DING_ZONES: MistyZone[] = ['head', 'earL', 'earR', 'muzzle', 'chest', 'tummy', 'armL', 'armR', 'legL', 'legR']
 
@@ -352,7 +354,7 @@ export class BubbleBathWorld implements World3D {
     scene.add(slug.root)
     this.slug = { ...slug, poke: -1 }
     const duck = makeDuck(bag)
-    duck.root.position.copy(DUCK_AT)
+    duck.root.position.copy(DUCK_WIDE)
     duck.root.scale.setScalar(1.0)
     scene.add(duck.root)
     this.duck = { ...duck, poke: -1, spin: 0, hop: -1 }
@@ -898,8 +900,9 @@ export class BubbleBathWorld implements World3D {
     p.root.visible = true
     const scale = this.toolScale(p, 0.1)
     if (this.tool === 'cloud') {
-      const at = this.onPlane(tipX, tipY, AT.z + 0.75, tmp)
-      at.y += 0.42
+      // (Above her finger and only a little in front of her, so it rains on her without covering her face.)
+      const at = this.onPlane(tipX, tipY, AT.z + 0.35, tmp)
+      at.y += 0.55
       p.root.position.lerp(at, Math.min(1, dt * 18))
       p.root.scale.setScalar(this.toolScale(p, 0.17))
     } else {
@@ -934,10 +937,10 @@ export class BubbleBathWorld implements World3D {
       this.acc.suds += moved * FEEL.suds
       // (Over thick mud the lather comes out muddy tan; it whitens as she keeps scrubbing there.)
       const mud = onMisty ? this.coat.mudNear(hit.part!, hit.local) : 0
-      while (this.acc.suds >= 20) {
-        this.acc.suds -= 20
-        const j = tmp2.set((Math.random() - 0.5) * 0.06, (Math.random() - 0.5) * 0.06, (Math.random() - 0.5) * 0.06)
-        const size = (hit.who === 'maple' ? 0.02 : 0.026) + Math.random() * 0.016
+      while (this.acc.suds >= 16) {
+        this.acc.suds -= 16
+        const j = tmp2.set((Math.random() - 0.5) * 0.07, (Math.random() - 0.5) * 0.07, (Math.random() - 0.5) * 0.07)
+        const size = (hit.who === 'maple' ? 0.024 : 0.034) + Math.random() * 0.02
         this.suds.lather(hit.pivot, hit.local.clone().add(j), hit.normal, size, mud)
       }
       if (moved > 0) this.suds.whiten(hit.world, FEEL.reach, Math.min(1, moved * 0.004))
@@ -1081,8 +1084,9 @@ export class BubbleBathWorld implements World3D {
     cloud.root.visible = true
     // (Above her head, back and forth across her: the rain falls on all of her.)
     const x = AT.x + Math.sin(a.t * 1.3) * 0.5
-    const y = AT.y + 1.62 + Math.sin(a.t * 2.1) * 0.03
-    cloud.root.position.lerp(tmp.set(x, y, AT.z + 0.25), Math.min(1, dt * 3))
+    // (High over her head, so it never hides her face.)
+    const y = AT.y + 2.0 + Math.sin(a.t * 2.1) * 0.03
+    cloud.root.position.lerp(tmp.set(x, y, AT.z + 0.1), Math.min(1, dt * 3))
     cloud.root.quaternion.copy(this.rig.camera.quaternion)
     cloud.root.scale.setScalar(this.toolScale(cloud, 0.17))
     this.rain(dt, null)
@@ -1618,10 +1622,16 @@ export class BubbleBathWorld implements World3D {
         storySfx.pop()
       }
     }
+    // The glowing pool twinkles all round its rim, so it's plain where to tap.
+    if (this.stage === 'mirror' && !this.films.on && this.beat('mirror', 0.18)) {
+      const a = Math.random() * Math.PI * 2
+      this.bits.emit(MIRROR.x + Math.cos(a) * MIRROR.r, 0.06, MIRROR.z + Math.sin(a) * MIRROR.r * 0.7, 0, 0.9 + Math.random() * 0.6, 0, 0.9, 0.035, Math.random() < 0.5 ? 5 : 0)
+    }
     // The duck: drifts round a slow loop, bobbing; a tap makes it hop, spin and plop back with a splash.
     const dk = this.duck
-    dk.root.position.x = DUCK_AT.x + Math.sin(t * 0.23) * 0.1
-    dk.root.position.z = DUCK_AT.z + Math.sin(t * 0.31 + 1) * 0.06
+    const home = this.tall ? DUCK_TALL : DUCK_WIDE
+    dk.root.position.x = home.x + Math.sin(t * 0.23) * 0.1
+    dk.root.position.z = home.z + Math.sin(t * 0.31 + 1) * 0.06
     let hy = 0
     if (dk.hop >= 0) {
       dk.hop += dt / 0.55
@@ -1635,7 +1645,7 @@ export class BubbleBathWorld implements World3D {
         riverSfx.splash()
       }
     }
-    dk.root.position.y = DUCK_AT.y + Math.sin(t * 2.2) * 0.008 + hy
+    dk.root.position.y = home.y + Math.sin(t * 2.2) * 0.008 + hy
     dk.root.rotation.y = -0.6 + Math.cos(t * 0.23) * 0.5 + dk.spin
     dk.body.rotation.z = Math.sin(t * 1.7) * 0.06
     if (dk.poke >= 0) {
@@ -1691,7 +1701,7 @@ export class BubbleBathWorld implements World3D {
    *  to do. */
   private hint(dt: number) {
     const el = this.hintEl
-    const stuck = this.idle > HINT_S && !this.rubbing && !this.films.on && this.stage !== 'story' && this.stage !== 'done' && !this.act
+    const stuck = this.idle > (this.stage === 'mirror' || this.stage === 'sweater' ? 3 : HINT_S) && !this.rubbing && !this.films.on && this.stage !== 'story' && this.stage !== 'done' && !this.act
     if (this.stage === 'sponge' || this.stage === 'rain') {
       this.sparkleT -= dt
       if (stuck && this.sparkleT <= 0) {

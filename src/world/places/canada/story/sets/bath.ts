@@ -215,7 +215,7 @@ function flowers(x: number, z: number, n: number, y = 0, seed = 1) {
 }
 
 /** A sunny rainforest morning: a pastel sky, warm light, a soft haze far off (the films' stage and the game's sky). */
-export const RIVER_LOOK: SetLook = { sky: ['#94CEF2', '#BEE3F5', '#E6F4EE'], fog: ['#DEEFE6', 20, 85], light: [1.14, 1.12], tint: '#FFF6E8', clouds: false }
+export const RIVER_LOOK: SetLook = { sky: ['#94CEF2', '#BEE3F5', '#E6F4EE'], fog: ['#DEEFE6', 20, 85], light: [1.14, 1.12], tint: '#FFFBF6', clouds: false }
 
 /** Builds the river in `root`: everything the films and the game see. */
 export function buildRiver(bag: Bag, root: Group): RiverSet {

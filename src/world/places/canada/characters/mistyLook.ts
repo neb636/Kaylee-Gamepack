@@ -17,7 +17,6 @@
 import { Color, DynamicDrawUsage, Euler, Group, IcosahedronGeometry, InstancedMesh, Matrix4, Mesh, Object3D, Quaternion, Vector3, type BufferAttribute, type BufferGeometry } from 'three'
 import type { FilmActor } from '../../../engine3d/characters/actor'
 import type { Bag } from '../../../engine3d/dispose'
-import { smoothstep } from '../../../../sdk/math'
 import { P, solidMix, type V3 } from '../../../engine3d/geo'
 import { hullGeometry, instancedOutlineMaterial } from '../../../engine3d/outline'
 import { toon } from '../../../engine3d/toon'
@@ -29,9 +28,8 @@ const CROWN_LIFT: Record<HairStyle, number> = { fluff: 0.2, spikes: 0, bangs: 0.
 const TOPKNOT: Record<HairStyle, number> = { fluff: 0.4, spikes: 0.34, bangs: 0.36, swoop: 0.32 }
 /** River mud, and the moss in it. */
 export const MUD = '#8A5E43'
-/** The mud on her fur goes from a dry tan to a wet dark brown in blotches; the dollops on her are darker still. */
-const MUD_LIGHT = new Color('#C9A584')
-const MUD_DARK = new Color('#7A4C30')
+/** The muddy-tan coat on her fur; the dollops on her are chocolate. */
+const MUD_LIGHT = new Color('#BE9673')
 const MUD_SHADES = ['#6E4B35', '#76513A', '#694530', '#7A563D']
 const MOSS = '#6FA35A'
 const INK = '#2E2233'
@@ -57,8 +55,6 @@ interface PartMesh {
   /** 1 fur, 2 the cream muzzle/chest, 3 a dark paw. */
   kind: Uint8Array
   mud: Float32Array
-  /** How dark the mud is at each vertex (0 dry tan .. 1 wet brown). */
-  shade: Float32Array
   dirty: boolean
   /** The mud dollops and the fluff on this part. */
   blobs: Dot[]
@@ -91,7 +87,6 @@ export interface ZoneState {
 
 const ZONE_INDEX = Object.fromEntries(MISTY_ZONES.map((z, i) => [z, i])) as Record<MistyZone, number>
 const BERRY_COLORS = Object.fromEntries(Object.entries(BERRIES).map(([k, v]) => [k, new Color(v)])) as Record<Berry, Color>
-const mudC = new Color()
 const tmpC = new Color()
 const tmpV = new Vector3()
 const Y = new Vector3(0, 1, 0)
@@ -190,22 +185,7 @@ export class MistyCoat {
       kind[i] = k
       zone[i] = ZONE_INDEX[this.zoneAt(part, tmpV.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]), k)]
     }
-    // Blotches: a smooth wobble over her surface, so the mud is patchy (the same on every Misty).
-    const shade = new Float32Array(n)
-    const k = 9 / this.H
-    for (let i = 0; i < n; i++) {
-      const x = pos[i * 3] * k
-      const y = pos[i * 3 + 1] * k
-      const z = pos[i * 3 + 2] * k
-      const w = Math.sin(x * 1.7 + y * 0.9) + Math.sin(y * 2.3 - z * 1.3 + 1.7) + Math.sin(z * 1.9 + x * 1.1 + 4.1)
-      // (Wading: the mud is thickest low down on her legs and tummy, and thins out going up.)
-      const low = part === 'body' ? 1 - smoothstep(0.1 * this.H, 0.36 * this.H, pos[i * 3 + 1]) : 0
-      // (Her head only gets the dusting and the splats: a soft brown patch there reads as a bruise.)
-      shade[i] = part === 'head' ? 0.3 : Math.min(1, Math.max(0, 0.42 + w * 0.22 + low * 0.6))
-      // (Her face stays mostly clean round the eyes and the smile: a light dusting there, never a splat over her eyes.)
-      if (part === 'head' && pos[i * 3 + 2] > 0.35 * this.R && Math.abs(pos[i * 3]) < 0.62 * this.R && Math.abs(pos[i * 3 + 1] - this.headY) < 0.5 * this.R) shade[i] *= 0.35
-    }
-    return { part, pivot, mesh, geo, pos, nrm, base, zone, kind, shade, mud: new Float32Array(n), dirty: true, blobs: [], fluff: [], blobMesh: null, fluffMesh: null, fluffHull: null }
+    return { part, pivot, mesh, geo, pos, nrm, base, zone, kind, mud: new Float32Array(n), dirty: true, blobs: [], fluff: [], blobMesh: null, fluffMesh: null, fluffHull: null }
   }
 
   /** Which zone a point on a part is in (part-local meters). `kind` 2: the cream muzzle on the head. */
@@ -255,10 +235,11 @@ export class MistyCoat {
       const onFace = p.part === 'head' && v.z > 0.45 * R && Math.abs(v.x) < 0.55 * R && v.y < headY + 0.3 * R
       // (A clump here and there, not a spot on every patch: a third of the places get one, a few of them moss.)
       // (A splat here and there, each with a drop or two flicked off beside it: a few on her head, more on her body.)
-      if (!onFace && rnd() < (p.part === 'head' ? 0.13 : 0.17)) {
+      if (!onFace && rnd() < (p.part === 'head' ? 0.15 : 0.24)) {
         const s = (p.part === 'head' ? 0.15 * R : 0.036 * H) * (0.7 + rnd() * 0.7)
         const q = new Quaternion().setFromUnitVectors(new Vector3(0, 0, 1), nn).multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), rnd() * 6))
-        const moss = p.part !== 'head' && rnd() < 0.1
+        // (Moss only up on her body: a green clump at the waterline reads as a lily pad through her leg.)
+        const moss = p.part !== 'head' && v.y > 0.3 * H && rnd() < 0.1
         const color = new Color(moss ? MOSS : MUD_SHADES[Math.floor(rnd() * MUD_SHADES.length)])
         const at = v.clone().addScaledVector(nn, s * 0.06)
         p.blobs.push({ v: i, p: at, q, size: s, color, zone: z, k: 1 })
@@ -645,12 +626,11 @@ export class MistyCoat {
     if (s.color && s.k > 0) out.lerp(BERRY_COLORS[s.color], s.k * (p.kind[i] === 3 ? 0.7 : p.kind[i] === 2 ? 0.85 : 0.95))
     if (s.wet > 0) out.multiplyScalar(1 - 0.12 * s.wet)
     if (mud && p.mud[i] > 0) {
-      // A light dusty coat that her white shows through, a little thicker in soft patches; the round chocolate splats
-      // stuck on her (the dollops, placeDots) do the rest. So she reads as a white bear splattered with mud, not a grey
-      // or brown bear.
-      const blot = smoothstep(0.5, 0.95, p.shade[i])
-      const cover = p.kind[i] === 3 ? 0.3 : (p.kind[i] === 2 ? 0.2 : 0.28) + 0.62 * blot
-      out.lerp(mudC.copy(MUD_LIGHT).lerp(MUD_DARK, blot * 0.85), Math.min(1, p.mud[i] * 1.1) * cover)
+      // An even muddy-tan coat all over (no soft patches: on her round tummy those read as a smudge), and on top the
+      // round chocolate splats stuck on her (the dollops, placeDots). So she starts a tan, splattered bear and the wash
+      // turns her white.
+      const cover = p.kind[i] === 3 ? 0.3 : p.kind[i] === 2 ? 0.42 : 0.62
+      out.lerp(MUD_LIGHT, Math.min(1, p.mud[i] * 1.1) * cover)
     }
     return out
   }
