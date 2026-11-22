@@ -71,13 +71,14 @@ iPad's free space; `offline_save_failed` is the real "out of space" signal.
 
 Unfinished work can merge to main behind a PostHog feature flag, so the live site doesn't show it yet (`src/flags.ts`).
 
-- **Off by default.** A flag is on only when PostHog said so during this launch: off in builds without PostHog (PR
-  previews, local builds), off while offline, off until the flags have loaded and off if loading them failed. Her
+- **Off by default.** On the live site a flag is on only when PostHog said so during this launch: off while offline, off until the flags have loaded and off if loading them failed. Her
   iPad, often offline, never sees something half-built.
+- **On in previews.** Builds without PostHog (PR previews, local builds) show every flag as on, so a preview shows
+  the work it's for. Only the main deploy has PostHog.
 - **On for testers.** Each flag is released to the person property `tester = true`. Testers send no events, so a
   `?tester=1` browser sends `tester: true` with its flags request instead (`posthog.ts`, `setPersonPropertiesForFlags`).
 - **A place behind a flag:** `featureFlag` in its `meta.ts` keeps it off the world map and the game shelf until the
-  flag is on. Its links still work, and `?all=1` shows it anywhere (that's how PR previews and robots see it).
+  flag is on. Its links still work, and `?all=1` shows it anywhere.
 - **Adding one:** create it in PostHog (key in kebab case, one release condition: person `tester` exactly `true`,
   100%), add the key to `FLAGS`, check it with `useFlag()`. **Shipping it:** delete the check and the `FLAGS`
   entry, then delete the flag in PostHog.
