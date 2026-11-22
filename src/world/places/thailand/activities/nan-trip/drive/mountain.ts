@@ -87,20 +87,20 @@ const PAJERO_FEEL: Feel = { top: 9.5 * ZOOM, boost: 1.2, accel: 4 * ZOOM, coast:
  *  five setups (2026-10-27): quick and direct (6.5 m/s, 0.08 s), a wider dead middle and a bigger wheel to forgive
  *  her, a planted car (grip 13) and a faster road. */
 const STEER = knobs('driveSteer', 'Steering', 'src/world/places/thailand/activities/nan-trip/drive/mountain.ts', {
-  slide: { value: 6.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the car across the road' },
-  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
+  slide: { value: 6.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the car across the road', main: true },
+  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)', main: true },
   dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
   curve: { value: 1.3, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
   ease: { value: 0.08, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
   aim: { value: 10, min: 4, max: 24, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'the nearest point it steers toward: closer = sharper, but it swings back and forth' },
   pull: { value: 1.2, min: 0, max: 4, step: 0.1, label: 'Aim closer when far off', note: 'per meter she is from where she steers: a full push swerves more' },
-  turn: { value: 2.1, min: 0.5, max: 4, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast the Pajero can swing its nose' },
-  grip: { value: 13, min: 1, max: 15, step: 0.5, label: 'Grip', note: 'how quickly a sideways slide dies out (low = drifty)' },
-  top: { value: 23, min: 5, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Mom\'s foot on the straights' },
+  turn: { value: 2.1, min: 0.5, max: 4, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast the Pajero can swing its nose', main: true },
+  grip: { value: 13, min: 1, max: 15, step: 0.5, label: 'Grip', note: 'how quickly a sideways slide dies out (low = drifty)', main: true },
+  top: { value: 23, min: 5, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Mom\'s foot on the straights', main: true },
   back: { value: 1.2, min: 0.3, max: 4, step: 0.1, label: 'Back to her lane', unit: 's', note: 'how slowly Mom eases back after she lets go' },
   camera: { value: 0.3, min: 0, max: 1, step: 0.05, label: 'Camera follows the nose', note: '0 = the camera looks down the road; 1 = it turns with the car' },
   screech: { value: 9, min: 2, max: 15, step: 0.5, label: 'Squeal at a flick of', unit: '/s', note: 'how fast a yank must be to squeal the tyres' },
-})
+}, { sections: ['drive'] })
 /** A quick, hard flick of the wheel (faster than `STEER.screech`, with the push at least this far over): the tyres
  *  squeal, a puff of smoke off the back wheels, and the body rocks. No more than one squeal in this long (s). */
 const SCREECH_PUSH = 0.7

@@ -64,7 +64,10 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
   verb works and every section has a link. If playing says the toy isn't fun, change the toy, not the decoration.
 - **Feel numbers are knobs.** When a verb's feel hangs on numbers (steering, dragging, a hop), declare them with
   `knobs()` and put a `?feel=1` link on the review page (`docs/thailand-3d.md`, the feel lab). A "Copy for agent" note
-  from the user gets baked into the knobs' values.
+  from the user gets baked into the knobs' values. Only expose what the user can judge with a finger: tag each group
+  with the `sections` it applies to, mark the 3-6 knobs per scene that change the feel `main` (the rest fold under
+  "More"), make engine-wide groups `shared` and claimed, delete knobs nothing reads, and leave framing to the camera
+  lab. `scripts/check-knobs.mjs` checks the ids, files and sections.
 - **The fix lane.** The user asks for a fix or a tweak: one small PR whose review page shows a before-and-after clip
   (`reel` skill) and one line on what changed. No questions unless one is truly their call.
 - **Every PR has a review page** (`ship` skill): `review/review.json` → `node scripts/review.mjs` → publish → push.
