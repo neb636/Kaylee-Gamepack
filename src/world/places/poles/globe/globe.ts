@@ -34,22 +34,22 @@ import { DEG } from '../../../../sdk/math'
 const FILE = 'src/world/places/poles/globe/globe.ts'
 /** How the globe feels under her finger (live in the feel lab: ?feel=1 on the hub's links). */
 const SPIN = knobs('globe', 'Spin the globe', FILE, {
-  grip: { value: 1, min: 0.3, max: 2.5, step: 0.05, label: 'Grip', unit: '×', note: '1 = the spot under her finger stays under it; higher = the globe turns further than her finger' },
-  coast: { value: 1.4, min: 0.2, max: 5, step: 0.1, label: 'Coast', unit: 's', note: 'how long a flick sideways keeps it spinning' },
-  maxSpin: { value: 6, min: 1, max: 15, step: 0.5, label: 'Top flick speed', unit: 'rad/s', note: 'the fastest a flick can spin it' },
+  grip: { value: 1, min: 0.3, max: 2.5, step: 0.05, label: 'Grip', unit: '×', note: '1 = the spot under her finger stays under it; higher = the globe turns further than her finger', main: true },
+  coast: { value: 1.4, min: 0.2, max: 5, step: 0.1, label: 'Coast', unit: 's', note: 'how long a flick sideways keeps it spinning', main: true },
+  maxSpin: { value: 6, min: 1, max: 15, step: 0.5, label: 'Top flick speed', unit: 'rad/s', note: 'the fastest a flick can spin it', main: true },
   flick: { value: 0.06, min: 0, max: 0.3, step: 0.01, label: 'Flick smoothing', unit: 's', note: 'how much of her last moves count toward a flick (0 = only the very last)' },
   reach: { value: 0.25, min: 0, max: 0.8, step: 0.01, label: 'Flick reach', unit: 's', note: 'how far a flick up or down carries it when picking the pole it settles on' },
   poleView: { value: 28, min: 10, max: 70, step: 1, label: 'Pole view tilt', unit: '°', note: 'how far it tips to show a pole (90 = looking straight down on it)' },
-  settle: { value: 7, min: 1, max: 20, step: 0.5, label: 'Settle speed', unit: '/s', note: 'how quickly it settles on a pole or back to the middle after she lets go' },
+  settle: { value: 7, min: 1, max: 20, step: 0.5, label: 'Settle speed', unit: '/s', note: 'how quickly it settles on a pole or back to the middle after she lets go', main: true },
   stretch: { value: 0.3, min: 0, max: 1, step: 0.05, label: 'Past the pole', note: 'how far she can pull past straight down on a pole (a rubber band)' },
   idle: { value: 0.06, min: 0, max: 0.5, step: 0.01, label: 'Idle spin', unit: 'rad/s', note: 'the Earth turning by itself when nobody holds it' },
-})
+}, { activity: 'hub', sections: ['globe'] })
 /** How the sun feels. */
 const SUN = knobs('sun', 'Drag the sun', FILE, {
   tilt: { value: 23.4, min: 10, max: 45, step: 0.1, label: "Earth's tilt", unit: '°', note: 'how far up or down the sun goes (the real Earth: 23.4°)' },
-  follow: { value: 0.08, min: 0, max: 0.5, step: 0.01, label: 'Sun smoothing', unit: 's', note: 'how closely the sun follows her finger (0 = stuck to it)' },
-  season: { value: 1, min: 0.2, max: 4, step: 0.1, label: 'Season change', unit: 's', note: 'how long the ice, the snow and the night take to catch up with the sun' },
-})
+  follow: { value: 0.08, min: 0, max: 0.5, step: 0.01, label: 'Sun smoothing', unit: 's', note: 'how closely the sun follows her finger (0 = stuck to it)', main: true },
+  season: { value: 1, min: 0.2, max: 4, step: 0.1, label: 'Season change', unit: 's', note: 'how long the ice, the snow and the night take to catch up with the sun', main: true },
+}, { activity: 'hub', sections: ['sun'] })
 
 export type Side = 'middle' | 'north' | 'south'
 export interface GlobeStart {

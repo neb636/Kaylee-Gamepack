@@ -34,7 +34,7 @@ export const LAKE: FilmSet<LakeSet> = {
   look: { sky: ['#8CC8F7', '#C4E8FA', '#E6F5F2'], fog: [SKY, 160, 820], clouds: true },
   build(s, root) {
     const shore = buildShore(s.bag)
-    root.add(shore.land, shore.shallows, shore.flour, shore.logs, mirror(shore.land))
+    root.add(shore.land, shore.shallows, shore.flour, shore.logs, mirror(shore.land, s.bag))
     const water = new Water({ size: 1600, deep: LAKE_DULL[0], shallow: LAKE_DULL[1], haze: SKY, hazeNear: 130, hazeFar: 760, opacity: 0.62 }, s.bag)
     root.add(water.mesh)
     const canoe = new Canoe(s.bag)

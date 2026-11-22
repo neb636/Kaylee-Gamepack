@@ -56,21 +56,23 @@ import { beachBed } from '../sfx/common'
 import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/sandcastle/sandcastle.ts'
+/** The section its knobs show in (the feel lab). */
+const DIGGING = ['sandcastle']
 /** Her finger in the sand. */
 const DIG = knobs('sandDig', 'Digging the sand', FILE, {
-  radius: { value: 0.3, min: 0.12, max: 0.7, step: 0.01, label: 'Finger is this wide', unit: 'm', note: 'the radius of sand her finger moves' },
-  rate: { value: 1.5, min: 0.2, max: 5, step: 0.05, label: 'Digs down at', unit: 'm/s', note: 'how fast the sand goes down under her finger' },
+  radius: { value: 0.3, min: 0.12, max: 0.7, step: 0.01, label: 'Finger is this wide', unit: 'm', note: 'the radius of sand her finger moves', main: true },
+  rate: { value: 1.5, min: 0.2, max: 5, step: 0.05, label: 'Digs down at', unit: 'm/s', note: 'how fast the sand goes down under her finger', main: true },
   swipe: { value: 0.035, min: 0, max: 0.15, step: 0.005, label: 'A swipe digs', unit: 's', note: 'a quick swipe still digs each spot this long (higher = deeper trenches from fast fingers)' },
   deep: { value: 0.45, min: 0.1, max: 0.8, step: 0.01, label: 'Holes go down to', unit: 'm', note: 'the deepest a hole can get' },
   spread: { value: 1.55, min: 0.8, max: 3, step: 0.05, label: 'Dug sand lands', unit: '× wide', note: 'how far beside the trench the sand piles up' },
   keep: { value: 0.6, min: 0.2, max: 1.2, step: 0.05, label: 'Sand that piles up', unit: '×', note: 'how much of the dug sand makes the wall (the rest flies off)' },
-  pat: { value: 0.7, min: 0.1, max: 3, step: 0.05, label: 'Patting a wall up', unit: 'm/s', note: 'dragging along a pile raises it this fast' },
-  tall: { value: 0.42, min: 0.15, max: 1.2, step: 0.01, label: 'Walls up to', unit: 'm', note: 'the tallest a pile can get' },
+  pat: { value: 0.7, min: 0.1, max: 3, step: 0.05, label: 'Patting a wall up', unit: 'm/s', note: 'dragging along a pile raises it this fast', main: true },
+  tall: { value: 0.42, min: 0.15, max: 1.2, step: 0.01, label: 'Walls up to', unit: 'm', note: 'the tallest a pile can get', main: true },
   patFrom: { value: 0.07, min: 0.02, max: 0.3, step: 0.01, label: 'Pats from', unit: 'm', note: 'a finger starting on sand this much above the beach pats instead of digging' },
   dry: { value: 0.8, min: 0.2, max: 3, step: 0.05, label: 'Dry sand stands', unit: 'rise/run', note: 'the steepest dry sand stays (lower = it runs flatter)' },
   wet: { value: 2.6, min: 0.5, max: 6, step: 0.05, label: 'Wet sand stands', unit: 'rise/run', note: 'the steepest wet sand stays (dug sand is wet)' },
   kaylee: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: 'your unicorn sits from her finger', unit: 'm' },
-})
+}, { sections: DIGGING })
 /** The water and the tide. */
 const TIDE = knobs('sandTide', 'The tide and the water', FILE, {
   high: { value: 0.2, min: 0.05, max: 0.4, step: 0.01, label: 'High tide', unit: 'm', note: 'how far the sea rises in the tide round' },
@@ -81,16 +83,16 @@ const TIDE = knobs('sandTide', 'The tide and the water', FILE, {
   flow: { value: 4, min: 1, max: 12, step: 1, label: 'Water runs', unit: 'steps', note: 'flow steps a frame: more = the water rushes down the channel faster' },
   seep: { value: 0.003, min: 0, max: 0.05, step: 0.001, label: 'Sand soaks up', unit: 'm/s', note: 'how fast a pool cut off from the sea drains away' },
   filled: { value: 0.3, min: 0.05, max: 2, step: 0.05, label: 'Moat counts as filled at', unit: 'm²', note: 'water this big standing in the deep part of her moat = the moat filled' },
-  help: { value: 1.25, min: 0, max: 3, step: 0.05, label: 'A channel this close breaks through', unit: 'm', note: 'when the water stops this short of the moat, the sand between gives way by itself (0 = never)' },
+  help: { value: 1.25, min: 0, max: 3, step: 0.05, label: 'A channel this close breaks through', unit: 'm', note: 'when the water stops this short of the moat, the sand between gives way by itself (0 = never)', main: true },
   helpAfter: { value: 1.2, min: 0, max: 8, step: 0.1, label: '…after her finger is up for', unit: 's' },
-})
+}, { sections: DIGGING })
 /** How the rounds move on, the towers, burying Dad. */
 const PLAY = knobs('sandPlay', 'Rounds, towers and Dad', FILE, {
   dig: { value: 30, min: 5, max: 120, step: 1, label: 'Digging before the moulds', unit: 's', note: 'seconds of digging, then the moulds arrive (a moat dug all round is sooner)' },
   ring: { value: 0.85, min: 0.3, max: 1, step: 0.05, label: 'A moat is done at', unit: '× round', note: 'how much of the way round the castle she must dig for the moat to count' },
   towers: { value: 6, min: 1, max: 12, step: 1, label: 'Towers before the tide', note: 'the tide comes in after this many towers' },
   towersFor: { value: 150, min: 20, max: 300, step: 5, label: '…or after', unit: 's' },
-  fill: { value: 0.08, min: 0.005, max: 0.3, step: 0.005, label: 'Sand to fill the first bucket', unit: 'm³', note: 'the sand she digs beside a mould flies into it; full, a tap flips it' },
+  fill: { value: 0.08, min: 0.005, max: 0.3, step: 0.005, label: 'Sand to fill the first bucket', unit: 'm³', note: 'the sand she digs beside a mould flies into it; full, a tap flips it', main: true },
   fillMore: { value: 0.5, min: 0, max: 2, step: 0.05, label: '…more each tower', unit: '×', note: 'each next tower this round needs this much more sand (it gets harder)' },
   fillNear: { value: 1.2, min: 0.5, max: 4, step: 0.1, label: 'Digging this near a mould fills it', unit: 'm' },
   sink: { value: 0.12, min: 0.04, max: 0.4, step: 0.01, label: 'A tower slumps when dug under', unit: 'm' },
@@ -99,7 +101,7 @@ const PLAY = knobs('sandPlay', 'Rounds, towers and Dad', FILE, {
   crab: { value: 0.32, min: 0.1, max: 0.6, step: 0.01, label: 'A crab pops out at', unit: 'm deep' },
   pitch: { value: 44, min: 25, max: 75, step: 1, label: 'Camera looks down', unit: '°', note: 'steeper shows more sand, lower shows more of your unicorn and the sea' },
   tallPitch: { value: 12, min: 0, max: 30, step: 1, label: '…more on a tall screen', unit: '°' },
-})
+}, { sections: DIGGING })
 
 /** The rounds she plays, and the two films round them: `story` (the way in, then the digging) and `found` (the moat
  *  is full: Sandy moves in, then the island). */

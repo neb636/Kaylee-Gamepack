@@ -45,16 +45,18 @@ import { boatSfx as S, seaBed } from './sounds'
 import { TO_DEG } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/speedboat/speedboat.ts'
+/** The section its knobs show in (the feel lab). */
+const ON_THE_BOAT = ['speedboat']
 const BOAT = knobs('sametBoat', 'The speedboat ride', FILE, {
-  top: { value: 17, min: 4, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s' },
+  top: { value: 17, min: 4, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', main: true },
   accel: { value: 2.8, min: 0.4, max: 6, step: 0.1, label: 'Speeds up', unit: 'm/s²' },
   brake: { value: 2.4, min: 0.3, max: 6, step: 0.05, label: 'Slows in to the pier', unit: 'm/s²' },
-  waves: { value: 0.38, min: 0, max: 1.2, step: 0.02, label: 'Waves out at sea', unit: 'm' },
+  waves: { value: 0.38, min: 0, max: 1.2, step: 0.02, label: 'Waves out at sea', unit: 'm', main: true },
   bump: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'A wake bumps it up', unit: 'm/s' },
   plane: { value: 0.07, min: 0, max: 0.25, step: 0.01, label: 'Bow lifts at speed', unit: 'rad' },
   skip: { value: 1.5, min: 0, max: 10, step: 0.5, label: 'Skip button after', unit: 's' },
-  fish: { value: 1.1, min: 0.4, max: 6, step: 0.1, label: 'A flying fish every', unit: 's', note: 'out on the open sea, beside the boat: something to tap (it flips)' },
-})
+  fish: { value: 1.1, min: 0.4, max: 6, step: 0.1, label: 'A flying fish every', unit: 's', note: 'out on the open sea, beside the boat: something to tap (it flips)', main: true },
+}, { sections: ON_THE_BOAT })
 const CAM = knobs('sametBoatCam', 'The speedboat camera (on the pier)', FILE, {
   pitch: { value: 15, min: 5, max: 60, step: 1, label: 'Looks down', unit: '°' },
   tallPitch: { value: 13, min: 5, max: 70, step: 1, label: 'Looks down (portrait)', unit: '°' },
@@ -62,13 +64,13 @@ const CAM = knobs('sametBoatCam', 'The speedboat camera (on the pier)', FILE, {
   ahead: { value: 3.5, min: 0, max: 20, step: 0.5, label: 'Looks ahead', unit: 'm' },
   side: { value: 16, min: -60, max: 60, step: 1, label: 'From the side', unit: '°', note: 'how far round from behind the boat (her side of it)' },
   far: { value: 110, min: 60, max: 400, step: 10, label: 'Draws plants out to', unit: 'm', note: 'further trees are left to the haze (fewer draw calls on the iPad)' },
-})
+}, { sections: ON_THE_BOAT })
 const CINE = knobs('sametBoatCine', 'The speedboat cutscene', FILE, {
   open: { value: 4, min: 2, max: 10, step: 0.25, label: 'Leaving Ban Phe', unit: 's', note: 'from the motors starting' },
   ferry: { value: 4, min: 2, max: 10, step: 0.25, label: 'The ferry goes by', unit: 's' },
   sea: { value: 3, min: 1.5, max: 10, step: 0.25, label: 'The open sea', unit: 's' },
   arrive: { value: 24, min: 10, max: 120, step: 1, label: 'Slowing in from', unit: 'm', note: 'how far from Na Dan pier the last shot starts (it runs until they tie up)' },
-})
+}, { sections: ON_THE_BOAT })
 
 /** The cutscene's shots, in the boat's frame: x to its right, y up from the water, z toward the bow (the boat is
  *  7.2 m, stern at -3.3; Kaylee sits on the side bench at about x 0.8, z -0.4). SCENES picks them, in order. */

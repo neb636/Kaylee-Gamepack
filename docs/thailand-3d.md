@@ -71,6 +71,22 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   in the first playable (the code's `value`s are the defaults; read them every frame, never copy them into a const),
   watch the input and the result, and put a `?feel=1` link in the review page's links. When the user sends a "Copy for agent" note, bake the
   changed numbers into the knobs' `value`s and leave the knobs in.
+  **Only what's useful in this scene.** The lab once showed every group the country had loaded (the bike came with the
+  canoe's, the hockey's and the Roblox controls the bike never uses) and it was too much to face (2026-11-22). Now it
+  shows only the scene on screen's, and its scene picker (Game and Section, like the camera lab's) jumps to any other,
+  keeping what you changed. So when you add knobs:
+  - **Scope them.** A group belongs to the activity whose folder it's in (or `{ activity }`); give it
+    `{ sections: [...] }` for where it applies (the bike's while she rides, not in the story or the gondola). An
+    engine-wide group is `{ shared: true }` and shows only while a running scene `feelLab.claim()`s it (View3D claims
+    Roblox controls while the world roams).
+  - **Mark the main few.** `main: true` on the 3-6 knobs per scene the user would notice with a finger (speed, turn,
+    grip, power, jump height, how big the help is). Smoothing internals, dead zones, camera timings, look and story
+    timings stay unmarked and fold under "More". A knob you'd never ask the user to touch doesn't belong on the panel:
+    fold it, or keep it a constant.
+  - **No framing knobs.** Where the camera looks is the camera lab's (`?cam=1`).
+  - **Delete what nothing reads.** Ids are unique app-wide (the lab keys values by id). `scripts/check-knobs.mjs`
+    (in `npm run verify`) checks ids, files, sections and at most six `main` per group, and the README's feel lab list is
+    generated from the groups (`scripts/sections-readme.mjs`), so a removed game drops off by itself.
 - **Gotchas:** never name a shader variable `patch` or `sample` (reserved in WebGL2; the shader silently fails). Dispose
   what you create (`engine3d/dispose.ts`). Keep three.js out of `meta.ts` and `sections.ts`.
 - **The user decides the family:** who each person is, which animal, who comes on a trip. Ask, don't invent family facts.

@@ -57,30 +57,32 @@ import { whaleSfx } from './sounds'
 import { GreyWhale, Humpback, noteMesh, Orca, type Whale } from './whale'
 
 const FILE = 'src/world/places/canada/activities/whales/watch.ts'
+/** Where she watches the whales: the sections these knobs tune. */
+const WATCHING = ['grey', 'humpback', 'orcas']
 /** The play: the feel lab's sliders (?feel=1). */
 const PLAY = knobs('whales', 'Whale Peek-a-Boo', FILE, {
-  holdFull: { value: 2.2, min: 0.6, max: 5, step: 0.1, label: 'Hold for the biggest jump', unit: 's', note: 'how long she holds the humpback down for its biggest jump (and the ride)' },
-  easier: { value: 0.4, min: 0, max: 1.5, step: 0.05, label: 'Easier after each jump', unit: 's', note: 'the biggest jump needs this much less holding after every jump' },
+  holdFull: { value: 2.2, min: 0.6, max: 5, step: 0.1, label: 'Hold for the biggest jump', unit: 's', note: 'how long she holds the humpback down for its biggest jump (and the ride)', main: true },
+  easier: { value: 0.4, min: 0, max: 1.5, step: 0.05, label: 'Easier after each jump', unit: 's', note: 'the biggest jump needs this much less holding after every jump', main: true },
   grow: { value: 0.22, min: 0, max: 0.6, step: 0.02, label: 'Taps grow too', note: 'each jump after the first is this much bigger anyway (0..1 of the biggest), so taps alone reach the ride' },
-  height: { value: 1, min: 0.3, max: 2, step: 0.05, label: 'Jump height', unit: '×', note: 'how high the humpback jumps for the same hold' },
+  height: { value: 1, min: 0.3, max: 2, step: 0.05, label: 'Jump height', unit: '×', note: 'how high the humpback jumps for the same hold', main: true },
   wave: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Wave size', unit: '×', note: 'how hard the jump\'s wave rocks the boat' },
-  pop1: { value: 1.5, min: 0.5, max: 5, step: 0.1, label: 'Baby\'s first pop', unit: 's', note: 'how long the baby orca stays up the first time' },
-  pop2: { value: 3, min: 1, max: 8, step: 0.1, label: 'Baby\'s second pop', unit: 's', note: 'the second time (the third stays until she taps it)' },
+  pop1: { value: 1.5, min: 0.5, max: 5, step: 0.1, label: 'Baby\'s first pop', unit: 's', note: 'how long the baby orca stays up the first time', main: true },
+  pop2: { value: 3, min: 1, max: 8, step: 0.1, label: 'Baby\'s second pop', unit: 's', note: 'the second time (the third stays until she taps it)', main: true },
   boop: { value: 16, min: 6, max: 40, step: 1, label: 'Baby helps after', unit: 's', note: 'the last pop left alone this long: the baby swims to the boat and boops it' },
   near: { value: 4.75, min: 3.5, max: 12, step: 0.25, label: 'Bubbles from', unit: 'm', note: 'the nearest the bubbles come up to the boat' },
   far: { value: 5.75, min: 4, max: 16, step: 0.25, label: 'Bubbles up to', unit: 'm', note: 'the furthest' },
   come: { value: 6, min: 2, max: 20, step: 0.5, label: 'Whale comes by itself', unit: 's', note: 'bubbles left alone this long: the whale comes up anyway' },
-})
+}, { sections: WATCHING })
 /** The boat on the drive control (her finger holds the water where it should go). */
 const HELM = knobs('whaleHelm', 'The little boat', FILE, {
-  top: { value: 5, min: 2, max: 12, step: 0.25, label: 'Top speed', unit: 'm/s', note: 'with her finger far ahead' },
+  top: { value: 5, min: 2, max: 12, step: 0.25, label: 'Top speed', unit: 'm/s', note: 'with her finger far ahead', main: true },
   accel: { value: 3.5, min: 1, max: 12, step: 0.25, label: 'Speeding up', unit: 'm/s²' },
   coast: { value: 0.6, min: 0.05, max: 2, step: 0.05, label: 'Coasting drag', unit: '/s', note: 'how fast it slows when she lets go' },
   turn: { value: 1.4, min: 0.4, max: 3, step: 0.05, label: 'Turn rate', unit: 'rad/s' },
   grip: { value: 2.4, min: 0.5, max: 10, step: 0.1, label: 'Grip' },
   near: { value: 2.5, min: 1, max: 8, step: 0.25, label: 'Crawl when this close', unit: 'm' },
   far: { value: 14, min: 6, max: 40, step: 0.5, label: 'Full speed from', unit: 'm' },
-})
+}, { sections: WATCHING })
 
 export interface WhaleStart {
   section: WhaleSection
@@ -481,6 +483,7 @@ export class WhaleWatch implements World3D {
     ] as const) {
       const ang = yaw + Math.PI + a + Math.sin(a * 3) * 0.35
       o.root.position.set(this.d.x + Math.sin(ang) * r, 0, this.d.z + Math.cos(ang) * r)
+      keepOff(o.root.position, o.len * 0.5 + 0.6)
       o.root.rotation.y = ang + Math.PI / 2
       o.surfaceNow()
     }
@@ -844,6 +847,7 @@ export class WhaleWatch implements World3D {
     const rz = -Math.sin(yaw)
     const out = (bp.x - this.d.x) * rx + (bp.z - this.d.z) * rz >= 0 ? 1 : -1
     g.root.position.set(bp.x + rx * out * 3.4 - Math.sin(yaw) * 1.6, 0, bp.z + rz * out * 3.4 - Math.cos(yaw) * 1.6)
+    keepOff(g.root.position, g.len * 0.5 + 0.6)
     g.root.rotation.y = Math.atan2(bp.x - g.root.position.x, bp.z - g.root.position.z)
     g.pop()
     whaleSfx.peek()
@@ -1547,13 +1551,17 @@ export class WhaleWatch implements World3D {
     ] as const) {
       if (!o.visible || o.doing('pop') || o.doing('drop') || this.phase === 'finale') continue
       const a = yaw + Math.PI + a0 + Math.sin(this.orcaSwim * 0.16 + a0 * 3) * 0.35
-      const tx = d.x + Math.sin(a) * r
-      const tz = d.z + Math.cos(a) * r
+      // (Round the rocks, never through them: the spot it swims for is kept off every island, and so is the orca
+      // itself, nose to tail, so near the sea lions' rock it slides round the edge instead of into the stone.)
+      const pad = o.len * 0.5 + 0.6
+      const to = { x: d.x + Math.sin(a) * r, z: d.z + Math.cos(a) * r }
+      keepOff(to, pad)
       const p = o.root.position
-      const dx = tx - p.x
-      const dz = tz - p.z
+      const dx = to.x - p.x
+      const dz = to.z - p.z
       p.x += dx * damp(dt, 0.8)
       p.z += dz * damp(dt, 0.8)
+      keepOff(p, pad)
       if (Math.hypot(dx, dz) > 0.05) o.root.rotation.y += wrapAngle(Math.atan2(dx, dz) - o.root.rotation.y) * damp(dt, 2)
       // (A short bushy puff, not a tall plume: from out here a tall thin one reads as a trail of dots in the sky.)
       if (Math.random() < dt * 0.3) this.spout(o.body.localToWorld(o.hull.at(0.85, 0, 0, tA)), 0.5, false, 0.05, 3.4)

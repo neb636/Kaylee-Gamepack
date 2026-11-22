@@ -65,53 +65,55 @@ import { beachChair, cap, chairStack, pandanus, shieldUmbrella, thinPalm, towel 
 import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/hideseek/hideseek.ts'
+/** The section its knobs show in (the feel lab). */
+const HIDING = ['hideseek']
 /** Leading Kaylee round the beach. */
 const WALK = knobs('hideWalk', 'Leading your unicorn round Ao Prao', FILE, {
-  trot: { value: 2.0, min: 0.8, max: 5, step: 0.1, label: 'Trot', unit: 'm/s', note: 'her finger a little way ahead' },
-  gallop: { value: 4.0, min: 2, max: 9, step: 0.1, label: 'Gallop', unit: 'm/s', note: 'her finger far ahead' },
+  trot: { value: 2.0, min: 0.8, max: 5, step: 0.1, label: 'Trot', unit: 'm/s', note: 'her finger a little way ahead', main: true },
+  gallop: { value: 4.0, min: 2, max: 9, step: 0.1, label: 'Gallop', unit: 'm/s', note: 'her finger far ahead', main: true },
   gallopFrom: { value: 5, min: 2, max: 14, step: 0.25, label: 'Gallop from', unit: 'm', note: 'her finger this far ahead = full gallop' },
   stopNear: { value: 0.45, min: 0.1, max: 2, step: 0.05, label: 'Stop this close', unit: 'm' },
-})
+}, { sections: HIDING })
 /** Finding Dad (rounds 1 and 2). */
 const SEEK = knobs('hideSeek', 'Finding Dad', FILE, {
   count: { value: 3, min: 1, max: 10, step: 1, label: 'She counts to' },
   gap: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: '…a number every', unit: 's' },
-  near: { value: 3.4, min: 1, max: 8, step: 0.1, label: 'His place wiggles within', unit: 'm', note: 'your unicorn this close to where Dad hides: it wiggles and giggles' },
+  near: { value: 3.4, min: 1, max: 8, step: 0.1, label: 'His place wiggles within', unit: 'm', note: 'your unicorn this close to where Dad hides: it wiggles and giggles', main: true },
   wiggle: { value: 1.5, min: 0.4, max: 5, step: 0.1, label: '…every', unit: 's' },
-  find: { value: 1.25, min: 0.5, max: 3, step: 0.05, label: 'Walking up finds him at', unit: 'm', note: 'she finds him by walking this close, without a tap' },
+  find: { value: 1.25, min: 0.5, max: 3, step: 0.05, label: 'Walking up finds him at', unit: 'm', note: 'she finds him by walking this close, without a tap', main: true },
   giveaway: { value: 8, min: 3, max: 30, step: 0.5, label: 'Help 1: he peeks out after', unit: 's', note: 'stuck this long: a rustle, he pops his head up (a giggle, a splash), then a little rustle now and then' },
   glow: { value: 16, min: 5, max: 60, step: 1, label: 'Help 2: his place glows after', unit: 's', note: 'a big sneeze, and the finger points at it' },
   popOut: { value: 26, min: 8, max: 90, step: 1, label: 'Help 3: he pops out after', unit: 's', note: 'he jumps out and waves ("Here I am!"): a tap on him finds him' },
   runOver: { value: 6, min: 2, max: 30, step: 0.5, label: '…then runs to her after', unit: 's', note: 'still not found: he runs over ("Peekaboo!") and it counts' },
   busyHelp: { value: 0.5, min: 0, max: 1, step: 0.05, label: 'Help clock while she wanders', unit: '×', note: 'the help clock runs this fast while she leads your unicorn about (1 when she stops)' },
   hop: { value: 0.55, min: 0.2, max: 1.5, step: 0.05, label: 'He jumps out in', unit: 's' },
-})
+}, { sections: HIDING })
 /** Her turn to hide (round hide). */
 const DAD = knobs('hideDad', "your unicorn hides, Dad seeks", FILE, {
   count: { value: 5, min: 2, max: 12, step: 1, label: 'Dad counts to' },
   gap: { value: 1.0, min: 0.4, max: 2, step: 0.05, label: '…a number every', unit: 's' },
-  hideR: { value: 1.4, min: 0.6, max: 3, step: 0.05, label: 'A hiding place counts within', unit: 'm' },
+  hideR: { value: 1.4, min: 0.6, max: 3, step: 0.05, label: 'A hiding place counts within', unit: 'm', main: true },
   walk: { value: 2.8, min: 0.6, max: 5, step: 0.1, label: 'He searches at', unit: 'm/s' },
   looks: { value: 3, min: 1, max: 6, step: 1, label: 'Wrong places before he gives up' },
   look: { value: 1.4, min: 0.6, max: 4, step: 0.1, label: '…looking at each for', unit: 's' },
   sees: { value: 2.6, min: 0.5, max: 6, step: 0.1, label: 'He spots her out of hiding within', unit: 'm', note: 'only while he searches, and never twice in a row' },
-})
+}, { sections: HIDING })
 const CAM = knobs('hideCam', 'The beach camera', FILE, {
   pitch: { value: 36, min: 15, max: 70, step: 1, label: 'Looks down', unit: '°' },
   box: { value: 6.2, min: 3, max: 14, step: 0.1, label: 'Shows round her', unit: 'm', note: 'half the width of beach across the screen' },
   tallBox: { value: 4.4, min: 2, max: 12, step: 0.1, label: '…on a tall screen', unit: 'm' },
   pull: { value: 0.35, min: 0, max: 1, step: 0.05, label: 'Leans to the beach’s middle', note: '0 = right on her, 1 = the middle of the beach' },
   margin: { value: 1.5, min: 0, max: 5, step: 0.1, label: 'While she seeks, room round the hiding places', unit: 'm', note: 'the camera keeps her and every hiding place of the round on screen' },
-})
+}, { sections: HIDING })
 
 /** Peekaboo, the green firefly, in play. */
 const PEEKA = knobs('hidePeekaboo', 'Peekaboo, the green firefly', FILE, {
-  size: { value: 2.6, min: 0.8, max: 5, step: 0.1, label: 'Her size in play', unit: '×', note: '1 = a 30 cm glow; the beach camera is a long way off' },
+  size: { value: 2.6, min: 0.8, max: 5, step: 0.1, label: 'Her size in play', unit: '×', note: '1 = a 30 cm glow; the beach camera is a long way off', main: true },
   tiny: { value: 0.16, min: 0.04, max: 0.6, step: 0.01, label: 'Her tiny glow in a hiding place', note: '1 = as bright as out in the open' },
   first: { value: 3.5, min: 0.5, max: 15, step: 0.5, label: 'She first peeks out of Dad’s place after', unit: 's' },
   every: { value: 4.5, min: 1.5, max: 15, step: 0.5, label: '…then every', unit: 's' },
   out: { value: 1.3, min: 0.4, max: 4, step: 0.1, label: '…staying out for', unit: 's', note: 'from help 1 on she stays out, twinkling over him' },
-})
+}, { sections: HIDING })
 
 /** The rounds she plays. */
 export type HidePlayRound = '1' | '2' | 'hide'

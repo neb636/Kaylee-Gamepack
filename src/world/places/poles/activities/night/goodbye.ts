@@ -34,13 +34,13 @@ import { flySfx } from './sounds'
 const FILE = 'src/world/places/poles/activities/night/goodbye.ts'
 /** The goodbye flight's feel, in the toy globe's units (it is 1 round). */
 const FLY = knobs('goodbyeFly', 'Goodbye: fly Pola home', FILE, {
-  lift: { value: 0.11, min: 0.02, max: 0.4, step: 0.005, label: 'Rise', unit: '/s', note: 'how fast the balloon climbs while she holds' },
-  sink: { value: 0.05, min: 0.01, max: 0.2, step: 0.005, label: 'Sink', unit: '/s' },
-  pink: { value: 5.5, min: 1, max: 20, step: 0.5, label: 'Pink wind (north)', unit: '°/s', note: 'how fast the high wind carries the balloon up the globe' },
+  lift: { value: 0.11, min: 0.02, max: 0.4, step: 0.005, label: 'Rise', unit: '/s', note: 'how fast the balloon climbs while she holds', main: true },
+  sink: { value: 0.05, min: 0.01, max: 0.2, step: 0.005, label: 'Sink', unit: '/s', main: true },
+  pink: { value: 5.5, min: 1, max: 20, step: 0.5, label: 'Pink wind (north)', unit: '°/s', note: 'how fast the high wind carries the balloon up the globe', main: true },
   crawl: { value: 1.6, min: 0.3, max: 6, step: 0.1, label: 'Slowest drift', unit: '°/s' },
   pinkLow: { value: 0.16, min: 0.08, max: 0.3, step: 0.005, label: 'Pink wind from', note: 'height over the globe' },
   pinkHigh: { value: 0.26, min: 0.12, max: 0.4, step: 0.005, label: 'Pink wind to' },
-})
+}, { sections: ['goodbye'] })
 
 export interface GoodbyeStart {
   visited: string[]

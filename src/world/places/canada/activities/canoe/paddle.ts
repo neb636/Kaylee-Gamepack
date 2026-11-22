@@ -44,28 +44,30 @@ import { buildClouds, buildShore, buildSky, creekDistance, goatSpot, mirror, pil
 import { TO_DEG, damp, wrapAngle } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/canoe/paddle.ts'
+/** Where she paddles: the sections these knobs tune. */
+const PADDLING = ['glide', 'stream', 'loon', 'glacier']
 /** Her finger on the water: where the canoe goes, and how fast (engine3d/drive.ts). */
 const HELM = knobs('canoe', 'Paddling to her finger', FILE, {
-  top: { value: 4.6, min: 1.5, max: 9, step: 0.1, label: 'Top speed', unit: 'm/s', note: 'cruising speed with her finger far ahead' },
-  accel: { value: 2.6, min: 0.5, max: 8, step: 0.1, label: 'Push per stroke', unit: 'm/s²', note: 'how hard each stroke pushes while the blade is in the water (the average is about two thirds of this)' },
+  top: { value: 4.6, min: 1.5, max: 9, step: 0.1, label: 'Top speed', unit: 'm/s', note: 'cruising speed with her finger far ahead', main: true },
+  accel: { value: 2.6, min: 0.5, max: 8, step: 0.1, label: 'Push per stroke', unit: 'm/s²', note: 'how hard each stroke pushes while the blade is in the water (the average is about two thirds of this)', main: true },
   glide: { value: 0.22, min: 0, max: 1.5, step: 0.01, label: 'Slows between strokes', unit: '/s', note: 'drag while the blade is out of the water: higher = a bigger surge and slow-down with each stroke' },
   coast: { value: 0.3, min: 0.05, max: 1.5, step: 0.01, label: 'Coasting drag', unit: '/s', note: 'how fast it slows down when she lets go (lower = glides further)' },
-  turn: { value: 0.95, min: 0.3, max: 2.5, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast it swings round at cruising speed (stopped, half as fast: it never spins on the spot)' },
-  grip: { value: 2.6, min: 0.5, max: 10, step: 0.1, label: 'Keel', unit: '/s', note: 'how quickly a sideways slide dies out (low = it skids round turns)' },
+  turn: { value: 0.95, min: 0.3, max: 2.5, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast it swings round at cruising speed (stopped, half as fast: it never spins on the spot)', main: true },
+  grip: { value: 2.6, min: 0.5, max: 10, step: 0.1, label: 'Keel', unit: '/s', note: 'how quickly a sideways slide dies out (low = it skids round turns)', main: true },
   near: { value: 2.6, min: 1, max: 8, step: 0.25, label: 'Crawl when this close', unit: 'm', note: 'her finger this close to the canoe = a slow paddle' },
-  far: { value: 16, min: 6, max: 40, step: 0.5, label: 'Full speed from', unit: 'm', note: 'her finger this far ahead = full speed and quick strokes' },
+  far: { value: 16, min: 6, max: 40, step: 0.5, label: 'Full speed from', unit: 'm', note: 'her finger this far ahead = full speed and quick strokes', main: true },
   dead: { value: 0.14, min: 0, max: 0.5, step: 0.01, label: 'Straight-ahead zone', unit: 'rad', note: 'a finger this close to straight ahead goes straight' },
   tap: { value: 8, min: 2, max: 20, step: 0.5, label: 'A tap goes', unit: 'm', note: 'a tap on the water sends the canoe this far toward it (or to the spot, if nearer)' },
   camera: { value: 0.4, min: 0, max: 1, step: 0.05, label: 'Camera turns with it', note: '0 = slow and steady, 1 = right behind the canoe all the time' },
-})
+}, { sections: PADDLING })
 /** Maple's strokes: the rhythm. */
 const STROKE = knobs('canoeStroke', 'Maple paddling', FILE, {
   slow: { value: 0.75, min: 0.3, max: 2, step: 0.05, label: 'Strokes a second, slow', note: 'her finger close to the canoe' },
-  fast: { value: 1.45, min: 0.5, max: 3, step: 0.05, label: 'Strokes a second, fast', note: 'her finger far ahead' },
+  fast: { value: 1.45, min: 0.5, max: 3, step: 0.05, label: 'Strokes a second, fast', note: 'her finger far ahead', main: true },
   catch: { value: 0.55, min: 0.3, max: 0.8, step: 0.01, label: 'Blade in the water', note: 'share of each stroke the blade pulls (the rest it swings forward through the air)' },
   side: { value: 0.22, min: 0, max: 1, step: 0.01, label: 'Paddles one side to turn at', unit: 'rad/s', note: 'turning faster than this, she paddles on the side that turns it; slower, she swaps sides every stroke' },
   dizzy: { value: 0.75, min: 0.3, max: 2.5, step: 0.05, label: 'Dizzy at', unit: 'rad/s', note: 'going round in circles faster than this for 4 s makes Maple dizzy (a silly reaction)' },
-})
+}, { sections: PADDLING })
 
 export interface CanoeStart {
   section: CanoeSection
@@ -298,11 +300,11 @@ export class RedCanoe implements World3D {
     // ---- The shore, its reflection under the see-through water, the water.
     this.shore = buildShore(bag)
     scene.add(buildSky(bag), this.shore.land, this.shore.shallows, this.shore.flour, this.shore.logs)
-    this.reflection = mirror(this.shore.land)
+    this.reflection = mirror(this.shore.land, bag)
     scene.add(this.reflection)
     // The clouds turn slowly round the sky, and so does their reflection.
     this.clouds = buildClouds(bag)
-    this.cloudsM = mirror(this.clouds)
+    this.cloudsM = mirror(this.clouds, bag)
     scene.add(this.clouds, this.cloudsM)
     this.water = new Water({ size: 1600, deep: DULL.deep, shallow: DULL.shallow, haze: SKY, hazeNear: 130, hazeFar: 760, opacity: 0.62 }, bag)
     scene.add(this.water.mesh)

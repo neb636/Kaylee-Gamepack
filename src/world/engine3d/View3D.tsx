@@ -12,7 +12,8 @@ import { camLab, type LabWorld } from './camLab'
 import { automated } from './flags'
 import { frameLoop } from './loop'
 import { acquireRenderer, dropRenderer, releaseRenderer, warmUp } from './renderer'
-import { ROAM, type Roamable } from './roam'
+import { ROAM, ROAM_ID, type Roamable } from './roam'
+import { feelLab } from '../kit/knobs'
 import { RoamPad, type RoamPadHandle } from './RoamPad'
 import { useTimers, type Timers } from '../../sdk'
 
@@ -183,6 +184,8 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     let nTimes = 0
     let slow = 0
     let stop = () => {}
+    // While she walks with the stick, the feel lab shows Roblox controls (a shared group only a roaming scene claims).
+    let unclaimRoam: (() => void) | null = null
     const begin = () => {
       if (started || gone) return
       started = true
@@ -194,7 +197,15 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
           else world.update(dt)
           world.render()
           world.placeAnchors()
-          pad.current?.show(world.roam?.() ?? null)
+          const roaming = world.roam?.() ?? null
+          pad.current?.show(roaming)
+          // (A map that only turns isn't walking: its turning is the board's, not Roblox's.)
+          const walking = !!roaming && (roaming.walk || roaming.jump)
+          if (walking && !unclaimRoam) unclaimRoam = feelLab.claim(ROAM_ID)
+          else if (!walking && unclaimRoam) {
+            unclaimRoam()
+            unclaimRoam = null
+          }
           // The last 120 frame times in a ring; fps and p95 worked out every 30 frames (sorting every frame was garbage).
           times[nTimes++ % 120] = dt * 1000
           if (nTimes % 30 === 0) {
@@ -441,6 +452,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
 
     return () => {
       stop()
+      unclaimRoam?.()
       camLab.detach(lab)
       if (window.__kaylee3d === qa3d) delete window.__kaylee3d
       ro.disconnect()
