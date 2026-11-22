@@ -13,7 +13,6 @@ const INK = '#2E2233'
 const MOSS = '#7DB563'
 const MOSS_DARK = '#5E9A4E'
 const BARK = '#9A5A44'
-const BARK_DARK = '#7A4434'
 
 export type ToolId = 'sponge' | 'cloud' | 'towel' | 'comb' | Berry
 /** What the log holds: a tool, or a decoration to put on her. */
@@ -77,8 +76,13 @@ export function makeTowel(bag: Bag): Prop {
   const g = new Group()
   g.add(
     solidMix(
-      [P.capsule(0.07, 0.15, '#C9B5F7', { rot: [0, 0, Math.PI / 2] }), P.cyl(0.04, 0.04, 0.01, '#B39CEB', { at: [0.148, 0, 0], rot: [0, 0, Math.PI / 2] }, 14)],
-      [P.cyl(0.072, 0.072, 0.025, '#FF9EC6', { at: [-0.05, 0, 0], rot: [0, 0, Math.PI / 2] }, 18), P.cyl(0.072, 0.072, 0.025, '#FF9EC6', { at: [0.05, 0, 0], rot: [0, 0, Math.PI / 2] }, 18)],
+      // A fluffy pink towel folded in three (each fold a soft slab, a little shorter than the one under it), with two
+      // white stripes across its end and a fringe.
+      [P.rbox(0.26, 0.05, 0.17, 0.024, '#FFA8CF', { at: [0, -0.04, 0] }), P.rbox(0.25, 0.05, 0.165, 0.024, '#FFB8D8', { at: [0.004, 0.004, 0] }), P.rbox(0.24, 0.05, 0.16, 0.024, '#FFC6E0', { at: [0.008, 0.048, 0] })],
+      [
+        ...[-0.07, -0.045].map((x) => P.box(0.012, 0.145, 0.172, '#FFFFFF', { at: [x, 0.004, 0] })),
+        ...Array.from({ length: 7 }, (_, i) => P.box(0.012, 0.012, 0.03, '#FFFFFF', { at: [0.132, -0.04 + (i % 2) * 0.01, -0.07 + i * 0.023] })),
+      ],
       bag,
       2.4,
     ),
@@ -143,7 +147,6 @@ export function makeLog(bag: Bag): Group {
     P.cyl(0.11, 0.11, 1, BARK, { rot: [0, 0, Math.PI / 2] }, 18),
     ...[-0.5, 0.5].map((x) => P.cyl(0.095, 0.095, 0.012, '#D9A77F', { at: [x, 0, 0], rot: [0, 0, Math.PI / 2] }, 18)),
     ...[-0.38, -0.12, 0.15, 0.4].map((x, i) => P.sphere(0.1, i % 2 ? MOSS : MOSS_DARK, { at: [x, 0.07, 0.01], scale: [1.5, 0.45, 1.05] }, 12)),
-    ...[-0.25, 0.28].map((x) => P.box(0.012, 0.16, 0.01, BARK_DARK, { at: [x, 0, 0.108] })),
   ]
   return solid(merge(parts), bag, 2.4)
 }
@@ -151,6 +154,37 @@ export function makeLog(bag: Bag): Group {
 /** The bar of pink soap, with its own bubble. */
 export function makeSoap(bag: Bag): Group {
   return solidMix([P.rbox(0.2, 0.08, 0.12, 0.035, '#FFB3D1')], [P.sphere(0.03, '#FFFFFF', { at: [0.05, 0.05, 0.02] }, 10), P.sphere(0.02, '#FFE3F0', { at: [0.0, 0.05, -0.02] }, 8), P.rbox(0.08, 0.008, 0.05, 0.004, '#FF8FB8', { at: [-0.03, 0.041, 0] })], bag, 2)
+}
+
+/** A pink rubber duck with a little gold unicorn horn, floating in the pool: round body, round head, an orange beak,
+ *  a wing bump each side, a pink tail flick. Head toward +x; it floats with its waterline at y 0. Its `body` group bobs
+ *  and squashes on a tap. */
+export function makeDuck(bag: Bag) {
+  const root = new Group()
+  const body = new Group()
+  const PINK = '#FF9CC8'
+  const PINK_DARK = '#F57FB3'
+  body.add(
+    solidMix(
+      [
+        P.sphere(0.11, PINK, { at: [0, 0.03, 0], scale: [1.25, 0.8, 1] }, 18),
+        P.sphere(0.075, PINK, { at: [0.08, 0.14, 0] }, 16),
+        P.cone(0.04, 0.09, PINK, { at: [-0.13, 0.08, 0], rot: [0, 0, 1.1] }, 10),
+        P.sphere(0.04, '#FFA64A', { at: [0.155, 0.125, 0], scale: [1.3, 0.55, 1] }, 12),
+        P.cone(0.016, 0.075, '#FFD86B', { at: [0.1, 0.245, 0], rot: [0, 0, -0.35] }, 8),
+      ],
+      [
+        ...[-1, 1].map((s) => P.sphere(0.05, PINK_DARK, { at: [-0.01, 0.06, s * 0.095], scale: [1.3, 0.75, 0.45] }, 12)),
+        ...[-1, 1].map((s) => P.sphere(0.013, INK, { at: [0.135, 0.16, s * 0.04] }, 8)),
+        ...[-1, 1].map((s) => P.sphere(0.005, '#FFFFFF', { at: [0.142, 0.166, s * 0.045] }, 6)),
+        ...[-1, 1].map((s) => P.sphere(0.012, '#FF6FA8', { at: [0.12, 0.125, s * 0.06], scale: [1, 0.6, 0.5] }, 6)),
+      ],
+      bag,
+      1.6,
+    ),
+  )
+  root.add(body)
+  return { root, body }
 }
 
 /** The flat mossy rock the soap sits on. */

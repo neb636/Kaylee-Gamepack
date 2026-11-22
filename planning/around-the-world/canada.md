@@ -138,6 +138,15 @@ fix is what the team needs.
   (`story/sets/bath.ts`). Her look (`looks.ts` `MistyLook`: zone colors, fluff, hairdo, decorations, the sweater's paw
   print) is saved and put on by `characters/mistyLook.ts` `dressMisty` in the films, on the map and in the big game.
   Sections `story`, `wash`, `fluff`, `colors`, `mirror`; `?look=` is sticky. Knobs `bath`.
+  Polish pass (2026-11-21, after the user's notes, research into Talking Tom / Pou / Nintendogs / Dr. Panda baths):
+  `suds.ts` is soft foam (a foam shader, lilac rim, no ink line; muddy tan over thick mud, whitening as she scrubs)
+  plus `Floaters`, rainbow soap bubbles that float up and pop under her finger (a tap or a swipe through). A pink
+  unicorn rubber duck (`props.ts` makeDuck) squeaks and hops; each patch the rain rinses clean rings `bath-ding` a
+  step higher. Misty's mud is a light dusting plus round splats with drops (no splats over her eyes); `plainChest` on
+  her look drops the sun bear's crescent. No silly faces in the bath: the user found Maple's "way overboard", so
+  Maple pulls `wow` after the shake and the mirror close-up keeps Misty's own happy face. The river set
+  (`story/sets/bath.ts` + `bathWater.ts`) is a shader waterfall that curls over its lip, a round pool with shore
+  stones, leg rings (`river.wade`, the game moves it with her), lily pads, flowers, sunbeams and a faint drizzle.
 - **Flashlight Statues** (`activities/campfire/`, 3D): the clearing is built from the film set
   (`story/sets/campfire.ts` `buildCamp`). `light.ts` (the beam), `shade.ts` (dark shapes with shining eyes),
   `roast.ts`, `sky.ts`. The night critters live in `characters/critters.ts` (shared with the bike), the statue poses in

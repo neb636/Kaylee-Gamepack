@@ -17,7 +17,6 @@
 import { Color, DynamicDrawUsage, Euler, Group, IcosahedronGeometry, InstancedMesh, Matrix4, Mesh, Object3D, Quaternion, Vector3, type BufferAttribute, type BufferGeometry } from 'three'
 import type { FilmActor } from '../../../engine3d/characters/actor'
 import type { Bag } from '../../../engine3d/dispose'
-import { smoothstep } from '../../../../sdk/math'
 import { P, solidMix, type V3 } from '../../../engine3d/geo'
 import { hullGeometry, instancedOutlineMaterial } from '../../../engine3d/outline'
 import { toon } from '../../../engine3d/toon'
@@ -29,9 +28,8 @@ const CROWN_LIFT: Record<HairStyle, number> = { fluff: 0.2, spikes: 0, bangs: 0.
 const TOPKNOT: Record<HairStyle, number> = { fluff: 0.4, spikes: 0.34, bangs: 0.36, swoop: 0.32 }
 /** River mud, and the moss in it. */
 export const MUD = '#8A5E43'
-/** The mud on her fur goes from a dry tan to a wet dark brown in blotches; the dollops on her are darker still. */
-const MUD_LIGHT = new Color('#B08A66')
-const MUD_DARK = new Color('#5E3D2A')
+/** The muddy-tan coat on her fur; the dollops on her are chocolate. */
+const MUD_LIGHT = new Color('#BE9673')
 const MUD_SHADES = ['#6E4B35', '#76513A', '#694530', '#7A563D']
 const MOSS = '#6FA35A'
 const INK = '#2E2233'
@@ -57,8 +55,6 @@ interface PartMesh {
   /** 1 fur, 2 the cream muzzle/chest, 3 a dark paw. */
   kind: Uint8Array
   mud: Float32Array
-  /** How dark the mud is at each vertex (0 dry tan .. 1 wet brown). */
-  shade: Float32Array
   dirty: boolean
   /** The mud dollops and the fluff on this part. */
   blobs: Dot[]
@@ -91,7 +87,6 @@ export interface ZoneState {
 
 const ZONE_INDEX = Object.fromEntries(MISTY_ZONES.map((z, i) => [z, i])) as Record<MistyZone, number>
 const BERRY_COLORS = Object.fromEntries(Object.entries(BERRIES).map(([k, v]) => [k, new Color(v)])) as Record<Berry, Color>
-const mudC = new Color()
 const tmpC = new Color()
 const tmpV = new Vector3()
 const Y = new Vector3(0, 1, 0)
@@ -190,17 +185,7 @@ export class MistyCoat {
       kind[i] = k
       zone[i] = ZONE_INDEX[this.zoneAt(part, tmpV.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]), k)]
     }
-    // Blotches: a smooth wobble over her surface, so the mud is patchy (the same on every Misty).
-    const shade = new Float32Array(n)
-    const k = 9 / this.H
-    for (let i = 0; i < n; i++) {
-      const x = pos[i * 3] * k
-      const y = pos[i * 3 + 1] * k
-      const z = pos[i * 3 + 2] * k
-      const w = Math.sin(x * 1.7 + y * 0.9) + Math.sin(y * 2.3 - z * 1.3 + 1.7) + Math.sin(z * 1.9 + x * 1.1 + 4.1)
-      shade[i] = Math.min(1, Math.max(0, 0.5 + w * 0.3))
-    }
-    return { part, pivot, mesh, geo, pos, nrm, base, zone, kind, shade, mud: new Float32Array(n), dirty: true, blobs: [], fluff: [], blobMesh: null, fluffMesh: null, fluffHull: null }
+    return { part, pivot, mesh, geo, pos, nrm, base, zone, kind, mud: new Float32Array(n), dirty: true, blobs: [], fluff: [], blobMesh: null, fluffMesh: null, fluffHull: null }
   }
 
   /** Which zone a point on a part is in (part-local meters). `kind` 2: the cream muzzle on the head. */
@@ -249,11 +234,38 @@ export class MistyCoat {
       // Mud everywhere she's muddy (not on the muzzle's middle, so her smile still shows).
       const onFace = p.part === 'head' && v.z > 0.45 * R && Math.abs(v.x) < 0.55 * R && v.y < headY + 0.3 * R
       // (A clump here and there, not a spot on every patch: a third of the places get one, a few of them moss.)
-      if (!onFace && rnd() < 0.12) {
-        const s = (p.part === 'head' ? 0.11 * R : 0.026 * H) * (0.8 + rnd() * 0.5)
+      // (A splat here and there, each with a drop or two flicked off beside it: a few on her head, more on her body.)
+      if (!onFace && rnd() < (p.part === 'head' ? 0.15 : 0.24)) {
+        const s = (p.part === 'head' ? 0.15 * R : 0.036 * H) * (0.7 + rnd() * 0.7)
         const q = new Quaternion().setFromUnitVectors(new Vector3(0, 0, 1), nn).multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), rnd() * 6))
-        const moss = rnd() < 0.12
-        p.blobs.push({ v: i, p: v.clone().addScaledVector(nn, s * 0.06), q, size: s, color: new Color(moss ? MOSS : MUD_SHADES[Math.floor(rnd() * MUD_SHADES.length)]), zone: z, k: 1 })
+        // (Moss only up on her body: a green clump at the waterline reads as a lily pad through her leg.)
+        const moss = p.part !== 'head' && v.y > 0.3 * H && rnd() < 0.1
+        const color = new Color(moss ? MOSS : MUD_SHADES[Math.floor(rnd() * MUD_SHADES.length)])
+        const at = v.clone().addScaledVector(nn, s * 0.06)
+        p.blobs.push({ v: i, p: at, q, size: s, color, zone: z, k: 1 })
+        if (!moss) {
+          const ta = new Vector3(1, 0, 0).applyQuaternion(q)
+          const tb = new Vector3(0, 1, 0).applyQuaternion(q)
+          const drops = 1 + Math.floor(rnd() * 2)
+          for (let d = 0; d < drops; d++) {
+            const a = rnd() * Math.PI * 2
+            const r = s * (1.35 + rnd() * 0.5)
+            const dp = at.clone().addScaledVector(ta, Math.cos(a) * r * 1.2).addScaledVector(tb, Math.sin(a) * r * 0.8)
+            // (Snapped onto her: the nearest fur vertex there, so no drop hangs off her outline in the air.)
+            let best = -1
+            let bd = Infinity
+            for (let j = 0; j < n; j++) {
+              if (p.kind[j] !== 1 && p.kind[j] !== 2) continue
+              const dd = (p.pos[j * 3] - dp.x) ** 2 + (p.pos[j * 3 + 1] - dp.y) ** 2 + (p.pos[j * 3 + 2] - dp.z) ** 2
+              if (dd < bd) ((bd = dd), (best = j))
+            }
+            if (best < 0) continue
+            const bn = new Vector3(p.nrm[best * 3], p.nrm[best * 3 + 1], p.nrm[best * 3 + 2]).normalize()
+            const ds = s * (0.22 + rnd() * 0.18)
+            const bq = new Quaternion().setFromUnitVectors(new Vector3(0, 0, 1), bn)
+            p.blobs.push({ v: best, p: new Vector3(p.pos[best * 3], p.pos[best * 3 + 1], p.pos[best * 3 + 2]).addScaledVector(bn, ds * 0.06), q: bq, size: ds, color, zone: p.zone[best], k: 1 })
+          }
+        }
       }
       // Fluff: never on her face, round the eyes or on the muzzle (the cheek tufts are her hairdo), nor under her chin
       // where the team's scarf sits.
@@ -369,6 +381,19 @@ export class MistyCoat {
       }
     }
     return n ? sum / n : 0
+  }
+  /** How muddy her fur is right at a point on a part (part-local meters): the nearest of its vertices. */
+  mudNear(part: CoatPart, local: Vector3) {
+    const p = this.parts.find((q) => q.part === part)
+    if (!p) return 0
+    let best = Infinity
+    let mud = 0
+    for (let i = 0; i < p.mud.length; i++) {
+      if (p.zone[i] < 0) continue
+      const d = (p.pos[i * 3] - local.x) ** 2 + (p.pos[i * 3 + 1] - local.y) ** 2 + (p.pos[i * 3 + 2] - local.z) ** 2
+      if (d < best) ((best = d), (mud = p.mud[i]))
+    }
+    return mud
   }
   /** The muddiest spot left (part, local point), for the sparkle that helps her find it. */
   muddiest(): { part: PartMesh; local: Vector3; mud: number } | null {
@@ -601,11 +626,11 @@ export class MistyCoat {
     if (s.color && s.k > 0) out.lerp(BERRY_COLORS[s.color], s.k * (p.kind[i] === 3 ? 0.7 : p.kind[i] === 2 ? 0.85 : 0.95))
     if (s.wet > 0) out.multiplyScalar(1 - 0.12 * s.wet)
     if (mud && p.mud[i] > 0) {
-      // Splats of thick wet mud, and between them a thin dirty coat her white shows through (so she reads as a white
-      // bear covered in mud, not a brown bear).
-      const blot = smoothstep(0.3, 0.7, p.shade[i])
-      const cover = p.kind[i] === 3 ? 0.4 : (p.kind[i] === 2 ? 0.48 : 0.58) + 0.38 * blot
-      out.lerp(mudC.copy(MUD_LIGHT).lerp(MUD_DARK, blot), p.mud[i] * cover)
+      // An even muddy-tan coat all over (no soft patches: on her round tummy those read as a smudge), and on top the
+      // round chocolate splats stuck on her (the dollops, placeDots). So she starts a tan, splattered bear and the wash
+      // turns her white.
+      const cover = p.kind[i] === 3 ? 0.3 : p.kind[i] === 2 ? 0.42 : 0.62
+      out.lerp(MUD_LIGHT, Math.min(1, p.mud[i] * 1.1) * cover)
     }
     return out
   }

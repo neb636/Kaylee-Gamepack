@@ -444,7 +444,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       torso.push(P.torus(sr * 0.96, 0.024 * H, look.light, { at: [0, C[1], 0.01 * H], scale: [k[0], k[1], 1] }))
       if (!look.outfit) torso.push(P.sphere(0.13 * H, look.light, { at: [0, 0.31 * H, 0.1 * H * round[2]], scale: [1.05 * c, 1.25, 0.55] }))
     }
-    if (look.species === 'bear') {
+    if (look.species === 'bear' && !look.plainChest) {
       // The sun bear's cream crescent on the chest: a "U" under the chin.
       const y = 0.445 * H
       const z = Math.sqrt(Math.max(0, (0.155 * H) ** 2 - (y - 0.39 * H) ** 2)) * round[2]

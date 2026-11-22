@@ -24,5 +24,8 @@
  { "id": "bath-shimmer", "label": "The pool glows like a mirror", "prompt": "A still pool of water starting to glow like a magic mirror: a soft rising twinkly shimmer of gentle bells, dreamy and short.", "seconds": 1.5 },
  { "id": "bath-dress", "label": "The sweater goes on", "prompt": "A soft sweater pulled on over a fluffy bear: a cozy cloth whoosh followed by a little happy twinkle.", "seconds": 0.9 },
  { "id": "bath-deco", "label": "A decoration pops on", "prompt": "A flower popping onto soft fur: a tiny soft pop and a light twinkle, cute and toy-like.", "seconds": 0.5 },
- { "id": "bath-soap", "label": "The soap slips out", "prompt": "A wet bar of soap slipping out and shooting off: a slippery squirt and a squeaky zip, funny and cartoonish.", "seconds": 0.6 }
+ { "id": "bath-soap", "label": "The soap slips out", "prompt": "A wet bar of soap slipping out and shooting off: a slippery squirt and a squeaky zip, funny and cartoonish.", "seconds": 0.6 },
+ { "id": "bath-plip", "label": "A soap bubble pops", "prompt": "A single soap bubble popping: a tiny, bright, wet plip, soft, crisp and cute. No music.", "seconds": 0.5 },
+ { "id": "bath-duck", "label": "The rubber duck squeaks", "prompt": "A small squeezy rubber bath duck toy squeaking twice, quick and cute, with a tiny splash of bath water. No voices.", "seconds": 0.8 },
+ { "id": "bath-ding", "label": "A patch comes clean", "prompt": "A sparkly squeaky-clean ding: one bright little magical chime with a soft glittery shimmer, short and happy. No music.", "seconds": 0.8 }
 ]
