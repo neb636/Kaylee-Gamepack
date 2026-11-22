@@ -13,6 +13,7 @@
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
+import { bellyPatch, beaverTail } from './beaver'
 import { WEARABLES, type Look, type PaintColor, type PaintPart, type Wearable } from './look'
 
 export interface Rig {
@@ -33,6 +34,8 @@ export interface Rig {
   armR: Group
   /** Sample a model-authored wave from rest (0) through its return to rest (1). */
   wave?: (progress: number) => void
+  /** A sculpted face can pose its features together from the filtered voice level. */
+  expression?: (level: number) => void
   tail: Group | null
   /** A unicorn's mane locks (down the back and sides), pivoting at the top of the back of the head: the wind swings
    *  them (Wind). */
@@ -361,7 +364,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const eyes: Parts = []
   const eyesPlain: Parts = []
   const rest: Parts = []
-  const talking: Parts = []
+  const beaverBrows: Group[] = []
+  const muzzle: Parts = []
   /** A unicorn's locks, which swing in the wind (their own group on the head). */
   const locks: Parts = []
   /** Where the mouth is (head-local): the resting mouth and the talking one are built around it. */
@@ -373,6 +377,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   let jawAt: V3 | null = null
   const arm: { L: Parts; R: Parts } = { L: [], R: [] }
   const tail: Parts = []
+  const tailPlain: Parts = []
   /** Where the tail pivots (body-local): it wags from its root. */
   let tailRoot: V3 = [0, 0, 0]
   const phone: Parts = []
@@ -419,7 +424,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     }
     torso.push(P.capsule(0.155 * H, 0.1 * H, look.fur, { at: [0, 0.34 * H, 0], scale: round }))
     if ((look.species === 'fox' || look.species === 'puppy' || look.species === 'otter') && !look.outfit?.lace) torso.push(P.sphere(0.075 * H, look.light, { at: [0, 0.5 * H, 0.11 * H * round[2]], scale: [1.1, 0.8, 0.7] }))
-    if (look.species === 'beaver') torso.push(P.sphere(0.12 * H, look.light, { at: [0, 0.3 * H, 0.1 * H * round[2]], scale: [1.05 * c, 1.2, 0.55] }))
+    if (look.species === 'beaver') torsoPlain.push(bellyPatch(H, c, round[2], look.light))
     if (look.species === 'buffalo' && !look.outfit) torso.push(P.sphere(0.11 * H, look.light, { at: [0, 0.27 * H, 0.1 * H], scale: [1, 1.1, 0.55] }))
     if (look.species === 'tortoise') {
       // A big round shell on the back (like a backpack): a dome in the shell color with round plates sunk into it, a
@@ -842,8 +847,11 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         head.push(P.sphere(0.21 * R, look.fur, { at: ear, scale: [1, 1.07, 0.65] }, 26))
         headPlain.push(P.sphere(0.135 * R, '#87563E', { at: [ear[0], ear[1], 0.062 * R], scale: [1, 1.06, 0.32] }, 24))
         const bx = s * eyeX
-        headPlain.push(P.torus(0.148 * R, 0.031 * R, look.dark, { at: on(bx, 0.39 * R, 0.035 * R), rot: [-0.46, turnTo(bx)[1], 0.52 - s * 0.18] }, Math.PI - 1.04))
-        headPlain.push(P.sphere(0.26 * R, look.light, { at: [s * 0.165 * R, headY - 0.175 * R, 0.97 * R], rot: [0, s * 0.23, s * 0.16], scale: [1.03, 0.85, 0.69] }, 32))
+        const brow = new Group()
+        brow.position.set(...on(bx, 0.39 * R, 0.035 * R))
+        brow.add(solidMix([], [P.torus(0.148 * R, 0.033 * R, look.dark, { rot: [-0.46, turnTo(bx)[1], 0.52 - s * 0.18] }, Math.PI - 1.04)], bag, 0))
+        beaverBrows.push(brow)
+        muzzle.push(P.sphere(0.26 * R, look.light, { at: [s * 0.165 * R, headY - 0.175 * R, 0.97 * R], rot: [0, s * 0.23, s * 0.16], scale: [1.03, 0.85, 0.69] }, 32))
       }
       headPlain.push(P.sphere(0.175 * R, '#4D3329', { at: [0, headY - 0.036 * R, 1.115 * R], scale: [1.08, 0.78, 0.74] }, 30))
       headPlain.push(P.sphere(0.032 * R, '#D7B79C', { at: [-0.055 * R, headY + 0.018 * R, 1.224 * R], scale: [1.45, 0.64, 0.38] }))
@@ -860,15 +868,10 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       rest.push(smile.scale(R, R, R).rotateX(0.4))
       rest.push(P.sphere(0.09 * R, '#C67B71', { at: [0, -0.193 * R, -0.017 * R], rot: [0.4, 0, 0], scale: [1.45, 0.47, 0.34] }))
       for (const s of [-1, 1]) headPlain.push(P.rbox(0.122 * R, 0.176 * R, 0.06 * R, 0.027 * R, BEAVER_TEETH, { at: [s * 0.064 * R, headY - 0.365 * R, 1.046 * R], rot: [0.30, s * 0.08, s * -0.035] }))
-      // During speech the upper edge stays behind the incisors while the tongue and
-      // lower lip drop on stressed syllables. FaceLife drives this from the recording.
-      talking.push(P.sphere(0.23 * R, '#512B2A', { at: [0, -0.205 * R, -0.012 * R], rot: [0.28, 0, 0], scale: [1.02, 1.1, 0.30] }, 24))
-      talking.push(P.sphere(0.11 * R, '#C67B71', { at: [0, -0.34 * R, -0.008 * R], rot: [0.28, 0, 0], scale: [1.15, 0.51, 0.25] }))
-      // Wag from inside the rump. The tapered base overlaps both the hip and paddle.
-      tailRoot = [0, 0.22 * H, -0.095 * H * round[2]]
-      tail.push(P.sphere(0.14 * H, look.dark, { at: [0, 0.147 * H, -0.18 * H * round[2]], rot: [-0.64, 0, 0], scale: [0.47, 0.34, 1.05] }, 24))
-      tail.push(P.sphere(0.16 * H, look.dark, { at: [0, 0.07 * H, -0.3 * H * round[2]], rot: [0.12, 0, 0], scale: [0.72, 0.16, 1.15] }, 20))
-      for (const a of [-0.5, 0.5]) for (const k of [-0.07, 0, 0.07]) tail.push(P.capsule(0.004 * H, 0.17 * H, '#4F3428', { at: [k * H, 0.095 * H, -0.3 * H * round[2]], rot: [Math.PI / 2 + 0.12, a, 0] }))
+      tailRoot = [0, 0.18 * H, -0.07 * H * round[2]]
+      const [blade, pattern] = beaverTail(H, tailRoot, look.dark)
+      tail.push(blade)
+      tailPlain.push(pattern)
       break
     }
     case 'moose': {
@@ -1067,7 +1070,12 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       head.push(P.cyl(0.52 * R, 0.52 * R, 0.05 * R, '#2B3566', { at: [0, headY + 0.72 * R, 0.62 * R], rot: [0.3, 0, 0], scale: [1, 1, 0.55] }, 20))
       head.push(P.sphere(0.11 * R, '#FFC83D', { at: [0, headY + 0.88 * R, 0.66 * R], scale: [1, 1, 0.5] }))
     }
-    if (e === 'scarf') {
+    if (e === 'scarf' && look.species === 'beaver') {
+      // Close around the neck with the loose end over her sternum. Her raised
+      // paws sweep outside the collar on either side.
+      torso.push(P.torus(0.15 * H, 0.032 * H, '#FF8FB8', { at: [0, 0.521 * H, 0], rot: [1.71, 0, 0], scale: [1, 1.10, 1] }))
+      torso.push(P.rbox(0.065 * H, 0.14 * H, 0.025 * H, 0.012 * H, '#FF8FB8', { at: [0.038 * H, 0.443 * H, 0.157 * H], rot: [-0.15, 0.15, -0.16] }))
+    } else if (e === 'scarf') {
       torso.push(P.torus(0.255 * H, 0.05 * H, '#FF8FB8', { at: [0, 0.54 * H, 0.02 * H], rot: [Math.PI / 2, 0, 0] }, Math.PI * 2))
       torso.push(P.rbox(0.09 * H, 0.24 * H, 0.04 * H, 0.015 * H, '#FF8FB8', { at: [0.12 * H, 0.42 * H, 0.27 * H], rot: [0.25, 0, -0.15] }))
     }
@@ -1121,11 +1129,31 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const talk = new Group()
   for (const m of [mouthGroup, talk]) m.position.set(...mouthAt)
   if (rest.length) mouthGroup.add(solidMix([], rest, bag, 0))
-  if (!talking.length) talking.push(P.sphere(0.17 * R, MOUTH, { scale: [1.1, 0.9, 0.35] }), P.sphere(0.09 * R, TONGUE, { at: [0, -0.06 * R, 0.03 * R], scale: [1.3, 0.6, 0.5] }))
-  talk.add(solidMix([], talking, bag, 0))
+  talk.add(solidMix([], [P.sphere(0.17 * R, MOUTH, { scale: [1.1, 0.9, 0.35] }), P.sphere(0.09 * R, TONGUE, { at: [0, -0.06 * R, 0.03 * R], scale: [1.3, 0.6, 0.5] })], bag, 0))
   talk.scale.setScalar(0.001)
   talk.visible = false
   headPivot.add(eyeGroup, mouthGroup, talk)
+  let expression: Rig['expression']
+  if (beaverBrows.length) {
+    const pads = solidMix([], muzzle, bag, 0)
+    headPivot.add(pads, ...beaverBrows)
+    const browHeight = beaverBrows[0].position.y
+    expression = (level) => {
+      // One smile, anchored at the upper lip. The cheeks lift and the brows
+      // lead the expression on accented vowels and when she raises a paw.
+      const accent = Math.sqrt(level)
+      mouthGroup.scale.set(1 - 0.22 * level, 0.86 + 1.12 * level, 1)
+      pads.position.y = 0.044 * R * accent
+      for (let i = 0; i < beaverBrows.length; i++) {
+        const side = i === 0 ? -1 : 1
+        const gesture = Math.min(1, Math.abs((i === 0 ? armL : armR).rotation.z) / 2.3)
+        const lift = accent * (i === 0 ? 0.076 : 0.052) + gesture * 0.10
+        beaverBrows[i].position.y = browHeight + lift * R
+        beaverBrows[i].position.z = on(side * eyeX, 0.39 * R + lift * R, 0.035 * R)[2]
+        beaverBrows[i].rotation.z = side * (-0.15 * accent - 0.23 * gesture)
+      }
+    }
+  }
   let beak: Rig['beak']
   if (jawAt) {
     const top = pivoted(beakTop, jawAt, bag, px)
@@ -1156,10 +1184,10 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   armR.add(solidMix(arm.R, [], bag, px))
   let tailGroup: Group | null = null
   if (tail.length) {
-    tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px)
+    tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px, tailPlain)
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
+  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, expression, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
 }
 
 /** A five-petal flower (with two leaves behind it) printed on a surface at `at`, turned by `rot` to face out. */
@@ -1223,10 +1251,10 @@ function hairdo(h: NonNullable<Look['hairdo']>, f: Frame, head: Parts) {
 }
 
 /** Parts in a group that pivots at `at` (the parts stay where they were). */
-function pivoted(parts: Parts, at: V3, bag: Bag, px: number) {
+function pivoted(parts: Parts, at: V3, bag: Bag, px: number, plain: Parts = []) {
   const g = new Group()
   g.position.set(...at)
-  for (const p of parts) p.translate(-at[0], -at[1], -at[2])
-  g.add(solidMix(parts, [], bag, px))
+  for (const p of [...parts, ...plain]) p.translate(-at[0], -at[1], -at[2])
+  g.add(solidMix(parts, plain, bag, px))
   return g
 }

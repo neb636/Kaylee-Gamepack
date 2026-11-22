@@ -42,6 +42,7 @@ export class FaceLife {
     const k = this.level
     // A beak opens on its hinge instead (the pelican): no mouth pops up on her face.
     if (this.rig.beak) this.rig.beak.open(k)
+    else if (this.rig.expression) this.rig.expression(k)
     else if (open) mouth.scale.set(1 + 0.15 * k, 1 + 0.9 * k, 1)
     else {
       const talking = k > 0.04
