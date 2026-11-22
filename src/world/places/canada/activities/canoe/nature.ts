@@ -33,7 +33,8 @@ const BARK = '#7E5B48'
 /** One skirt of conifer branches: a cone whose hem is ragged (every other point pulled out and drooped, the rest
  *  tucked up) and whose middle puffs out a little, so a stack of them reads as layered boughs, not a smooth cone. */
 function skirt(r: number, h: number, y: number, shade: string, seed: number, seg = 10) {
-  const g = new ConeGeometry(r, h, seg, 2)
+  // (Open underneath: nobody sees under a bough, and it saves a third of the triangles.)
+  const g = new ConeGeometry(r, h, seg, 2, true)
   const p = g.attributes.position
   for (let i = 0; i < p.count; i++) {
     const x = p.getX(i)
@@ -56,8 +57,8 @@ function skirt(r: number, h: number, y: number, shade: string, seed: number, seg
 
 /** A conifer about `h` meters tall: `tiers` skirts from wide and shaded at the bottom to small and lit at the top, on a
  *  short brown trunk. `slim` narrows it (the subalpine fir is a spire). */
-function conifer(h: number, tiers: number, slim: number, seed: number, seg = 10) {
-  const parts: BufferGeometry[] = [plantPart(new CylinderGeometry(0.12, 0.2, h * 0.22, 6), BARK, 0, { at: [0, h * 0.1, 0] })]
+function conifer(h: number, tiers: number, slim: number, seed: number, seg = 8) {
+  const parts: BufferGeometry[] = [plantPart(new CylinderGeometry(0.12, 0.2, h * 0.22, 5, 1, true), BARK, 0, { at: [0, h * 0.1, 0] })]
   const shades = ['#C4D2C6', '#D3DED3', '#E1E9DF', '#EEF3EC', '#F8FAF6', '#FFFFFF', '#FFFFFF']
   const base = h * 0.12
   const span = h - base
@@ -77,20 +78,29 @@ interface Kind {
   h: number
   px: number
   colors: string[]
+  /** Too small to show in the lake's reflection: left out of it (`userData.noMirror`). */
+  small?: boolean
+  /** A plainer shape for the reflection (fewer skirts): the lake blurs it anyway. */
+  lite?: BufferGeometry
 }
+
+/** The plainer shapes the reflection draws instead, by the instanced mesh's `userData.mirrorGeo` (a geometry's uuid:
+ *  userData is copied as JSON, so it can't hold the geometry itself). */
+const liteShapes = new Map<string, BufferGeometry>()
+export const mirrorShape = (uuid: string) => liteShapes.get(uuid)
 
 export const SPRUCE_GREENS = ['#3F8E6E', '#4C9E78', '#357F63', '#2F7A5E', '#58A884', '#46927A', '#3C8A72', '#5AAE7E']
 
 function kinds() {
-  const spruce: Kind = { geo: conifer(9, 6, 0.27, 1), h: 9, px: 1.5, colors: SPRUCE_GREENS }
-  const fir: Kind = { geo: conifer(11, 7, 0.17, 4, 8), h: 11, px: 1.5, colors: ['#2E7461', '#36806A', '#2A6B5C', '#3F8A70', '#327866'] }
+  const spruce: Kind = { geo: conifer(9, 5, 0.27, 1), lite: conifer(9, 3, 0.27, 1, 5), h: 9, px: 1.5, colors: SPRUCE_GREENS }
+  const fir: Kind = { geo: conifer(11, 6, 0.17, 4, 7), lite: conifer(11, 3, 0.17, 4, 5), h: 11, px: 1.5, colors: ['#2E7461', '#36806A', '#2A6B5C', '#3F8A70', '#327866'] }
   // The larch: a soft spruce shape that turns gold (only a few, high up: a splash of color like the Nan forest's pink).
-  const larch: Kind = { geo: conifer(8, 5, 0.25, 7), h: 8, px: 1.5, colors: ['#F2C14E', '#F5D06A', '#E9B648', '#F7C95C'] }
+  const larch: Kind = { geo: conifer(8, 4, 0.25, 7), lite: conifer(8, 3, 0.25, 7, 5), h: 8, px: 1.5, colors: ['#F2C14E', '#F5D06A', '#E9B648', '#F7C95C'] }
   // The far forest up the slopes: three skirts, no line.
-  const far: Kind = { geo: conifer(9, 3, 0.3, 9, 7), h: 9, px: 0, colors: ['#4C8E74', '#3F8268', '#5A9A7A', '#477F6C'] }
+  const far: Kind = { geo: conifer(9, 3, 0.3, 9, 6), lite: conifer(9, 2, 0.3, 9, 5), h: 9, px: 0, colors: ['#4C8E74', '#3F8268', '#5A9A7A', '#477F6C'] }
   // An aspen: a white trunk with dark eyes, a lumpy round crown.
-  const aspenParts: BufferGeometry[] = [plantPart(new CylinderGeometry(0.13, 0.18, 4.4, 7), '#EEE9DF', 0, { at: [0, 2.2, 0] })]
-  for (let i = 0; i < 4; i++) aspenParts.push(plantPart(new CylinderGeometry(0.19, 0.19, 0.12, 7), '#4E4252', 0, { at: [0, 0.8 + i * 0.85, 0], rot: [0, i, 0], scale: [1, 1, 0.5] }))
+  const aspenParts: BufferGeometry[] = [plantPart(new CylinderGeometry(0.13, 0.18, 4.4, 6, 1, true), '#EEE9DF', 0, { at: [0, 2.2, 0] })]
+  for (let i = 0; i < 2; i++) aspenParts.push(plantPart(new CylinderGeometry(0.19, 0.19, 0.12, 5, 1, true), '#4E4252', 0, { at: [0, 1 + i * 1.4, 0], rot: [0, i, 0], scale: [1, 1, 0.5] }))
   aspenParts.push(
     leafBlob(1.5, '#FFFFFF', [0, 5.6, 0], [1, 1.25, 1], 3),
     leafBlob(1.15, '#E3EBDB', [0.95, 4.7, 0.3], [1, 1.15, 1], 4),
@@ -101,11 +111,12 @@ function kinds() {
     geo: joinParts([leafBlob(0.8, '#FFFFFF', [0, 0.7, 0], [1.2, 0.85, 1.1], 30, [6, 4]), leafBlob(0.62, '#E2EADA', [0.7, 0.5, 0.25], [1, 0.85, 1], 31, [5, 3]), leafBlob(0.58, '#DCE5D3', [-0.6, 0.45, -0.35], [1, 0.85, 1], 32, [5, 3])]),
     h: 1.5,
     px: 1.3,
+    small: true,
     colors: ['#5E9E62', '#6FAE66', '#4F9160', '#7BB86A'],
   }
   // Fireweed: a bunch of tall stems, each with a spike of pink flowers (Canada's summer meadows are full of it).
   const weed: BufferGeometry[] = []
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 4; i++) {
     const a = i * 2.39
     const r = 0.12 + (i % 3) * 0.1
     const L = 0.9 + (i % 4) * 0.14
@@ -114,7 +125,7 @@ function kinds() {
     weed.push(plantPart(new ConeGeometry(0.09, 0.5, 6), i % 2 ? '#FFFFFF' : '#F0E4EC', 1, { at: [Math.sin(a) * (r + lean * L), L + 0.18, Math.cos(a) * (r + lean * L)], rot: [lean, a, 0] }))
     weed.push(plantPart(new ConeGeometry(0.06, 0.3, 4), '#6FAE66', 0, { at: [Math.sin(a) * r * 0.6, 0.25, Math.cos(a) * r * 0.6], rot: [0.9, a + 1, 0], scale: [1, 1, 0.3] }))
   }
-  const fireweed: Kind = { geo: joinParts(weed), h: 1.4, px: 0, colors: ['#FF8FC8', '#F27BB8', '#FF9FD0', '#E86DB2', '#FFA8D8'] }
+  const fireweed: Kind = { geo: joinParts(weed), h: 1.4, px: 0, small: true, colors: ['#FF8FC8', '#F27BB8', '#FF9FD0', '#E86DB2', '#FFA8D8'] }
   const blades: BufferGeometry[] = []
   for (let i = 0; i < 9; i++) {
     const a = (i / 9) * Math.PI * 2 + (i % 2) * 0.35
@@ -122,18 +133,18 @@ function kinds() {
     const L = 0.7 + (i % 4) * 0.1
     blades.push(plantPart(new ConeGeometry(0.05, L, 3), i % 2 ? '#FFFFFF' : '#E8EFD8', 1, { at: [Math.sin(a) * Math.sin(lean) * L * 0.5, Math.cos(lean) * L * 0.5, Math.cos(a) * Math.sin(lean) * L * 0.5], rot: [lean, a, 0], scale: [1, 1, 0.4] }))
   }
-  const tuft: Kind = { geo: joinParts(blades), h: 0.9, px: 0, colors: ['#9FD27C', '#8CC771', '#B2DA86', '#C9D98A'] }
+  const tuft: Kind = { geo: joinParts(blades), h: 0.9, px: 0, small: true, colors: ['#9FD27C', '#8CC771', '#B2DA86', '#C9D98A'] }
   // Boulders and pebbles: faceted rock with a mossy or snowy top (`boulderGeometry`), tinted per rock.
   const boulder: Kind = { geo: boulderGeometry(11, true), h: 1.2, px: 1.4, colors: ['#B6AEC4', '#A9A1BA', '#9E95B0', '#BDB6CA', '#A39BB4'] }
-  const pebble: Kind = { geo: boulderGeometry(23, false), h: 1, px: 0, colors: ['#CFC8DA', '#BDB5CC', '#D8D2E2', '#B4ABC4', '#E2DCE8'] }
+  const pebble: Kind = { geo: boulderGeometry(23, false, 0), h: 1, px: 0, small: true, colors: ['#CFC8DA', '#BDB5CC', '#D8D2E2', '#B4ABC4', '#E2DCE8'] }
   return { spruce, fir, larch, far, aspen, shrub, fireweed, tuft, boulder, pebble }
 }
 export type PlantKind = keyof ReturnType<typeof kinds>
 
 /** A faceted boulder about 1 m across and 0.65 m tall, sitting on y = 0: a lumpy icosahedron with a flat bottom, flat
  *  shaded so every facet catches the light on its own. `moss`: the facets facing up are green (tint 0). */
-export function boulderGeometry(seed: number, moss: boolean) {
-  const g = new IcosahedronGeometry(1, 1)
+export function boulderGeometry(seed: number, moss: boolean, detail = 1) {
+  const g = new IcosahedronGeometry(1, detail)
   const p = g.attributes.position
   const v = new Vector3()
   for (let i = 0; i < p.count; i++) {
@@ -182,7 +193,8 @@ export function rockPart(size: number, color: string, seed: number, o: PartOpts 
 }
 
 /** Plants and rocks placed round the lake, then built as one InstancedMesh per kind (and an ink line for the near
- *  ones). The hulls are marked like engine hulls (`userData.hull`), so the lake's reflection leaves them out. */
+ *  ones). The hulls are marked like engine hulls (`userData.hull`) and the small plants `userData.noMirror`, so the
+ *  lake's reflection leaves them out. */
 export class Grove {
   private readonly K = kinds()
   private readonly placed = new Map<PlantKind, { m: Matrix4; c: Color; ink: boolean }[]>()
@@ -217,6 +229,11 @@ export class Grove {
           mesh.setColorAt(i, p.c)
         })
         mesh.computeBoundingSphere()
+        mesh.userData.noMirror = !!kind.small
+        if (kind.lite) {
+          liteShapes.set(kind.lite.uuid, bag.add(kind.lite))
+          mesh.userData.mirrorGeo = kind.lite.uuid
+        }
         root.add(mesh)
         if (ink) {
           const hull = bag.add(new InstancedMesh(bag.add(hullGeometry(kind.geo)), instancedOutlineMaterial(kind.px), list.length))
@@ -228,7 +245,11 @@ export class Grove {
         }
       }
     }
-    for (const id of Object.keys(this.K) as PlantKind[]) if (!this.placed.has(id)) this.K[id].geo.dispose()
+    for (const id of Object.keys(this.K) as PlantKind[])
+      if (!this.placed.has(id)) {
+        this.K[id].geo.dispose()
+        this.K[id].lite?.dispose()
+      }
     root.userData.counts = Object.fromEntries([...this.placed].map(([id, l]) => [id, l.length]))
     return root
   }

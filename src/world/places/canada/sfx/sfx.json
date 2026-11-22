@@ -738,6 +738,13 @@
   "loop": true
  },
  {
+  "id": "canoe-creek",
+  "label": "The glacier creek and its waterfall (near it)",
+  "prompt": "A lively little mountain creek: a small waterfall splashing into a rocky pool and clear water bubbling and rushing over pebbles. Bright, gentle, steady, close. Seamless loop, no voices, no music.",
+  "seconds": 6,
+  "loop": true
+ },
+ {
   "id": "hub-hoot",
   "label": "The snowy owl hoots",
   "prompt": "A soft, round, friendly cartoon owl hooting twice, hoo hoo, gentle and cozy, a little sleepy and sweet.",

@@ -15,7 +15,7 @@ import { toon } from '../../../../engine3d/toon'
 import { RiverMaterial } from './flow'
 import { buildGlacier, onGlacier } from './glacier'
 import { CLIFF, DOCK, FLOUR, LAND, landY, LODGE, LOGJAM, MOOSE, MOUTH, ringPoint, ROCKPILE, SQUIRREL } from './lake'
-import { bumps, cragPart, Grove, rng, rockPart, SPRUCE_GREENS, type CragLook } from './nature'
+import { bumps, cragPart, Grove, mirrorShape, rng, rockPart, SPRUCE_GREENS, type CragLook } from './nature'
 
 export { rng }
 export const SKY = '#C4E8FA'
@@ -181,7 +181,7 @@ function buildForest(bag: Bag) {
     else grove.add('pebble', p.x, y, p.z, 0.18 + rand() * 0.3, { sy: 0.6 + rand() * 0.5 })
   }
   // The meadow and the forest, out from the beach.
-  for (let i = 0; i < 2600; i++) {
+  for (let i = 0; i < 2100; i++) {
     const th = rand() * Math.PI * 2
     const k = 1.05 + rand() ** 1.35 * 1.15
     const p = ringPoint(th, k)
@@ -189,7 +189,7 @@ function buildForest(bag: Bag) {
     const y = landY(p.x, p.z)
     // (Patches: the meadow comes and goes, the forest has clearings.)
     const patch = bumps(p.x * 0.08, 0, p.z * 0.08, 17)
-    const near = k < 1.55
+    const near = k < 1.28
     if (k < 1.2) {
       const r = rand()
       if (r < 0.34) grove.add('tuft', p.x, y, p.z, 0.8 + rand() * 0.7)
@@ -206,6 +206,8 @@ function buildForest(bag: Bag) {
       else if (rand() < 0.3) grove.add('boulder', p.x, y, p.z, 1 + rand() * 1.4, { ink: near })
       continue
     }
+    // (Up the slopes, the forest thins out: half the trees there are hidden behind the ones in front anyway.)
+    if (!near && rand() < 0.35) continue
     const r = rand()
     const high = k > 1.75
     if (high && r < 0.07) grove.add('larch', p.x, y, p.z, 0.8 + rand() * 0.4, { ink: near })
@@ -398,6 +400,12 @@ function creek() {
     pts.push({ x: p.x, z: p.z, y, sx: -t.z, sz: t.x, w, along, rush: Math.min(1, Math.max(0, drop * 1.3 - 0.3)) })
   }
   return (creekPts = pts)
+}
+/** How far (x, z) is from the creek's water, its waterfall included (m). */
+export function creekDistance(x: number, z: number) {
+  let d = Infinity
+  for (const p of creek()) d = Math.min(d, Math.hypot(x - p.x, z - p.z) - p.w)
+  return Math.max(0, d)
 }
 /** Is (x, z) within `pad` meters of the creek's water? */
 export function nearCreek(x: number, z: number, pad = 0) {
@@ -593,15 +601,21 @@ export function buildShore(bag: Bag): Shore {
   return { land, shallows, peaks, glacier, lodge, logs, stream, flour }
 }
 
-/** A mirror image of `src` under the water (no ink lines: a reflection is soft). */
+/** A mirror image of `src` under the water (no ink lines: a reflection is soft; no grass, pebbles or bushes: too small
+ *  to see in it). */
 export function mirror(src: Group) {
   const m = src.clone(true)
   m.scale.y = -1
   const drop: Object3D[] = []
   m.traverse((o) => {
-    if (o.userData.hull !== undefined) drop.push(o)
+    if (o.userData.hull !== undefined || o.userData.noMirror) drop.push(o)
   })
   for (const o of drop) o.removeFromParent()
+  // (The forest's trees reflect as their plainer shapes.)
+  m.traverse((o) => {
+    const lite = typeof o.userData.mirrorGeo === 'string' ? mirrorShape(o.userData.mirrorGeo) : undefined
+    if (lite) (o as Mesh).geometry = lite
+  })
   return m
 }
 
