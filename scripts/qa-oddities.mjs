@@ -6,7 +6,7 @@
 //   node scripts/qa-screens.mjs --routes=<activity> && node scripts/qa-oddities.mjs [--routes=<activity>] [--only=ipad-landscape]
 //   node scripts/qa-oddities.mjs --dir=<folder of png/jpg>      any frames (reel frames, motion strips)
 //   node scripts/qa-oddities.mjs --eval                         score the questions on known bugs (oddities/eval-labels.json)
-//   [--max-dollars=0.5] stops before spending more; [--parallel=6]; [--samples=3] calls per frame, averaged
+//   [--max-dollars=0.75] stops before spending more (then ask the user before raising it); [--parallel=6]; [--samples=3] calls per frame, averaged
 //
 // Needs TYPESAFE_API_KEY (from the environment, this checkout's .env or the main checkout's .env).
 // Writes qa-output/oddities/: results.json (every answer), requests.jsonl (each payload, to rerun one), boxed/<set>/
@@ -25,7 +25,7 @@ const API = 'https://api.typesafe.ai/v1/systemone'
 const DOLLARS_PER_INPUT_TOKEN = 0.042 / 1e6 // Jev's published input price; output tokens are free
 const dir = path.join(out, 'oddities')
 const evalMode = args.includes('--eval')
-const maxDollars = Number(flag('max-dollars') ?? 0.5)
+const maxDollars = Number(flag('max-dollars') ?? 0.75) // the user's cap per run (2026-11-22)
 const parallel = Number(flag('parallel') ?? 6)
 const samples = Number(flag('samples') ?? 3)
 
@@ -257,10 +257,12 @@ for (const r of results.filter((x) => x.findings.length)) lines.push(`- ${r.set}
 lines.push('', `## Maybes (just under a question's threshold: look before trusting)`, '')
 for (const r of results.filter((x) => x.maybes.length)) lines.push(`- ${r.set}/${r.name}: ${r.maybes.map((f) => `${f.label} ${pct(f.p)}`).join(', ')}`)
 if (errors.length) lines.push('', '## Errors (these frames were NOT checked)', '', ...errors.map((e) => `- ${e}`))
-if (stopped) lines.push('', `Stopped at --max-dollars=${maxDollars}: ${stopped} frames not checked.`)
+const capNote = stopped && `Stopped at the $${maxDollars} cap: ${stopped} frames not checked. Ask the user whether to go on before rerunning with a higher --max-dollars (or narrow --routes/--only).`
+if (capNote) lines.push('', capNote)
 writeFileSync(path.join(dir, 'summary.md'), lines.join('\n') + '\n')
 console.log(lines.slice(2, 4).join('\n').trim())
 console.log(`See qa-output/oddities/summary.md${errors.length ? ` (${errors.length} frames failed, listed there)` : ''}.`)
+if (capNote) console.log(capNote)
 
 if (evalMode) await import('./oddities/score.mjs').then((m) => m.score(results, dir, labels(root)))
 if (errors.length) process.exitCode = 1

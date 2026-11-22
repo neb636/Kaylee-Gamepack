@@ -35,12 +35,13 @@ After `npm run build`; WebKit, because the iPad runs Safari (`npx playwright ins
   strip (12 frames across a whole auto-played run, `qa-output/play/`). `--video` also records each run
   (`qa-output/video/`). Keep talk before the first touch under ~6 seconds and talk per touch under ~1.5 s.
 - `node scripts/qa-oddities.mjs --routes=<the same>` (**only when asked**: the "Jev visual QA" toggle in DimSum's
-  Instructions menu, or the user says so): TypeSafe's Jev looks at each screenshot for 3D oddities (clipping, detached
-  props, hard-edged mist, ghost rings, dither, the camera inside scenery, floating things) and draws red boxes
-  (`qa-output/oddities/summary.md` and `sheet-*.png`). It's a paid API (cents a run, `--max-dollars`, key in the main
-  checkout's `.env`), so it isn't part of verify or CI. A box is a lead, not a verdict: look at it. A screen can tell
-  it who holds what (`oddities: { held: [{ holder: 'the beaver', prop: 'hockey stick' }] }` on the screen in its
-  qa.mjs). Changed a question in `scripts/oddities/questions.mjs`? Run `--eval` before and after and keep the better.
+  Instructions menu, or the user says so): TypeSafe's Jev looks at each screenshot for 3D oddities (things sunk into
+  the ground, a pale band at the water's edge, detached or broken props, ghost rings, dither, the camera inside
+  scenery, floating things) and draws red boxes (`qa-output/oddities/summary.md` and `sheet-*.png`). It's a paid API
+  (cents a run, key in the main checkout's `.env`), so it isn't part of verify or CI. A run stops at $0.75; past that,
+  ask the user before going on. A box is a lead, not a verdict: look at it. A screen can tell it who holds what
+  (`oddities: { held: [{ holder: 'the beaver', prop: 'hockey stick' }] }` on the screen in its qa.mjs). Changed a
+  question in `scripts/oddities/questions.mjs`? Run `--eval` before and after and keep the better.
 - **The scenarios live with the country, not in the scripts:** `src/world/places/<id>/qa.mjs` exports `screens`,
   `pacing` and `motion` (a new activity can keep its own in `activities/<id>/qa.mjs`; helpers like `vp`, `skip`,
   `tapAnchor` and `seedWall` come from `scripts/qa-lib.mjs`). An activity with none still gets a screenshot per section

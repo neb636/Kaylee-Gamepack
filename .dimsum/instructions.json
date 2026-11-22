@@ -9,7 +9,7 @@
       "description": "Jev looks at every screenshot of the screens you changed and boxes 3D oddities (clipping, floating props, ghost rings). Costs cents; off unless you turn it on.",
       "defaultOn": false,
       "resetAfterSend": true,
-      "text": "Before you finish, run Jev visual QA on the screens this change touches: `npm run build`, then `node scripts/qa-screens.mjs --routes=<the activity or screen names>` and `node scripts/qa-oddities.mjs --routes=<the same>` (the key comes from the main checkout's .env; keep it under the default $0.50). Look at qa-output/oddities/summary.md and its contact sheets, fix every red box that is a real bug, check the maybes yourself, and put the sheet and one line per finding (fixed, or why it's not a bug) on the review page."
+      "text": "Before you finish, run Jev visual QA on the screens this change touches: `npm run build`, then `node scripts/qa-screens.mjs --routes=<the activity or screen names>` and `node scripts/qa-oddities.mjs --routes=<the same>` (the key comes from the main checkout's .env; it stops at a $0.75 cap per run; if it does, ask me before going further). Look at qa-output/oddities/summary.md and its contact sheets, fix every red box that is a real bug, check the maybes yourself, and put the sheet and one line per finding (fixed, or why it's not a bug) on the review page."
     }
   ]
 }
