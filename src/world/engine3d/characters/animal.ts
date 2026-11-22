@@ -538,7 +538,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     if (look.extras?.includes('eye-ring')) headPlain.push(P.sphere(eyeSize * 1.55, WHITE, { at: on(x, eyeY, lift - 0.06 * R), rot: turnTo(x), scale: [0.9, 1.05, 0.3] }, 16))
     if (look.lashes) for (const k of [0, 1]) eyesPlain.push(P.capsule(0.012 * R, 0.07 * R, INK, { at: on(x + s * (0.16 + k * 0.05) * R, eyeY + (0.17 - k * 0.07) * R, lift + 0.01 * R), rot: [0, 0, s * (-0.9 - k * 0.5)] }))
     const blushY = look.species === 'unicorn' || look.species === 'pony' ? -0.08 * R : -0.2 * R
-    if (!seaOtter) headPlain.push(P.sphere(0.12 * R, BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
+    if (!seaOtter) headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
   }
   const mouthPoint = (y: number, z?: number): V3 => (z === undefined ? on(0, y, 0.005 * R) : [0, headY + y, z])
   /** The resting mouth, built around the origin (its group sits at `mouthAt`). */
@@ -891,8 +891,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         headPlain.push(P.sphere(0.085 * R, look.dark, { at: [s * 0.255 * R, headY - 0.26 * R, 1.34 * R], rot: [-0.15, s * 0.52, -s * 0.20], scale: [0.78, 1.28, 0.36] }))
         headPlain.push(P.sphere(0.15 * R, '#70482F', { at: on(s * eyeX, eyeY + 0.35 * R), rot: turnTo(s * eyeX), scale: [1, 0.25, 0.35] }))
         const earRotation: V3 = [0, -s * 0.18, -s * 1.22]
-        head.push(P.sphere(R, look.fur, { at: [s * 0.95 * R, headY + 0.47 * R, -0.10 * R], rot: earRotation, scale: [0.19, 0.38, 0.14] }))
-        headPlain.push(P.sphere(R, look.ear ?? look.light, { at: [s * 0.99 * R, headY + 0.48 * R, 0.01 * R], rot: earRotation, scale: [0.115, 0.26, 0.06] }))
+        head.push(P.sphere(R, look.fur, { at: [s * 0.93 * R, headY + 0.47 * R, -0.10 * R], rot: earRotation, scale: [0.17, 0.33, 0.13] }))
+        headPlain.push(P.sphere(R, look.ear ?? look.light, { at: [s * 0.96 * R, headY + 0.48 * R, 0.01 * R], rot: earRotation, scale: [0.10, 0.22, 0.055] }))
         head.push(mooseAntler(s, R, headY))
       }
       // Three overlapping locks break up the crown between the antler roots.
