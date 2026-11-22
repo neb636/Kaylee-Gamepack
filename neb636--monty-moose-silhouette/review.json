@@ -1,8 +1,13 @@
 {
   "title": "Monty the moose",
   "checkIn": "Fix",
-  "kaylee": "Monty smiles between words and opens a little round mouth with a pink tongue as he talks. You can try all 13 of his lines in the character lab.",
+  "kaylee": "Monty has softer, level eyebrows and a clear neckline. You can hear all 13 of his lines in the character lab.",
   "pictures": [
+    {
+      "title": "Brows and neckline",
+      "before": "pics/front-before.jpg",
+      "after": "pics/front-after.jpg"
+    },
     {
       "title": "Asking about his goalie job at the waterfall",
       "after": "pics/waterfall-speaking.jpg"
