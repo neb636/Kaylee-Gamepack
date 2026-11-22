@@ -4,7 +4,7 @@
   "kaylee": "The map's pins are a little smaller, every friend has room around it, and the moose, the pizza and the panda are redrawn.",
   "questions": [],
   "pictures": [
-    { "title": "Up close", "before": "pics/pins-close-before.jpg", "after": "pics/pins-close.jpg", "caption": "Moose: flat antlers with points, a longer face. Pizza: the whole slice shows. Panda: both ears show, shiny eyes." },
+    { "title": "Up close", "before": "pics/pins-close-before.jpg", "after": "pics/pins-close.jpg", "caption": "Moose: flat antlers with points, a longer face. Pizza: the whole slice shows. Panda: the classic cute face, with slanted eye patches, a glint in each eye and a little w smile." },
     { "title": "On the iPad", "before": "pics/pins-before-ipad.jpg", "after": "pics/pins-after-ipad.jpg", "caption": "Circles are 10% smaller; they tap the same as before." },
     { "title": "On the iPhone", "before": "pics/pins-before-iphone.jpg", "after": "pics/pins-after-iphone.jpg", "caption": "Italy and Egypt overlap less." }
   ],
