@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "roast-after",
+  "title": "Roast after",
+  "video": "roast-after.mp4",
+  "gif": "roast-after.gif",
+  "seconds": 161,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-campfire-roast",
+      "where": "canada-campfire-roast",
+      "seconds": 80,
+      "fps": 66.1,
+      "status": "ok"
+    },
+    {
+      "name": "canada-campfire-roast-giant",
+      "where": "canada-campfire-roast-giant",
+      "seconds": 38,
+      "fps": 72.6,
+      "status": "ok"
+    },
+    {
+      "name": "canada-campfire-roast-giant",
+      "where": "canada-campfire-roast-giant",
+      "seconds": 38,
+      "fps": 72.9,
+      "status": "ok"
+    }
+  ]
+}
