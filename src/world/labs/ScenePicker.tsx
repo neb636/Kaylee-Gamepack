@@ -21,6 +21,14 @@ export function gamesOf(place: string): SceneChoice[] {
   return [...(sectionsFor(place, HUB) ? [{ id: HUB, name: 'Home base', icon: '🏠' }] : []), ...meta.activities, ...(meta.inTheWorks ?? [])].filter((a) => sectionsFor(place, a.id))
 }
 
+/** Where a country opens from the labs: its first map, else its first game from the start. */
+export function firstScene(place: string): { activity: string; section: string | undefined } | undefined {
+  const list = gamesOf(place)
+  const withMap = list.find((a) => sectionsFor(place, a.id)?.sections.some((x) => x.id === 'map'))
+  if (withMap) return { activity: withMap.id, section: 'map' }
+  return list[0] ? { activity: list[0].id, section: undefined } : undefined
+}
+
 /** The game and section on screen: the address bar says which game; the section is the game's own once it has entered
  *  one (just after a pick the last game's is still there, so it only counts when the games match). */
 export function sceneHere(place: string): { activity?: string; section?: string } {
@@ -66,10 +74,8 @@ export function ScenePicker({
   // Other countries with games to open (Canada, the Poles...), the way the Game list starts with a country's maps.
   const countries = openPlace ? places.filter((p) => gamesOf(p.meta.id).length > 0) : []
   const pickCountry = (id: string) => {
-    const list = gamesOf(id)
-    const withMap = list.find((a) => sectionsFor(id, a.id)?.sections.some((x) => x.id === 'map'))
-    if (withMap) openPlace?.(id, withMap.id, 'map')
-    else if (list[0]) openPlace?.(id, list[0].id, undefined)
+    const first = firstScene(id)
+    if (first) openPlace?.(id, first.activity, first.section)
   }
   return (
     <Section title="Scene">
