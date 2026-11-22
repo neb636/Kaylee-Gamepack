@@ -1,0 +1,15 @@
+{
+  "title": "Red Canoe: the lake's edge",
+  "checkIn": "fix",
+  "kaylee": "The odd pale band round the lake is gone: the trees and mountains now reflect in the water right up to the shore.",
+  "questions": [],
+  "pictures": [
+    { "title": "By the dock", "before": "pics/glide-before.jpg", "after": "pics/glide-after.jpg", "caption": "No pale strip between the beach and the reflections" },
+    { "title": "The glacier stream", "before": "pics/stream-before.jpg", "after": "pics/stream-after.jpg", "caption": "The reflection meets the shore instead of starting out in the lake" },
+    { "title": "The west shore", "before": "pics/west-before.jpg", "after": "pics/west-after.jpg", "caption": "The dock and trees reflect from the waterline" }
+  ],
+  "links": [
+    { "label": "Glide (the dock)", "hash": "#/world/canada/canoe/glide" },
+    { "label": "The glacier stream", "hash": "#/world/canada/canoe/stream" }
+  ]
+}
