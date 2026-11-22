@@ -1,0 +1,11 @@
+{
+  "title": "World map: hand-drawn country pins",
+  "checkIn": "fix",
+  "kaylee": "Every country on the map now has its own little friend to tap: a moose, a pizza, a camel, a panda, an elephant, a llama, a kangaroo and a penguin, drawn to match the map.",
+  "questions": [],
+  "pictures": [
+    { "title": "On the iPhone", "before": "pics/map-phone-before.jpg", "after": "pics/map-phone-after.jpg", "caption": "The system emoji are gone: each pin is a drawing in the map's own flat style" },
+    { "title": "On the iPad", "before": "pics/map-ipad-before.jpg", "after": "pics/map-ipad-after.jpg", "caption": "Same pins, same places, same size to tap" }
+  ],
+  "links": [{ "label": "Open the map", "hash": "#/world?view=map" }]
+}
