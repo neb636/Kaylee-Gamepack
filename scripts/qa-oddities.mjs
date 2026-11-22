@@ -122,10 +122,14 @@ async function ask(frame, facts) {
   const { buffer, type } = await fitForJev(frame.file)
   fd.append('shot', new Blob([buffer], { type }), path.basename(frame.file))
   for (let attempt = 0; ; attempt++) {
-    const res = await fetch(API, { method: 'POST', headers: { Authorization: `Bearer ${KEY}`, 'TypeSafe-Danger-Zone-Images': 'true' }, body: fd })
-    if (res.ok) return res.json()
-    // Rate limits and server hiccups get two retries; anything else is a real error, never read as "no oddity".
-    if (attempt < 2 && (res.status === 429 || res.status >= 500)) {
+    // Rate limits, server hiccups and dropped connections get two retries; anything else is a real error, never read
+    // as "no oddity".
+    const res = await fetch(API, { method: 'POST', headers: { Authorization: `Bearer ${KEY}`, 'TypeSafe-Danger-Zone-Images': 'true' }, body: fd }).catch((e) => {
+      if (attempt >= 2) throw e
+      return null
+    })
+    if (res?.ok) return res.json()
+    if (!res || (attempt < 2 && (res.status === 429 || res.status >= 500))) {
       await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)))
       continue
     }
