@@ -1,13 +1,27 @@
 {
   "title": "Monty the moose",
   "checkIn": "Fix",
-  "kaylee": "Monty has broad, swept-back antlers, soft ears and a shorter, gently rounded muzzle when he looks up from his bath.",
+  "kaylee": "Monty has a little upturned smile, one curious eyebrow, and pancake-shaped antlers with three stubby points on each side.",
   "pictures": [
-    {"title":"Face to face","before":"pics/front-before.jpg","after":"pics/front-after.jpg"},
-    {"title":"In profile","before":"pics/profile-before.jpg","after":"pics/profile-after.jpg"}
+    {
+      "title": "From the original Monty to today",
+      "before": "pics/front-original.jpg",
+      "after": "pics/front-after.jpg"
+    },
+    {
+      "title": "The shorter muzzle, compared with the last version",
+      "before": "pics/profile-before.jpg",
+      "after": "pics/profile-after.jpg"
+    }
   ],
   "links": [
-    {"label":"Turn Monty around","hash":"#/world/characters/moose"},
-    {"label":"Meet him at the waterfall","hash":"#/world/canada/story/bike-out"}
+    {
+      "label": "Turn Monty around",
+      "hash": "#/world/characters/moose"
+    },
+    {
+      "label": "Meet him at the waterfall",
+      "hash": "#/world/canada/story/bike-out"
+    }
   ]
 }
