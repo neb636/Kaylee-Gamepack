@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "roxy-after",
+  "title": "Roxy after",
+  "video": "roxy-after.mp4",
+  "gif": "roxy-after.gif",
+  "seconds": 7,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Characters raccoon",
+      "where": "#/world/characters/raccoon",
+      "seconds": 5,
+      "fps": 27.2,
+      "status": "ok"
+    }
+  ]
+}
