@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "instructions": [
+    {
+      "kind": "toggle",
+      "id": "jev-visual-qa",
+      "label": "Jev 3D glitch check",
+      "category": "Verification",
+      "defaultOn": false,
+      "resetAfterSend": true,
+      "text": "Before you finish, run the Jev 3D glitch check on the screens this change touches: `npm run build`, then `node scripts/qa-screens.mjs --routes=<the activity or screen names>` and `node scripts/qa-oddities.mjs --routes=<the same>` (the key comes from the main checkout's .env; it stops at a $0.75 cap per run; if it does, ask me before going further). Look at qa-output/oddities/summary.md and its contact sheets, fix every red box that is a real bug, check the maybes yourself, and put the sheet and one line per finding (fixed, or why it's not a bug) on the review page."
+    }
+  ]
+}
