@@ -21,6 +21,7 @@ const CharacterLab = lazy(() => import('./places/thailand/lab/CharacterLab'))
 const CameraLab = lazy(() => import('./labs/camera/CameraLab'))
 // The feel lab (?feel=1 on any section): sliders over the playing game for every knob it declares (kit/knobs.ts).
 const FeelLab = lazy(() => import('./labs/feel/FeelLab'))
+const FeelStart = lazy(() => import('./labs/feel/FeelStart'))
 
 /** The labs' own params (?cam=1, cam.*, ?feel=1, feel.*): never part of the game's state. */
 const isLab = (k: string) => k === 'cam' || k.startsWith('cam.') || isFeelParam(k)
@@ -48,7 +49,13 @@ export function World({ place, activity, section, params = {} }: { place?: strin
     screen = <PlaceFrame id={place} activity={activity} section={section} params={gameParams} />
     lab = params.cam !== undefined
     feel = params.feel !== undefined
-  } else screen = <WorldMap view={params.view} />
+  } else if (params.feel !== undefined)
+    screen = (
+      <Suspense fallback={null}>
+        <FeelStart />
+      </Suspense>
+    )
+  else screen = <WorldMap view={params.view} />
   return (
     <div className="world" style={{ position: 'absolute', inset: 0 }}>
       <div ref={setHost} style={{ position: 'absolute', inset: 0 }}>
