@@ -21,6 +21,7 @@ import {
   UniformsUtils,
   Vector3,
 } from 'three'
+import { smoothstep } from '../../../../../sdk/math'
 import type { Bag } from '../../../../engine3d/dispose'
 
 // ---- The outline: smooth unions of ellipses and rounded boxes, plus a meandering channel.
@@ -72,13 +73,9 @@ const smin = (a: number, b: number, k: number) => {
   const h = Math.min(1, Math.max(0, 0.5 + (0.5 * (b - a)) / k))
   return b * (1 - h) + a * h - k * h * (1 - h)
 }
-const smooth = (a: number, b: number, x: number) => {
-  const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
-  return t * t * (3 - 2 * t)
-}
 function chanX(c: Channel, z: number) {
   const s = (z - c.z0) * c.dir
-  return c.a + c.amp * Math.sin(s * c.f + c.ph) * smooth(0, c.ease, s) - c.amp * Math.sin(c.ph) * (1 - smooth(0, c.ease, s))
+  return c.a + c.amp * Math.sin(s * c.f + c.ph) * smoothstep(0, c.ease, s) - c.amp * Math.sin(c.ph) * (1 - smoothstep(0, c.ease, s))
 }
 function sdf(o: Outline, x: number, z: number) {
   let d = 1e5
@@ -405,7 +402,7 @@ export function makeFalls(bag: Bag, specs: CurtainSpec[]) {
       for (let j = 0; j <= across; j++) {
         const u = (j / across) * 2 - 1
         // (The curtain bellies forward a touch in the middle.)
-        const belly = (1 - u * u) * 0.05 * smooth(lipV, lipV + 0.5, v)
+        const belly = (1 - u * u) * 0.05 * smoothstep(lipV, lipV + 0.5, v)
         pos.push(s.x + u * s.half, y, z + belly)
         flow.push(u * s.half, v, s.half, lipV)
         meta.push(si, 0)
