@@ -200,24 +200,32 @@ for (const f of readdirSync(dir).filter((n) => /^sheet-\d+\.png$/.test(n))) rmSy
 rmSync(path.join(dir, 'boxed'), { recursive: true, force: true })
 
 // The budget: every call's tokens count once it answers (even when another sample of its frame failed), and a frame
-// reserves its estimated cost before it sends, so calls in flight can't carry a run past --max-dollars.
+// reserves its estimated cost before it sends, so calls in flight can't carry a run past --max-dollars. A frame that
+// doesn't fit while others are in flight waits for them (their real cost may be lower, or they may fail and free
+// their share); the run stops only when nothing is in flight and the next frame still doesn't fit.
 let tokens = 0
 let reserved = 0
 let calls = 0
 let stopped = 0
 const perCall = () => (calls ? tokens / calls : 5000) // a guess until the first answer: a big frame with every question
+const inFlight = new Set()
 const results = []
 const errors = []
 const queue = [...list]
 const t0 = Date.now()
 await Promise.all(Array.from({ length: parallel }, async () => {
   for (let frame = queue.shift(); frame; frame = queue.shift()) {
-    const cost = perCall() * samples
-    if ((tokens + reserved + cost) * DOLLARS_PER_INPUT_TOKEN > maxDollars) {
+    const fits = () => (tokens + reserved + perCall() * samples) * DOLLARS_PER_INPUT_TOKEN <= maxDollars
+    while (!fits() && inFlight.size) await Promise.race(inFlight)
+    if (!fits()) {
       stopped++
       continue
     }
+    const cost = perCall() * samples
     reserved += cost
+    let done
+    const settledOnce = new Promise((r) => (done = r))
+    inFlight.add(settledOnce)
     const f = facts[frame.screen]
     // Jev's answers drift a little between identical calls (typically 0.02, up to 0.13), so each frame is asked
     // --samples times (default 3) and the yes/no answers averaged; boxes come from the first call.
@@ -227,6 +235,8 @@ await Promise.all(Array.from({ length: parallel }, async () => {
       tokens += r.value.usage?.input_tokens ?? 0
       calls++
     }
+    inFlight.delete(settledOnce)
+    done()
     const failed = settled.find((r) => r.status === 'rejected')
     if (failed) {
       errors.push(`${frame.set}/${frame.name}: ${failed.reason.message}`)
