@@ -1,5 +1,5 @@
 // The pictures inside the world map's pins: one hand-drawn friend per country, in the map picture's own look (flat
-// shapes, no outlines, dot eyes, pink cheeks) on a pastel disc that fills the pin. They replace the system emoji,
+// shapes, no outlines, dot eyes, pink cheeks) on a white disc that fills the pin (pastel until 2026-11-22; pale friends get a soft lavender edge so they hold up on white). They replace the system emoji,
 // which looked different on every device and didn't match the map (2026-11-22). A place with no picture here falls
 // back to its emoji.
 //
@@ -46,7 +46,7 @@ function Moose() {
   )
   return (
     <>
-      <rect width="100" height="100" fill="#CFF3E4" />
+      <rect width="100" height="100" fill="#fff" />
       <Fit s={0.9} y={53}>
         {antler}
         <g transform="translate(100 0) scale(-1 1)">{antler}</g>
@@ -70,7 +70,7 @@ function Pizza() {
   // One slice, whole inside the circle: a puffy crust, melted cheese that drips, pepperoni, basil and a face.
   return (
     <>
-      <rect width="100" height="100" fill="#FFD9E6" />
+      <rect width="100" height="100" fill="#fff" />
       <Fit s={0.97} y={52}>
         <g transform="rotate(-7 50 50)">
           <path d="M21 32Q50 22 79 32L54.5 86Q50 93 45.5 86Z" fill="#FFD460" />
@@ -102,7 +102,7 @@ function Pizza() {
 function Camel() {
   return (
     <>
-      <rect width="100" height="100" fill="#CFE0FF" />
+      <rect width="100" height="100" fill="#fff" />
       <circle cx="74" cy="25" r="8" fill="#FFC83D" />
       <path d="M60 78 75 54 90 78Z" fill="#F2C55C" />
       <path d="M75 54 90 78H79.5Z" fill="#E0AC45" />
@@ -138,11 +138,11 @@ function Panda() {
   const BLACK = '#33292F'
   return (
     <>
-      <rect width="100" height="100" fill="#DDD2FF" />
+      <rect width="100" height="100" fill="#fff" />
       <Fit s={0.9} y={53}>
         <circle cx="23.5" cy="33" r="12.5" fill={BLACK} />
         <circle cx="76.5" cy="33" r="12.5" fill={BLACK} />
-        <path d="M50 27C73 27 86 41 86 57C86 73 71 83 50 83C29 83 14 73 14 57C14 41 27 27 50 27Z" fill="#FFFDF8" />
+        <path d="M50 27C73 27 86 41 86 57C86 73 71 83 50 83C29 83 14 73 14 57C14 41 27 27 50 27Z" fill="#FFFDF8" stroke="#E6DCEC" strokeWidth="2" />
         <ellipse cx="32.5" cy="56" rx="7.8" ry="9.8" fill={BLACK} transform="rotate(22 32.5 56)" />
         <ellipse cx="67.5" cy="56" rx="7.8" ry="9.8" fill={BLACK} transform="rotate(-22 67.5 56)" />
         <ellipse cx="34.8" cy="53.6" rx="2.1" ry="3.1" fill="#fff" transform="rotate(22 34.8 53.6)" />
@@ -158,7 +158,7 @@ function Panda() {
 function Elephant() {
   return (
     <>
-      <rect width="100" height="100" fill="#FFE9A8" />
+      <rect width="100" height="100" fill="#fff" />
       <Fit s={0.78} y={46}>
         <circle cx="21" cy="47" r="22" fill="#94A8DA" />
         <circle cx="79" cy="47" r="22" fill="#94A8DA" />
@@ -178,18 +178,19 @@ function Elephant() {
 function Llama() {
   return (
     <>
-      <rect width="100" height="100" fill="#CFEBFF" />
+      <rect width="100" height="100" fill="#fff" />
       <Fit s={0.86} y={100}>
         <ellipse cx="34" cy="22" rx="6.5" ry="14" fill="#FFF3DD" transform="rotate(-14 34 22)" />
         <ellipse cx="66" cy="22" rx="6.5" ry="14" fill="#FFF3DD" transform="rotate(14 66 22)" />
         <ellipse cx="34.3" cy="23" rx="3" ry="9" fill="#F7B5CC" transform="rotate(-14 34 22)" />
         <ellipse cx="65.7" cy="23" rx="3" ry="9" fill="#F7B5CC" transform="rotate(14 66 22)" />
+        <path d="M50 100V62" stroke="#E6DCEC" strokeWidth="33" strokeLinecap="round" />
         <path d="M50 100V62" stroke="#FFF3DD" strokeWidth="30" strokeLinecap="round" />
         <path d="M33 82h34v8H33z" fill="#FF4F9A" />
         <path d="M33 90h34v5H33z" fill="#FFC83D" />
         <path d="M33 95h34v5H33z" fill="#5FCFB0" />
-        <ellipse cx="50" cy="50" rx="22" ry="23" fill="#FFF3DD" />
-        <g fill="#fff">
+        <ellipse cx="50" cy="50" rx="22" ry="23" fill="#FFF3DD" stroke="#E6DCEC" strokeWidth="2" />
+        <g fill="#fff" stroke="#E6DCEC" strokeWidth="2">
           <circle cx="41" cy="29" r="8.5" />
           <circle cx="50" cy="25" r="9" />
           <circle cx="59" cy="29" r="8.5" />
@@ -208,7 +209,7 @@ function Llama() {
 function Kangaroo() {
   return (
     <>
-      <rect width="100" height="100" fill="#FFD9C7" />
+      <rect width="100" height="100" fill="#fff" />
       <Fit s={0.84} y={100}>
         <ellipse cx="31" cy="26" rx="10" ry="22" fill="#B9713F" transform="rotate(-18 31 26)" />
         <ellipse cx="69" cy="26" rx="10" ry="22" fill="#B9713F" transform="rotate(18 69 26)" />
@@ -230,7 +231,7 @@ function Kangaroo() {
 function Penguin() {
   return (
     <>
-      <rect width="100" height="100" fill="#D6F0FF" />
+      <rect width="100" height="100" fill="#fff" />
       <path d="M0 82Q25 70 50 80T100 76V100H0Z" fill="#fff" />
       <Fit s={0.84} y={100}>
         <ellipse cx="21" cy="68" rx="7" ry="15" fill="#3F4A7A" transform="rotate(24 21 68)" />
