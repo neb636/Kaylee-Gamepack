@@ -1519,18 +1519,11 @@
     "file": "97b560ac23f9.mp3"
   },
   {
-    "text": "Hold the marshmallow near the fire.",
+    "text": "Put a marshmallow on the stick! Toast it like the picture.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2743,
-    "file": "8e135693d788.mp3"
-  },
-  {
-    "text": "Click and hold the marshmallow near the fire.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2808,
-    "file": "5e41510429a8.mp3"
+    "ms": 4536,
+    "file": "f2b50f03b6df.mp3"
   },
   {
     "text": "It's on fire! Tap it to blow it out!",
