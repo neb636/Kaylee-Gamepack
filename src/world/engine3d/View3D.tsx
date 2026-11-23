@@ -9,8 +9,9 @@ import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPoi
 import type { Camera, InstancedMesh, Mesh, Scene, WebGLRenderer } from 'three'
 import type { CameraRig } from './camera'
 import { camLab, type LabWorld } from './camLab'
-import { automated } from './flags'
+import { automated, flag } from './flags'
 import { frameLoop } from './loop'
+import { PerfHud } from './perf'
 import { acquireRenderer, dropRenderer, releaseRenderer, warmUp } from './renderer'
 import { ROAM, ROAM_ID, type Roamable } from './roam'
 import { feelLab } from '../kit/knobs'
@@ -40,6 +41,10 @@ export interface World3D extends Roamable {
   tap(x: number, y: number, id?: string): void
   hoverAnchor?(id: string | null): void
   qa(): Record<string, unknown>
+  /** One short line on what it's doing, for the ?perf=1 overlay's slow-frame log (speed, steer, particles). */
+  perfNote?(): string
+  /** Where the thing she's steering is on screen (px), for the ?perf=1 overlay's jerks. */
+  perfFocus?(): { x: number; y: number } | null
   memory(): Record<string, number>
   /** Its delayed callbacks (sdk/timers.ts): cancelled the moment it leaves the screen, even when freeing the GPU has
    *  to wait for its shaders. */
@@ -148,7 +153,11 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
 
     // ---- Size: the canvas fills the screen; the camera keeps the framing below the top bar ----
     // The desktop Studio draws at 1.5x at most (a Retina pane at 2x costs nearly twice the GPU for little Dad can see).
-    let dpr = Math.min(window.devicePixelRatio || 1, 2)
+    // `?dpr=N` fixes the pixel ratio (and turns off the slow-device drop below), to test whether it causes a stutter.
+    const dprParam = Number(flag('dpr'))
+    const fixedDpr = dprParam > 0 ? dprParam : 0
+    let dpr = fixedDpr || Math.min(window.devicePixelRatio || 1, 2)
+    const perf = PerfHud.on ? new PerfHud(el) : null
     // (Drawing has begun, after the shaders compiled; the view is going away.)
     let started = false
     let gone = false
@@ -160,6 +169,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       const h = r.height / k
       renderer.setPixelRatio(dpr)
       renderer.setSize(w, h, false)
+      perf?.event(`resize ${Math.round(w)}x${Math.round(h)} dpr ${dpr}`)
       world.setSize(w, h, topProbe.current?.offsetHeight ?? 104)
       // Resizing the canvas clears it, and the canvas is opaque with no kept buffer on a real device (renderer.ts): draw
       // again at once, or the screen flashes black until the next frame (Dad saw it on the mountain road whenever the
@@ -190,12 +200,18 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       if (started || gone) return
       started = true
       stop = frameLoop(
-        (_now, dt) => {
+        (now, dt) => {
           if (pausedRef.current) return
           // Frozen in the camera lab: the moment holds, only the camera moves.
+          const t0 = perf ? performance.now() : 0
           if (camLab.frozen) world.rig.update(dt)
           else world.update(dt)
+          const t1 = perf ? performance.now() : 0
           world.render()
+          if (perf) {
+            const t2 = performance.now()
+            perf.frame(now, { update: t1 - t0, render: t2 - t1, calls: world.stats.calls, tris: world.stats.tris, dpr, programs: renderer.info.programs?.length ?? 0, finger: fingers.size > 0, note: world.perfNote?.() ?? '' }, { m: world.rig.camera.matrixWorld.elements, focus: world.perfFocus?.() ?? null })
+          }
           world.placeAnchors()
           const roaming = world.roam?.() ?? null
           pad.current?.show(roaming)
@@ -221,7 +237,8 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
           // (Not in the Studio: its 30 fps cap would read as a slow device.)
           if (!automated && !world.calm) {
             slow = dt > 0.02 ? slow + 1 : Math.max(0, slow - 2)
-            if (slow > 90 && dpr > 1) {
+            if (slow > 90 && dpr > 1 && !fixedDpr) {
+              perf?.event(`dpr ${dpr}→${Math.max(1, dpr - 0.25)}`)
               dpr = Math.max(1, dpr - 0.25)
               slow = 0
               measure()
@@ -452,6 +469,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
 
     return () => {
       stop()
+      perf?.dispose()
       unclaimRoam?.()
       camLab.detach(lab)
       if (window.__kaylee3d === qa3d) delete window.__kaylee3d
