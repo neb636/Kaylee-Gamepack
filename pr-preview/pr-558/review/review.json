@@ -1,0 +1,91 @@
+{
+ "listens": [
+  {
+   "title": "The roast's new sounds (2.8 s made with ElevenLabs)",
+   "audio": "sfx/roast.mp3",
+   "items": [
+    {
+     "text": "A marshmallow out of the bag",
+     "at": 0,
+     "end": 0.8
+    },
+    {
+     "text": "A marshmallow onto the stick",
+     "at": 1.5,
+     "end": 2.1
+    },
+    {
+     "text": "Monty eats the branch",
+     "at": 2.8,
+     "end": 4.16
+    }
+   ]
+  }
+ ],
+ "title": "Campfire Night: the roast, the sticks and the paw",
+ "checkIn": "fix",
+ "kaylee": "She takes a marshmallow from Maple's bag, it toasts on a stick propped over the fire, and when it looks like a friend's picture she feeds it to them.",
+ "questions": [
+  "Does the new roast feel right to play: a marshmallow in her fingers and a stick that stays by the fire?"
+ ],
+ "reels": [
+  {
+   "name": "campfire-after",
+   "moments": [
+    "canada-film-campfire-in",
+    "canada-campfire-roast-sloppy",
+    "canada-campfire-roast"
+   ]
+  },
+  {
+   "name": "campfire-before",
+   "moments": [
+    "canada-film-campfire-in",
+    "canada-campfire-roast"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "label": "Play the roast",
+   "hash": "#/world/canada/campfire/roast"
+  },
+  {
+   "label": "Monty's giant one",
+   "hash": "#/world/canada/campfire/roast?order=4"
+  },
+  {
+   "label": "Watch the opening film",
+   "hash": "#/world/canada/story/campfire-in"
+  },
+  {
+   "label": "Feel lab: the roast's knobs",
+   "hash": "#/world/canada/campfire/roast?feel=1"
+  }
+ ],
+ "pictures": [
+  {
+   "title": "The little paw",
+   "before": "pics/paw-before.jpg",
+   "after": "pics/paw-after.jpg",
+   "caption": "Its arm stuck out over the top of the bush with nobody on the end. Now it comes out of the leaves."
+  },
+  {
+   "title": "Sticks in paws",
+   "before": "pics/stick-before.jpg",
+   "after": "pics/stick-after.jpg",
+   "caption": "Maple's stick hung below her paw. Every film stick and the puck now sit in the paw (Roxy's and the kits' too)."
+  },
+  {
+   "title": "The roast",
+   "before": "pics/roast-before.jpg",
+   "after": "pics/roast-after.jpg",
+   "caption": "No more stick floating in the air: it's propped over the fire, and she carries the marshmallow in front of everybody, so it goes through nobody."
+  },
+  {
+   "title": "Jev 3D glitch check",
+   "after": "pics/jev-sheet.jpg",
+   "caption": "Run on the changed screens in nine screen shapes (8 cents in all). No red box was a bug in the game. Detached prop on the roasting stick: not a bug, it is propped over the fire on purpose. Camera inside scenery on a QA-only close-up from behind the fire: fixed, the QA camera stands nearer (11 boxes down to 4, none in the game). Sunk into the ground on the film out, upright iPhone: not sunk; Maple and Roxy are cut off at the sides there, as before this change (in the notes). Maybes checked: none real. The full report on how Jev did is linked in the PR."
+  }
+ ]
+}
