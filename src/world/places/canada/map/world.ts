@@ -1034,7 +1034,12 @@ export class CanadaMapWorld implements World3D {
       return this.events.team(m.id)
     }
     if (id === 'hut') return this.openHut()
-    if (id?.startsWith('poke:')) return this.poke(id.slice(5) as PokeId)
+    if (id?.startsWith('poke:')) {
+      // A heart pin wins over an animal or the balloon behind it: her finger on the pin is for the pin.
+      const pin = x + y > 0 ? this.pinUnder(x, y) : null
+      if (pin) return this.pick(pin)
+      return this.poke(id.slice(5) as PokeId)
+    }
     // Anything else: whatever her finger lands on answers.
     this.raycaster.setFromCamera(new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1), this.rig.camera)
     const cloud = this.raycaster.intersectObjects(this.clouds.map((c) => c.root), true)[0]
@@ -1090,6 +1095,27 @@ export class CanadaMapWorld implements World3D {
   }
 
   /** A friend at the rink or a goose under her finger (it answers instead of the rink opening). */
+  /** The visible heart pin under her finger, if any: its badge (and the point under it), never smaller than a thumb. */
+  private pinUnder(x: number, y: number): PlaceId | null {
+    const min = Math.min(this.w, this.h) < 500 ? 64 : 88
+    let best: PlaceId | null = null
+    let bestD = Infinity
+    for (const [id, pin] of this.pins) {
+      if (!pin.root.visible) continue
+      const s = pin.root.scale.x
+      const badge = this.toScreen(tmp.set(0, 0.2 + PIN_R * 0.9, 0).multiplyScalar(s).applyQuaternion(pin.root.quaternion).add(pin.root.position))
+      const tip = this.toScreen(pin.root.position)
+      const r = Math.max(min / 2, this.ppu(pin.root.position) * PIN_R * s * 1.25)
+      // From the badge's middle down to its point.
+      const d = Math.min(Math.hypot(x - badge.x, y - badge.y), Math.hypot(x - tip.x, y - tip.y) + r * 0.4)
+      if (d < r && d < bestD) {
+        bestD = d
+        best = id
+      }
+    }
+    return best
+  }
+
   private thingUnder(x: number, y: number): string | null {
     let best: string | null = null
     let bestD = Infinity
