@@ -1106,7 +1106,8 @@ export class BubbleBathWorld implements World3D {
     if (st === 'sponge') {
       if (coat.mudOf() <= SPONGE_DONE || this.stageStrokes >= 14 || this.idle > FEEL.idle) this.go('rain')
     } else if (st === 'rain') {
-      if (this.whiteT < 0 && coat.mudOf() <= WHITE_AT) {
+      // Only once: after the shake whiteT is -100 (still < 0) while the towel waits 1.7 s, so `< 0` here said it twice.
+      if (this.whiteT === -1 && coat.mudOf() <= WHITE_AT) {
         // White shows through: Sparkle's fact, Misty pleased; the rain finishes the last bits.
         this.whiteT = 0
         this.sparkleAt(this.misty.at(0.6, tmp), 20)
