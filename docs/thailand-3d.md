@@ -49,7 +49,7 @@ and toys (boat, mall, Nan, Koh Samet, the Thailand, Krabi and Nan maps, the ward
   the game's), and a drag on something of the board's own (Nan's car) returns true from `roamGrabbed()`.
 - **The trip kit** (`trip/`): packing, the goodbye, the vehicles, the airport, the window seat, the photo wall. Reuse it
   for a new trip instead of building travel again.
-- **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap,
+- **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap, `?perf=1` shows a frame-time overlay with a copyable slow-frame log (`engine3d/perf.ts`), `?dpr=N` fixes the pixel ratio (no slow-device drop),
   `window.__thaiHouseQA()` is read-only state for tests (no jump hooks: tests open section links).
 - **The camera lab:** `?cam=1` on any 3D section link opens it (`src/world/labs/camera/`): the real game in an iPad
   or iPhone frame, a panel that nudges the game's camera or locks one of your own (`CameraRig.setOverride`, so no game code

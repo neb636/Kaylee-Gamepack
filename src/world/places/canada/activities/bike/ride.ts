@@ -1490,6 +1490,11 @@ export class MountainBike implements World3D {
 
   // ---------------------------------------------------------------- QA
 
+  perfNote() {
+    const parts = this.leaves.mesh.count + this.drift.mesh.count + this.dust.mesh.count + this.spray.mesh.count + this.foam.mesh.count
+    return `${this.mode} s ${this.s.toFixed(0)} v ${this.d.speed.toFixed(1)} steer ${this.wheel.k.toFixed(2)} carve ${Math.round(this.carve * TO_DEG)} parts ${parts}${this.air ? ' air' : ''}`
+  }
+
   qa() {
     const p = this.toScreen(this.bikePos(tmp2).clone())
     return {
