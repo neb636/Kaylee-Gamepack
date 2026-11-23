@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Campfire Night: the roast, the sticks and the paw</title>
+<title>Script check: Canada › Campfire</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -35,34 +35,22 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .solo img{width:100%;border-radius:12px;display:block;background:var(--lav)}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
-<span class="chip">Check-in fix</span>
-<h1>Campfire Night: the roast, the sticks and the paw</h1>
-<p class="kaylee">She takes a marshmallow from Maple's bag, it toasts on a stick propped over the fire, and when it looks like a friend's picture she feeds it to them.</p>
 
-<h2>Watch</h2><figure><video src="reel/campfire-after.mp4" poster="" controls playsinline muted autoplay loop></video>
-<figcaption>Campfire after · 228 s</figcaption></figure>
-<figure><video src="reel/campfire-before.mp4" poster="" controls playsinline muted autoplay loop></video>
-<figcaption>Campfire before · 145 s</figcaption></figure>
-<h2>Before and after</h2><div class="pics"><figure class="pair"><div><img src="pics/paw-before.jpg" alt="Before: The little paw" loading="lazy"><span>Before</span></div><div><img src="pics/paw-after.jpg" alt="After: The little paw" loading="lazy"><span>After</span></div>
-<figcaption><b>The little paw</b>: Its arm stuck out over the top of the bush with nobody on the end. Now it comes out of the leaves.</figcaption></figure>
-<figure class="pair"><div><img src="pics/stick-before.jpg" alt="Before: Sticks in paws" loading="lazy"><span>Before</span></div><div><img src="pics/stick-after.jpg" alt="After: Sticks in paws" loading="lazy"><span>After</span></div>
-<figcaption><b>Sticks in paws</b>: Maple's stick hung below her paw. Every film stick and the puck now sit in the paw (Roxy's and the kits' too).</figcaption></figure>
-<figure class="pair"><div><img src="pics/roast-before.jpg" alt="Before: The roast" loading="lazy"><span>Before</span></div><div><img src="pics/roast-after.jpg" alt="After: The roast" loading="lazy"><span>After</span></div>
-<figcaption><b>The roast</b>: No more stick floating in the air: it's propped over the fire, and she carries the marshmallow in front of everybody, so it goes through nobody.</figcaption></figure>
-<figure class="solo"><img src="pics/jev-sheet.jpg" alt="Jev 3D glitch check" loading="lazy">
-<figcaption><b>Jev 3D glitch check</b>: Run on the changed screens in nine screen shapes (8 cents in all). No red box was a bug in the game. Detached prop on the roasting stick: not a bug, it is propped over the fire on purpose. Camera inside scenery on a QA-only close-up from behind the fire: fixed, the QA camera stands nearer (11 boxes down to 4, none in the game). Sunk into the ground on the film out, upright iPhone: not sunk; Maple and Roxy are cut off at the sides there, as before this change (in the notes). Maybes checked: none real. The full report on how Jev did is linked in the PR.</figcaption></figure></div>
+<h1>Script check: Canada › Campfire</h1>
+
+
+
+
 <h2>Hear the script</h2><div class="card"><h3>Canada › Campfire</h3>
 <p class="meta">45 lines (1 new) · 115 s of talk · her name 0× · 16 flagged</p>
 
 <p><a href="table-read/canada-campfire.html">Read along: who says what, and when</a></p></div>
-<h2>Listen</h2><div class="card listen"><h3>The roast's new sounds (2.8 s made with ElevenLabs)</h3>
-<audio controls preload="metadata" src="sfx/roast.mp3"></audio>
-<ol class="meta"><li><button class="cue" data-at="0" data-end="0.8"><span class="t">0:00–0:00</span> A marshmallow out of the bag</button></li><li><button class="cue" data-at="1.5" data-end="2.1"><span class="t">0:01–0:02</span> A marshmallow onto the stick</button></li><li><button class="cue" data-at="2.8" data-end="4.16"><span class="t">0:02–0:04</span> Monty eats the branch</button></li></ol></div>
-<h2>Your call</h2><ol><li><p>Does the new roast feel right to play: a marshmallow in her fingers and a stick that stays by the fire?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/558">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
-<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/canada/campfire/roast">Play the roast</a> <a class="pill" href="../#/world/canada/campfire/roast?order=4">Monty's giant one</a> <a class="pill" href="../#/world/canada/story/campfire-in">Watch the opening film</a> <a class="pill" href="../#/world/canada/campfire/roast?feel=1">Feel lab: the roast's knobs</a></p>
+
+
+
 </main>
 <script>
-const qs=["Does the new roast feel right to play: a marshmallow in her fingers and a stick that stays by the fire?"],titles=[]
+const qs=[],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
