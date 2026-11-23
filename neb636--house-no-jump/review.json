@@ -1,0 +1,8 @@
+{
+  "title": "Thailand house: no jump button",
+  "checkIn": "fix",
+  "kaylee": "The yellow jump button is gone from the house; she still walks with the stick, and stools, the mattress and the stairs still hop her up by themselves.",
+  "questions": [],
+  "pictures": [{ "title": "Downstairs", "before": "pics/before.jpg", "after": "pics/after.jpg", "caption": "The jump button (bottom right) is gone" }],
+  "links": [{ "label": "Play it", "hash": "#/world/thailand/hub/downstairs" }]
+}
