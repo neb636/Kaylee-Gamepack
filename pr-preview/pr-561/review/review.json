@@ -1,0 +1,11 @@
+{
+  "title": "Canada map: the camping pin wins",
+  "checkIn": "fix",
+  "kaylee": "Tapping the camping pin on the Canada map opens camping, even when Sparkle's balloon floats right behind it.",
+  "questions": [],
+  "pictures": [
+    { "title": "iPhone", "before": "pics/camping-before.png", "after": "pics/camping-after.png", "caption": "The balloon used to hide behind the camping pin and catch your taps. Now a tap on any heart pin goes to the pin." },
+    { "title": "iPad", "before": "pics/ipad-before.png", "after": "pics/ipad-after.png", "caption": "The balloon floats a little further north, clear of the camping pin." }
+  ],
+  "links": [{ "label": "Try the map", "hash": "#/world/canada/hub/map?team=snowman,bike" }]
+}
