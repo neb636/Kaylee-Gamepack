@@ -1,0 +1,21 @@
+{
+  "title": "One set of controls, in the same places, in every game",
+  "checkIn": "fix",
+  "kaylee": "Back is always top left, the way on is always bottom right, and every button is drawn in the game's own style.",
+  "questions": [
+    "Is lavender right for every \"again\" button, or did you like the mint one at the board games?",
+    "In the mall games the way on now pops in bottom right instead of top centre. Does she find it?"
+  ],
+  "pictures": [
+    { "title": "Mall games: one back button", "before": "pics/barber-before.jpg", "after": "pics/barber-after.jpg", "caption": "Top left goes back to the hall. The sticker strip sits beside it, not under it." },
+    { "title": "Campfire: one row of stars", "before": "pics/campfire-before.jpg", "after": "pics/campfire-after.jpg", "caption": "Stars are the orders she is toasting; the pink dashes are the parts of the game." },
+    { "title": "Board games: leave is top left", "before": "pics/table-before.jpg", "after": "pics/table-after.jpg", "caption": "The waving hand is gone. The games button is drawn, top right." },
+    { "title": "Trophy and again buttons", "before": "pics/win-before.jpg", "after": "pics/win-after.jpg", "caption": "Drawn again and home pictures instead of emoji, everywhere there is an again." },
+    { "title": "The end card", "after": "pics/podium-after.jpg", "caption": "Small again, big way on. The boat race, the Nan roads and the farm stops all end like this." }
+  ],
+  "links": [
+    { "label": "A mall game", "hash": "#/world/thailand/mall-trip/barber" },
+    { "label": "The campfire roast", "hash": "#/world/canada/campfire/roast" },
+    { "label": "The game table", "hash": "#/world/thailand/hub/table" }
+  ]
+}
