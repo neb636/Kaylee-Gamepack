@@ -1055,7 +1055,7 @@ motion.push(
 )
 
 // Roblox controls (engine3d/roam.ts) in the house: a drag on the right swings the camera round, a drag on the left is
-// the thumbstick that walks her the way it's pushed (as the camera faces), and the jump button hops her along.
+// the thumbstick that walks her the way it's pushed (as the camera faces). No jump button in the house.
 motion.push({
   name: 'thai-roam',
   seconds: 6,
@@ -1078,7 +1078,6 @@ motion.push({
     await page.mouse.move(x + 8, y - 70, { steps: 4 })
     await page.waitForTimeout(1600)
     await page.mouse.up()
-    await page.locator('[data-roam="jump"]').click({ force: true })
     await page.waitForTimeout(1200)
   },
 })
