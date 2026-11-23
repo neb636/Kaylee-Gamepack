@@ -3,7 +3,8 @@
 // across it (+ = to her right as she rides down). It heads down the mountain toward -z, winding left and right.
 //
 //   START..0          out of the gondola's top station
-//   0..GREEN_END      the green trail: wide, gentle bends, a few little rollers at the end
+//   0..GREEN_END      the green trail: gentle bends through the woods, opening twice into a wide meadow carpeted in
+//                     fallen leaves (room for big S-turns), a few little rollers at the end
 //   ..BERMS_END       berms and bumps: tighter banked turns; the trail splits round an island of trees into the green
 //                     way (left: smooth, gently banked) and the blue way (right: steep berms, roots, rock hops, doubles)
 //   ..CREEK_END       the creek (a wooden bridge on the left, a splash through on the right) and the jump (a wooden
@@ -230,11 +231,30 @@ export function island(s: number) {
   return SPLIT.half * smooth(Math.min(k * 7, (1 - k) * 8))
 }
 
-/** Half the width of the rideable trail (m). Through the split each way is 3 m wide. */
+/** The green trail's two leaf meadows: where each opens (s), where it's fully open, where it closes again, and how
+ *  wide it gets (half, m). The woods' trail is 3.4 m (half); they open smoothly out to this and back. (The first closes
+ *  before the moose's pond, the second before the rollers and the bear.) */
+export const MEADOWS: [number, number, number, number, number][] = [
+  [22, 40, 66, 86, 10.5],
+  [116, 134, 182, 202, 12],
+]
+/** How open into a meadow the trail is at s (0 in the woods, 1 right out in the meadow). */
+export function meadow(s: number) {
+  for (const [a, b, c, d] of MEADOWS) if (s > a && s < d) return Math.min(smooth((s - a) / (b - a)), 1 - smooth((s - c) / (d - c)))
+  return 0
+}
+const meadowHalf = (s: number) => {
+  for (const [a, , , d, w] of MEADOWS) if (s > a && s < d) return lerp(3.4, w, meadow(s))
+  return 3.4
+}
+/** Through the split each way is this much wider than the woods' 3 m, at the island's widest (room up the berms). */
+export const WAY_WIDE = 1.3
+
+/** Half the width of the rideable trail (m). Through the split each way is 4.3 m wide. */
 export function half(s: number) {
   if (s < 0) return 2.4 + 1 * smooth((s - START) / 14)
-  if (s < GREEN_END) return 3.4 - 0.4 * smooth((s - GREEN_END + 20) / 20)
-  if (s < CREEK_END) return 3 + island(s)
+  if (s < GREEN_END) return meadowHalf(s) - 0.4 * smooth((s - GREEN_END + 20) / 20)
+  if (s < CREEK_END) return 3 + island(s) * (1 + WAY_WIDE / SPLIT.half)
   return 3 + 4.5 * smooth((s - CREEK_END) / (END - CREEK_END))
 }
 
@@ -280,7 +300,8 @@ const BANK = { green: 3, blue: 7.5 }
 export function bank(s: number, lat: number) {
   const c = curve(s)
   const r = island(s)
-  const k = s < GREEN_END ? BANK.green * 1.4 : r > 0 && lat < 0 ? BANK.green : BANK.blue
+  // (Out in a meadow the ground hardly leans: it's a wide open hillside.)
+  const k = s < GREEN_END ? BANK.green * 1.4 * (1 - 0.7 * meadow(s)) : r > 0 && lat < 0 ? BANK.green : BANK.blue
   return Math.max(-0.34, Math.min(0.34, -c * k))
 }
 

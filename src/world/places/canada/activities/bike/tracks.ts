@@ -1,6 +1,7 @@
 // The bike's line on the ground (after Bottomless, where every turn leaves a trench in the snow): a thin groove the back
 // wheel presses into the dirt and the leaves, there all the way down the mountain, so she sees the swoops she made. A
-// ribbon of quads along the wheel's path, the oldest dropping off the end; a hop leaves a gap.
+// ribbon of quads along the wheel's path, the oldest dropping off the end; a hop leaves a gap. (In the leaf meadows a
+// second, wider and darker one: the groove she ploughs through the carpet of leaves.)
 import { BufferAttribute, BufferGeometry, Mesh, MeshBasicMaterial } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 
@@ -18,13 +19,13 @@ export class TireLine {
   private lastX = 0
   private lastZ = 0
 
-  constructor(bag: Bag, private max = 1600, private width = 0.2, color = '#5A3920') {
+  constructor(bag: Bag, private max = 1600, private width = 0.2, color = '#5A3920', opacity = 0.62) {
     this.pos = new Float32Array(max * 2 * 3)
     this.start = new Uint8Array(max)
     this.geo.setAttribute('position', new BufferAttribute(this.pos, 3))
     this.geo.setIndex(new BufferAttribute(new Uint32Array((max - 1) * 6), 1))
     this.geo.setDrawRange(0, 0)
-    const mat = new MeshBasicMaterial({ color, transparent: true, opacity: 0.62, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 })
+    const mat = new MeshBasicMaterial({ color, transparent: true, opacity, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 })
     this.mesh = new Mesh(this.geo, mat)
     this.mesh.frustumCulled = false
     this.mesh.renderOrder = 1
@@ -65,7 +66,8 @@ export class TireLine {
     for (let i = 1; i < this.n; i++) {
       if (this.start[i]) continue
       const p = (i - 1) * 2
-      a.set([p, p + 1, p + 2, p + 1, p + 3, p + 2], q)
+      // (Counter-clockwise seen from above, so it faces up: the other way round it was culled and never showed.)
+      a.set([p, p + 2, p + 1, p + 1, p + 2, p + 3], q)
       q += 6
     }
     idx.needsUpdate = true

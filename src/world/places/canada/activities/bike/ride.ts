@@ -12,8 +12,10 @@
 // (no spot to steer toward, no turn-rate wait). Maple leans and crouches into the push the moment it starts, leaves
 // spray off the back wheel and the wheel leaves a line in the dirt. Let go and the bike points down the trail again
 // and keeps her line (the trail's bends turn her by themselves). The camera swings round behind her and widens at
-// speed. The mountain does the going: steeper is faster, and a carve across the trail costs a little speed. The verb deepens three ways down one course (trail.ts): the green trail (wide and gentle,
-// leaf piles that burst, stumps that boing, a chipmunk running alongside), berms and bumps (two ways round an island
+// speed. The mountain does the going: steeper is faster, and a carve across the trail costs a little speed. The verb deepens three ways down one course (trail.ts): the green trail (gentle, opening
+// twice into wide meadows carpeted in fallen leaves, room for big S-turns: her wheel ploughs a groove through the
+// leaves, each S-turn's flip puffs them up, the hare and the deer graze right where she carves and jump if she whooshes
+// close; leaf piles that burst, stumps that boing, a chipmunk running alongside), berms and bumps (two ways round an island
 // of trees: the green way's gentle rollers or the blue way's steep berms, roots, rock hops and doubles), then the creek
 // (the bridge on the left or a splash through on the right) and the jump (the kicker on the right, or round it). She
 // rolls out in the meadow by the waterfall.
@@ -46,8 +48,8 @@ import { TireLine } from './tracks'
 import { Mountain } from './mountain'
 import { buildSky, FALL, type Gondola, GONDOLA_CABINS, HANG, SKY } from './scenery'
 import type { BikeSection } from './sections'
-import { BERMS_END, BRIDGE_HALF, Course, CREEK, CREEK_END, END, FALLS, GREEN_END, H0, half, inCreek, island, JUMP, phi, POOL, rattly, SHOULDER, SPLIT, START, way } from './trail'
-import { DEG, TO_DEG, wrapAngle } from '../../../../../sdk/math'
+import { BERMS_END, BRIDGE_HALF, Course, CREEK, CREEK_END, END, FALLS, GREEN_END, H0, half, inCreek, island, JUMP, meadow, phi, POOL, rattly, SHOULDER, SPLIT, START, way } from './trail'
+import { DEG, smooth, TO_DEG, wrapAngle } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/bike/ride.ts'
 /** A brisk turn (rad/s): what the lean and the bars measure the bike's turning against. */
@@ -66,7 +68,7 @@ const STEER = knobs('bars', 'Steering', FILE, {
   curve: { value: 1.2, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
   ease: { value: 0.04, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
   grip: { value: 9, min: 1, max: 16, step: 0.5, label: 'Grip', note: 'how quickly a sideways skid dies out (low = drifty)' },
-  chase: { value: 0.65, min: 0, max: 1, step: 0.05, label: 'Camera swings behind her', note: '0 = the camera looks down the trail; 1 = right behind the bike', main: true },
+  chase: { value: 0.8, min: 0, max: 1, step: 0.05, label: 'Camera swings behind her', note: '0 = the camera looks down the trail; 1 = right behind the bike', main: true },
   swing: { value: 5, min: 1, max: 14, step: 0.5, label: 'Camera swing speed', unit: '/s', note: 'how quickly the camera comes round behind her' },
   fov: { value: 10, min: 0, max: 24, step: 1, label: 'Wider at speed', unit: '°', note: 'how much the lens widens when she goes fast (and the camera pulls back)' },
 }, { sections: RIDING })
@@ -124,10 +126,13 @@ const ORDER: BikeSection[] = ['story', 'gondola', 'green', 'berms', 'creek', 'fa
 const PARTS: BikeSection[] = ['green', 'berms', 'creek', 'falls']
 /** Maple's whoops: at most one this often (s). */
 const CHAT_S = 3.5
-/** The deer among the trees, the black bear far off eating berries, the hare who hops across the trail (s, side). */
-const DEER = { s: 468, side: 1, off: 7 }
+/** The deer grazing out in the second leaf meadow and the hare sitting in the first, right where she carves (s, lat:
+ *  she weaves round them, and they jump if she whooshes close); the black bear far off eating berries. */
+const DEER = { s: 160, lat: -3.2 }
 const BEAR = { s: 236, side: -1, off: 8.5 }
-const HARE = { s: 152, side: -1 }
+const HARE = { s: 56, lat: 2.6 }
+/** How close she whooshes past the deer and the hare before they jump (m). */
+const STARTLE = { deer: 4, hare: 3 }
 /** No steering for this long: the 👆 shows how. */
 const HINT_S = 8
 /** The gondola ride: how far up the line it starts (m below the top) and how long it takes (s). */
@@ -137,6 +142,9 @@ const GOND_S = 11
 const STORY_YAW = 1.25
 /** Leaf piles (s, lat: + right of the trail, as a share of the edge so they sit right at it) and stumps on the shoulders. */
 const PILES: [number, number][] = [
+  // (Two out in the meadows, to aim for between the critters.)
+  [70, -0.3],
+  [176, 0.35],
   [42, -0.8],
   [80, 0.85],
   [124, -0.9],
@@ -249,6 +257,12 @@ export class MountainBike implements World3D {
   /** The camera's little dip after a landing (m). */
   private camDip = 0
   private line: TireLine
+  /** Her groove through the meadows' leaves (wider and darker than the line in the dirt). */
+  private groove: TireLine
+  /** The S-turns in a meadow: which way her last big push was, and when; the last flip's puff of leaves. */
+  private flipSign = 0
+  private flipAt = -99
+  private puffAt = -99
   private sq = 0
   private sqV = 0
   private pitch = 0
@@ -275,7 +289,9 @@ export class MountainBike implements World3D {
   private deerHome = { x: 0, z: 0, nx: 0, nz: 0 }
   private bear: Bear
   private hare: Hare
+  /** How far the hare has hopped out of her way (0..1), and which way (across: ±1). */
   private hareK = 0
+  private hareDir = 1
   private looked = new Set<string>()
   /** When someone last spoke (Maple's whoops wait their turn), what Sparkle said already. */
   private chatAt = -99
@@ -294,7 +310,7 @@ export class MountainBike implements World3D {
   private lastTouch = 0
   private lastSteer = -99
   private lastX = 0
-  private counts = { steered: 0, hops: 0, bigAir: 0, landings: 0, piles: 0, stumps: 0, splashes: 0, bridge: 0, jumps: 0, bonks: 0, rocks: 0, swings: 0, taps: 0, pokes: 0 }
+  private counts = { steered: 0, hops: 0, bigAir: 0, landings: 0, piles: 0, stumps: 0, splashes: 0, bridge: 0, jumps: 0, bonks: 0, rocks: 0, swings: 0, taps: 0, pokes: 0, puffs: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -311,7 +327,7 @@ export class MountainBike implements World3D {
     this.rig.camera.far = 3200
 
     // ---- The mountain: the land, the trail, the gondola, the forest, the water, the hills (mountain.ts) ----
-    const deerAt = t.spot(DEER.s, DEER.side * (half(DEER.s) + DEER.off))
+    const deerAt = t.spot(DEER.s, DEER.lat)
     const bearAt = t.spot(BEAR.s, BEAR.side * (half(BEAR.s) + BEAR.off))
     this.mountain = new Mountain(course, bag, (x, z) => Math.hypot(x - deerAt.x, z - deerAt.z) < 4 || Math.hypot(x - bearAt.x, z - bearAt.z) < 6)
     this.gondola = this.mountain.gondola
@@ -395,12 +411,13 @@ export class MountainBike implements World3D {
     this.frog.root.position.copy(this.frogHome)
     this.frog.root.rotation.y = phi(CREEK.at) + Math.PI / 2
     scene.add(this.frog.root)
-    // The deer among the trees (grazing along the trail), the black bear far off by her blueberry bush, the hare at the
-    // trail's edge.
+    // The deer out in the meadow (grazing in the leaves; she bounds off toward the trees on her side), the black bear far
+    // off by her blueberry bush, the hare in the other meadow.
     this.deer = new Deer(bag)
     {
       const a = phi(DEER.s)
-      this.deerHome = { x: deerAt.x, z: deerAt.z, nx: Math.cos(a) * DEER.side, nz: Math.sin(a) * DEER.side }
+      const side = Math.sign(DEER.lat)
+      this.deerHome = { x: deerAt.x, z: deerAt.z, nx: Math.cos(a) * side, nz: Math.sin(a) * side }
       this.deer.root.position.set(deerAt.x, course.land(deerAt.x, deerAt.z), deerAt.z)
       this.deer.root.rotation.y = Math.PI - a + 0.5
       scene.add(this.deer.root)
@@ -446,7 +463,10 @@ export class MountainBike implements World3D {
     const feel: Feel = { top: RIDE.speed, boost: 1.3, accel: RIDE.accel, coast: 0.4, turn: TURN, grip: STEER.grip, near: 2, far: 7, dead: 0.02, lean: RIDE.lean }
     this.d = new Driver(feel)
     this.line = new TireLine(bag)
-    scene.add(this.line.mesh)
+    this.groove = new TireLine(bag, 1200, 0.42, '#5C3218', 0.82)
+    // (Drawn over the fallen leaves, so it reads as pushed through them.)
+    this.groove.mesh.renderOrder = 2
+    scene.add(this.line.mesh, this.groove.mesh)
 
     // ---- Where the link starts ----
     this.section = start.section
@@ -493,6 +513,7 @@ export class MountainBike implements World3D {
     this.y = this.course.ride(s, lat, false)
     this.carve = 0
     this.line?.lift()
+    this.groove?.lift()
     this.vy = 0
     this.air = false
     this.gv = NaN
@@ -523,9 +544,10 @@ export class MountainBike implements World3D {
   }
 
   /** Just out of the station's door (the side shot): until she's a little way down, or weaving there a while (the
-   *  cabins swing past that shot's camera). */
+   *  cabins swing past that shot's camera) once the shot from behind her is clear of the station. */
   private get atDoor() {
-    return this.mode === 'ride' && this.s < 3 && this.modeT < 2.4
+    // (On a phone the shot from behind sits further back: until she's that far out, it would be inside the station.)
+    return this.mode === 'ride' && this.s < 3 && (this.modeT < 2.4 || this.s < START + (this.tall ? 14 : 4))
   }
 
   /** In her gondola cabin (the story, and the ride up). */
@@ -925,10 +947,26 @@ export class MountainBike implements World3D {
     const bx = d.x - Math.sin(d.heading) * back
     const bz = d.z - Math.cos(d.heading) * back
     const g = this.course.ride(this.s, this.lat, this.onBridge)
-    if (this.air || this.wet) this.line.lift()
+    // (Out in a meadow, a groove through the leaves instead of a line in the dirt.)
+    const leafy = meadow(this.s) > 0.3
+    if (this.air || this.wet || leafy) this.line.lift()
     else this.line.add(bx, g + (this.onBridge ? 0.012 : 0.025), bz, d.heading)
+    if (this.air || !leafy) this.groove.lift()
+    else this.groove.add(bx, g + 0.07, bz, d.heading)
     const hard = this.air ? 0 : Math.abs(this.push) * clamp(v / RIDE.speed, 0, 1.3)
     bikeSfx.carve(hard)
+    // An S-turn's flip in the leaves (a big push one way, then soon the other): the leaves puff up, rustle.
+    if (leafy && !this.air && Math.abs(this.push) > 0.55 && v > 3) {
+      const sign = Math.sign(this.push)
+      if (sign !== this.flipSign && this.time - this.flipAt < 1.6 && this.time - this.puffAt > 0.8) {
+        this.puffAt = this.time
+        this.counts.puffs++
+        this.leaves.burst(bx, g + 0.2, bz, 26, 2.6, 3.6, 0.18)
+        bikeSfx.leaves()
+      }
+      this.flipSign = sign
+      this.flipAt = this.time
+    }
     if (hard < 0.15 || this.onBridge || this.wet) return
     // To the outside of the turn: pushing right (+lat) throws them toward -lat, and a little back.
     const a = phi(this.s)
@@ -938,7 +976,7 @@ export class MountainBike implements World3D {
       const sp = 1.6 + hard * 2.4 + Math.random() * 1.2
       const vx = Math.cos(a) * out * sp - Math.sin(d.heading) * (0.6 + Math.random())
       const vz = Math.sin(a) * out * sp - Math.cos(d.heading) * (0.6 + Math.random())
-      const p = Math.random() < 0.6 ? this.leaves : this.dust
+      const p = Math.random() < (leafy ? 0.92 : 0.6) ? this.leaves : this.dust
       p.emit(bx, g + 0.15, bz, vx, 1.6 + hard * 2.2 + Math.random() * 1.4, vz, 0.7 + Math.random() * 0.4, p === this.leaves ? 0.13 + Math.random() * 0.06 : 0.1 + hard * 0.06)
     }
   }
@@ -1087,14 +1125,23 @@ export class MountainBike implements World3D {
     const want = this.deer.busy ? out : this.deer.walkBack ? out + Math.PI : Math.PI - phi(DEER.s) + 0.5
     this.deer.root.rotation.y += wrapAngle(want - this.deer.root.rotation.y) * Math.min(1, dt * 5)
     this.deer.update(dt, t)
-    // (She bounds off by herself if Maple whooshes right past her.)
-    if (this.mode === 'ride' && Math.abs(this.s - DEER.s) < 3 && this.lat * DEER.side > half(this.s) * 0.5 && !this.deer.busy && this.deer.away === 0) this.deer.poke()
+    // (Whoosh right past her and she bounds off, a snort and a puff of leaves.)
+    const close = (s: number, lat: number, r: number) => this.mode === 'ride' && !this.air && Math.hypot(this.s - s, this.lat - lat) < r
+    if (close(DEER.s, DEER.lat, STARTLE.deer) && !this.deer.busy && this.deer.away === 0) {
+      this.deer.poke()
+      snort()
+      this.startled(this.deer.root.position)
+    }
     this.bear.update(dt, t)
 
-    // The hare hops across the trail in front of her as she comes.
-    if (this.mode === 'ride' && !this.hare.crossing && this.hareK === 0 && HARE.s - this.s < 15 && HARE.s - this.s > 4) this.hare.crossing = true
+    // The hare sits in the leaves; whoosh close and he hops out of her way, thump.
+    if (close(HARE.s, HARE.lat, STARTLE.hare) && !this.hare.crossing && this.hareK === 0) {
+      this.hare.crossing = true
+      this.hareDir = HARE.lat >= this.lat ? 1 : -1
+      this.startled(this.hare.root.position)
+    }
     if (this.hare.crossing) {
-      this.hareK = Math.min(1, this.hareK + dt / 1.5)
+      this.hareK = Math.min(1, this.hareK + dt / 0.7)
       if (this.hareK >= 1) {
         this.hare.crossing = false
         thump()
@@ -1107,7 +1154,7 @@ export class MountainBike implements World3D {
     if (this.mode === 'ride')
       for (const [id, at, side] of [
         ['bear', BEAR.s, BEAR.side],
-        ['deer', DEER.s, DEER.side],
+        ['deer', DEER.s, Math.sign(DEER.lat)],
         ['porcupine', PORCUPINE.s, PORCUPINE.side],
       ] as const) {
         if (this.looked.has(id) || at - this.s > 12 || at - this.s < 2) continue
@@ -1135,18 +1182,23 @@ export class MountainBike implements World3D {
     bikeSfx.munch()
   }
 
-  /** The hare at the trail's edge, or partway across (hareK 0..1, left edge to right edge). */
+  /** A puff of leaves where a critter jumps as she whooshes past. */
+  private startled(at: Vector3) {
+    this.leaves.burst(at.x, at.y + 0.2, at.z, 20, 2.2, 3.2, 0.17)
+    bikeSfx.leaves()
+  }
+
+  /** The hare in the meadow, or partway through his hop out of her way (hareK 0..1). */
   private placeHare() {
     const c = this.course
-    const edge = half(HARE.s) + 1.3
-    const lat = HARE.side * edge * (1 - 2 * this.hareK)
-    const s = HARE.s + this.hareK * 1.5
+    const lat = HARE.lat + this.hareDir * 2.4 * smooth(this.hareK)
+    const s = HARE.s + this.hareK * 0.8
     const p = c.trail.spot(s, lat)
     this.hare.root.position.set(p.x, c.ground(s, lat), p.z)
-    // Facing across the trail while he hops, facing the trail when he sits.
+    // Facing up the hill (watching her come), across while he hops, then down it (watching her go).
     const a = phi(s)
-    const across = Math.atan2(-Math.cos(a) * HARE.side, -Math.sin(a) * HARE.side)
-    this.hare.root.rotation.y = this.hare.crossing ? across : this.hareK >= 1 ? across + Math.PI : across
+    const across = Math.atan2(Math.cos(a) * this.hareDir, Math.sin(a) * this.hareDir)
+    this.hare.root.rotation.y = this.hare.crossing ? across : this.hareK >= 1 ? Math.atan2(Math.sin(a), -Math.cos(a)) : Math.atan2(-Math.sin(a), Math.cos(a))
   }
 
   // ---------------------------------------------------------------- Maple: where and how she rides

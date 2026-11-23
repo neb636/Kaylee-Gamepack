@@ -16,8 +16,8 @@ import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
 import { PAL, toon, toonGradient } from '../../../../engine3d/toon'
 import { Water } from '../../../../engine3d/water'
-import { BRIDGE_HALF, CLIFF, Course, CREEK, CREEK_END, END, FALLS, GREEN_END, half, inCreek, island, JUMP, onKicker, POOL, RIB, ROCKS, ROOTS, SPLIT, START, STATION } from './trail'
-import { smooth } from '../../../../../sdk/math'
+import { BRIDGE_HALF, CLIFF, Course, CREEK, CREEK_END, END, FALLS, GREEN_END, half, inCreek, island, JUMP, meadow, MEADOWS, onKicker, POOL, RIB, ROCKS, ROOTS, SPLIT, START, STATION } from './trail'
+import { clamp, smooth } from '../../../../../sdk/math'
 import { FlowMaterial } from '../../../../engine3d/flow'
 export { FlowMaterial }
 
@@ -29,6 +29,7 @@ export function rng(seed: number) {
   let s = seed >>> 0
   return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296)
 }
+const tmpC = new Color()
 const hash = (x: number, z: number) => {
   const v = Math.sin(x * 127.1 + z * 311.7) * 43758.5453
   return v - Math.floor(v)
@@ -38,6 +39,29 @@ const hash = (x: number, z: number) => {
 export const FALL = { red: '#E8553F', scarlet: '#D9443A', orange: '#F2873A', gold: '#F5B83D', yellow: '#F6D45A' }
 const SPRUCE = ['#3F8F63', '#4FA474', '#2F7D58', '#46986A']
 const MAPLES = [FALL.red, FALL.orange, FALL.scarlet, FALL.gold, FALL.orange, FALL.red]
+
+// ---------------------------------------------------------------- the meadows' carpet of leaves
+
+const CARPET = [FALL.orange, FALL.red, FALL.gold, FALL.orange, FALL.yellow, '#D9733A', FALL.scarlet, FALL.gold].map((h) => new Color(h))
+const MEADOW_GRASS = new Color('#A3D67E')
+/** The meadows' ground: fallen leaves in drifts of red, orange and gold, the grass showing through here and there. */
+function carpet(x: number, z: number, out: Color) {
+  out.copy(CARPET[Math.floor(hash(Math.floor(x / 1.4), Math.floor(z / 1.4)) * CARPET.length)])
+  // (Big soft drifts, with thinner patches where the grass shows.)
+  const drift = Math.sin(x / 4.3 + z / 6.1) * Math.sin(z / 3.7 - x / 5.3) + 0.35 * Math.sin((x - z) / 2.9)
+  return out.lerp(MEADOW_GRASS, 0.12 + 0.4 * smooth((-drift - 0.35) / 0.6))
+}
+/** How much leaf carpet covers the ground `a` m from the trail's middle at s (0..1): in a meadow, all of it right across
+ *  (the woods' dirt path fades out as it opens), thinning out past its edge into the grass by the trees. */
+function carpetK(s: number, a: number) {
+  const m = meadow(s)
+  if (m <= 0) return 0
+  const hw = half(s)
+  const path = 3 * (1 - m)
+  const across = smooth((a - path + 1.5) / 1.5)
+  const out = 1 - smooth((a - hw - 1) / (RIB + 9))
+  return clamp(m * 1.6) * across * out
+}
 
 // ---------------------------------------------------------------- the land
 
@@ -111,7 +135,11 @@ export function buildLand(course: Course, gondolaNear: (x: number, z: number, pa
       else if (course.cliffAt(x, z)) c.copy(rock)
       else if (y < 6 && z < zEnd - 30) c.copy(fields[Math.floor(hash(Math.floor((x + 0.35 * z) / 22), 3) * fields.length)])
       else if (gondolaNear(x, z, 0) || onRun(x, z)) c.copy(runC)
-      else if (d < RIB + 10) c.copy(grass).lerp(floor, smooth((d - RIB) / 10))
+      else if (d < RIB + 10) {
+        c.copy(grass).lerp(floor, smooth((d - RIB) / 10))
+        const ck = loc ? carpetK(loc.s, Math.abs(loc.lat)) : 0
+        if (ck > 0) c.lerp(carpet(x, z, tmpC), ck)
+      }
       else if (Math.abs(x - cxz) < 140) c.copy(floor).lerp(quilt[Math.floor(n * 6)], 0.18)
       else {
         // Far away, the forest is a quilt of fall colors.
@@ -215,6 +243,9 @@ export function buildTrail(course: Course, bag: Bag) {
         // Faint bands every 6 m: they stream past, so speed reads.
         if (((s % 6) + 6) % 6 < 0.5 && v < 0.9) c.multiplyScalar(0.94)
       }
+      // Out in a meadow: a carpet of fallen leaves right across, the dirt path fading out under it.
+      const ck = carpetK(s, a)
+      if (ck > 0) c.lerp(carpet(p.x, p.z, tmpC), ck)
       col[k] = c.r
       col[k + 1] = c.g
       col[k + 2] = c.b
@@ -243,7 +274,8 @@ export function buildTrail(course: Course, bag: Bag) {
 export function buildFallen(course: Course, bag: Bag) {
   const t = course.trail
   const r = rng(19)
-  const N = 5200
+  // (The trail's own, then the meadows' carpet.)
+  const N = 5200 + MEADOW_LEAVES
   const geo = bag.add(new CircleGeometry(0.13, 4).rotateX(-Math.PI / 2).scale(1, 1, 1.6))
   // Its own toon material, without depth writes, drawn after the ground and everything standing on it: leaves that
   // overlap lie at one height, and with depth writes they fought over every pixel and shimmered as the camera moved.
@@ -278,10 +310,29 @@ export function buildFallen(course: Course, bag: Bag) {
     m.setColorAt(n, colors[Math.floor(r() * colors.length)])
     n++
   }
+  // The meadows: leaves lying everywhere, thickest where it's most open.
+  const from = MEADOWS[0][0]
+  const to = MEADOWS[MEADOWS.length - 1][3]
+  for (let i = 0; i < MEADOW_LEAVES * 1.6 && n < N; i++) {
+    const s = from + r() * (to - from)
+    if (r() > meadow(s)) continue
+    const lat = (r() * 2 - 1) * (half(s) + 2.5)
+    t.spot(s, lat, sp)
+    const y = course.ground(s, lat) + 0.04
+    e.set(0, r() * Math.PI * 2, 0)
+    q.setFromEuler(e)
+    const k = 0.7 + r() * 0.8
+    mtx.compose(pos.set(sp.x, y, sp.z), q, scl.set(k, 1, k))
+    m.setMatrixAt(n, mtx)
+    m.setColorAt(n, colors[Math.floor(r() * colors.length)])
+    n++
+  }
   m.count = n
   m.instanceMatrix.needsUpdate = true
   return m
 }
+/** How many more leaves lie in the meadows. */
+const MEADOW_LEAVES = 4200
 
 // ---------------------------------------------------------------- the forest
 
