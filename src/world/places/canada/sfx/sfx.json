@@ -164,6 +164,13 @@
   "loop": true
  },
  {
+  "id": "bike-carve",
+  "label": "Tires carving through leaves (loop)",
+  "prompt": "A kids' mountain bike carving a hard turn on a dirt forest trail: the tires slide and swish through dry crunchy autumn leaves and loose dirt, a soft continuous skidding hiss. Even, gentle, not harsh. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
   "id": "bike-bell",
   "label": "The bike bell",
   "prompt": "A bright little bicycle bell, two cheerful dings, clear and sweet, not shrill.",

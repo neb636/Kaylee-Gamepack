@@ -28,6 +28,12 @@ export const bikeSfx = {
     (_v: number) => {},
     (v: number) => ({ rate: 0.75 + Math.min(1, v / 12) * 0.5, vol: Math.min(1, v / 6) * 0.6 }),
   ),
+  /** The tires' hiss through the leaves and dirt while she carves (call it every frame; `hard` 0..1+). */
+  carve: held(
+    url('bike-carve'),
+    (_hard: number) => {},
+    (hard: number) => ({ rate: 0.85 + Math.min(1, hard) * 0.3, vol: Math.min(1, Math.max(0, hard - 0.12) * 1.3) * 0.55 }),
+  ),
   bell: clip(url('bike-bell'), ding),
   leaves: clip(url('bike-leaves'), () => (sfx.fwip(), noise(0.4, 0.12, 'bandpass', 2400, 900, 0, 0.8))),
   /** Boing! Up off a stump. */
