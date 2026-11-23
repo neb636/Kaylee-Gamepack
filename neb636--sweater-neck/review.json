@@ -1,0 +1,11 @@
+{
+  "title": "The bath: the team sweater's neck",
+  "checkIn": "fix",
+  "kaylee": "The team sweater Maple holds up has a real round neck now, not a red ring floating over it.",
+  "questions": [],
+  "pictures": [
+    { "title": "Maple holds up the sweater", "before": "pics/sweater-before.jpg", "after": "pics/sweater-after.jpg", "caption": "The red ring above the top is now a scooped crew neck; the leaf moved down to clear it" },
+    { "title": "After Misty's paw print", "after": "pics/sweater-print.jpg", "caption": "The paw print still lands on the tummy under the leaf" }
+  ],
+  "links": [{ "label": "The mirror pool, then the sweater", "hash": "#/world/canada/bath/mirror?look=" }]
+}
