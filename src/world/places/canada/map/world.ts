@@ -89,7 +89,7 @@ export const MAP_ANCHORS: AnchorInfo[] = [
 ]
 
 /** The map camera's entrance, tuned in the feel lab (?feel=1). */
-export const MAP_CAM = mapCamKnobs('canada-map-cam', 'Canada map camera', 'src/world/places/canada/map/world.ts', { yaw: 0, pitch: -4, zoom: 0.9 }, { activity: 'hub', sections: ['map'] })
+export const MAP_CAM = mapCamKnobs('canada-map-cam', 'Canada map camera', 'src/world/places/canada/map/world.ts', { yaw: 0, pitch: -12, zoom: 0.9 }, { activity: 'hub', sections: ['map'] })
 
 /** Particle colors: water, white, pink, butter, leaf, dust. */
 const DROP = 0
