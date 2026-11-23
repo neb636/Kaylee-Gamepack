@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { Buddy, lineText, lineVoice, say, SparklePuppet, stopSpeaking, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../sdk'
+import { HudGlyph, Buddy, lineText, lineVoice, say, SparklePuppet, stopSpeaking, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../sdk'
 
 /**
  * A tiny bit of story: a friend says 1-2 short lines, then the play starts.
@@ -77,8 +77,8 @@ export function StoryBeat({ lines, img, friend, onDone, bg }: { lines: Line[]; i
           </motion.div>
         )}
       </div>
-      <motion.div animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1 }} style={{ background: 'var(--hotpink)', color: '#fff', borderRadius: 999, padding: '10px 30px', fontSize: 30, fontWeight: 700, boxShadow: 'var(--shadow)' }}>
-        ▶
+      <motion.div animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1 }} style={{ background: 'var(--hotpink)', color: '#fff', borderRadius: 999, padding: '10px 30px', fontSize: 30, fontWeight: 700, boxShadow: '0 5px 0 #d4337b', display: 'grid', placeItems: 'center' }}>
+        <HudGlyph icon="play" />
       </motion.div>
     </motion.button>
   )

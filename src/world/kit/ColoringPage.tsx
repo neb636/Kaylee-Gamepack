@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { sounds } from '../../sdk'
+import { HudGlyph, sounds } from '../../sdk'
 
 export const CRAYONS = ['#FF4F9A', '#FF8FB8', '#B9A6F5', '#7FB2FF', '#8FE3C8', '#5CBF6B', '#FBEA9A', '#FFB347', '#E0603E', '#A8764F', '#FFF7F0', '#6B5D73']
 
@@ -220,7 +220,7 @@ export function ColoringPage({ src, onFill, action }: { src: string; onFill?: (c
           disabled={!canUndo}
           style={{ width: 'var(--target)', height: `calc(var(--target) * ${CRAYON_H})`, borderRadius: 999, background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'calc(var(--target) * 0.36)', opacity: canUndo ? 1 : 0.4 }}
         >
-          ↩️
+          <HudGlyph icon="back" style={{ color: 'var(--lavender-dark)' }} />
         </motion.button>
         {action !== undefined && (
           <div style={{ gridColumn: actionColumn, minHeight: `calc(var(--target) * ${ACTION_H})`, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{action}</div>

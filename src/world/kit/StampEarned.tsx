@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, Buddy, burst, lineText, say, SparklePuppet, sounds, type PuppetHandle, useTimers } from '../../sdk'
+import { HudGlyph, BigButton, Buddy, burst, lineText, say, SparklePuppet, sounds, type PuppetHandle, useTimers } from '../../sdk'
 import type { ActivityInfo, PlaceFact } from '../types'
 
 /** Stamp slam + animal sticker + one spoken fun fact, then back to the country map. `facts` (optional): a row of
@@ -94,7 +94,9 @@ export function StampEarned({ activity, onClose, facts, closeIcon = '🗺️ ▶
       {ready && (
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
           <BigButton onClick={onClose} ariaLabel="Back to the map">
-            {closeIcon}
+            {closeIcon.replace(/^🗺️\s*/, '').replace(/\s*▶$/, '')}
+            {closeIcon.startsWith('🗺️') && <HudGlyph icon="map" />}
+            {closeIcon.endsWith('▶') && <HudGlyph icon="play" />}
           </BigButton>
         </motion.div>
       )}

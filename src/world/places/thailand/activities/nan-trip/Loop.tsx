@@ -13,6 +13,7 @@
 //
 // Sparkle sits in the corner (trip/legs/Guide.tsx). The trip around it
 // (the boarding pass between legs, resume and replays, the stops) is NanTrip.tsx.
+import { HudButton } from '../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -197,19 +198,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
       )}
       {/* On the plane: skip ahead (the cabin to the landing, the landing to Nan) if the ride gets long. */}
       {mount.world === 'plane' && !covered && mode === 'webgl' && (
-        <motion.button
-          aria-label="Skip ahead"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          whileTap={{ scale: 0.88 }}
-          onClick={() => {
-            sounds.whoosh()
-            ;(worldRef.current as PlaneRide | null)?.skip()
-          }}
-          style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', bottom: 'calc(var(--safe-bottom) + 18px)', width: 'clamp(88px, 12vmin, 104px)', height: 'clamp(88px, 12vmin, 104px)', borderRadius: '50%', border: '5px solid #fff', background: 'var(--lavender)', fontSize: 'clamp(36px, 6vmin, 48px)', boxShadow: 'var(--shadow)', zIndex: 33, padding: 0 }}
-        >
-          ⏩
-        </motion.button>
+        <HudButton role="skip" icon="skip" slot="bottom-right" label="Skip ahead" pop={false} onClick={() => { sounds.whoosh(); (worldRef.current as PlaneRide | null)?.skip() }} style={{ zIndex: 33 }} />
       )}
       {mode === 'webgl' && (
         <PhotoFan

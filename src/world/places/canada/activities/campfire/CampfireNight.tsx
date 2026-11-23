@@ -9,7 +9,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, SparklePuppet, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
+import { HudGlyph, BigButton, burst, lineText, say, SparklePuppet, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import type { FilmState } from '../../../../engine3d/film'
@@ -54,7 +54,7 @@ export function CampfireNight({ onDone, setProgress, filmed, stamps }: CanadaAct
   const [film, setFilm] = useState<FilmState | null>(null)
   const [filmLine, setFilmLine] = useState<Line | null>(null)
   const [done, setDone] = useState(false)
-  const [stars, setStars] = useState<{ done: number; of: number } | null>(null)
+  const parts = useRef(0)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const sparkle = useRef<PuppetHandle>(null)
@@ -76,10 +76,18 @@ export function CampfireNight({ onDone, setProgress, filmed, stamps }: CanadaAct
       setLine(l)
       sparkle.current?.play('wave')
     },
-    progress: (n) => cb.current.setProgress(n, CAMP_PARTS),
+    progress: (n) => {
+      parts.current = n
+      cb.current.setProgress(n, CAMP_PARTS)
+    },
     filmLine: setFilmLine,
     film: setFilm,
-    stars: setStars,
+    // The roast: a gold star for every order given right. They take the top bar's pill (the parts go under them as
+    // dashes), so there is one row of stars, not the shell's and one of ours.
+    stars: (st) => {
+      if (st) cb.current.setProgress(st.done, st.of, { done: parts.current, total: CAMP_PARTS })
+      else cb.current.setProgress(parts.current, CAMP_PARTS)
+    },
     done: () => {
       setDone(true)
       burst()
@@ -100,7 +108,6 @@ export function CampfireNight({ onDone, setProgress, filmed, stamps }: CanadaAct
     setDone(false)
     setSection(s)
     setLine(SAY[s])
-    setStars(null)
     setRun((r) => ({ ...r, section: s, kits: 0, laughs: 0, order: 0, goodnight: true, n: r.n + 1 }))
   }
 
@@ -135,16 +142,6 @@ export function CampfireNight({ onDone, setProgress, filmed, stamps }: CanadaAct
           🔦 Tap to wake the campsite
         </button>
       )}
-      {/* The roast: a gold star for every order given right (the row fills up). */}
-      {stars && !film && (
-        <div className="camp-stars" aria-label={`${stars.done} of ${stars.of} stars`} style={{ position: 'absolute', display: 'flex', gap: 4, padding: '6px 14px', borderRadius: 999, background: 'rgba(255,255,255,.88)', boxShadow: 'var(--shadow)', zIndex: 20, pointerEvents: 'none' }}>
-          {Array.from({ length: stars.of }, (_, i) => (
-            <motion.svg key={i} viewBox="0 0 24 24" style={{ width: 'clamp(26px, 4.4vmin, 40px)', height: 'clamp(26px, 4.4vmin, 40px)' }} animate={i < stars.done ? { scale: [1, 1.5, 1] } : { scale: 1 }} transition={{ duration: 0.45 }}>
-              <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" fill={i < stars.done ? '#FFD447' : '#E4DFF0'} stroke={i < stars.done ? '#C98A1A' : '#BDB5D6'} strokeWidth="1.4" strokeLinejoin="round" />
-            </motion.svg>
-          ))}
-        </div>
-      )}
       {/* Sparkle in the corner: she gives the instructions; a tap hears the last one again. */}
       {!film && (
         <button
@@ -162,8 +159,8 @@ export function CampfireNight({ onDone, setProgress, filmed, stamps }: CanadaAct
         <div style={{ position: 'absolute', left: 'calc(var(--target, 88px) + 16px)', right: 'calc(var(--target, 88px) + 16px)', bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
           {done && (
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
-              <BigButton onClick={() => restart('eyes')} ariaLabel="Play again">
-                🔁 🔦
+              <BigButton color="lavender" onClick={() => restart('eyes')} ariaLabel="Play again">
+                <HudGlyph icon="again" /> 🔦
               </BigButton>
             </motion.div>
           )}
@@ -196,8 +193,6 @@ const PILL = {
 
 /** The hint's hand: a press on what to touch (the wiggly tail, the marshmallow, the flashlight). */
 const HINT_CSS = `
-.camp-stars { top: calc(var(--safe-top, 0px) + 14px); right: max(12px, env(safe-area-inset-right)); }
-@media (max-aspect-ratio: 1/1) { .camp-stars { top: calc(var(--safe-top, 0px) + 92px); right: auto; left: 50%; transform: translateX(-50%); } }
 .camp-hint { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 6; }
 .camp-hint span { position: absolute; left: -26px; top: -6px; font-size: 52px; line-height: 1; filter: drop-shadow(0 3px 4px rgba(0,0,0,.45)); animation: camp-press 1.2s ease-in-out infinite; }
 @keyframes camp-press {

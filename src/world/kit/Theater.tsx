@@ -2,7 +2,7 @@
 // The world map's Theater shows every country; a country's Theater button (in its top bar) shows only its own videos.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { say, SparklePuppet, sounds, useOnline, useSayOnMount, type PuppetHandle, useTimers } from '../../sdk'
+import { HudGlyph, say, SparklePuppet, sounds, useOnline, useSayOnMount, type PuppetHandle, useTimers } from '../../sdk'
 import { WORLD_LINES } from '../lines'
 import type { PlaceMeta, PlaceVideo } from '../types'
 import { BarPill, TopBar } from './Chrome'
@@ -251,8 +251,8 @@ export function VideoBreak({ video, onDone, next = '🗺️' }: { video: PlaceVi
               done()
             }}
           >
-            <span>⏭</span>
-            <span>{next}</span>
+            <HudGlyph icon="skip" />
+            {next === '🗺️' ? <HudGlyph icon="map" style={{ color: 'var(--lavender-dark)' }} /> : <span>{next}</span>}
           </motion.button>
         </Screening>
       </Stage>

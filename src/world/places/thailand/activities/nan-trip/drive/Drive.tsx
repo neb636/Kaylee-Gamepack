@@ -7,6 +7,7 @@
 // family's photo with the 3 behind them and the end card offers ✈️🏠 home (from the airport; from the lookout, 🔁 and 🗺️
 // back to the map). Every drive (and every 🔁) rolls its own
 // weather and traffic (roads.ts rollDrive); a link's `weather` holds for the drive it opens.
+import { EndCard as HudEnd, HudButton } from '../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -179,46 +180,25 @@ const STOP_AT: Partial<Record<RoadId, Stop | Stop[]>> = {
  *  reading. At the end of a road with a stop (the valley road's mushroom farm, the sky road's Stop Time Cafe and Bo
  *  Kluea's salt wells), its big pictures come first. */
 function EndCard({ road, onRoad, onStop, onMap, onHome }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: (road: RoadId, stop?: string) => void; onMap?: () => void; onHome?: () => void }) {
-  const size = 'clamp(92px, 15vmin, 128px)'
   const stops = onStop ? [STOP_AT[road] ?? []].flat() : []
+  // One way on, and only it is big and breathes: a stop, else the plane home, else the map.
+  const mapIsOn = !stops.length && !onHome
   return (
-    <motion.div
-      key="end"
-      initial={{ y: 160 }}
-      animate={{ y: 0 }}
-      exit={{ y: 160 }}
-      transition={{ type: 'spring', stiffness: 240, damping: 18 }}
-      style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom, 0px) + 18px)', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 'clamp(12px, 2.6vw, 26px)', padding: '0 16px', zIndex: 50 }}
-    >
+    <HudEnd key="end">
+      <HudButton role="again" icon="again" label="Drive it again" onClick={() => onRoad(road)} />
+      {(onMap ? [] : ROAD_IDS.filter((r) => r !== road)).map((r) => (
+        <HudButton key={r} role="open" label={nanRoad(r).name} onClick={() => onRoad(r)}>
+          {nanRoad(r).icon}
+        </HudButton>
+      ))}
+      {onMap && <HudButton role={mapIsOn ? 'go' : 'open'} icon="map" size={mapIsOn ? 'lg' : 'md'} pulse={mapIsOn} label="The Nan map" onClick={onMap} />}
       {stops.map((stop) => (
-        <motion.button key={stop.icon} aria-label={stop.label} whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1.1 }} onClick={() => onStop?.(road, stop.id)} style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: 'var(--hotpink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}>
+        <HudButton key={stop.icon} role="go" size="lg" pulse label={stop.label} onClick={() => onStop?.(road, stop.id)}>
           {stop.icon}
-        </motion.button>
+        </HudButton>
       ))}
-      {[road, ...(onMap ? [] : ROAD_IDS.filter((r) => r !== road))].map((r) => (
-        <motion.button
-          key={r}
-          aria-label={r === road ? 'Drive it again' : nanRoad(r).name}
-          whileTap={{ scale: 0.88 }}
-          animate={r === road ? { scale: 1 } : { scale: [1, 1.07, 1] }}
-          transition={r === road ? undefined : { repeat: Infinity, duration: 1.4, delay: ROAD_IDS.indexOf(r) * 0.2 }}
-          onClick={() => onRoad(r)}
-          style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: r === road ? 'var(--lavender)' : 'var(--pink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}
-        >
-          {r === road ? '🔁' : nanRoad(r).icon}
-        </motion.button>
-      ))}
-      {onMap && (
-        <motion.button aria-label="The Nan map" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.07, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} onClick={onMap} style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: 'var(--pink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}>
-          🗺️
-        </motion.button>
-      )}
-      {/* On the trip, from the 3: the plane home (the bigger pulse: it's the way on). */}
-      {onHome && (
-        <motion.button aria-label="Fly home" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1.1 }} onClick={onHome} style={{ minWidth: 'clamp(120px, 22vw, 170px)', height: size, borderRadius: 999, border: '6px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', padding: '0 20px' }}>
-          ✈️🏠
-        </motion.button>
-      )}
-    </motion.div>
+      {/* On the trip, from the 3: the plane home. */}
+      {onHome && <HudButton role="go" icon="home" size="lg" pulse label="Fly home" onClick={onHome} />}
+    </HudEnd>
   )
 }

@@ -1,5 +1,6 @@
 // The Vet Clinic's screen: the 3D exam room (clinic.ts), its tap targets, the patient's thought bubble (the tool it
-// needs next) and the 👆 after a while with nothing touched. When all three patients are better, a big 🛝 takes her back to the playground.
+// needs next) and the 👆 after a while with nothing touched. When all three patients are better, the way on (bottom right) takes her back to the playground.
+import { HudButton } from '../../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -105,17 +106,7 @@ export function Vet({ patient, onPatient, onHealed, onPlay }: Props) {
       )}
       <AnimatePresence>
         {allDone && (
-          <motion.button
-            aria-label="Back to the playground"
-            initial={{ scale: 0 }}
-            animate={{ scale: [0, 1.2, 1], rotate: [0, -6, 6, 0] }}
-            transition={{ duration: 0.6, rotate: { repeat: Infinity, repeatDelay: 1.6, duration: 0.6 } }}
-            whileTap={{ scale: 0.88 }}
-            onClick={onPlay}
-            style={{ position: 'absolute', left: '50%', top: 'calc(var(--top-clear, 104px) + 12px)', translate: '-50% 0', width: 'clamp(96px, 16vmin, 132px)', height: 'clamp(96px, 16vmin, 132px)', borderRadius: '50%', border: '6px solid #fff', background: 'var(--hotpink)', fontSize: 'clamp(48px, 8vmin, 66px)', boxShadow: 'var(--shadow)', zIndex: 60, padding: 0 }}
-          >
-            🛝
-          </motion.button>
+          <HudButton key="on" role="go" icon="play" size="lg" slot="bottom-right" pulse label="Back to the playground" onClick={onPlay} />
         )}
       </AnimatePresence>
     </div>

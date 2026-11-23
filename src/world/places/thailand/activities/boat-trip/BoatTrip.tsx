@@ -40,6 +40,7 @@
 // keep going from there; after her first whole trip it offers 🧳 the whole trip again or 🚤 straight to the boat with what
 // she packed last time, and the flight is shorter (`replay=1` in a link plays it that way). A `home` link without
 // photos from the bay builds the bay behind the boarding pass first and takes a fresh Nail Island photo.
+import { HudButton } from '../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -797,19 +798,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       )}
       {/* On the plane: skip ahead (the cabin to the landing, the landing to Krabi) if the ride gets long. */}
       {mount.world === 'plane' && !pass && mode === 'webgl' && (
-        <motion.button
-          aria-label="Skip ahead"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          whileTap={{ scale: 0.88 }}
-          onClick={() => {
-            sounds.whoosh()
-            ;(worldRef.current as PlaneRide | null)?.skip()
-          }}
-          style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', bottom: 'calc(var(--safe-bottom) + 18px)', width: 'clamp(88px, 12vmin, 104px)', height: 'clamp(88px, 12vmin, 104px)', borderRadius: '50%', border: '5px solid #fff', background: 'var(--lavender)', fontSize: 'clamp(36px, 6vmin, 48px)', boxShadow: 'var(--shadow)', zIndex: 33, padding: 0 }}
-        >
-          ⏩
-        </motion.button>
+        <HudButton role="skip" icon="skip" slot="bottom-right" label="Skip ahead" pop={false} onClick={() => { sounds.whoosh(); (worldRef.current as PlaneRide | null)?.skip() }} style={{ zIndex: 33 }} />
       )}
       <PhotoFan
         photos={photos}

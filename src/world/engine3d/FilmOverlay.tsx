@@ -6,7 +6,7 @@
 // finger was (nothing in the world reacts during a film, but the screen never ignores her).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { lineText, lineVoice, sounds, type Line, useTimers } from '../../sdk'
+import { HudGlyph, lineText, lineVoice, sounds, type Line, useTimers } from '../../sdk'
 import { TURN_S, type FilmState } from './film'
 
 export interface Speaker {
@@ -140,7 +140,7 @@ function SkipButton({ onSkip }: { onSkip: () => void }) {
       <svg viewBox="0 0 100 100" aria-hidden style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
         <circle cx="50" cy="50" r={R} fill="none" stroke="#FF4F9A" strokeWidth="8" strokeLinecap="round" strokeDasharray={C} strokeDashoffset={held ? 0 : C} style={{ transition: held ? `stroke-dashoffset ${HOLD_S}s linear` : 'stroke-dashoffset .2s' }} />
       </svg>
-      <span aria-hidden style={{ fontSize: 'clamp(26px, 4.6vmin, 38px)', lineHeight: 1 }}>⏭</span>
+      <HudGlyph icon="skip" size="clamp(26px, 4.6vmin, 38px)" style={{ color: 'var(--ink-soft)', position: 'relative' }} />
     </button>
   )
 }

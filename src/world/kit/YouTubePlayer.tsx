@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
-import { BigButton, Mascot, say, sounds, stopSpeaking, useTimers } from '../../sdk'
+import { HudGlyph, BigButton, Mascot, say, sounds, stopSpeaking, useTimers } from '../../sdk'
 import { WORLD_LINES } from '../lines'
 import type { PlaceVideo } from '../types'
 import { FitBox } from './Chrome'
@@ -245,10 +245,10 @@ export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVid
               </motion.div>
               <div style={{ display: 'flex', gap: 'clamp(12px, 4cqw, 32px)' }}>
                 <BigButton color="lavender" onClick={replay} ariaLabel="Watch again">
-                  ↻
+                  <HudGlyph icon="again" />
                 </BigButton>
-                <BigButton color="pink" onClick={onDone} ariaLabel="All done">
-                  ✓
+                <BigButton color="mint" onClick={onDone} ariaLabel="All done">
+                  <HudGlyph icon="check" />
                 </BigButton>
               </div>
             </Cover>
@@ -256,8 +256,8 @@ export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVid
           {state === 'error' && (
             <Cover key="error">
               <Mascot pose="think" size={Math.min(160, window.innerHeight * 0.18)} />
-              <BigButton color="pink" onClick={onDone} ariaLabel="All done">
-                ✓
+              <BigButton color="mint" onClick={onDone} ariaLabel="All done">
+                <HudGlyph icon="check" />
               </BigButton>
             </Cover>
           )}

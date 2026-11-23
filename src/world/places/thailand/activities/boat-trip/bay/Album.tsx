@@ -3,6 +3,7 @@
 // poses, Mom's selfies; at Baan Chang, the sign wall and the splash), and an animal sticker flies in for every
 // critter she drives up to (and Khanom, the baby elephant, after the splash). Open it and the photos fill one page and
 // the ten stickers the other; tap any of them to hear Sparkle's fact. Nothing to read.
+import { HudButton } from '../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import type { Line } from '../../../../../../sdk'
@@ -22,7 +23,6 @@ export interface AlbumPhoto {
 const FACT: Record<PhotoKind, Line | null> = { village: L.bay.facts.football, hong: L.bay.facts.hong, nail: L.bay.facts.nail, selfie: null, race: L.race.trophy, sign: L.facts.chang, chang: L.facts.elephant }
 /** A sticker's fact (Khanom's: the trunk). */
 const stickerFact = (id: StickerId): Line => L.bay.stickers[id] ?? L.chang.facts.trunk
-const BTN = 'min(96px, max(68px, 12vmin))'
 /** Where the album button's middle is (a flying sticker aims there). */
 const buttonCenter = () => ({ x: window.innerWidth - 18 - 48, y: window.innerHeight - 18 - 48 })
 
@@ -37,27 +37,29 @@ export function Album(props: { photos: AlbumPhoto[]; found: StickerId[]; open: b
   const last = photos[photos.length - 1]
   return (
     <>
-      <motion.button
+      <HudButton
         key={`album-${bump}`}
-        aria-label="Trip album"
+        role="open"
+        icon="album"
+        slot="bottom-right"
+        label="Trip album"
+        pop={false}
         initial={bump ? { scale: 1.35, rotate: -10 } : false}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: 'spring', stiffness: 380, damping: 9 }}
-        whileTap={{ scale: 0.88 }}
         onClick={() => {
           sfx.pop()
           onOpen()
         }}
-        style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', bottom: 'calc(var(--safe-bottom) + 18px)', width: BTN, height: BTN, borderRadius: 24, border: '5px solid #fff', background: 'var(--lavender)', boxShadow: 'var(--shadow)', zIndex: 32, padding: 0, display: 'grid', placeItems: 'center', fontSize: 'min(48px, 7vmin)', overflow: 'visible' }}
+        style={{ zIndex: 32, overflow: 'visible' }}
       >
-        <span aria-hidden>📔</span>
         {last && <img src={last.src} alt="" style={{ position: 'absolute', right: -10, top: -14, width: '58%', borderRadius: 4, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(43,35,48,.3)', transform: 'rotate(8deg)' }} />}
         {found.length > 0 && (
           <span aria-hidden style={{ position: 'absolute', left: -12, top: -12, width: 44, height: 44, display: 'grid', placeItems: 'center', background: '#fff', borderRadius: '50%', boxShadow: '0 2px 6px rgba(43,35,48,.25)' }}>
             <Sticker id={found[found.length - 1]} found size={34} />
           </span>
         )}
-      </motion.button>
+      </HudButton>
       <AnimatePresence>
         {open && (
           <motion.div
@@ -125,16 +127,7 @@ export function Album(props: { photos: AlbumPhoto[]; found: StickerId[]; open: b
                   )
                 })}
               </div>
-              <button
-                aria-label="Close album"
-                onClick={() => {
-                  sfx.pop()
-                  onClose()
-                }}
-                style={{ position: 'sticky', bottom: 0, gridColumn: '1 / -1', justifySelf: 'center', width: 88, height: 88, borderRadius: '50%', border: '5px solid #fff', background: 'var(--hotpink)', color: '#fff', fontSize: 40, fontWeight: 700, boxShadow: 'var(--shadow)' }}
-              >
-                ✓
-              </button>
+              <HudButton role="done" icon="check" label="Close album" pop={false} onClick={() => { sfx.pop(); onClose() }} style={{ position: 'sticky', bottom: 0, gridColumn: '1 / -1', justifySelf: 'center' }} />
             </motion.div>
             <AnimatePresence>
               {big && (

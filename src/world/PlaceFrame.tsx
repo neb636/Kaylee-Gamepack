@@ -1,5 +1,5 @@
 // Runs one country: loads its Place component, draws the top bar, saves stamps, and shows the trophy ceremony.
-import { lazy, Suspense, useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
 import { go } from '../router'
 import { motion } from 'motion/react'
@@ -60,9 +60,14 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
   const online = useOnline() // videos need the internet
   const stamps = useMemo(() => (seedAll ? meta.activities.map((a) => a.id) : passport.stamps[meta.id] ?? []), [seedAll, meta, passport])
   const [won, setWon] = useState(false)
-  const [progress, setProgressState] = useState({ done: 0, total: 0 })
+  // The stars belong to the activity that set them (`of`): a new activity starts with none. (Clearing them in an effect
+  // here used to wipe the stars a game had just set, whenever its code was already loaded: a child's effects run first.)
+  const [progressState, setProgressState] = useState<{ done: number; total: number; parts?: { done: number; total: number }; of?: string }>({ done: 0, total: 0 })
+  const showing = useRef(activity)
+  showing.current = activity
+  const progress = progressState.of === activity ? progressState : { done: 0, total: 0, parts: undefined }
 
-  const setProgress = useCallback((done: number, total: number) => setProgressState({ done, total }), [])
+  const setProgress = useCallback((done: number, total: number, parts?: { done: number; total: number }) => setProgressState({ done, total, parts, of: showing.current }), [])
   // An activity can take over the top-left button while it's open (kit/topLeft.ts: a Koh Samet stop's way back to the beach).
   const topLeft = useTopLeftOverride()
   const backToMap = useCallback(() => go.world(meta.id), [meta.id])
@@ -93,7 +98,6 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
   }, [meta.id])
 
   useEffect(() => {
-    setProgressState({ done: 0, total: 0 })
     if (activity) capture('world_activity_started', { place_id: meta.id, activity_id: activity })
   }, [activity, meta.id])
 
@@ -146,7 +150,7 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
         >
           {progress.total > 0 && (
             <BarPill>
-              <StarProgress done={progress.done} total={progress.total} size="clamp(22px, min(6vw, 6vh), 34px)" />
+              <StarProgress done={progress.done} total={progress.total} parts={progress.parts} size="clamp(22px, min(6vw, 6vh), 34px)" />
             </BarPill>
           )}
         </TopBar>

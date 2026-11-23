@@ -1,5 +1,6 @@
 // The Racing Slide's screen: the 3D slide (track.ts), its tap targets, the countdown's big numbers, the ring that closes
-// on her before each bump (rounds 2 and 3) and the 👆 when she's stuck (or the first time something's new). After three races a big 🛝 takes her back to the playground.
+// on her before each bump (rounds 2 and 3) and the 👆 when she's stuck (or the first time something's new). After three races the way on (bottom right) takes her back to the playground.
+import { HudButton } from '../../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -88,17 +89,7 @@ export function Race({ round, onRound, onWon, onPlay }: Props) {
       <Countdown n={count} />
       <AnimatePresence>
         {allDone && (
-          <motion.button
-            aria-label="Back to the playground"
-            initial={{ scale: 0 }}
-            animate={{ scale: [0, 1.2, 1], rotate: [0, -6, 6, 0] }}
-            transition={{ duration: 0.6, rotate: { repeat: Infinity, repeatDelay: 1.6, duration: 0.6 } }}
-            whileTap={{ scale: 0.88 }}
-            onClick={onPlay}
-            style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 16px)', bottom: 'calc(var(--safe-bottom, 0px) + 16px)', width: 'clamp(96px, 16vmin, 132px)', height: 'clamp(96px, 16vmin, 132px)', borderRadius: '50%', border: '6px solid #fff', background: 'var(--hotpink)', fontSize: 'clamp(48px, 8vmin, 66px)', boxShadow: 'var(--shadow)', zIndex: 60, padding: 0 }}
-          >
-            🛝
-          </motion.button>
+          <HudButton key="on" role="go" icon="play" size="lg" slot="bottom-right" pulse label="Back to the playground" onClick={onPlay} />
         )}
       </AnimatePresence>
     </div>

@@ -188,6 +188,7 @@ export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onSti
           }}
         />
       </div>
+      {/* hud-ok: the jump button is part of the joystick (a play control with its own look), not a HUD control. */}
       <button
         ref={jumpEl}
         aria-label="Jump"

@@ -1,9 +1,11 @@
 // What the game table shows over the house: the picker (three big picture cards drawn like the game shelf's icons, the
 // three cousins' faces with BB picked, a big ▶; in the Unicorn game ▶ then opens a second step, her unicorn's color:
 // pictures of the four real pieces and another ▶), and while they play: the two faces
-// at the sides (whoever's turn it is grows and glows), 🎲 back to the games and 👋 to get up, and a big 🔁 when someone
+// at the sides (whoever's turn it is grows and glows), the games button (top right), getting up (the top-left button), and a big "again" when someone
 // has won. The faces are pictures of their real 3D selves (faces.ts; an emoji until the picture is taken). No words to
 // read: pictures, faces and big targets (var(--target): 96 px on iPad, 72 px on a short iPhone).
+import { useTopLeft } from '../../../../../kit/topLeft'
+import { HUD_ICONS, HudButton } from '../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, type CSSProperties, type MutableRefObject } from 'react'
 import { sounds, useLandscape } from '../../../../../../sdk'
@@ -44,29 +46,20 @@ export function Face({ who, size, photo, active = false, crown = false }: { who:
 
 export function TableUI({ view, table }: { view: TableView; table: MutableRefObject<TablePlugin | null> }) {
   const t = () => table.current
-  const tap = (f: () => void) => () => {
-    sounds.pop()
-    f()
-  }
   const size = 'var(--target)'
   // The faces at the sides: halfway down on a wide screen; on a tall one up in the sky above the floating board, so they
   // never sit over its corners.
   const wide = useLandscape()
   const side: CSSProperties = { position: 'absolute', top: wide ? '50%' : 'calc(var(--safe-top) + 10px + var(--target) * 1.35)', translate: wide ? '0 -50%' : '0 0', zIndex: 30, pointerEvents: 'none' }
-  const iconBtn = (bg: string): CSSProperties => ({ ...round(size, bg, '#fff'), fontSize: `calc(${size} * .45)`, cursor: 'pointer' })
+  useTopLeft({
+    icon: <span style={{ width: '58%', height: '58%' }}>{HUD_ICONS.back}</span>,
+    label: 'Leave the table',
+    onBack: () => t()?.leave(),
+  })
   return (
     <>
-      {/* Top right: back to the games, and get up from the table. */}
-      <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 10px)', right: 'calc(var(--safe-right, 0px) + 14px)', display: 'flex', gap: 12, zIndex: 50 }}>
-        {(!view.picking || view.step === 'color') && (
-          <motion.button aria-label="Games" whileTap={{ scale: 0.85 }} onClick={tap(() => t()?.games())} style={iconBtn('var(--butter)')}>
-            🎲
-          </motion.button>
-        )}
-        <motion.button aria-label="Leave the table" whileTap={{ scale: 0.85 }} onClick={tap(() => t()?.leave())} style={iconBtn('var(--sky)')}>
-          👋
-        </motion.button>
-      </div>
+      {/* Top right: back to the games. (Getting up from the table is the top-left button: the one way back.) */}
+      {(!view.picking || view.step === 'color') && <HudButton role="open" icon="dice" size="sm" slot="top-right" label="Games" onClick={() => t()?.games()} />}
 
       {view.picking ? (
         view.step === 'color' ? <ColorPicker view={view} table={table} /> : <Picker view={view} table={table} />
@@ -85,19 +78,7 @@ export function TableUI({ view, table }: { view: TableView; table: MutableRefObj
           <AnimatePresence>{view.card && <BigCard key={view.card + view.turn} token={view.card} />}</AnimatePresence>
           <AnimatePresence>
             {view.phase === 'finished' && (
-              <motion.button
-                key="again"
-                aria-label="Play again"
-                initial={{ scale: 0 }}
-                animate={{ scale: [1, 1.08, 1] }}
-                exit={{ scale: 0 }}
-                transition={{ scale: { repeat: Infinity, duration: 1.4 } }}
-                whileTap={{ scale: 0.85 }}
-                onClick={tap(() => t()?.again())}
-                style={{ ...iconBtn('var(--mint)'), position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: '-50% 0', width: 'calc(var(--target) * 1.25)', height: 'calc(var(--target) * 1.25)', fontSize: 'calc(var(--target) * .6)', zIndex: 40 }}
-              >
-                🔁
-              </motion.button>
+              <HudButton key="again" role="again" icon="again" size="lg" slot="bottom-center" pulse label="Play again" onClick={() => t()?.again()} />
             )}
           </AnimatePresence>
         </>

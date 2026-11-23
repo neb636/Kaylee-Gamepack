@@ -19,7 +19,7 @@
 import { getStroke } from 'perfect-freehand'
 import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, burst, firstTime, sounds, useAlive, useElementSize, type Line, useTimers, Timers } from '../../../../../sdk'
+import { HudGlyph, BigButton, burst, firstTime, sounds, useAlive, useElementSize, type Line, useTimers, Timers } from '../../../../../sdk'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
@@ -1318,8 +1318,8 @@ export function SnowCoats({ onDone }: ActivityProps) {
         )}
         {phase === 'end' && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={CORNER}>
-            <BigButton onClick={again} ariaLabel="Again">
-              🔁 ❄️
+            <BigButton color="lavender" onClick={again} ariaLabel="Again">
+              <HudGlyph icon="again" /> ❄️
             </BigButton>
           </motion.div>
         )}

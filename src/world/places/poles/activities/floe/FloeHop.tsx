@@ -7,7 +7,7 @@
 // cheer, then the stamp (onDone; the film after it is Mama meeting Pebble). "Again" lays the floes out a new way.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, burst, say, speakingVoice, useAlive, wait, type Line, useTimers } from '../../../../../sdk'
+import { HudGlyph, BigButton, burst, say, speakingVoice, useAlive, wait, type Line, useTimers } from '../../../../../sdk'
 import { onDevice } from '../../../../../sdk/device'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
@@ -165,8 +165,8 @@ export function FloeHop({ onDone }: ActivityProps) {
       <Guide ref={guide} hint={home || section === 'mama' ? null : HINT[section]} quiet={home} />
       {home && (
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={{ position: 'absolute', right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', zIndex: 20 }}>
-          <BigButton onClick={again} ariaLabel="Again, with new floes">
-            🔁 🧊
+          <BigButton color="lavender" onClick={again} ariaLabel="Again, with new floes">
+            <HudGlyph icon="again" /> 🧊
           </BigButton>
         </motion.div>
       )}

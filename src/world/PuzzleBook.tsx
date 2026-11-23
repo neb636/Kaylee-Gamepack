@@ -1,7 +1,7 @@
 // Free-play picture puzzles, alongside the coloring book. No passport stamps required.
 import { useEffect, useRef, useState } from 'react'
 import { go } from '../router'
-import { BigButton, JigsawPuzzle, SayButton, SparklePuppet, say, sounds, useSayOnMount, type PuppetHandle } from '../sdk'
+import { HudGlyph, BigButton, JigsawPuzzle, SayButton, SparklePuppet, say, sounds, useSayOnMount, type PuppetHandle } from '../sdk'
 import { DockGlyph, MapIcon, worldBack } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
@@ -69,7 +69,7 @@ function Puzzle({ picture }: { picture: typeof pictures[number] }) {
       <div style={{ flex: 1, minHeight: 0 }}><JigsawPuzzle key={`${size}-${round}`} img={picture.img} {...counts[size]} onSnap={n => { setPlaced(n); void puppet.current?.play('nod') }} onMiss={() => { void say(L.puzzleMiss); void puppet.current?.play('think') }} onDone={() => { if (!mounted.current || generation.current !== currentGeneration) return; setDone(true); void say(L.puzzleDone); void puppet.current?.play('cheer') }} /></div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexShrink: 0, minHeight: 96 }}>
         <SparklePuppet ref={puppet} height="96px" />
-        {done ? <BigButton onClick={() => { setDone(false); setPlaced(0); setRound(n => n + 1); void say(L.puzzleHow) }}>↻ Play again</BigButton> : <SayButton text={L.puzzleHint} />}
+        {done ? <BigButton color="lavender" onClick={() => { setDone(false); setPlaced(0); setRound(n => n + 1); void say(L.puzzleHow) }}><HudGlyph icon="again" /> Play again</BigButton> : <SayButton text={L.puzzleHint} />}
         <BigButton onClick={() => { generation.current++; setSize(null); setDone(false); setPlaced(0); setRound(n => n + 1); void say(L.puzzlePieces) }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><DockGlyph kind="puzzles" /> Pieces</span></BigButton>
       </div>
     </>}

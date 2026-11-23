@@ -9,7 +9,13 @@ export interface TopLeft {
   onBack(): void
 }
 
+// A stack: the newest one mounted shows; when it goes, the one under it (the house's, under the game table's) is back.
+const stack: TopLeft[] = []
 let current: TopLeft | null = null
+const sync = () => {
+  current = stack[stack.length - 1] ?? null
+  subs.forEach((f) => f())
+}
 const subs = new Set<() => void>()
 const subscribe = (f: () => void) => {
   subs.add(f)
@@ -36,11 +42,12 @@ export function useTopLeft(t: TopLeft | null) {
       label: label ?? '',
       onBack: () => latest.current?.onBack(),
     }
-    current = mine
-    subs.forEach((f) => f())
+    stack.push(mine)
+    sync()
     return () => {
-      if (current === mine) current = null
-      subs.forEach((f) => f())
+      const i = stack.indexOf(mine)
+      if (i >= 0) stack.splice(i, 1)
+      sync()
     }
   }, [on, label])
 }

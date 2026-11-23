@@ -166,6 +166,7 @@ and `docs/3d-characters.md`.
 | Designing a toy | `docs/play-design.md` (the eight principles and the fun check), `planning/around-the-world/ACTIVITY-TEMPLATE.md` |
 | Building anything | `docs/building.md` (where things live, packages, the SDK, adding an activity end to end, deep links, screens, offline, commands) |
 | Picking an interaction | `docs/interactions.md` |
+| Adding a button (back, way on, again, skip, done) | `docs/hud.md` (the six places, `HudButton`, the drawn icons) |
 | Working in 3D or Thailand | `docs/thailand-3d.md` (engine, camera, cinema, labs) |
 | Telling a story or a cutscene | `docs/films.md` (films: beats, shots, memories, skipping; Jip and the hat mix-up is the first) |
 | Writing or recording lines | `docs/voices.md` (the cast, `lines.ts`, recording, the table read) |
@@ -182,11 +183,14 @@ every new or changed game or level). **Agent:** `fresh-eyes` reviews a toy it ha
 
 - `npm run verify` must pass before every PR. It checks: the player-name rule (rule 5) and its own tests, every
   `voice-lines.json` matches its `lines.ts`, a voice clip for every line, heavy libraries (three, phaser) only inside a
-  country folder or the 3D engine, no raw `setTimeout`/`setInterval` in a game (next point), no file names that differ only in case, the generated `docs/game-sections.html` and
+  country folder or the 3D engine, no raw `setTimeout`/`setInterval` in a game (next point), the controls are one family (`docs/hud.md`), no file names that differ only in case, the generated `docs/game-sections.html` and
   `docs/code-map.md` (run `npm run sections-readme`), typecheck, build. This list is the one source; other docs link here.
   Changed lines? Push them: the PR records them for you: its preview workflow's voices job uses the `OPENAI_API_KEY` repository secret, commits the clips to your branch and re-runs CI. `git pull` to get the clips. With a key of your own you can record
   them first (`node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`); you don't need one.
 - Every section of every activity opens from a link, with its state in the URL (`tests/sections.spec.ts`).
+- **Controls are one family.** Back is the top-left button (`useTopLeft`), progress is the one pill (`setProgress`),
+  and every other control is a `<HudButton role slot />` with a drawn icon, never a hand-styled circle or a system
+  emoji (`docs/hud.md`, checked by `scripts/check-hud.mjs`).
 - Ask the user before adding a package (`docs/building.md`, Dependencies).
 - **Reuse before you write.** Number helpers are `src/sdk/math.ts`, the sound context is `audio()` (`src/sdk/sounds.ts`),
   the stamp → video → map flow is `useStampFlow` (`src/world/kit/stampFlow.tsx`), and 3D has `engine3d/` (outlines,

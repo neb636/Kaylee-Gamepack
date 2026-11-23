@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
-import { awardTrophy, bigCelebration, BigButton, Mascot, say, sounds, Trophy } from './sdk-internal'
+import { awardTrophy, bigCelebration, BigButton, HudGlyph, Mascot, say, sounds, Trophy } from './sdk-internal'
 
 /** What the trophy ceremony needs to know about what was won (a country's trophy: `world-<id>`, its name, emoji, title). */
 export interface TrophyWin {
@@ -46,7 +46,7 @@ export function WinCeremony({ meta, onPlayAgain, onHome }: { meta: TrophyWin; on
       </div>
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', marginTop: 12 }}>
         <BigButton
-          color="white"
+          color="lavender"
           onClick={() => {
             if (isPostHogEnabled) {
               posthog.capture('game_restarted', { game_id: meta.id })
@@ -55,10 +55,10 @@ export function WinCeremony({ meta, onPlayAgain, onHome }: { meta: TrophyWin; on
           }}
           ariaLabel="Play again"
         >
-          🔁 Again
+          <HudGlyph icon="again" /> Again
         </BigButton>
         <BigButton color="pink" onClick={onHome} ariaLabel="Home">
-          🏠 Home
+          <HudGlyph icon="home" /> Home
         </BigButton>
       </div>
     </motion.div>

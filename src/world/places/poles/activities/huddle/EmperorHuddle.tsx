@@ -7,7 +7,7 @@
 // Pebble is tucked back in). After Papa's song: the stamp (onDone).
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, say, type Line } from '../../../../../sdk'
+import { HudGlyph, BigButton, say, type Line } from '../../../../../sdk'
 import { onDevice } from '../../../../../sdk/device'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
@@ -156,8 +156,8 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
       </div>
       {phase === 'end' && (
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }} style={CORNER}>
-          <BigButton onClick={again} ariaLabel="Again">
-            🔁 🐧
+          <BigButton color="lavender" onClick={again} ariaLabel="Again">
+            <HudGlyph icon="again" /> 🐧
           </BigButton>
         </motion.div>
       )}

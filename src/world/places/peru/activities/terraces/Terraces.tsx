@@ -14,7 +14,7 @@ import SECTIONS from './sections'
 // re-render per move).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import { BigButton, burst, Buddy, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
+import { HudGlyph, BigButton, burst, Buddy, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -1067,7 +1067,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           </BigButton>
           {photos.length > 0 && (
             <BigButton onClick={() => void finish()} ariaLabel="Done" color="mint">
-              📔 ✓
+              📔 <HudGlyph icon="check" />
             </BigButton>
           )}
         </div>

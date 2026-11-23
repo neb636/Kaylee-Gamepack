@@ -29,7 +29,7 @@ for (const viewport of [{ width: 820, height: 1180 }, { width: 1180, height: 820
             await page.mouse.up()
             await expect(page.getByRole('img', { name: `Puzzle piece ${n + 1} (in place)`, exact: true })).toBeVisible()
           }
-          await expect(page.getByRole('button', { name: '↻ Play again', exact: true })).toBeVisible()
+          await expect(page.getByRole('button', { name: 'Play again', exact: true })).toBeVisible()
         }
         if (name === 'Outback Kangaroos' && count === 12) await page.screenshot({ path: `/tmp/puzzle-play-${viewport.width}.png` })
         await page.getByRole('button', { name: 'Pieces', exact: true }).click()
