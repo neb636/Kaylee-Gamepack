@@ -172,8 +172,79 @@ fix is what the team needs.
   and the close-up helper `characters/closeup.ts` (`docs/films.md`).
 - A finished Canada became unfinished: the `salmon` stamp is gone and `bath` is earned by playing it. The trophy stays.
 
+## Round three, planned 2026-11-22: every game is a try-out (nothing built yet)
+
+**What the user said:** the rebuild is great, but "a lot of the mini-games don't seem to have a purpose. The whale one
+you go to recruit the otter and then you tow him around and then see some whales." Make every scene tie in with the
+hockey team, and give the whale game and the canoe "more of a reason". A rework, not a rewrite.
+
+**What's wrong (from reading every script and game):** the hockey lives in the films, not in her hands. In most
+chapters the game is the trip to the friend (bike, canoe) or a toy beside the story (the whales), and the friend's
+talent is shown to her afterwards in the film out. Campfire and the bath already work, and they are the model: Roxy's
+sneaking *is* her talent, and Misty's look goes to the big game.
+
+**The rule for every chapter (three threads, same verbs, same scenes):**
+
+1. **The need.** The film in's first line says what the team is missing (a wall, a goalie, quick paws, a song, a big
+   shot, a puck), so she knows why she's going.
+2. **The try-out is in the game.** The game's last beat is the friend's hockey talent, done by her finger with the
+   game's own verb. The film out stops showing the talent and shrinks to the ask and the scarf.
+3. **Something comes home.** A thing from her play stands at the rink on the map and is used in the big game.
+
+| Chapter | The need (film in) | The try-out (her finger, the game's verb) | What comes home | Size |
+|---|---|---|---|---|
+| 🐋 `whales` Ollie | "A team needs a puck!" Ollie's lucky rock is flat, round and slides: the best puck in Canada. The spout blows it away (as now) | The rock is on screen the whole game and every whale toy moves it on (below). Last: Ollie catches it and spin-passes it across the deck to Maple: the fastest pass | **The rock is the big game's puck** (it twinkles) | medium |
+| 🛶 `canoe` Lulu | "Every big game starts with a song" (as now), but Lulu's call is worried: her chick has paddled off, and she can't sing till it's back | Find the chick in the milky water, bring it to Lulu's bubbles, then **tap Lulu and she sings**: the glacier echoes it back, the chick squeaks after | The chick sings the last note at the big game and squeaks at every goal | medium |
+| ⛄ `snowman` Tuque | "Nobody here plays hockey... let's make a player!" (as now) | When Tuque wakes, the next snowball she pushes at him boings off his tummy (any later one too) | The other snowmen she built are the crowd along the canal (how many she made) | small |
+| 🚵 `bike` Monty | "We need a goalie. Somebody big!" | At the bottom Monty stands across the trail: she steers left, he's there; right, he's there. A soft bonk and a giggle each time, then "Nothing gets past Monty!" | His lily pad stays on his antler | small |
+| ⛺ `campfire` Roxy | "We need quick paws" (one line added) | Already the game. Maple's puck sits on the marshmallow bag: what Roxy holds up at "Yoink!" (or hands back at "Let's share") is the puck | The kits' marshmallow sticks are their flags | tiny |
+| 🛁 `bath` Misty | "We need a big, strong shot" (one line added) | Already there as a silly (the soap batted over the cedars): make it a sure beat before the sweater, Maple tosses the soap, a tap and Misty swats it | Her look (as now) | tiny |
+
+### Whale Peek-a-Boo: the rock goes whale to whale
+
+Same three whales, same touches, same sections (`grey`, `humpback`, `orcas`). New: the rock is always somewhere she can
+see, and Ollie has a job on the rope (she is the catcher, and points at the rock: that replaces a hint).
+
+- `grey`: the rock is stuck in the barnacles on its back, twinkling. Blowhole: the spout pops it up and it lands back
+  (Ollie reaches, misses, spins). Barnacles: it laughs and the rock wobbles. Tail (the tap she'd do last): it flicks
+  the rock off toward the next bubbles. The sea star joke stays ("That's a sea star, silly!").
+- `humpback`: the rock sits on its nose. Hold and let go: the jump throws the rock, a longer hold throws it nearer
+  Ollie. The biggest jump (the ride) and the baby orca snatches it out of the air.
+- `orcas`: as now (peek-a-boo, Grandma, the flick to Ollie). New last beat: tap Ollie, she spins and slides the rock
+  across the deck to Maple, puck-style. A do-nothing player still finishes.
+- Lines: about four new for Ollie ("Almost!", "Over here!"), one for Maple ("What a pass!"), `filmIn.ollie` and
+  `filmIn.hop` reworded for the puck. `rockFly` in `watch.ts` already flies the rock; `characters/rock.ts` is the prop.
+
+### Red Canoe: bring Lulu's chick home
+
+Same lake, same control, same sections. The two errands (the milky water, the bubbles) become one job.
+
+- `glide`: Lulu's call across the lake, as in the film.
+- `stream`: the sparkle path to the milky water now leads to a tiny squeak (louder as she nears, like the creek's
+  sound). The chick hops on the bow. The rock-flour fact moves to a poke on the milky water.
+- `loon`: the bubbles are Lulu diving to look for her baby; each time she comes up nearer. The third time she sees
+  the chick: the reunion (today's `family` payoff, the chick on her back).
+- `glacier`: new last beat, the try-out: tap Lulu, she sings, the glacier answers. Tap again, again.
+- Open for the user: is the chick lost (a little sad, a big hug) or playing hide-and-seek (all giggles)?
+
+### The map and the big game
+
+- The heart pin over each friend still to find carries a small picture of what the team needs (net, music note,
+  puck, stick, paw, snowball).
+- Back on the map, after Sparkle's count, Maple says what the team has now, one short line per friend ("Now we have
+  a goalie!"). Six lines.
+- The big game: the puck is the rock, the chick ends Lulu's song, the snowmen are the crowd. Nothing else changes.
+
+### How to build it
+
+Three PRs, one at a time: **1** the whales, **2** the canoe, **3** the small ties (snowman, bike, campfire, bath, map,
+big game) together. About 30 new or reworded lines in all (a table read each PR), new sounds for the rock, the chick
+and the echo (`sfx` skill). Doesn't change: any verb, control, scene, set, knob or section id. The bike's change is
+only its last stretch (`falls`), so it doesn't touch the handling work.
+
 ## Next
 
+- Round three (above) is planned and waits for the user's answers on its review page.
 - Kaylee plays it. Watch for: which of the three she goes back to; whether she finds the hut; does she hold the
   humpback or only tap (taps still grow the jump); is the campfire too dark on her iPad in a bright room; how long
   Flashlight Statues really takes her (a perfect-aim robot does it in about 70 s; the plan wanted 2.5 min).
