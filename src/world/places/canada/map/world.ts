@@ -42,7 +42,7 @@ import { Balloon } from '../story/props'
 import { beluga, bison, floe, orca, snowyOwl, type Bison, type Owl, type Swimmer } from './critters'
 import { MapMoves, moveFocus, MOVE_S } from './moves'
 import { heartPin, PIN_R } from './pins'
-import { buildBay, buildCamp, buildCastle, buildForest, buildLake, buildMountain, buildRink, type PlaceToy } from './places'
+import { buildBay, buildCamp, buildCastle, buildForest, buildLake, buildMountain, buildRink, inkLift, type PlaceToy } from './places'
 import { buildField, FLOES, fromRockies, PLACES, POKES, type Field, type PlaceId, type PokeId } from './shape'
 import { hubSfx } from './sounds'
 import { buildLand, buildScenery, buildTray, Sea, snowLine, TRAY } from './terrain'
@@ -320,6 +320,10 @@ export class CanadaMapWorld implements World3D {
     this.buildPokes()
     this.buildPins()
     this.buildSky()
+    // (The friends, Maple and the geese keep their own lines.)
+    const actors = [this.maple.root, ...[...this.mates.values()].map((m) => m.actor.root), ...this.geese.map((g) => g.root)]
+    // (Nor the heart pins: nothing stands behind them, and a lifted line shows through their thin face.)
+    inkLift(this.scene, undefined, new Set([...actors, ...[...this.pins.values()].map((p) => p.root)]))
     this.buildMs = Math.round(performance.now() - began)
   }
 
@@ -1342,3 +1346,4 @@ export class CanadaMapWorld implements World3D {
     this.bag.dispose()
   }
 }
+

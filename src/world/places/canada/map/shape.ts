@@ -14,6 +14,11 @@ export type XZ = [x: number, z: number]
 /** The board (the tray's inside). */
 export const BOARD = { x0: -8, x1: 8, z0: -4.5, z1: 4.5 }
 /** Heights: Canada's top, the neighbours' paper, the sea bed under the water (the sea is at 0). */
+/** The map's ink: one line weight (px) for every toy on the board, like the friends' (2.5-3), so no edge has a line
+ *  while the one beside it fades to nothing. `toy`: the places, the animals, the tray, the pins; `small`: the little
+ *  bits that move (a flag, a door, a fish); `wood`: the hundreds of trees and the peaks behind them, a touch lighter. */
+export const LINE = { toy: 3, small: 2.6, wood: 2.4, lift: 0.02 }
+
 export const LEVEL = { land: 0.34, paper: 0.12, floor: -0.22 }
 
 // ---------------------------------------------------------------- the shapes (smooth closed curves through these)

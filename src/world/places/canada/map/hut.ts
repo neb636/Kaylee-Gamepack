@@ -4,12 +4,13 @@
 // whose light flickers, pink-and-white bunting under the eaves, a red maple leaf on the gable, the team's pink scarf on
 // a peg and two pink sticks leaning by the door, so it reads as theirs. Built at map scale in the rink's own space
 // (places.ts puts it there): one merged mesh for what stands still, small groups for what moves.
-import { Group, Vector3 } from 'three'
+import { Group, Vector3, type BufferGeometry } from 'three'
 import { bell, clamp } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
 import { blobShadow, merge, P, solid, solidMix } from '../../../engine3d/geo'
 import { CANADA_COLORS } from '../characters/looks'
 import { leafGeo } from '../story/props'
+import { LINE } from './shape'
 
 const SNOW = '#FFFFFF'
 const SNOW_SHADE = '#EEF1FF'
@@ -61,14 +62,16 @@ export function buildHut(bag: Bag): Hut {
     // The walls: one log-brown house shape (a gable at the front and back), so the roof sits exactly on it.
     P.prism([[-W / 2, 0], [W / 2, 0], [W / 2, H], [0, H + R], [-W / 2, H]], D, LOG, { at: [0, B, 0] }),
   ]
+  // (The grooves, the leaf and the bunting are paint, on `paint`: no ink round each little piece.)
+  const paint: BufferGeometry[] = []
   // The logs: a groove between each on the side walls and below the eaves at the front, and their round ends poking
   // out at the front corners.
   for (let i = 1; i < 5; i++) {
     const y = B + (H * i) / 5
-    for (const s of [-1, 1]) parts.push(P.box(0.006, 0.012, D - 0.01, LOG_DARK, { at: [s * (W / 2 + 0.002), y, 0] }))
-    parts.push(P.box(0.06, 0.012, 0.006, LOG_DARK, { at: [-W / 2 + 0.03, y, D / 2 + 0.002] }), P.box(0.06, 0.012, 0.006, LOG_DARK, { at: [W / 2 - 0.03, y, D / 2 + 0.002] }))
+    for (const s of [-1, 1]) paint.push(P.box(0.006, 0.012, D - 0.01, LOG_DARK, { at: [s * (W / 2 + 0.002), y, 0] }))
+    paint.push(P.box(0.06, 0.012, 0.006, LOG_DARK, { at: [-W / 2 + 0.03, y, D / 2 + 0.002] }), P.box(0.06, 0.012, 0.006, LOG_DARK, { at: [W / 2 - 0.03, y, D / 2 + 0.002] }))
     // (The back wall is logs all the way across: seen from behind it's a log cabin too, not a flat board.)
-    parts.push(P.box(W - 0.01, 0.012, 0.006, LOG_DARK, { at: [0, y, -D / 2 - 0.002] }))
+    paint.push(P.box(W - 0.01, 0.012, 0.006, LOG_DARK, { at: [0, y, -D / 2 - 0.002] }))
   }
   for (let i = 0; i < 5; i++) {
     const y = B + (H * (i + 0.5)) / 5
@@ -111,12 +114,12 @@ export function buildHut(bag: Bag): Hut {
   parts.push(P.rbox(0.15, 0.14, 0.02, 0.008, SNOW, { at: [wx, wy, fz + 0.004] }), P.rbox(0.17, 0.025, 0.05, 0.01, SNOW_SHADE, { at: [wx, wy - 0.075, fz + 0.02] }))
   // The red maple leaf on a round white board high on the gable.
   parts.push(P.cyl(0.065, 0.065, 0.016, SNOW, { at: [0, B + H + 0.085, fz + 0.008], rot: [Math.PI / 2, 0, 0] }, 20))
-  parts.push(leafGeo(0.1).translate(0, B + H + 0.085, fz + 0.02))
+  paint.push(leafGeo(0.1).translate(0, B + H + 0.085, fz + 0.02))
   // Pink-and-white bunting on a string under the eaves.
-  parts.push(P.cyl(0.004, 0.004, W + 0.02, '#8A5A3C', { at: [0, B + H - 0.012, fz + 0.03], rot: [0, 0, Math.PI / 2] }, 4))
+  paint.push(P.cyl(0.004, 0.004, W + 0.02, '#8A5A3C', { at: [0, B + H - 0.012, fz + 0.03], rot: [0, 0, Math.PI / 2] }, 4))
   for (let i = 0; i < 6; i++) {
     const x = -W / 2 + 0.06 + i * ((W - 0.12) / 5)
-    parts.push(P.prism([[-0.03, 0], [0.03, 0], [0, -0.065]], 0.01, i % 2 ? SNOW : PINK, { at: [x, B + H - 0.012, fz + 0.03] }))
+    paint.push(P.prism([[-0.03, 0], [0.03, 0], [0, -0.065]], 0.01, i % 2 ? SNOW : PINK, { at: [x, B + H - 0.012, fz + 0.03] }))
   }
   // A snowbank at the right front corner, two pink hockey sticks stuck in it, leaning on the wall.
   for (const [x, lean] of [[0.235, 0.14], [0.27, -0.1]] as const) {
@@ -124,7 +127,7 @@ export function buildHut(bag: Bag): Hut {
     parts.push(P.rbox(0.03, 0.06, 0.016, 0.006, PINK, { at: [x - Math.sin(lean) * 0.15, 0.37, fz + 0.015], rot: [-0.1, 0, lean] }))
   }
   parts.push(P.sphere(0.13, SNOW_SHADE, { at: [W / 2 + 0.05, 0.05, fz - 0.06], scale: [1.1, 0.55, 1] }, 12), P.sphere(0.08, SNOW, { at: [W / 2 + 0.1, 0.05, fz + 0.05], scale: [1, 0.6, 1] }, 10))
-  body.add(solid(merge(parts), bag, 1.4))
+  body.add(solidMix(parts, paint, bag, LINE.toy))
 
   // The window's light: a warm pane and a brighter one that flickers over it, like a fire inside.
   const pane = (c: string, z: number) => solidMix([], [P.box(0.11, 0.1, 0.01, c, { at: [wx, wy, fz + 0.012 + z] }), P.box(0.012, 0.1, 0.012, SNOW, { at: [wx, wy, fz + 0.019 + z] }), P.box(0.11, 0.012, 0.012, SNOW, { at: [wx, wy, fz + 0.019 + z] })], bag, 0)
@@ -147,7 +150,7 @@ export function buildHut(bag: Bag): Hut {
         P.cone(0.022, 0.03, PINK, { at: [dw / 2, dh * 0.74 - 0.02, 0.014], rot: [0, 0, Math.PI], scale: [1.15, 1, 0.4] }, 8),
       ]),
       bag,
-      1.2,
+      LINE.small,
     ),
   )
   body.add(door)
@@ -165,7 +168,7 @@ export function buildHut(bag: Bag): Hut {
         P.box(0.034, 0.012, 0.016, SNOW, { at: [0.025, -0.085, 0.014], rot: [0, 0, -0.08] }),
       ]),
       bag,
-      1.1,
+      LINE.small,
     ),
   )
   body.add(scarf)

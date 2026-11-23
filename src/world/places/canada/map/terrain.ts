@@ -8,7 +8,7 @@ import { trayParts } from '../../../engine3d/board'
 import type { Bag } from '../../../engine3d/dispose'
 import { bake, merge, P, solid } from '../../../engine3d/geo'
 import { toonGradient } from '../../../engine3d/toon'
-import { BOARD, fromRockies, LEVEL, PLACES, PRAIRIE, wobble, type Field, type XZ } from './shape'
+import { BOARD, fromRockies, LEVEL, LINE, PLACES, PRAIRIE, wobble, type Field, type XZ } from './shape'
 
 /** Ground mesh cells per unit, and painted pixels per unit. */
 const MESH = 14
@@ -40,6 +40,11 @@ export function inPrairie(x: number, z: number) {
   const n = wobble(x * 1.3, z * 1.3) * 0.08
   return Math.min(x - x0, x1 - x, z - z0, z1 - z) + n
 }
+
+/** The ground and the sea drawn a hair further back than they are, so a toy's ink line isn't eaten where it meets them:
+ *  every toy stands a little sunk into the land (a castle into its hill, the trail's stones into the slope), and without
+ *  this the ground covered the line along that side, so one edge had a line and the next had none. */
+const UNDER_INK = { polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 200 }
 
 const painted = new WeakMap<Field, HTMLCanvasElement>()
 
@@ -78,7 +83,7 @@ export function buildLand(field: Field, bag: Bag) {
   const tex = bag.add(new CanvasTexture(top))
   tex.colorSpace = SRGBColorSpace
   tex.anisotropy = 4
-  return new Mesh(geo, bag.add(new MeshToonMaterial({ map: tex, gradientMap: toonGradient() })))
+  return new Mesh(geo, bag.add(new MeshToonMaterial({ map: tex, gradientMap: toonGradient(), ...UNDER_INK })))
 }
 
 function paint(field: Field) {
@@ -298,6 +303,7 @@ export class Sea {
           uLight: { value: new Color('#86CDF0') },
           uIce: { value: new Color('#DCEEFB') },
         },
+        ...UNDER_INK,
         vertexShader: seaVertex,
         fragmentShader: seaFragment,
       }),
@@ -317,7 +323,7 @@ export const TRAY = { w: BOARD.x1 - BOARD.x0, d: BOARD.z1 - BOARD.z0, top: LEVEL
 
 /** The toy tray the map sits in: a cream rim with a pink edge on a lavender base. */
 export function buildTray(bag: Bag): Group {
-  return solid(merge(trayParts(TRAY.w, TRAY.d, TRAY.top, TRAY.rim, TRAY.k)), bag, 2)
+  return solid(merge(trayParts(TRAY.w, TRAY.d, TRAY.top, TRAY.rim, TRAY.k)), bag, LINE.toy)
 }
 
 /** A chunky spruce, `s` tall, standing on (x, y, z): three drooping tiers, each a shade lighter going up; `snow` dusts
@@ -433,6 +439,6 @@ export function buildScenery(field: Field, bag: Bag) {
     if (x > 0.4 && rnd() < 0.22) parts.push(...mapleParts(x, y, z, s, Math.floor(rnd() * 3)))
     else parts.push(...spruceParts(x, y, z, s, rk.side < 0, z < snowLine(x, z) + 0.8, rnd() * 6))
   }
-  group.add(solid(merge(parts), bag, 1.2))
+  group.add(solid(merge(parts), bag, LINE.wood))
   return { group, peaks }
 }

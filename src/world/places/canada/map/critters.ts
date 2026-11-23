@@ -5,7 +5,8 @@
 // moving parts in their own groups; world.ts brings them to life.
 import { Group } from 'three'
 import type { Bag } from '../../../engine3d/dispose'
-import { merge, P, solid } from '../../../engine3d/geo'
+import { merge, P, solid, solidMix } from '../../../engine3d/geo'
+import { LINE } from './shape'
 
 const INK = '#2E2233'
 
@@ -32,41 +33,42 @@ export function snowyOwl(bag: Bag): Owl {
   const root = new Group()
   const head = new Group()
   root.add(
-    solid(
-      merge([
+    solidMix(
+      [
         // The snowy rock she perches on.
         P.sphere(0.17, '#C9C2D8', { at: [0, 0.05, 0], scale: [1.3, 0.55, 1.1] }, 10),
         P.sphere(0.15, '#FFFFFF', { at: [0, 0.1, 0], scale: [1.25, 0.35, 1.05] }, 10),
         // The body: a round white egg, flecked with black on the front.
         P.sphere(0.13, '#FFFFFF', { at: [0, 0.27, 0], scale: [1, 1.2, 0.95] }, 14),
-        ...flecks(0, 0.27, 0.12, 0.09, 0.08, 9, 0.4),
         // Two little yellow feet.
         ...[-1, 1].map((s) => P.sphere(0.025, '#FFC83D', { at: [s * 0.05, 0.13, 0.08], scale: [1.2, 0.5, 1.4] }, 6)),
-      ]),
+      ],
+      // (The flecks, her eyes' middles: paint, no ink round each.)
+      flecks(0, 0.27, 0.12, 0.09, 0.08, 9, 0.4),
       bag,
-      1.4,
+      LINE.toy,
     ),
   )
   const wings: Group[] = []
   for (const s of [-1, 1]) {
     const w = new Group()
     w.position.set(s * 0.11, 0.33, -0.01)
-    w.add(solid(merge([P.sphere(0.08, '#F7F5FF', { at: [s * 0.02, -0.06, 0], scale: [0.35, 1.0, 0.9] }, 10), ...flecks(s * 0.045, -0.06, 0.03, 0.02, 0.05, 3, s + 2)]), bag, 1.2))
+    w.add(solidMix([P.sphere(0.08, '#F7F5FF', { at: [s * 0.02, -0.06, 0], scale: [0.35, 1.0, 0.9] }, 10)], flecks(s * 0.045, -0.06, 0.03, 0.02, 0.05, 3, s + 2), bag, LINE.small))
     root.add(w)
     wings.push(w)
   }
   head.position.set(0, 0.43, 0)
   head.add(
-    solid(
-      merge([
+    solidMix(
+      [
         P.sphere(0.1, '#FFFFFF', { scale: [1.1, 0.95, 1] }, 14),
-        ...flecks(0, 0.05, -0.08, 0.06, 0.02, 4, 2.1),
-        // Big yellow eyes with black middles, and a little dark beak.
-        ...[-1, 1].flatMap((s) => [P.sphere(0.034, '#FFD23F', { at: [s * 0.042, 0.012, 0.082], scale: [1, 1, 0.5] }, 10), P.sphere(0.018, INK, { at: [s * 0.042, 0.012, 0.098], scale: [1, 1, 0.5] }, 8)]),
+        // Big yellow eyes and a little dark beak.
+        ...[-1, 1].map((s) => P.sphere(0.034, '#FFD23F', { at: [s * 0.042, 0.012, 0.082], scale: [1, 1, 0.5] }, 10)),
         P.cone(0.016, 0.04, '#4A3F55', { at: [0, -0.025, 0.1], rot: [Math.PI / 2 + 0.6, 0, 0] }, 6),
-      ]),
+      ],
+      [...flecks(0, 0.05, -0.08, 0.06, 0.02, 4, 2.1), ...[-1, 1].map((s) => P.sphere(0.018, INK, { at: [s * 0.042, 0.012, 0.098], scale: [1, 1, 0.5] }, 8))],
       bag,
-      1.4,
+      LINE.toy,
     ),
   )
   root.add(head)
@@ -100,7 +102,7 @@ export function bison(bag: Bag): Bison {
         ...[[-0.12, 0.13], [0.12, 0.13], [-0.11, -0.21], [0.11, -0.21]].map(([x, z]) => P.cyl(0.035, 0.03, 0.12, LEG, { at: [x, 0.06, z] }, 6)),
       ]),
       bag,
-      1.5,
+      LINE.toy,
     ),
   )
   head.position.set(0, 0.19, 0.29)
@@ -116,7 +118,7 @@ export function bison(bag: Bag): Bison {
         ...eyes(0.055, 0.02, 0.085, 0.014),
       ]),
       bag,
-      1.5,
+      LINE.toy,
     ),
   )
   body.add(head)
@@ -145,11 +147,11 @@ export function beluga(bag: Bag): Swimmer {
         P.torus(0.035, 0.007, '#C9A8C8', { at: [0, -0.01, 0.31], rot: [0.2, 0, Math.PI] }, Math.PI),
       ]),
       bag,
-      1.5,
+      LINE.toy,
     ),
   )
   tail.position.set(0, 0, -0.24)
-  tail.add(solid(merge([-1, 1].map((s) => P.sphere(0.07, '#EEF2FC', { at: [s * 0.06, 0, -0.04], scale: [1, 0.22, 0.6] }, 8))), bag, 1.4))
+  tail.add(solid(merge([-1, 1].map((s) => P.sphere(0.07, '#EEF2FC', { at: [s * 0.06, 0, -0.04], scale: [1, 0.22, 0.6] }, 8))), bag, LINE.small))
   body.add(tail)
   root.add(body)
   return { root, body, tail }
@@ -170,11 +172,11 @@ export function orca(bag: Bag): Swimmer {
         ...eyes(0.09, 0.07, 0.24, 0.012),
       ]),
       bag,
-      1.5,
+      LINE.toy,
     ),
   )
   tail.position.set(0, 0, -0.3)
-  tail.add(solid(merge([-1, 1].map((s) => P.sphere(0.08, '#2B2638', { at: [s * 0.07, 0, -0.04], scale: [1, 0.2, 0.55] }, 8))), bag, 1.4))
+  tail.add(solid(merge([-1, 1].map((s) => P.sphere(0.08, '#2B2638', { at: [s * 0.07, 0, -0.04], scale: [1, 0.2, 0.55] }, 8))), bag, LINE.small))
   body.add(tail)
   root.add(body)
   return { root, body, tail }
@@ -188,5 +190,5 @@ export const floe = (bag: Bag, r: number, seed: number) =>
       P.cyl(r * 0.96, r * 0.96, 0.02, '#FFFFFF', { at: [0, 0.03, 0], scale: [1, 1, 0.7 + (seed % 3) * 0.1] }, 7),
     ]),
     bag,
-    1.1,
+    LINE.toy,
   )

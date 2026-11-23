@@ -25,6 +25,7 @@ import { ToyActor, type Performer } from '../characters/toy'
 import { Tuque } from '../characters/tuque'
 import type { ChapterId } from '../story/chapters'
 import { makePuck, stickFit, stickParts } from '../story/props'
+import { LINE } from './shape'
 import { moveSfx } from './sounds'
 
 const TAU = Math.PI * 2
@@ -189,7 +190,7 @@ const PINE = '#A0623C'
 const PINE_DARK = '#7C4630'
 
 function rock(bag: Bag) {
-  return solid(merge([P.sphere(0.055, ROCK, { scale: [1, 0.78, 0.92] }, 12), P.sphere(0.02, '#CBC8D8', { at: [0.022, 0.022, 0.032] }, 6), P.sphere(0.012, '#8E8AA0', { at: [-0.025, -0.005, 0.038] }, 6)]), bag, 1.4)
+  return solid(merge([P.sphere(0.055, ROCK, { scale: [1, 0.78, 0.92] }, 12), P.sphere(0.02, '#CBC8D8', { at: [0.022, 0.022, 0.032] }, 6), P.sphere(0.012, '#8E8AA0', { at: [-0.025, -0.005, 0.038] }, 6)]), bag, LINE.small)
 }
 
 /** Misty's stick on the map: the game's hockey stick (story/props.ts), but twice as thick, in a darker wood and with
@@ -207,7 +208,7 @@ function pinecone(bag: Bag) {
       parts.push(P.sphere(0.017, i % 2 ? PINE_DARK : PINE, { at: [Math.cos(a) * r, Math.sin(a) * r, z], scale: [1, 1, 0.6] }, 6))
     }
   }
-  return solid(merge(parts), bag, 1.3)
+  return solid(merge(parts), bag, LINE.small)
 }
 
 /** A music note (a round head, a stem and a flag), about 0.16 tall, flat in xy and facing +z (it's turned to the camera). */
@@ -219,7 +220,7 @@ function note(bag: Bag, color: string, two: boolean) {
   ]
   if (two) parts.push(P.sphere(0.034, color, { at: [0.09, 0.03, 0], rot: [0, 0, 0.4], scale: [1.3, 0.92, 0.55] }, 12), P.box(0.013, 0.12, 0.013, color, { at: [0.126, 0.09, 0] }), P.box(0.1, 0.018, 0.013, color, { at: [0.081, 0.142, 0], rot: [0, 0, 0.3] }))
   const g = new Group()
-  const n = solid(merge(parts), bag, 1.3)
+  const n = solid(merge(parts), bag, LINE.small)
   n.position.set(two ? -0.06 : -0.02, -0.06, 0)
   g.add(n)
   return g

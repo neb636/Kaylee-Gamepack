@@ -6,6 +6,7 @@ import { Group } from 'three'
 import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid } from '../../../engine3d/geo'
 import { PAL } from '../../../engine3d/toon'
+import { LINE } from './shape'
 
 /** The badge's radius (units): world.ts scales the pin up on a small screen so it never shrinks below a thumbnail. */
 export const PIN_R = 0.24
@@ -32,7 +33,7 @@ export function heartPin(bag: Bag, gold = false) {
         P.prism(heart, 0.03, '#FFFFFF', { at: [0, 0.2 + PIN_R * 0.9 + 0.018, 0.03] }),
       ]),
       bag,
-      2,
+      LINE.toy,
     ),
   )
   root.add(face)

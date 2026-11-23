@@ -6,14 +6,15 @@
 // cedars and the falls where a salmon jumps; Tofino's kelp out on the Pacific and a whale that spouts. Built at map
 // scale (a friend is about a unit tall), every one a toy: one merged mesh for what stands still, small groups for what
 // moves. Each knows how to bounce when tapped.
-import { BufferGeometry, Float32BufferAttribute, Group, Vector3 } from 'three'
+import { BufferGeometry, Float32BufferAttribute, Group, Vector3, type Mesh, type Object3D } from 'three'
 import { bell, clamp } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
-import { bake, blobShadow, merge, P, solid } from '../../../engine3d/geo'
+import { bake, blobShadow, merge, P, solid, solidMix } from '../../../engine3d/geo'
+import { outlineMaterial } from '../../../engine3d/outline'
 import { CANADA_COLORS } from '../characters/looks'
 import { makeCup } from '../story/props'
 import { buildHut, type Hut } from './hut'
-import type { PlaceId } from './shape'
+import { LINE, type PlaceId } from './shape'
 import { peakParts, snowCap, spruceParts } from './terrain'
 
 const SNOW = '#FFFFFF'
@@ -42,6 +43,26 @@ export interface PlaceToy {
   update(dt: number, t: number): void
 }
 
+/**
+ * Every ink line under `root` drawn `lift` meters nearer the camera than its shape (the outline shader's bias). A toy's
+ * line runs round its back corners, and whatever it stands on (its snowy base, the ground, a hill) is nearer than those,
+ * so without a lift the base ate the line down the sides while the front edge kept it. Kept small (LINE.lift): more
+ * than a part is thick and the line shows through it (a pin's face, the rink's ice, a tree's tiers go black). Lines
+ * already lifted keep theirs.
+ */
+export function inkLift(root: Object3D, lift: number = LINE.lift, skip?: Set<Object3D>) {
+  const walk = (o: Object3D) => {
+    if (skip?.has(o)) return
+    const px = o.userData.hull as number | undefined
+    if (px !== undefined && !o.userData.hullBias) {
+      o.userData.hullBias = lift
+      ;(o as Mesh).material = outlineMaterial(px, o.userData.hullColor as string | undefined, lift)
+    }
+    for (const c of o.children) walk(c)
+  }
+  walk(root)
+}
+
 /** The done-mark: a pink pennant with a white heart on a little pole. */
 function doneFlag(bag: Bag) {
   const g = new Group()
@@ -60,11 +81,11 @@ function doneFlag(bag: Bag) {
         P.prism(heart, 0.03, SNOW, { at: [0.1, 0.066, 0] }),
       ]),
       bag,
-      1.4,
+      LINE.toy,
     ),
   )
   cloth.position.y = 0.42
-  g.add(solid(merge([P.cyl(0.012, 0.012, 0.56, '#FFF7F0', { at: [0, 0.28, 0] }, 6), P.sphere(0.025, '#FFC83D', { at: [0, 0.57, 0] }, 8)]), bag, 1.4), cloth)
+  g.add(solid(merge([P.cyl(0.012, 0.012, 0.56, '#FFF7F0', { at: [0, 0.28, 0] }, 6), P.sphere(0.025, '#FFC83D', { at: [0, 0.57, 0] }, 8)]), bag, LINE.small), cloth)
   g.userData.cloth = cloth
   g.visible = false
   return g
@@ -137,7 +158,7 @@ export function buildRink(bag: Bag): Rink {
     P.cyl(0.015, 0.018, 0.5, '#3A3340', { at: [-1.25, 0.3, 0.05] }, 6),
     P.sphere(0.045, '#FFE9A8', { at: [-1.25, 0.57, 0.05] }, 8),
   ]
-  place.root.add(solid(merge(parts), bag, 1.4))
+  place.root.add(solid(merge(parts), bag, LINE.toy))
   // The Cup on its stand, by the rink's left end.
   const cup = makeCup(bag, 0.72, true)
   cup.scale.setScalar(0.5)
@@ -211,12 +232,16 @@ export function buildCastle(bag: Bag): CastlePlace {
   const WIN = '#FFE9A8'
   const G = 0.21
   // A dormer on a roof's front slope: a little copper gable with a lit window.
-  const dormer = (x: number, y: number, z: number, k = 1) => [
-    P.box(0.07 * k, 0.07 * k, 0.08 * k, COPPER_DARK, { at: [x, y, z] }),
-    P.box(0.04 * k, 0.045 * k, 0.01, WIN, { at: [x, y - 0.005 * k, z + 0.041 * k] }),
-    P.prism([[-0.045 * k, 0], [0.045 * k, 0], [0, 0.05 * k]], 0.09 * k, COPPER, { at: [x, y + 0.035 * k, z] }),
-  ]
-  const windows = (xs: number[], ys: number[], z: number, w = 0.045, h = 0.065) => ys.flatMap((y) => xs.flatMap((x) => [P.box(w + 0.014, 0.012, 0.012, STONE, { at: [x, y - h / 2 - 0.004, z + 0.002] }), P.box(w, h, 0.01, WIN, { at: [x, y, z] })]))
+  // (Windows, sills and the door are paint on the walls, on `paint`: the ink goes round the building, not each window.)
+  const paint: BufferGeometry[] = []
+  const dormer = (x: number, y: number, z: number, k = 1) => {
+    paint.push(P.box(0.04 * k, 0.045 * k, 0.01, WIN, { at: [x, y - 0.005 * k, z + 0.041 * k] }))
+    return [P.box(0.07 * k, 0.07 * k, 0.08 * k, COPPER_DARK, { at: [x, y, z] }), P.prism([[-0.045 * k, 0], [0.045 * k, 0], [0, 0.05 * k]], 0.09 * k, COPPER, { at: [x, y + 0.035 * k, z] })]
+  }
+  const windows = (xs: number[], ys: number[], z: number, w = 0.045, h = 0.065): BufferGeometry[] => {
+    for (const y of ys) for (const x of xs) paint.push(P.box(w + 0.014, 0.012, 0.012, STONE, { at: [x, y - h / 2 - 0.004, z + 0.002] }), P.box(w, h, 0.01, WIN, { at: [x, y, z] }))
+    return []
+  }
   const parts = [
     // A snowy cliff above the river, with lavender rock showing on its face.
     P.rbox(1.45, 0.16, 1.05, 0.08, SNOW, { at: [0, 0.06, 0] }),
@@ -237,11 +262,7 @@ export function buildCastle(bag: Bag): CastlePlace {
     P.rbox(0.3, 0.64, 0.3, 0.02, BRICK, { at: [0, G + 0.32, -0.06] }),
     P.rbox(0.32, 0.03, 0.32, 0.01, STONE, { at: [0, G + 0.63, -0.06] }),
     hipRoof(0.38, 0.38, 0.4, COPPER, [0, G + 0.645, -0.06]),
-    P.cyl(0.006, 0.01, 0.12, '#F2C14E', { at: [0, G + 1.1, -0.06] }, 6),
-    P.sphere(0.018, '#F2C14E', { at: [0, G + 1.17, -0.06] }, 8),
-    // The arched door at the tower's foot.
-    P.rbox(0.1, 0.13, 0.02, 0.03, STONE, { at: [0, G + 0.065, 0.095] }),
-    P.rbox(0.07, 0.11, 0.02, 0.03, '#8A5A3C', { at: [0, G + 0.055, 0.1] }),
+    // (The arched door at the tower's foot is paint, below.)
     // The corner turrets with their witch-hat roofs.
     ...[-1, 1].flatMap((s) => [
       P.cyl(0.085, 0.09, 0.48, BRICK, { at: [s * 0.5, G + 0.24, 0.0] }, 12),
@@ -255,23 +276,33 @@ export function buildCastle(bag: Bag): CastlePlace {
     ...[-0.32, 0.32].flatMap((x) => dormer(x, G + 0.42, -0.01)),
     ...dormer(0, G + 0.76, 0.03, 0.9),
     ...[-0.2, 0.2].map((x) => P.box(0.045, 0.12, 0.045, BRICK_DARK, { at: [x, G + 0.5, -0.2] })),
-    // The boardwalk terrace along the cliff's edge, its lamp posts and a little green kiosk.
+    // Snowy spruces round the back.
+    ...spruceParts(-0.64, 0.12, -0.3, 0.36, false, true, 0.4),
+    ...spruceParts(0.66, 0.12, -0.18, 0.34, true, true, 1.3),
+    ...spruceParts(0.62, 0.12, 0.1, 0.24, false, true, 2.2),
+  ]
+  paint.push(P.rbox(0.1, 0.13, 0.02, 0.03, STONE, { at: [0, G + 0.065, 0.095] }), P.rbox(0.07, 0.11, 0.02, 0.03, '#8A5A3C', { at: [0, G + 0.055, 0.1] }))
+  // The thin bits (the gold spire; the boardwalk terrace along the cliff's edge, its lamp posts and a little green
+  // kiosk) are their own toy: the castle's bigger lift would show their line right through them.
+  const bits = [
+    P.cyl(0.006, 0.01, 0.12, '#F2C14E', { at: [0, G + 1.1, -0.06] }, 6),
+    P.sphere(0.018, '#F2C14E', { at: [0, G + 1.17, -0.06] }, 8),
     P.rbox(0.62, 0.025, 0.16, 0.01, '#E7C79E', { at: [-0.32, G - 0.005, 0.36] }),
     P.rbox(0.62, 0.015, 0.015, 0.005, SNOW, { at: [-0.32, G + 0.06, 0.435] }),
     ...[-0.6, -0.44, -0.28, -0.12].map((x) => P.cyl(0.008, 0.008, 0.06, SNOW, { at: [x, G + 0.03, 0.435] }, 4)),
     ...[-0.52, -0.14].flatMap((x) => [P.cyl(0.007, 0.009, 0.2, '#3A3340', { at: [x, G + 0.1, 0.33] }, 6), P.sphere(0.022, WIN, { at: [x, G + 0.21, 0.33] }, 8)]),
     ...[-1, 1].flatMap((s) => [-1, 1].map((t) => P.cyl(0.006, 0.006, 0.1, SNOW, { at: [-0.33 + s * 0.04, G + 0.05, 0.33 + t * 0.04] }, 4))),
     P.cone(0.075, 0.08, COPPER, { at: [-0.33, G + 0.14, 0.33] }, 8),
-    // Snowy spruces round the back.
-    ...spruceParts(-0.64, 0.12, -0.3, 0.36, false, true, 0.4),
-    ...spruceParts(0.66, 0.12, -0.18, 0.34, true, true, 1.3),
-    ...spruceParts(0.62, 0.12, 0.1, 0.24, false, true, 2.2),
   ]
-  place.root.add(solid(merge(parts), bag, 1.5))
+  place.root.add(solid(merge(bits), bag, LINE.small))
+  const castle = solidMix(parts, paint, bag, LINE.toy)
+  // (Tall deep walls: the snowy cliff in front of their back corners needs a bigger lift than the rest of the board.)
+  inkLift(castle, LINE.lift * 2.5)
+  place.root.add(castle)
   // Flags on the turrets.
   const flags: Group[] = []
   for (const s of [-1, 1]) {
-    const f = solid(merge([P.cyl(0.006, 0.006, 0.14, '#3A3340', { at: [0, 0.07, 0] }, 4), P.prism([[0, 0.14], [0.1, 0.115], [0, 0.09]], 0.008, s < 0 ? '#4F8FE8' : RED)]), bag, 1)
+    const f = solid(merge([P.cyl(0.006, 0.006, 0.14, '#3A3340', { at: [0, 0.07, 0] }, 4), P.prism([[0, 0.14], [0.1, 0.115], [0, 0.09]], 0.008, s < 0 ? '#4F8FE8' : RED)]), bag, LINE.small)
     f.position.set(s * 0.5, 0.99, 0.0)
     place.root.add(f)
     flags.push(f)
@@ -287,7 +318,7 @@ export function buildCastle(bag: Bag): CastlePlace {
       P.sphere(0.035, SNOW, { at: [0.57, 0.62, 0.36] }, 8),
     ]),
     bag,
-    1.5,
+    LINE.toy,
   )
   place.root.add(heap)
   place.flag.position.set(-0.6, 0.2, 0.3)
@@ -326,10 +357,10 @@ export function buildMountain(bag: Bag): PlaceToy {
     ...spruceParts(-0.5, 0.0, 0.55, 0.3),
     ...spruceParts(0.8, 0.0, 0.2, 0.34, true),
   ]
-  place.root.add(solid(merge(parts), bag, 1.5))
+  place.root.add(solid(merge(parts), bag, LINE.toy))
   // The waterfall: a pale sheet with white stripes that run down it.
   const fall = new Group()
-  fall.add(solid(P.rbox(0.13, 0.4, 0.02, 0.01, '#BFE9F7', { at: [0, -0.2, 0] }), bag, 1))
+  fall.add(solid(P.rbox(0.13, 0.4, 0.02, 0.01, '#BFE9F7', { at: [0, -0.2, 0] }), bag, LINE.small))
   const stripes: Group[] = []
   for (let i = 0; i < 3; i++) {
     const s = solid(P.box(0.1, 0.05, 0.01, SNOW, { at: [0, 0, 0.012] }), bag, 0)
@@ -384,9 +415,9 @@ export function buildCamp(bag: Bag): Camp {
     ...spruceParts(0.74, 0.02, -0.42, 0.5, true),
     ...spruceParts(-0.62, 0.02, 0.32, 0.4, true),
   ]
-  place.root.add(solid(merge(parts), bag, 1.5))
+  place.root.add(solid(merge(parts), bag, LINE.toy))
   const flames = new Group()
-  flames.add(solid(merge([P.cone(0.075, 0.22, '#FF8A3D', { at: [0, 0.11, 0] }, 7), P.cone(0.05, 0.16, '#FFC83D', { at: [0.02, 0.09, 0.02] }, 7), P.cone(0.03, 0.1, '#FFF1A8', { at: [-0.01, 0.07, 0.03] }, 6)]), bag, 1.2))
+  flames.add(solid(merge([P.cone(0.075, 0.22, '#FF8A3D', { at: [0, 0.11, 0] }, 7), P.cone(0.05, 0.16, '#FFC83D', { at: [0.02, 0.09, 0.02] }, 7), P.cone(0.03, 0.1, '#FFF1A8', { at: [-0.01, 0.07, 0.03] }, 6)]), bag, LINE.small))
   flames.position.set(0.42, 0.09, 0.32)
   place.root.add(flames)
   place.flag.position.set(-0.55, 0.04, 0.5)
@@ -422,7 +453,7 @@ export function buildLake(bag: Bag): Lake {
     ...spruceParts(0.95, 0.0, 0.3, 0.36),
     ...spruceParts(0.8, 0.0, 0.58, 0.3, true),
   ]
-  place.root.add(solid(merge(parts), bag, 1.5))
+  place.root.add(solid(merge(parts), bag, LINE.toy))
   // The red canoe: a long hull with pointed ends, a paddle laid across.
   const canoe = new Group()
   canoe.add(
@@ -433,7 +464,7 @@ export function buildLake(bag: Bag): Lake {
         P.cyl(0.008, 0.008, 0.3, WOOD, { at: [0.04, 0.08, 0], rot: [Math.PI / 2, 0, 0.1] }, 4),
       ]),
       bag,
-      1.4,
+      LINE.toy,
     ),
   )
   canoe.position.set(-0.32, 0.07, 0.32)
@@ -480,11 +511,11 @@ export function buildForest(bag: Bag): Forest {
     ...cedar(-0.75, 0.25, 0.8),
     ...[[-0.15, 0.55], [0.75, 0.45], [0.05, 0.15]].map(([x, z]) => P.sphere(0.09, '#5DB27F', { at: [x, 0.06, z], scale: [1.5, 0.6, 1.2] }, 8)),
   ]
-  place.root.add(solid(merge(parts), bag, 1.5))
-  const fall = solid(P.rbox(0.3, 0.34, 0.02, 0.01, '#CFF0FA', { at: [0, -0.17, 0] }), bag, 1)
+  place.root.add(solid(merge(parts), bag, LINE.toy))
+  const fall = solid(P.rbox(0.3, 0.34, 0.02, 0.01, '#CFF0FA', { at: [0, -0.17, 0] }), bag, LINE.small)
   fall.position.set(0.3, 0.38, -0.04)
   place.root.add(fall)
-  const fish = solid(merge([P.sphere(0.06, '#F28A7A', { scale: [0.6, 0.8, 1.7] }, 10), P.cone(0.05, 0.08, '#E0705F', { at: [0, 0, -0.12], rot: [-Math.PI / 2, 0, 0], scale: [0.4, 1, 1] }, 6), P.sphere(0.012, '#2E2233', { at: [0.03, 0.02, 0.06] }, 5)]), bag, 1.2)
+  const fish = solid(merge([P.sphere(0.06, '#F28A7A', { scale: [0.6, 0.8, 1.7] }, 10), P.cone(0.05, 0.08, '#E0705F', { at: [0, 0, -0.12], rot: [-Math.PI / 2, 0, 0], scale: [0.4, 1, 1] }, 6), P.sphere(0.012, '#2E2233', { at: [0.03, 0.02, 0.06] }, 5)]), bag, LINE.small)
   place.root.add(fish)
   place.flag.position.set(0.72, 0.02, 0.55)
   const pool = new Vector3(0.3, 0.05, 0.25)
@@ -520,7 +551,7 @@ export function buildBay(bag: Bag): Bay {
     for (const k of [0, 1, 2]) kelp.push(P.sphere(0.06, k === 1 ? '#9BB24E' : '#B5A94C', { at: [x + Math.cos(r + k * 0.5) * 0.08 * k, 0.015, z + Math.sin(r + k * 0.5) * 0.08 * k], rot: [0, r + k * 0.5, 0], scale: [1.6, 0.25, 0.7] }, 8))
     kelp.push(P.sphere(0.03, '#C9A84E', { at: [x, 0.03, z] }, 6))
   }
-  place.root.add(solid(merge(kelp), bag, 1.1))
+  place.root.add(solid(merge(kelp), bag, LINE.toy))
   // The humpback: a dark back and a fin above the water, the tail lifting now and then.
   const whale = new Group()
   whale.add(
@@ -533,10 +564,10 @@ export function buildBay(bag: Bag): Bay {
         P.sphere(0.012, '#2E2233', { at: [-0.13, 0.04, 0.32] }, 5),
       ]),
       bag,
-      1.4,
+      LINE.toy,
     ),
   )
-  const tail = solid(merge([P.sphere(0.12, '#4A5A7A', { at: [0.1, 0, 0], scale: [1, 0.2, 0.55] }, 8), P.sphere(0.12, '#4A5A7A', { at: [-0.1, 0, 0], scale: [1, 0.2, 0.55] }, 8)]), bag, 1.4)
+  const tail = solid(merge([P.sphere(0.12, '#4A5A7A', { at: [0.1, 0, 0], scale: [1, 0.2, 0.55] }, 8), P.sphere(0.12, '#4A5A7A', { at: [-0.1, 0, 0], scale: [1, 0.2, 0.55] }, 8)]), bag, LINE.small)
   tail.position.set(0, 0.0, -0.5)
   whale.add(tail)
   // (Out in the water behind Ollie, and smaller than her: only a back, a fin and a tail.)
