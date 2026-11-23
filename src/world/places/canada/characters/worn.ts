@@ -31,7 +31,8 @@ export const UNDER_HAT = 'under-hat'
 /** The name of the team's pink scarf group on anyone who wears it (story/cast.ts, tuque.ts, lulu.ts). */
 export const TEAM_SCARF = 'team-scarf'
 
-/** Where the cabin's things sit on a hand-built toy: `hat` at the middle of the head (userData.R its radius), `neck` at
+/** Where the cabin's things sit on a hand-built toy: `hat` at the middle of the head (userData.R its radius; userData.cheeks, if her
+ *  head isn't a ball, how much wider and deeper it is where a cheek stamp goes), `neck` at
  *  the middle of the ring a scarf goes round (userData.r), `belly` at the middle of the body a jersey goes over (Tuque's
  *  middle ball: userData.r, sx, sy; Lulu's body: rx, ry, rz), her `wings` (a jersey's sleeves), Tuque's floppy `flop`. */
 export interface ToySpots {
@@ -343,7 +344,7 @@ export function dressToy(actor: ToyActor, who: TeamId, worn: Worn, bag: Bag): vo
     }
   }
   if (worn.cheek && CHEEK_AT[who]) {
-    const cheek = placeCheek(worn.cheek, new Vector3(), R, [1, 1, 1], CHEEK_AT[who], d.bag)
+    const cheek = placeCheek(worn.cheek, new Vector3(), R, (spots.hat.userData.cheeks as V3 | undefined) ?? [1, 1, 1], CHEEK_AT[who], d.bag)
     cheek.name = 'cabin-cheek'
     spots.hat.add(cheek)
     d.added.push(cheek)

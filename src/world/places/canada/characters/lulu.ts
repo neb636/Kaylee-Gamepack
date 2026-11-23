@@ -9,6 +9,7 @@
 // She sits low: on water, put her feet at the surface; her body is made to look afloat.
 // (Her body, head and neck keep the sizes the Team Cabin's clothes are fitted to: `spots`, characters/worn.ts.)
 import { Group, Matrix4, RingGeometry, Vector3, type BufferGeometry } from 'three'
+import { clamp } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
 import { bake, merge, P, placeMatrix, solid, solidMix, type PartOpts, type V3 } from '../../../engine3d/geo'
 import { CANADA_COLORS } from './looks'
@@ -33,8 +34,6 @@ const FLUFF = '#BDB7B0'
 const FLUFF_DARK = '#A39C94'
 const FLUFF_PALE = '#F4F0EA'
 const CHICK_BILL = '#4A4048'
-
-const clamp01 = (v: number) => Math.max(0, Math.min(1, v))
 
 /** A ball pushed into a shape: `f` moves each point of a unit ball, then the part is placed. Its shading follows the
  *  new surface, with no seam where the ball's own edges meet. */
@@ -153,8 +152,8 @@ function eyeParts(on: On, drop: V3, R: number, eyeX: number, eyeY: number, size:
 
 /** Her body's shape, on a unit ball: the back end narrows and lifts toward the tail, the chest swells up to the neck. */
 function loonBody(p: Vector3) {
-  const t = clamp01((-p.z - 0.45) / 0.55)
-  const f = clamp01((p.z - 0.3) / 0.7)
+  const t = clamp((-p.z - 0.45) / 0.55)
+  const f = clamp((p.z - 0.3) / 0.7)
   p.x *= 1 - 0.3 * t * t
   p.y = p.y * (1 - 0.25 * t * t) + 0.35 * t * t + 0.12 * f * f
   return p
@@ -266,7 +265,7 @@ export class Lulu extends ToyActor {
     this.team.visible = false
     this.team.name = TEAM_SCARF
     this.neck.add(this.team)
-    const spot = (parent: Group, x: number, y: number, z: number, data: Record<string, number>, tilt = 0) => {
+    const spot = (parent: Group, x: number, y: number, z: number, data: Record<string, number | V3>, tilt = 0) => {
       const g = new Group()
       g.position.set(x, y, z)
       g.rotation.x = tilt
@@ -275,7 +274,8 @@ export class Lulu extends ToyActor {
       return g
     }
     this.spots = {
-      hat: spot(this.neck, 0, headY, 0.02 * H, { R }),
+      // (`cheeks`: how much wider and deeper than a ball her head is where a cheek stamp goes.)
+      hat: spot(this.neck, 0, headY, 0.02 * H, { R, cheeks: [1.072, 1, 1.027] }),
       neck: spot(this.neck, 0, 0.03 * H, 0, { r: 0.14 * H }, -0.15),
       belly: spot(this.body, ...C, { rx: RX, ry: RY, rz: RZ }),
       wings: [this.wingL, this.wingR],
@@ -296,7 +296,7 @@ export class Lulu extends ToyActor {
       const lined = [
         // (The shoulder is full and round; behind it the wing thins and its lower edge sweeps up toward the tips.)
         sculpt(BLACK, 28, (p) => {
-          const t = clamp01(-p.z)
+          const t = clamp(-p.z)
           p.y = p.y * (1 - 0.35 * t * t) + 0.1 * t * t
         }, { at: c, scale: r }),
         ...[0, 1, 2].map((i) => P.sphere(0.1 * H, i === 1 ? FEATHER : BLACK, { at: [c[0] + s * (0.012 - i * 0.008) * H, c[1] + (0.07 - i * 0.062) * H, c[2] - (0.215 - i * 0.022) * H], rot: [0.16 - i * 0.2, 0, 0], scale: [0.2, 0.46, 1.42 - i * 0.14] }, 14)),
