@@ -219,7 +219,7 @@ export class CanadaMapWorld implements World3D {
   private geese: Goose[] = []
   private pokes = new Map<PokeId, Poke>()
   private pins = new Map<PlaceId, Pin>()
-  /** The friends at home stand bigger on a tall screen, where the far (Pacific) end of the board is small. */
+  /** The friends at home stand bigger on a tall screen, where the board (or its far end) is small. */
   private homeK = 1
   private owl!: Owl
   private bisonToy!: Bison
@@ -478,14 +478,16 @@ export class CanadaMapWorld implements World3D {
     this.top = top
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
-    // A tall screen looks along the country from its south-east corner, so the long board fills it; a wide one looks
-    // from the south.
+    // A phone held upright keeps north up (turning the board sideways put the Pacific at the top): it looks from a
+    // little east of south and a little higher, so the board reads as a toy on a table. An iPad held upright looks
+    // along the country from its south-east corner, so the long board fills it; a wide screen looks from the south.
     const tall = h > w * 1.05
-    this.base.yaw = tall ? 90 : 0
-    this.base.pitch = tall ? 60 : 58
+    const phone = h > w * 1.6
+    this.base.yaw = phone ? 15 : tall ? 90 : 0
+    this.base.pitch = phone ? 66 : tall ? 60 : 58
     // Every place turns its front to the camera's side of the board (they're toys on a tray).
     for (const p of this.places.values()) p.root.rotation.y = (this.base.yaw * Math.PI) / 180
-    // On a tall screen the far (Pacific) end is small: the friends at home stand bigger, so each stays a big target.
+    // On a tall screen the board is small (or its far end is): the friends at home stand bigger, so each stays a big target.
     this.homeK = tall ? HOME_TALL : 1
     for (const m of this.mates.values()) if (!m.team) m.spot.scale.setScalar(this.homeK)
     this.frame()
