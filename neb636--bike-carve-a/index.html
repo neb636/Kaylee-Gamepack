@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mountain Bike, card A: snappy bars</title>
+<title>Mountain Bike: carve like Bottomless (your pick, tuned)</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -36,8 +36,8 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
 <span class="chip">Check-in 3 of 4: play it</span>
-<h1>Mountain Bike, card A: snappy bars</h1>
-<p class="kaylee">The bike answers her finger at once: push and it carves across the trail, Maple leans and crouches into it, leaves fly and the wheel leaves a line. Let go and she rides straight on.</p>
+<h1>Mountain Bike: carve like Bottomless (your pick, tuned)</h1>
+<p class="kaylee">Your feel-lab numbers are in: a gentler carve (39°), almost twice the speed (14.8 m/s) and the camera swung further behind her. Hops off the blue way's rocks now follow the bend instead of landing her in the island.</p>
 
 <h2>Watch</h2><figure><video src="reel/bike-carve-a.mp4" poster="" controls playsinline muted autoplay loop></video>
 <figcaption>Bike carve a · 11 s</figcaption></figure>
@@ -47,12 +47,11 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <h2>Listen</h2><div class="card listen"><h3>The bike's new sound</h3>
 <audio controls preload="metadata" src="sfx/bike.mp3"></audio>
 <ol class="meta"><li><button class="cue" data-at="0" data-end="4"><span class="t">0:00–0:04</span> Tires carving through leaves (loop)</button></li></ol></div>
-<h2>Your call</h2><ol><li><p>Does it feel as quick as Bottomless now (yes, closer, or no)?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>Should a turn cost a little speed (keep or drop)?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
-<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/canada/bike/green">Ride from the top</a> <a class="pill" href="../#/world/canada/bike/berms?trail=blue">The berms (blue way)</a> <a class="pill" href="../#/world/canada/bike/berms?trail=green&amp;feel=1">Tune the feel</a></p>
+<h2>Your call</h2><ol><li><p>Ready for her iPad, or another round on the feel (ready or tune)?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/canada/bike/green">Ride from the top</a> <a class="pill" href="../#/world/canada/bike/berms?trail=blue">The berms (blue way)</a> <a class="pill" href="../#/world/canada/bike/falls?feel=1">Tune the feel</a></p>
 </main>
 <script>
-const qs=["Does it feel as quick as Bottomless now (yes, closer, or no)?","Should a turn cost a little speed (keep or drop)?"],titles=[]
+const qs=["Ready for her iPad, or another round on the feel (ready or tune)?"],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})

@@ -1,10 +1,9 @@
 {
- "title": "Mountain Bike, card A: snappy bars",
+ "title": "Mountain Bike: carve like Bottomless (your pick, tuned)",
  "checkIn": "3 of 4: play it",
- "kaylee": "The bike answers her finger at once: push and it carves across the trail, Maple leans and crouches into it, leaves fly and the wheel leaves a line. Let go and she rides straight on.",
+ "kaylee": "Your feel-lab numbers are in: a gentler carve (39\u00b0), almost twice the speed (14.8 m/s) and the camera swung further behind her. Hops off the blue way's rocks now follow the bend instead of landing her in the island.",
  "questions": [
-  "Does it feel as quick as Bottomless now (yes, closer, or no)?",
-  "Should a turn cost a little speed (keep or drop)?"
+  "Ready for her iPad, or another round on the feel (ready or tune)?"
  ],
  "reels": [
   {
@@ -25,7 +24,7 @@
   },
   {
    "label": "Tune the feel",
-   "hash": "#/world/canada/bike/berms?trail=green&feel=1"
+   "hash": "#/world/canada/bike/falls?feel=1"
   }
  ],
  "pictures": [
