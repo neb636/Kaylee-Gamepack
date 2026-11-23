@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 450" preserveAspectRatio="xMidYMid slice">
+  <title>Mall day</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="320" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9fd4fa"/><stop offset="1" stop-color="#e4f4ff"/></linearGradient>
+    <radialGradient id="sunglow" cx="1096" cy="92" r="220" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff8dc" stop-opacity="0.95"/><stop offset="0.35" stop-color="#fff3d0" stop-opacity="0.45"/><stop offset="1" stop-color="#fff3d0" stop-opacity="0"/></radialGradient>
+    <linearGradient id="river" x1="0" y1="318" x2="0" y2="450" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#b6e3f6"/><stop offset="0.4" stop-color="#7ec9ea"/><stop offset="1" stop-color="#4fa9d6"/></linearGradient>
+    <linearGradient id="glass" x1="0" y1="100" x2="0" y2="282" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d9f0ff"/><stop offset="1" stop-color="#93cffa"/></linearGradient>
+    <!-- the mall's glass front: a wide, high arch -->
+    <clipPath id="front"><path d="M262 284V188Q620 14 978 188V284Z"/></clipPath>
+    <clipPath id="tower"><path d="M820 300V92L926 66V300Z"/></clipPath>
+    <!-- a palm, its foot at 0,0 -->
+    <g id="palm">
+      <path d="M-7 0C-6-50-2-100 6-150L14-149C8-100 6-50 7 0Z" fill="#c99266"/>
+      <path d="M1 0C2-50 4-100 10-150L14-149C8-100 6-50 7 0Z" fill="#a46e4b"/>
+      <path d="M-4-30h9M-3-60h9M-1-90h9M2-120h9" stroke="#e5b78f" stroke-width="3.5" stroke-linecap="round"/>
+      <g transform="translate(10 -150)">
+        <g fill="#48a96c"><path d="M0-2C-22-16-56-16-82 2C-54-4-30 0 0 6Z"/><path d="M2 2C28 2 54 20 64 46C46 26 26 16 2 8Z"/><path d="M-2 2C-26 8-46 28-50 54C-36 32-20 20 0 8Z"/></g>
+        <g fill="#73cf86"><path d="M0 0C-16-30-40-44-68-44C-40-34-22-20-2 4Z"/><path d="M0 0C4-30 20-52 44-60C28-42 18-24 4 4Z"/><path d="M2 0C30-16 64-14 86 4C62-2 36 0 4 6Z"/></g>
+        <path d="M-2 2C-16-22-34-34-56-38M4 2C30-8 54-8 74 0" fill="none" stroke="#aee8b7" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="-4" cy="10" r="7" fill="#8a5b3d"/><circle cx="9" cy="12" r="7" fill="#6b432e"/><circle cx="2" cy="21" r="6" fill="#8a5b3d"/>
+      </g>
+    </g>
+    <!-- a balloon, its knot at 0,0 -->
+    <ellipse id="bb" cx="0" cy="-27" rx="18" ry="22"/>
+    <clipPath id="bc"><use href="#bb"/></clipPath>
+    <path id="bh" d="M-10-34C-9-41-5-45 0-46" fill="none" stroke-width="4" stroke-linecap="round"/>
+    <path id="bk" d="M-4.5 1h9l-4.5-6z"/>
+    <g id="bPink"><g clip-path="url(#bc)"><use href="#bb" fill="#e7699c"/><use href="#bb" fill="#ff8fb8" x="-4" y="-5"/></g><use href="#bh" stroke="#ffc4da"/><use href="#bk" fill="#e7699c"/></g>
+    <g id="bLav"><g clip-path="url(#bc)"><use href="#bb" fill="#937ee0"/><use href="#bb" fill="#b9a6f5" x="-4" y="-5"/></g><use href="#bh" stroke="#ddd2ff"/><use href="#bk" fill="#937ee0"/></g>
+    <g id="bGold"><g clip-path="url(#bc)"><use href="#bb" fill="#eba123"/><use href="#bb" fill="#ffc83d" x="-4" y="-5"/></g><use href="#bh" stroke="#ffe189"/><use href="#bk" fill="#eba123"/></g>
+    <g id="bMint"><g clip-path="url(#bc)"><use href="#bb" fill="#5cc6a6"/><use href="#bb" fill="#8fe3c8" x="-4" y="-5"/></g><use href="#bh" stroke="#c7f3e4"/><use href="#bk" fill="#5cc6a6"/></g>
+    <g id="bHot"><g clip-path="url(#bc)"><use href="#bb" fill="#d8367f"/><use href="#bb" fill="#ff4f9a" x="-4" y="-5"/></g><use href="#bh" stroke="#ff8fc0"/><use href="#bk" fill="#d8367f"/></g>
+    <!-- the corkscrew slide: the half-turns behind the pole, then in front, then the run-out -->
+    <path id="tBack" d="M286 220C285 219.5 283.5 217.5 279.5 216.5C275 216 268 215 261 215C254 215.5 244.5 216 236 217C227.5 218 218 220 211 222.5C204 225 197 228 192.5 231.5C188.5 234.5 187 240 186 242"/>
+    <path id="tFront" d="M186 198C187 200 188.5 205.5 192.5 208.5C197 212 204 215 211 217.5C218 220 227.5 222 236 223C244.5 224 254 224.5 261 225C268 225 275 224 279.5 223.5C283.5 222.5 285 220.5 286 220M186 242C187 244 188.5 249.5 192.5 252.5C197 256 204 259 211 261.5C218 264 227.5 266 236 267C244.5 268 254 268.5 261 269C268 269 275 268 279.5 267.5C283.5 266.5 285 264.5 286 264C300 268 314 284 320 298"/>
+    <path id="sp" d="M0-11l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/>
+  </defs>
+
+  <!-- sky, sun, clouds, birds -->
+  <rect width="1200" height="330" fill="url(#sky)"/>
+  <circle cx="1096" cy="92" r="220" fill="url(#sunglow)"/>
+  <circle cx="1096" cy="92" r="36" fill="#fff6d2"/>
+  <g fill="#fff" opacity="0.9">
+    <circle cx="64" cy="104" r="16"/><circle cx="92" cy="90" r="24"/><circle cx="124" cy="100" r="18"/><circle cx="146" cy="110" r="11"/>
+    <rect x="46" y="104" width="112" height="18" rx="9"/>
+  </g>
+  <g fill="#fff" opacity="0.85">
+    <circle cx="610" cy="72" r="13"/><circle cx="632" cy="60" r="19"/><circle cx="656" cy="70" r="13"/>
+    <rect x="596" y="70" width="74" height="14" rx="7"/>
+  </g>
+  <g fill="none" stroke="#8a86c4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M968 112q6-6 12 0q6-6 12 0"/><path d="M1000 92q5-5 10 0q5-5 10 0"/><path d="M450 96q5-5 10 0q5-5 10 0"/>
+  </g>
+
+  <!-- the far city in the haze -->
+  <g fill="#d3def7">
+    <rect x="-10" y="214" width="58" height="110"/><rect x="40" y="170" width="54" height="154"/><rect x="88" y="230" width="70" height="94"/>
+    <rect x="958" y="208" width="60" height="116"/><rect x="1040" y="226" width="70" height="98"/><rect x="1100" y="180" width="56" height="144"/><rect x="1150" y="238" width="60" height="86"/>
+  </g>
+  <g fill="#e6edfc">
+    <rect x="48" y="182" width="8" height="120"/><rect x="62" y="182" width="8" height="120"/><rect x="1108" y="192" width="8" height="110"/><rect x="1122" y="192" width="8" height="110"/><rect x="966" y="220" width="8" height="90"/>
+  </g>
+
+  <!-- the tall glass tower behind the mall -->
+  <g clip-path="url(#tower)">
+    <rect x="814" y="60" width="120" height="250" fill="#c4d8f5"/>
+    <rect x="880" y="60" width="54" height="250" fill="#a9c1ea"/>
+    <path d="M820 128H930M820 156H930M820 184H930" stroke="#e5eefc" stroke-width="3"/>
+    <path d="M846 60V300M866 60V300" stroke="#dae7fb" stroke-width="3"/>
+    <path d="M906 60V300" stroke="#bdd1f1" stroke-width="3"/>
+  </g>
+  <path d="M820 92L926 66" stroke="#eef4ff" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- the mall: a huge curved glass front, folded like a crystal -->
+  <g clip-path="url(#front)">
+    <rect x="250" y="90" width="740" height="200" fill="url(#glass)"/>
+    <!-- each fold: lit on its left, shaded on its right -->
+    <path d="M262 284L296 130L330 284ZM364 284L398 106L432 284ZM466 284L500 92L534 284ZM568 284L602 86L636 284ZM670 284L704 88L738 284ZM772 284L806 98L840 284ZM874 284L908 118L942 284Z" fill="#eaf7ff" opacity="0.8"/>
+    <path d="M296 130L330 284H364L330 122ZM398 106L432 284H466L432 100ZM500 92L534 284H568L534 88ZM602 86L636 284H670L636 86ZM704 88L738 284H772L738 90ZM806 98L840 284H874L840 104ZM908 118L942 284H976L942 126Z" fill="#7dbdf0" opacity="0.6"/>
+    <!-- floors behind the glass -->
+    <path d="M250 206H990M250 244H990" stroke="#f4fbff" stroke-width="4" opacity="0.75"/>
+    <!-- the far end of the curve, turning away from the light -->
+    <rect x="860" y="90" width="130" height="200" fill="#6f9fe0" opacity="0.22"/>
+    <!-- reflections sweeping across -->
+    <path d="M360 284L470 120H512L402 284ZM620 284L730 120H750L640 284Z" fill="#fff" opacity="0.35"/>
+  </g>
+  <path d="M262 188Q620 14 978 188" fill="none" stroke="#fff7f0" stroke-width="8" stroke-linecap="round"/>
+  <path d="M286 174Q420 116 560 104" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- sparkles on the glass -->
+  <g fill="#fff">
+    <use href="#sp" transform="translate(470 156)"/><use href="#sp" transform="translate(690 132) scale(.85)"/><use href="#sp" transform="translate(574 230) scale(.6)"/><use href="#sp" transform="translate(806 190) scale(.7)"/><use href="#sp" transform="translate(386 216) scale(.55)"/>
+  </g>
+  <!-- the ground floor: warm shop windows and glass doors -->
+  <rect x="256" y="276" width="728" height="8" rx="3" fill="#fff"/>
+  <rect x="262" y="284" width="716" height="22" fill="#fff7f0"/>
+  <rect x="890" y="284" width="88" height="22" fill="#efdccd"/>
+  <g fill="#ffe7b0">
+    <rect x="340" y="289" width="62" height="17" rx="3"/><rect x="418" y="289" width="62" height="17" rx="3"/>
+    <rect x="760" y="289" width="62" height="17" rx="3"/><rect x="838" y="289" width="62" height="17" rx="3"/><rect x="916" y="289" width="50" height="17" rx="3"/>
+  </g>
+  <g fill="#ffd38a"><rect x="340" y="300" width="62" height="6"/><rect x="418" y="300" width="62" height="6"/><rect x="760" y="300" width="62" height="6"/><rect x="838" y="300" width="62" height="6"/><rect x="916" y="300" width="50" height="6"/></g>
+  <rect x="520" y="286" width="200" height="20" fill="#b3dcfb"/>
+  <path d="M570 286V306M620 286V306M670 286V306" stroke="#fff7f0" stroke-width="4"/>
+  <path d="M528 306L548 286h10L538 306zM628 306L648 286h8L636 306z" fill="#e2f4ff"/>
+  <rect x="506" y="280" width="228" height="8" rx="4" fill="#fff"/>
+  <rect x="510" y="288" width="220" height="3" fill="#4b3a8c" opacity="0.12"/>
+
+  <!-- the riverside walk and its railing -->
+  <rect y="304" width="1200" height="14" fill="#ece6f7"/>
+  <rect y="304" width="1200" height="3" fill="#faf8ff"/>
+  <path d="M0 314h1200" stroke="#fff" stroke-width="10" stroke-dasharray="3 13"/>
+  <rect y="308" width="1200" height="3" rx="1.5" fill="#fff"/>
+
+  <!-- the playground: a little tower with a corkscrew tube slide -->
+  <ellipse cx="248" cy="306" rx="84" ry="5" fill="#4b3a8c" opacity="0.15"/>
+  <use href="#tBack" fill="none" stroke="#e7699c" stroke-width="20" stroke-linecap="round"/>
+  <use href="#tBack" fill="none" stroke="#937ee0" stroke-width="20" stroke-dasharray="14 40" stroke-dashoffset="20"/>
+  <rect x="230" y="166" width="12" height="140" fill="#bcb6d6"/>
+  <rect x="236" y="166" width="6" height="140" fill="#9790ba"/>
+  <use href="#tFront" fill="none" stroke="#ff8fb8" stroke-width="20" stroke-linecap="round"/>
+  <use href="#tFront" fill="none" stroke="#ffc83d" stroke-width="20" stroke-dasharray="14 40" stroke-dashoffset="34"/>
+  <use href="#tFront" fill="none" stroke="#8fe3c8" stroke-width="20" stroke-dasharray="14 40" stroke-dashoffset="7"/>
+  <use href="#tFront" fill="none" stroke="#d8367f" stroke-width="3" opacity="0.35" transform="translate(0 8)"/>
+  <use href="#tFront" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity="0.6" transform="translate(0 -6)"/>
+  <ellipse cx="321" cy="300" rx="9" ry="12" fill="#e7699c" transform="rotate(-20 321 300)"/>
+  <ellipse cx="322" cy="300" rx="5" ry="7.5" fill="#6a57c7" transform="rotate(-20 322 300)"/>
+  <!-- the deck and its little roof -->
+  <rect x="178" y="184" width="112" height="10" rx="3" fill="#fff7f0"/>
+  <rect x="178" y="190" width="112" height="4" fill="#efdccd"/>
+  <rect x="186" y="150" width="7" height="36" fill="#fff7f0"/><rect x="275" y="150" width="7" height="36" fill="#efdccd"/>
+  <path d="M184 178h100" stroke="#fff7f0" stroke-width="4"/>
+  <path d="M174 154L234 116L294 154Z" fill="#ff4f9a" stroke="#ff4f9a" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M234 116L294 154H234Z" fill="#d8367f" stroke="#d8367f" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M190 146L226 124" stroke="#ff8fc0" stroke-width="4" stroke-linecap="round"/>
+  <rect x="232" y="94" width="4" height="22" fill="#9790ba"/>
+  <path d="M236 94l22 7-22 7z" fill="#ffc83d"/>
+
+  <!-- balloons tied to the deck -->
+  <g fill="none" stroke="#9790ba" stroke-width="2" stroke-linecap="round">
+    <path d="M286 186C300 170 312 152 318 132M286 186C306 176 330 166 352 160M286 186C294 166 290 146 282 128M286 186C314 180 360 152 384 124M286 186C318 186 356 186 390 178"/>
+  </g>
+  <use href="#bPink" transform="translate(318 132) rotate(4)"/>
+  <use href="#bGold" transform="translate(352 160) rotate(16)"/>
+  <use href="#bLav" transform="translate(282 128) rotate(-12) scale(.9)"/>
+  <use href="#bMint" transform="translate(384 124) rotate(20) scale(.9)"/>
+  <use href="#bHot" transform="translate(390 178) rotate(30) scale(.8)"/>
+
+  <!-- a puppy on the riverside walk, by the doors -->
+  <g transform="translate(482 314)">
+    <ellipse cx="0" cy="0" rx="20" ry="3" fill="#4b3a8c" opacity="0.15"/>
+    <path d="M11-6C19-8 22-14 20-21" fill="none" stroke="#d9a275" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M-13 0C-15-12-8-23 0-23C8-23 15-12 13 0Z" fill="#f2c79b"/>
+    <path d="M4-22C11-19 15-10 13 0H5C7-8 7-15 4-22Z" fill="#d9a275"/>
+    <ellipse cx="-5" cy="-1" rx="5.5" ry="3.5" fill="#fff7f0"/><ellipse cx="5" cy="-1" rx="5.5" ry="3.5" fill="#fff7f0"/>
+    <rect x="-8.5" y="-22" width="17" height="4" rx="2" fill="#ff4f9a"/>
+    <circle cx="0" cy="-33" r="13.5" fill="#f2c79b"/>
+    <path d="M8-43.5a13.5 13.5 0 0 1 2 21C8-29 7-37 8-43.5Z" fill="#d9a275"/>
+    <path d="M-10-44C-17.5-44-21-35-19-27C-18-22.5-12.5-22.5-11.5-28C-10.5-33-8-39-10-44Z" fill="#a46e4b"/>
+    <path d="M10-44C17.5-44 21-35 19-27C18-22.5 12.5-22.5 11.5-28C10.5-33 8-39 10-44Z" fill="#8a5b3d"/>
+    <ellipse cx="0" cy="-27.5" rx="7" ry="5" fill="#fff7f0"/>
+    <ellipse cx="0" cy="-30" rx="3" ry="2" fill="#2b2330"/>
+    <path d="M-3-26q1.5 1.5 3 0q1.5 1.5 3 0" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="-5" cy="-35" rx="2" ry="2.5" fill="#2b2330"/><ellipse cx="5" cy="-35" rx="2" ry="2.5" fill="#2b2330"/>
+    <circle cx="-4.5" cy="-36" r="1" fill="#fff"/><circle cx="5.5" cy="-36" r="1" fill="#fff"/>
+    <ellipse cx="-9" cy="-28.5" rx="2.5" ry="1.5" fill="#ff8fb8" opacity="0.55"/><ellipse cx="9" cy="-28.5" rx="2.5" ry="1.5" fill="#ff8fb8" opacity="0.55"/>
+  </g>
+
+  <!-- palms along the river -->
+  <use href="#palm" transform="translate(110 312) scale(.95)"/>
+  <use href="#palm" transform="translate(1018 312) scale(1.02)"/>
+  <use href="#palm" transform="translate(1090 312) scale(.74)"/>
+
+  <!-- the river, with the mall's light on it -->
+  <rect y="318" width="1200" height="132" fill="url(#river)"/>
+  <rect y="318" width="1200" height="4" fill="#effcff" opacity="0.8"/>
+  <g fill="#fff" opacity="0.55">
+    <rect x="300" y="330" width="120" height="4" rx="2"/><rect x="500" y="340" width="160" height="4" rx="2"/><rect x="560" y="352" width="70" height="4" rx="2"/>
+    <rect x="96" y="346" width="90" height="4" rx="2"/><rect x="380" y="372" width="110" height="4" rx="2"/><rect x="660" y="394" width="90" height="4" rx="2"/><rect x="200" y="404" width="80" height="4" rx="2"/>
+  </g>
+  <use href="#sp" fill="#fff" transform="translate(460 356) scale(.7)"/>
+
+  <!-- the river ferry with an orange roof, heading left -->
+  <g transform="translate(980 344) scale(.9)">
+    <ellipse cx="0" cy="2" rx="176" ry="6" fill="#3d93c4" opacity="0.45"/>
+    <g fill="#fff" opacity="0.8"><ellipse cx="-176" cy="-2" rx="16" ry="5"/><rect x="164" y="-6" width="40" height="4" rx="2"/><rect x="-224" y="4" width="40" height="4" rx="2"/><rect x="-206" y="-8" width="24" height="4" rx="2"/></g>
+    <rect x="132" y="-98" width="4" height="40" fill="#9790ba"/>
+    <path d="M136-98l26 8-26 8z" fill="#ff9c57"/>
+    <path d="M-122-58H140V-26H-122Z" fill="#fff7f0"/>
+    <path d="M112-58H140V-26H112Z" fill="#efdccd"/>
+    <g fill="#8ccfff">
+      <rect x="-110" y="-52" width="20" height="18" rx="5"/><rect x="-80" y="-52" width="20" height="18" rx="5"/><rect x="-50" y="-52" width="20" height="18" rx="5"/><rect x="-20" y="-52" width="20" height="18" rx="5"/>
+      <rect x="10" y="-52" width="20" height="18" rx="5"/><rect x="40" y="-52" width="20" height="18" rx="5"/><rect x="70" y="-52" width="20" height="18" rx="5"/><rect x="100" y="-52" width="20" height="18" rx="5"/>
+    </g>
+    <path d="M-110-40l12-12h6l-18 18zM-80-40l12-12h6l-18 18zM-50-40l12-12h6l-18 18zM-20-40l12-12h6l-18 18zM10-40l12-12h6l-18 18zM40-40l12-12h6l-18 18zM70-40l12-12h6l-18 18zM100-40l12-12h6l-18 18z" fill="#d6efff"/>
+    <rect x="-134" y="-68" width="286" height="13" rx="6" fill="#ff9c57"/>
+    <rect x="-134" y="-61" width="286" height="6" rx="3" fill="#e57a35"/>
+    <path d="M-128-65H144" stroke="#ffc595" stroke-width="3" stroke-linecap="round"/>
+    <path d="M-182-28H160C168-28 170-22 166-16L158 0H-142C-160 0-176-12-182-28Z" fill="#fff"/>
+    <path d="M-170-14H164L158 0H-142C-152 0-162-6-170-14Z" fill="#e4ddf6"/>
+    <path d="M-178-22H166" stroke="#ff8fb8" stroke-width="5"/>
+  </g>
+</svg>
