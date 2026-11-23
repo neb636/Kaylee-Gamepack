@@ -222,3 +222,7 @@ her finger). Same lake, same control, same section ids; the two errands (the mil
 
 - The names (Monty, Roxy, Tuque, Lulu, Misty, Ollie, Gus) are first picks.
 - Lulu and Gus have new voices nobody has heard yet.
+- **Roxy and her kits look like raccoons (2026-11-22):** the `raccoon` recipe is its own file,
+  `engine3d/characters/raccoon.ts`: a wide head with cheek ruffs, round ears dark inside, the mask and white brows as
+  flat patches on the head, a small closed smile, a white tummy and a ringed tail that curls up beside the body. The
+  cabin's hats read the head's shape from `RACCOON_HEAD`. Thailand's raccoon drivers use the same recipe.
