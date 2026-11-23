@@ -1,0 +1,22 @@
+{
+  "title": "Nan Cup: snappier kart steering",
+  "checkIn": "fix",
+  "kaylee": "Her kart turns the moment she pushes, leans and kicks up dirt into the turn, and keeps its line when her finger sits still.",
+  "questions": [
+    "Steering: right, too twitchy, or too slow? (Change the Steering and Snap knobs in the feel lab and tell me the numbers.)",
+    "Camera: does it swing behind her enough on a hard turn?"
+  ],
+  "pictures": [
+    {
+      "title": "Before and now, the same push",
+      "after": "pics/nan-steer.png",
+      "caption": "Now she starts moving in 0.18 s instead of 0.42 s. A tap moves her about 1.5 m and she stays there; holding the push swings her right across the road."
+    }
+  ],
+  "links": [
+    { "label": "Play it: the forest race", "hash": "#/world/thailand/nan-trip/race" },
+    { "label": "Feel lab: Steering knobs", "hash": "#/world/thailand/nan-trip/race?feel=1" },
+    { "label": "Rice steps", "hash": "#/world/thailand/nan-trip/race?track=steps" },
+    { "label": "Cloud top", "hash": "#/world/thailand/nan-trip/race?track=cloud" }
+  ]
+}
