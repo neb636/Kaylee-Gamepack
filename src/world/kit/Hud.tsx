@@ -6,7 +6,7 @@
 //   top right     tools she opens and closes (dress-up, the album, the games shelf)
 //   bottom left   Sparkle and her bubble (kit/Guide.tsx)
 //   bottom centre the end card: a small "again" and a big way on, only when a round is over (<EndCard>)
-//   bottom right  the way on, done or skip, above the 3D jump button (--roam-right)
+//   bottom right  the way on, done or skip
 //
 // The colour says the job (`role`), the picture is drawn in the game's style (`icon`, never a system emoji: they look
 // different on every device and pasted on beside the drawn map button).
@@ -19,7 +19,7 @@ export { HUD_ICONS, type HudIcon }
 /** The job a button does, which picks its colour: leave (white), go (pink, the way on), done (mint), again
  *  (lavender), open (butter: a map, an album, the party), skip (quiet and smaller). */
 export type HudRole = 'leave' | 'go' | 'done' | 'again' | 'open' | 'skip'
-/** Where it sits (absolute, clear of the safe areas; bottom right also clears the 3D jump button). */
+/** Where it sits (absolute, clear of the safe areas). */
 export type HudSlot = 'top-right' | 'top-center' | 'bottom-right' | 'bottom-left' | 'bottom-center'
 
 export interface HudButtonProps extends Omit<HTMLMotionProps<'button'>, 'children' | 'onClick' | 'role'> {

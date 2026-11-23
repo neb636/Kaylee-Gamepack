@@ -1,4 +1,4 @@
-// A compact walking hint fixed in the bottom-left corner, plus the jump button bottom right.
+// A compact walking hint fixed in the bottom-left corner. (No jump button: it did nothing useful, 2026-11-23.)
 // Left-half drags still steer from where the finger went down; only the hint stays in its corner.
 // Each new gesture shows it for two seconds, then fades while steering keeps working.
 import { forwardRef, useEffect, useImperativeHandle, useRef, type PointerEvent as ReactPointerEvent } from 'react'
@@ -17,32 +17,28 @@ export interface RoamPadHandle {
 
 interface Props {
   onStick: (x: number, y: number) => void
-  onJump: () => void
 }
 
 const STICK = 'clamp(72px, 12vmin, 88px)'
 // Preserve the original gesture reach so a smaller drawing doesn't make walking more sensitive.
 const inputReach = () => Math.max(112, Math.min(184, Math.min(window.innerWidth, window.innerHeight) * 0.22)) * ROAM.stickReach
-const JUMP = 'clamp(88px, 15vmin, 128px)'
 const EDGE = 20
 /** Above every tap target in the world (the house and the trip legs give them depth z-indexes up to ~30000), so a
- *  thing behind a corner never takes her stick or jump. */
+ *  thing behind a corner never takes her stick. */
 const PAD_Z = 50000
 /** Clears the corner offsets (on unmount too: React has dropped the ref by the time View3D's cleanup runs). */
 const clearOffsets = () => {
   document.documentElement.style.removeProperty('--roam-left')
-  document.documentElement.style.removeProperty('--roam-right')
 }
 
-export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onStick, onJump }, ref) {
+export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onStick }, ref) {
   const timers = useTimers()
   const stickEl = useRef<HTMLDivElement>(null)
   const knobEl = useRef<HTMLDivElement>(null)
-  const jumpEl = useRef<HTMLButtonElement>(null)
   const held = useRef<{ pointer: number; cx: number; cy: number; r: number } | null>(null)
   /** Gesture origin and reach (client px), independent of the fixed hint. */
   const floating = useRef<{ cx: number; cy: number; r: number } | null>(null)
-  const shown = useRef({ walk: false, jump: false })
+  const shown = useRef({ walk: false })
   const hintTimer = useRef<number | null>(null)
   const hideHint = () => {
     if (hintTimer.current !== null) clearTimeout(hintTimer.current)
@@ -87,21 +83,15 @@ export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onSti
   useImperativeHandle(ref, () => ({
     show(state) {
       const walk = !!state?.walk
-      const jump = !!state?.jump
       const s = shown.current
-      if (walk === s.walk && jump === s.jump) return
+      if (walk === s.walk) return
       if (!walk && s.walk && (held.current || floating.current)) {
         floating.current = null
         release()
       }
       if (!walk) hideHint()
       s.walk = walk
-      s.jump = jump
       if (stickEl.current) stickEl.current.style.display = walk ? '' : 'none'
-      if (jumpEl.current) jumpEl.current.style.display = jump ? '' : 'none'
-      const root = document.documentElement.style
-      if (jump) root.setProperty('--roam-right', `calc(${JUMP} + ${EDGE}px)`)
-      else root.removeProperty('--roam-right')
     },
     float(x0, y0, x, y) {
       const el = stickEl.current
@@ -188,50 +178,6 @@ export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onSti
           }}
         />
       </div>
-      {/* hud-ok: the jump button is part of the joystick (a play control with its own look), not a HUD control. */}
-      <button
-        ref={jumpEl}
-        aria-label="Jump"
-        data-roam="jump"
-        onPointerDown={(e) => {
-          e.stopPropagation()
-          onJump()
-          const el = jumpEl.current
-          if (el) {
-            el.style.scale = '0.86'
-            timers.later(() => (el.style.scale = ''), 140)
-          }
-        }}
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            onJump()
-          }
-        }}
-        style={{
-          display: 'none',
-          position: 'absolute',
-          right: `calc(var(--safe-right, 0px) + ${EDGE}px)`,
-          bottom: `calc(var(--safe-bottom, 0px) + ${EDGE + 10}px)`,
-          width: JUMP,
-          height: JUMP,
-          padding: 0,
-          borderRadius: '50%',
-          border: '5px solid #fff',
-          background: 'radial-gradient(circle at 38% 32%, #fff3b8, var(--butter, #ffe27a) 70%)',
-          boxShadow: '0 5px 14px rgba(43,35,48,.28)',
-          zIndex: PAD_Z,
-          touchAction: 'none',
-          transition: 'scale .12s',
-        }}
-      >
-        {/* A big up arrow over a little bump: jump! */}
-        <svg viewBox="0 0 100 100" width="70%" height="70%" style={{ display: 'block', margin: 'auto' }}>
-          <path d="M50,14 L80,48 L62,48 L62,70 L38,70 L38,48 L20,48 Z" fill="var(--hotpink, #ff4f9a)" stroke="#fff" strokeWidth="5" strokeLinejoin="round" />
-          <path d="M26,86 Q50,74 74,86" fill="none" stroke="var(--hotpink, #ff4f9a)" strokeWidth="7" strokeLinecap="round" />
-        </svg>
-      </button>
     </>
   )
 })

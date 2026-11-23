@@ -128,7 +128,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
   }, [])
 
   return (
-    <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: 'flex', alignItems: 'flex-end', gap: 6, zIndex: 15, pointerEvents: 'none', maxWidth: 'calc(100% - 120px - var(--roam-left, 0px) - var(--roam-right, 0px))' }}>
+    <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: 'flex', alignItems: 'flex-end', gap: 6, zIndex: 15, pointerEvents: 'none', maxWidth: 'calc(100% - 120px - var(--roam-left, 0px))' }}>
       <button
         aria-label="Sparkle"
         disabled={quiet && !dressing}

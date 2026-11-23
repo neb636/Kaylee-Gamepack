@@ -609,7 +609,7 @@ export class CanadaMapWorld implements World3D {
   }
 
   roam(): RoamState | null {
-    return this.closing || this.onRink ? null : { walk: false, jump: false }
+    return this.closing || this.onRink ? null : { walk: false }
   }
 
   get calm() {

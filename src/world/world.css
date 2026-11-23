@@ -645,7 +645,7 @@
 .hud-at { position: absolute; z-index: var(--z-hud); }
 .hud-top-right { top: calc(var(--safe-top) + 12px); right: calc(env(safe-area-inset-right, 0px) + 16px); }
 .hud-top-center { top: calc(var(--bar-clear) + 4px); left: calc(50% - var(--hud-size) / 2); }
-.hud-bottom-right { right: calc(env(safe-area-inset-right, 0px) + 14px); bottom: calc(var(--safe-bottom) + 14px + var(--roam-right, 0px)); }
+.hud-bottom-right { right: calc(env(safe-area-inset-right, 0px) + 14px); bottom: calc(var(--safe-bottom) + 14px); }
 .hud-bottom-left { left: calc(env(safe-area-inset-left, 0px) + 14px); bottom: calc(var(--safe-bottom) + 14px); }
 .hud-bottom-center { left: calc(50% - var(--hud-size) / 2); bottom: calc(var(--safe-bottom) + 18px); }
 .hud-end {

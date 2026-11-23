@@ -13,7 +13,7 @@ with a system emoji for a picture. Now the same job looks the same and sits in t
 | Top right | **Tools** she opens and closes (dress-up, the games shelf) | `<HudButton role="open" size="sm" slot="top-right" />` |
 | Bottom left | **Sparkle** and her bubble; tap her to hear it again | `kit/Guide.tsx` |
 | Bottom centre | **The end card**, only when a round is over: a small again, a big way on | `<EndCard>` with `<HudButton role="again" />` and `<HudButton role="go" size="lg" pulse />` |
-| Bottom right | **The way on, done or skip.** It clears the 3D jump button by itself (`--roam-right`) | `<HudButton slot="bottom-right" />` |
+| Bottom right | **The way on, done or skip.** | `<HudButton slot="bottom-right" />` |
 
 Only one thing on a screen breathes (`pulse`): the way on.
 
