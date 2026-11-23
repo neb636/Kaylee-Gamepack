@@ -1,9 +1,10 @@
-// Red Canoe: Kaylee paddles Maple's red canoe across the turquoise lake to find Lulu the loon by the glacier (paddle.ts
+// Red Canoe: Kaylee paddles Maple's red canoe across the turquoise lake to find Lulu the loon's lost chick and take it
+// home to her by the glacier, and then Lulu sings for her (paddle.ts
 // is the world; it also does the talking: Maple's hello, Sparkle's one line per part and her help when she's stuck,
 // Maple's and the animals' reactions). After the chapter's way-in film (`filmed`) it starts on the water with Sparkle's
 // line; from a link or a replay Maple says hello at the dock first. The address bar follows her from part to part
 // (sections.ts). The bubble at the bottom shows what Sparkle said (tap it to hear it again). The stars fill part by part;
-// with Lulu and her chick at the glacier the celebration plays, then onDone (the film out and the stamp), and "again"
+// when Lulu has sung by the glacier the celebration plays, then onDone (the film out and the stamp), and "again"
 // sets off from the dock once more.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
@@ -21,11 +22,11 @@ import CANOE_SECTIONS, { type CanoeSection } from './sections'
 const SAY: Record<CanoeSection, { icon: string; line: Line }> = {
   story: { icon: '🦫', line: L.canoe.story },
   glide: { icon: '🛶', line: L.canoe.go },
-  stream: { icon: '✨', line: L.canoe.stream },
+  stream: { icon: '🐣', line: L.canoe.stream },
   loon: { icon: '🫧', line: L.canoe.loon },
-  glacier: { icon: '💙', line: L.canoe.family },
+  glacier: { icon: '🎵', line: L.canoe.sing },
 }
-const FOUND = { icon: '🏔️', line: L.canoe.found }
+const FOUND = { icon: '🐣', line: L.canoe.chickFound }
 
 export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
   const timers = useTimers()
@@ -57,7 +58,8 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
     done: () => {
       setDone(true)
       burst()
-      // The celebration plays (the loon family round the canoe, Maple cheering), then the stamp, the first time.
+      // Lulu has sung: the celebration plays (the loon family round the canoe, Maple cheering), then the stamp, the
+      // first time.
       if (!finished.current) {
         finished.current = true
         stampTimer.current = timers.later(() => props.current.onDone(), DONE_S * 1000)

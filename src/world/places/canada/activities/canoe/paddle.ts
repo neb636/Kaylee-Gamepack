@@ -1,6 +1,7 @@
 // Red Canoe (planning/around-the-world/canada.md, "Maple's Team"): a glacier lake in Banff, bright turquoise among the
-// snowy peaks. Lulu the loon, the best singer in Canada, lives on the far side by the glacier; Kaylee paddles Maple's red
-// canoe across to find her (the films round the game ask her to sing at the big game).
+// snowy peaks. Lulu the loon, the best singer in Canada, can't sing: her chick has paddled off. Kaylee paddles Maple's
+// red canoe to find it, takes it home to Lulu by the glacier, and then Lulu sings for her (the try-out: the films round
+// the game ask her to sing at the big game).
 //
 // The toy (core verb): one finger on the water and the canoe goes there. Maple paddles by herself, stroke after stroke,
 // on the side that turns it the right way (alternating when it goes straight); her finger further ahead and she
@@ -10,15 +11,17 @@
 // sticking, and the next nudge always frees it. A mouse is the same: click and hold, or click.
 //
 // The verb deepens three ways (lake.ts has where everything is): glide (calm water, the duck family follows like a
-// parade), where the blue comes from (the glacier stream's milky rock flour in the north-west corner: paddle into it and
-// the lake glows bluer), then follow the bubbles to Lulu (she dives and pops up nearer the glacier each time, laughing;
-// the last time her chick is on her back, right under the glacier, and the whole lake glows turquoise).
+// parade), find the chick (a tiny peep from the glacier stream's milky water in the north-west corner, louder as she
+// nears; paddle into it and the chick hops onto the bow, and the lake glows bluer), then take it to Lulu (the bubbles
+// are Lulu diving to look for her baby: she pops up nearer the glacier each time; the third time she sees it, the chick
+// hops onto her back and the whole lake glows turquoise). Last, the try-out: a tap on Lulu and she sings, and the
+// glacier sings it back (three songs; she sings by herself if Kaylee doesn't tap).
 //
 // The lake is the shared engine3d/water.ts, see-through, over a mirror image of the shore and the mountains: that's the
 // reflection, and the canoe's wake ripples over it. Built for engine3d/View3D.tsx. The paddling's numbers are feel-lab
 // knobs (?feel=1), with a graph of her finger against what the canoe does.
 import { Color, Fog, Group, Mesh, Plane, Raycaster, RingGeometry, MeshBasicMaterial, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, say, sounds, spendHint, stopSpeaking, type Line, Timers } from '../../../../../sdk'
+import { bell, clamp, say, sounds, spendHint, stopSpeaking, type Line, Timers } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -36,9 +39,10 @@ import { meet } from '../../book/met'
 import { L } from '../../lines'
 import { Canoe, CANOE_LEN, SEAT_Z } from './boat'
 import { snd } from './sounds'
-import { Beaver, Duck, Eagle, Goat, Loon, Marmot, Pika, Squirrel, Trout } from './critters'
+import { Beaver, Duck, Eagle, Goat, Loon, Marmot, Pika, SING_S, Squirrel, Trout } from './critters'
 import { DUCKS, EAGLE_Y, FAMILY, FLOUR, GLACIER, GLIDE_M, inward, keepOn, LAKE_DULL, LAKE_GLOW, landY, LODGE, MARMOT, MOOSE, PADDLE_K, PIKA, shoreK, SQUIRREL, STARTS } from './lake'
 import { Moose } from './moose'
+import { Lulu } from '../../characters/lulu'
 import type { CanoeSection } from './sections'
 import { buildClouds, buildShore, buildSky, creekDistance, goatSpot, mirror, pileY, SKY, type Shore } from './shore'
 import { TO_DEG, damp, wrapAngle } from '../../../../../sdk/math'
@@ -75,20 +79,21 @@ export interface CanoeStart {
 export interface CanoeEvents {
   /** She reached the next part (the address bar follows). */
   section(s: CanoeSection): void
-  /** She found the rock flour (the line at the bottom says why the lake is blue). */
+  /** She found the chick in the milky water (the line at the bottom changes). */
   found(): void
-  /** How far through the four parts she is (glide, the blue, the loon, the family). */
+  /** How far through the four parts she is (glide, the chick, home to Lulu, the song). */
   progress(done: number): void
-  /** The loon family by the glacier. */
+  /** Lulu has sung: the celebration, then the stamp. */
   done(): void
 }
 
-/** The parts that fill the stars: glide, where the blue comes from, follow the loon, the loon family. */
+/** The parts that fill the stars: glide, find the chick, take it home to Lulu, Lulu's song. */
 export const CANOE_PARTS = 4
 
 export const CANOE_ANCHORS: AnchorInfo[] = [
   { id: 'maple', label: 'Maple', kind: 'thing' },
-  { id: 'loon', label: 'The loon', kind: 'thing' },
+  { id: 'loon', label: 'Lulu', kind: 'thing' },
+  { id: 'chick', label: "Lulu's chick", kind: 'thing' },
   { id: 'ducks', label: 'The ducks', kind: 'thing' },
   { id: 'lodge', label: 'The beaver lodge', kind: 'thing' },
   { id: 'moose', label: 'The moose', kind: 'thing' },
@@ -114,7 +119,22 @@ const GLOW = { deep: new Color(LAKE_GLOW[0]), shallow: new Color(LAKE_GLOW[1]) }
 /** The loon: how close counts as finding her, and how that grows when it's taking a while. */
 const LOON_NEAR = 6
 const LOON_NEAR_MAX = 11
-const LOON_FINDS = 3
+const LOON_FINDS = 2
+/** Where the lost chick paddles about in the milky water, how near the canoe counts as finding it, and where it rides
+ *  on the bow (canoe-local: the little deck at the tip). */
+const CHICK = { x: FLOUR.x - 1.5, z: FLOUR.z - 2.5 }
+const CHICK_NEAR = 5
+const CHICK_H = 0.48
+const BOW = new Vector3(0, 0.5, 1.8)
+const HOP_S = 0.75
+/** Lulu's songs before the celebration; seconds of quiet before Sparkle says how, and before Lulu sings by herself. */
+const SONGS = 3
+/** One song from start to finish: her call (story-loon, 4 s) and the glacier's echo of it from ECHO_S. No new song
+ *  (and no celebration) before it's over, so songs never play over each other. */
+const ECHO_S = 1.1
+const SONG_S = ECHO_S + 4.3
+const SING_HINT_S = 8
+const SING_SELF_S = 14
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -163,7 +183,9 @@ interface Ducky {
   h: number
 }
 
-type LoonPhase = 'wait' | 'bubbles' | 'float' | 'found' | 'family'
+type LoonPhase = 'wait' | 'bubbles' | 'float' | 'found' | 'reunite' | 'family'
+/** The chick: lost in the milky water, hopping onto the bow, riding it, hopping onto Lulu's back, home. */
+type ChickPhase = 'lost' | 'hop' | 'bow' | 'jump' | 'home'
 
 export class RedCanoe implements World3D {
   /** Its delayed callbacks: cancelled when it's disposed. */
@@ -237,6 +259,18 @@ export class RedCanoe implements World3D {
   private loonFinds = 0
   private callT = 2
   private doneT = -1
+  private chick: Lulu
+  private chickPhase: ChickPhase = 'lost'
+  private chickT = 0
+  private chickSay = -1
+  private peepT = 1
+  private hopFrom = new Vector3()
+  /** Lulu's songs so far, and seconds since the last one (or since she was home). */
+  private songs = 0
+  private quietT = 0
+  private singHinted = false
+  /** Seconds since the song started (-1: no song); a new one waits till the echo has finished. */
+  private songT = -1
 
   // ---- Everyone else.
   private ducks: Ducky[] = []
@@ -280,7 +314,7 @@ export class RedCanoe implements World3D {
   private bubbles: Particles
 
   private lastTouch = 0
-  private counts = { strokes: 0, holds: 0, taps: 0, bumps: 0, dizzy: 0, parades: 0, pokes: 0, snow: 0, chunks: 0, jumps: 0 }
+  private counts = { strokes: 0, holds: 0, taps: 0, bumps: 0, dizzy: 0, parades: 0, pokes: 0, snow: 0, chunks: 0, jumps: 0, echoes: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -343,6 +377,10 @@ export class RedCanoe implements World3D {
     this.loon.root.visible = false
     this.mama.root.visible = false
     scene.add(this.loon.root, this.mama.root)
+    // Her chick, lost in the milky water (toy-sized like her).
+    this.chick = new Lulu(bag, { chick: true, height: CHICK_H })
+    this.chick.place(CHICK.x, -0.04, CHICK.z, 180)
+    scene.add(this.chick.root)
     for (let i = 0; i < 5; i++) {
       const d = new Duck(bag, i > 0)
       const a = i * 0.5
@@ -409,14 +447,15 @@ export class RedCanoe implements World3D {
     if (start.section === 'loon' || start.section === 'glacier') {
       this.found = true
       this.glow = this.glowGoal = 0.6
+      this.chickOnBow()
     }
     this.parts = Math.max(0, at - 1)
     this.events.progress(this.parts)
     if (start.section === 'loon') this.startLoon()
-    if (start.section === 'glacier') this.reachFamily()
+    if (start.section === 'glacier') this.homeAgain(false)
     // A section link starts playing at once; the bare link opens with Maple's hello (the story). (After the way-in film
     // the game starts at `glide`: RedCanoe.tsx.)
-    else if (start.section !== 'story') this.timers.later(() => this.go(start.section), 400)
+    if (start.section !== 'story') this.timers.later(() => this.go(start.section), 400)
     this.setGlow()
     this.placeCanoe(0)
     this.eagleC.set(this.x, EAGLE_Y, this.z - 20)
@@ -506,8 +545,12 @@ export class RedCanoe implements World3D {
       this.canoe.wave()
     } else if (s === 'loon') {
       this.progress(2)
-      // (After the rock flour's lines, if they're still going.)
+      // (After the chick's lines, if they're still going.)
       this.talk(L.canoe.loon, this.foundT >= 0)
+    } else if (s === 'glacier') {
+      this.progress(3)
+      // (After the hug, if it's still going.)
+      this.talk(L.canoe.sing, true)
     }
   }
 
@@ -516,7 +559,8 @@ export class RedCanoe implements World3D {
   /** Help when she's stuck, never a "wrong": no paddling for 8 s, Sparkle says how (the hand shows it too); paddling
    *  round without finding the milky water or the loon, Sparkle points her there (the sparkles and the current help). */
   private helpIfStuck(t: number) {
-    if (this.section === 'story' || this.doneT >= 0) return
+    // (Lulu's song has its own help: story().)
+    if (this.section === 'story' || this.doneT >= 0 || this.loonPhase === 'family' || this.loonPhase === 'reunite') return
     const idle = t - this.lastTouch
     if (idle > HINT_S && t - this.idleSaid > 16 && this.hintsSaid < 2) {
       this.idleSaid = t
@@ -830,7 +874,7 @@ export class RedCanoe implements World3D {
     if (this.section === 'story' || (this.doneT > 3 && this.doneT < 6)) look = this.rig.camera.position
     else if (this.loon.root.visible && !this.loon.under) look = this.loon.root.position
     else if (this.mama.root.visible && !this.mama.under) look = this.mama.root.position
-    else if (this.section === 'stream' && !this.found) look = tmp2.set(FLOUR.x, 0.3, FLOUR.z)
+    else if (this.section === 'stream' && !this.found) look = this.chick.root.position
     else if (this.trout.flying) look = this.trout.root.position
     else if (this.beaver.busy) look = this.beaver.root.position
     else if (near(this.ducks[0].d.root.position, 9)) look = this.ducks[0].d.root.position
@@ -854,8 +898,9 @@ export class RedCanoe implements World3D {
     if (this.section === 'stream' && !this.found) {
       this.streamT += dt
       this.flourT = inFlour ? this.flourT + dt : 0
-      if (this.flourT > 1.2) this.findFlour()
+      if (this.flourT > 1.2 || this.chickDist < CHICK_NEAR) this.findChick()
     }
+    this.updateChick(dt, t)
     // Milky water swirls round the canoe while it's in the flour.
     if (inFlour && Math.random() < dt * 12) {
       const f = this.fwd
@@ -870,6 +915,16 @@ export class RedCanoe implements World3D {
       }
     }
     this.updateLoon(dt, t)
+    // Lulu's song: if it's quiet a while, Sparkle says how (the hand shows it too); a while longer, she sings anyway.
+    if (this.songT >= 0 && (this.songT += dt) > SONG_S) this.songT = -1
+    if (this.loonPhase === 'family' && this.doneT < 0) {
+      this.quietT += dt
+      if (this.quietT > SING_HINT_S && !this.singHinted) {
+        this.singHinted = true
+        if (spendHint(L.canoe.sing)) this.talk(L.canoe.sing)
+      }
+      if (this.quietT > SING_SELF_S) this.sing()
+    }
     if (this.doneT >= 0) {
       this.doneT += dt
       // The family swims round the canoe; the lake glows; Maple slaps her tail now and then.
@@ -882,19 +937,97 @@ export class RedCanoe implements World3D {
     }
   }
 
-  private findFlour() {
+  /** The chick! It hops onto the bow (and the milky water glows: the lake turns bluer). */
+  private findChick() {
     if (this.found) return
     this.found = true
     this.foundT = 0
     this.glowGoal = 0.6
-    this.sparkle.burst(this.x, 0.3, this.z, 50, 3, 3, 0.2)
-    for (let i = 0; i < 4; i++) this.glowFoam.emit(this.x, 0.03, this.z, 0, 0, 0, 2 + i * 0.4, 2.5 + i * 1.5)
+    const c = this.chick.root.position
+    this.sparkle.burst(c.x, 0.3, c.z, 50, 3, 3, 0.2)
+    for (let i = 0; i < 4; i++) this.glowFoam.emit(c.x, 0.03, c.z, 0, 0, 0, 2 + i * 0.4, 2.5 + i * 1.5)
     sounds.sparkle()
     snd.stream()
+    snd.chick()
     this.canoe.cheer()
     this.events.found()
-    this.talk(L.canoe.foundMaple)
-    this.talk(L.canoe.found, true)
+    this.hopFrom.copy(c)
+    this.chickPhase = 'hop'
+    this.chickT = 0
+    this.talk(L.canoe.chickFound)
+  }
+
+  private get chickDist() {
+    const c = this.chick.root.position
+    return Math.hypot(this.x - c.x, this.z - c.z)
+  }
+
+  /** The chick rides on the bow's little deck (it rocks with the canoe), turned to Maple and us so its face shows, and a
+   *  little bigger there so it reads from behind the canoe. */
+  private chickOnBow() {
+    this.chickPhase = 'bow'
+    this.chick.ride(this.canoe.hull, BOW.x, BOW.y, BOW.z, 180)
+    this.chick.root.scale.setScalar(1.25)
+  }
+
+  /** Where the chick sits on Lulu's back (world), as on the one that rides her (critters.ts Loon). */
+  private lulusBack(out: Vector3) {
+    const L = this.loon.lulu
+    return L.body.localToWorld(out.set(0, 0.36 * L.height, -0.2 * L.height))
+  }
+
+  private updateChick(dt: number, t: number) {
+    const c = this.chick
+    const ph = this.chickPhase
+    this.chickT += dt
+    if (ph === 'lost') {
+      // Paddling in little circles in the milky water, peeping for its mama: louder the nearer the canoe is (from
+      // when Sparkle points her there, so she can follow the sound).
+      const a = t * 0.35
+      c.root.position.set(CHICK.x + Math.cos(a) * 1.2, -0.04 + Math.sin(t * 2.3) * 0.02, CHICK.z + Math.sin(a) * 1.2)
+      c.root.rotation.y = a + Math.PI
+      if (this.section === 'stream' && (this.peepT -= dt) < 0) {
+        this.peepT = 1.5 + Math.random() * 0.8
+        snd.peep(clamp(1 - this.chickDist / 60))
+        this.chickSay = 0
+        if (Math.random() < 0.4) c.hop()
+      }
+    } else if (ph === 'hop' || ph === 'jump') {
+      // A hop in an arc: onto the bow, or from the bow onto Lulu's back.
+      const k = Math.min(1, this.chickT / HOP_S)
+      const to = ph === 'hop' ? this.canoe.hull.localToWorld(tmp.copy(BOW)) : this.lulusBack(tmp)
+      const e = k * k * (3 - 2 * k)
+      c.root.position.lerpVectors(this.hopFrom, to, e)
+      c.root.position.y += bell(k) * 1.3
+      c.root.rotation.y = Math.atan2(to.x - this.hopFrom.x, to.z - this.hopFrom.z)
+      if (k >= 1) {
+        if (ph === 'hop') {
+          this.chickOnBow()
+          this.foam.emit(this.x, 0.03, this.z, 0, 0, 0, 1, 0.8)
+          sfx.chirp()
+        } else this.homeAgain(true)
+      }
+    } else if (ph === 'bow') {
+      // Riding along, it squeaks now and then; it watches for its mama.
+      if ((this.peepT -= dt) < 0) {
+        this.peepT = 5 + Math.random() * 3
+        snd.chick()
+        this.chickSay = 0
+      }
+    }
+    // Its squeak: its bill pops open, its head tips back.
+    if (this.chickSay >= 0 && (this.chickSay += dt) > 0.9) this.chickSay = -1
+    c.calling = this.chickSay >= 0 ? bell(this.chickSay / 0.9) : 0
+    if (ph !== 'hop' && ph !== 'jump') c.headTurn = Math.sin(t * 0.9) * 0.4
+    c.update(dt, t)
+  }
+
+  /** The chick on the bow squeaks and hops (Lulu just came up). */
+  private chickCalls() {
+    if (this.chickPhase !== 'bow') return
+    this.chickSay = 0
+    this.chick.hop()
+    this.timers.later(() => snd.chick(), 250)
   }
 
   /** The loon's first dive: she pops up ahead, laughs and goes under. */
@@ -929,7 +1062,8 @@ export class RedCanoe implements World3D {
     const phase = this.loonPhase
     this.loonT += dt
     const final = this.loonFinds >= LOON_FINDS
-    const who = final ? this.mama : this.loon
+    // (Lulu on her own, looking for her chick, until it hops on her back: then the one with the chick, `mama`.)
+    const who = phase === 'family' ? this.mama : this.loon
     const dist = Math.hypot(this.x - this.loonAt.x, this.z - this.loonAt.z)
     const reach = LOON_NEAR + (LOON_NEAR_MAX - LOON_NEAR) * clamp((this.loonT - 12) / 20)
     if (phase === 'bubbles') {
@@ -944,9 +1078,12 @@ export class RedCanoe implements World3D {
         who.root.position.set(this.loonAt.x, 0, this.loonAt.z)
         who.surface()
         who.poke()
+        who.looking = 1
         this.foam.emit(this.loonAt.x, 0.02, this.loonAt.z, 0, 0, 0, 1.4, 1.6)
         this.spray.burst(this.loonAt.x, 0.1, this.loonAt.z, 10, 1.4, 2.5, 0.1)
-        loonLaugh(this.loonFinds === 0 || final)
+        // (Her long call: where is her baby? And the chick on the bow hears her.)
+        loonLaugh(true)
+        this.chickCalls()
         this.callT = 4
       }
     } else if (phase === 'float') {
@@ -968,25 +1105,26 @@ export class RedCanoe implements World3D {
         loonLaugh(false)
       }
       if (dist < reach) {
-        this.loonPhase = 'found'
-        this.loonT = 0
-        who.poke()
-        loonLaugh(false)
         sounds.pop()
         this.sparkle.burst(this.loonAt.x, 0.5, this.loonAt.z, 20, 2, 2.5, 0.16)
-        if (final) this.reachFamily()
+        if (final) this.reunite()
         else {
+          // Maple calls to her... but she's looking the other way, and down she goes again, nearer the glacier.
+          this.loonPhase = 'found'
+          this.loonT = 0
+          who.poke()
+          loonLaugh(false)
           this.loonFinds++
           this.canoe.wave()
-          who.flap()
+          this.chickCalls()
           if (this.loonFinds === 1) meet('loon')
-          if (this.loonFinds >= LOON_FINDS) this.progress(3)
           this.talk(L.canoe.loonFound[(this.loonFinds - 1) % L.canoe.loonFound.length], true)
         }
       }
     } else if (phase === 'found') {
       // A moment to see her, then down she goes and the bubbles come up somewhere else.
       if (this.loonT > 1.3 && !this.loon.diving) {
+        this.loon.looking = 0
         this.loon.dive()
         this.spray.burst(this.loonAt.x, 0.1, this.loonAt.z, 8, 1.2, 2, 0.1)
         sounds.whoosh()
@@ -998,9 +1136,15 @@ export class RedCanoe implements World3D {
         if (this.loonFinds >= LOON_FINDS) this.loonAt.set(FAMILY.x, 0, FAMILY.z)
         else this.pickLoonSpot(11, 16)
       }
+    } else if (phase === 'reunite') {
+      // She sees her chick! She turns to the canoe and waits, wide-eyed, while it hops across to her back.
+      const l = this.loon
+      const face = Math.atan2(this.x - l.root.position.x, this.z - l.root.position.z)
+      l.root.rotation.y += wrapAngle(face - l.root.rotation.y) * damp(dt, 4)
     } else if (phase === 'family') {
-      // The payoff: Lulu, her chick on her back, swims up beside the canoe on the camera's side, facing us (her face and
-      // her chick in the shot); then slowly round the canoe, laughing now and then, the chick squeaking.
+      // Home: Lulu, her chick on her back, swims up beside the canoe on the camera's side, facing us (her face and her
+      // chick in the shot, ready for her song); after the song, slowly round the canoe, laughing now and then, the
+      // chick squeaking.
       const l = this.mama
       const cam = this.rig.camera.position
       const toCam = Math.atan2(cam.x - this.x, cam.z - this.z)
@@ -1011,9 +1155,10 @@ export class RedCanoe implements World3D {
       const faceCam = Math.atan2(cam.x - l.root.position.x, cam.z - l.root.position.z) - 0.5
       const swim = b + Math.PI / 2
       l.root.rotation.y += wrapAngle((this.doneT < 6 ? faceCam : swim) - l.root.rotation.y) * damp(dt, 3)
-      if ((this.callT -= dt) < 0) {
+      // (While she's waiting to sing, only the chick chirps: her voice is for her song.)
+      if ((this.callT -= dt) < 0 && !l.singing) {
         this.callT = 5 + Math.random() * 3
-        if (Math.random() < 0.6) {
+        if (this.doneT >= 0 && Math.random() < 0.6) {
           l.poke()
           loonLaugh(Math.random() < 0.3)
         } else {
@@ -1026,30 +1171,101 @@ export class RedCanoe implements World3D {
     this.mama.update(dt, t)
   }
 
-  /** The loon family by the glacier: the whole lake glows turquoise. */
-  private reachFamily() {
+  /** The third time she comes up, Lulu sees her chick: it hops off the bow and onto her back. */
+  private reunite() {
+    this.loonPhase = 'reunite'
+    this.loonT = 0
+    this.loon.looking = 0
+    this.loon.poke()
+    this.loon.lulu.pull('wow')
+    this.canoe.cheer()
+    snd.chick()
+    this.chickSay = 0
+    this.chick.release()
+    this.chick.root.scale.setScalar(1)
+    this.hopFrom.copy(this.chick.root.position)
+    this.chickPhase = 'jump'
+    this.chickT = 0
+  }
+
+  /** Lulu and her chick together again by the glacier: a flap of her wings, the whole lake glows turquoise, and she's
+   *  ready to sing. `hug`: it just happened (from the glacier link she's already home, beside the canoe). */
+  private homeAgain(hug: boolean) {
+    const at = hug ? this.loon.root : null
+    this.chickPhase = 'home'
+    this.chick.hide()
     this.loonPhase = 'family'
     this.loonFinds = LOON_FINDS
     this.mama.root.visible = true
-    this.mama.surface()
-    // (From the glacier link she starts beside the canoe; found on the water, she's already near it.)
-    if (this.mama.root.position.distanceTo(tmp.set(this.x, 0, this.z)) > 8) this.mama.root.position.set(this.x + Math.sin(this.head) * 4, 0, this.z + Math.cos(this.head) * 4)
+    this.mama.up = 1
+    if (at) {
+      this.mama.root.position.copy(at.position)
+      this.mama.root.rotation.y = at.rotation.y
+    } else this.mama.root.position.set(this.x + Math.sin(this.head) * 4, 0, this.z + Math.cos(this.head) * 4)
     this.loon.root.visible = false
-    this.mama.flap()
     this.glowGoal = 1
+    this.callT = 3
+    this.quietT = 0
+    this.singHinted = false
+    meet('loon')
+    if (!hug) return
+    this.mama.flap()
+    this.timers.later(() => (this.mama.squeak(), snd.chick()), 700)
+    loonLaugh(false)
+    sounds.sparkle()
+    const p = this.mama.root.position
+    this.sparkle.burst(p.x, 0.6, p.z, 50, 3, 3, 0.2)
+    for (let i = 0; i < 3; i++) this.glowFoam.emit(p.x, 0.03, p.z, 0, 0, 0, 1.6 + i * 0.4, 2 + i * 1.4)
+    this.canoe.cheer()
+    this.talk(L.canoe.home)
+    this.talk(L.canoe.chick, true)
+    this.enter('glacier')
+  }
+
+  /** The try-out: Lulu sings (a tap on her, or by herself after a quiet while), and a moment later the glacier sings it
+   *  back, fainter; then her chick squeaks along. When the third song is over, it's the celebration. */
+  private sing() {
+    const l = this.mama
+    if (this.loonPhase !== 'family' || this.doneT >= 0 || l.singing || this.songT >= 0) return
+    this.songs++
+    this.quietT = 0
+    this.songT = 0
+    l.sing()
+    snd.song()
+    const p = l.root.position
+    const h = l.lulu.head(tmp)
+    this.sparkle.burst(h.x, h.y + 0.3, h.z, 18, 1.2, 2.2, 0.16)
+    for (let i = 0; i < 3; i++) this.foam.emit(p.x, 0.03, p.z, 0, 0, 0, 1.2 + i * 0.4, 0.8 + i * 0.9)
+    const n = this.songs
+    // The glacier answers: its echo, and a shimmer runs across the ice, then fainter.
+    this.timers.later(() => (snd.echo(0.4), this.glacierSings(1)), ECHO_S * 1000)
+    this.timers.later(() => this.glacierSings(0.5), (ECHO_S + 1) * 1000)
+    this.timers.later(() => (l.squeak(), snd.chick()), (SING_S + 0.3) * 1000)
+    if (n === 1) this.timers.later(() => this.talk(L.canoe.echo, true), (ECHO_S + 0.2) * 1000)
+    if (n >= SONGS) this.timers.later(() => this.finish(), SONG_S * 1000)
+  }
+  private glacierSings(k: number) {
+    for (let i = 0; i < Math.round(30 * k); i++) {
+      const x = GLACIER.x + (Math.random() - 0.5) * GLACIER.halfWidth * 1.8
+      this.sparkle.emit(x, 1 + Math.random() * 7, GLACIER.z + 2.5, 0, 0.6 + Math.random() * 0.6, 0.4, 1.6, 0.35 * k + 0.1)
+    }
+    this.glowFoam.emit(GLACIER.x, 0.03, GLACIER.z + 3, 0, 0, 0, 2.2, 4 * k + 2)
+    this.counts.echoes++
+  }
+
+  /** Bravo, Lulu! The celebration (the family round the canoe, Maple cheering), then the stamp. */
+  private finish() {
+    if (this.doneT >= 0) return
     this.doneT = 0
     this.callT = 2.5
-    this.enter('glacier')
     this.progress(CANOE_PARTS)
     this.canoe.cheer()
     this.canoe.slap()
     sounds.fanfare()
     loonLaugh(true)
+    this.mama.flap()
     this.sparkle.burst(this.x, 0.5, this.z, 60, 3.5, 3, 0.2)
-    meet('loon')
-    this.timers.later(() => (this.mama.squeak(), snd.chick()), 1600)
-    this.talk(L.canoe.chick)
-    this.talk(L.canoe.family, true)
+    this.talk(L.canoe.family)
     this.events.done()
   }
 
@@ -1356,6 +1572,13 @@ export class RedCanoe implements World3D {
       return
     }
     if (id === 'loon') {
+      // Home with her chick: a tap and she sings (the try-out).
+      if (this.loonPhase === 'family' && this.doneT < 0) {
+        this.poked('loon', 'loon')
+        if (this.mama.singing || this.songT >= 0) this.mama.poke()
+        else this.sing()
+        return
+      }
       const who = this.loon.root.visible && !this.loon.under ? this.loon : this.mama
       const n = this.poked('loon', 'loon')
       who.poke()
@@ -1363,6 +1586,19 @@ export class RedCanoe implements World3D {
       loonLaugh(false)
       // The second poke: the loonie (tap-to-hear).
       if (n === 2) this.talk(L.canoe.loonie, true)
+      return
+    }
+    if (id === 'chick') {
+      // Lost in the milky water: it peeps and hops (close by, that's finding it, and the canoe paddles toward it).
+      this.poked('chick')
+      this.chickSay = 0
+      this.chick.hop()
+      if (this.chickPhase === 'lost') {
+        snd.peep(clamp(1 - this.chickDist / 60))
+        const c = this.chick.root.position
+        if (this.section !== 'glide' && this.chickDist < CHICK_NEAR + 8) this.findChick()
+        else this.sendTo(c.x, c.z)
+      } else snd.chick()
       return
     }
     if (id === 'ducks') {
@@ -1458,11 +1694,12 @@ export class RedCanoe implements World3D {
       return
     }
     if (Math.hypot(water.x - FLOUR.x, water.z - FLOUR.z) < FLOUR.r) {
-      // The rock flour sparkles (and close by, that's finding it).
+      // The rock flour sparkles; the first time, Sparkle says why the lake is blue (and close by, the chick is found).
       this.sparkle.burst(water.x, 0.2, water.z, 26, 2.2, 2.6, 0.18)
       sounds.sparkle()
       this.counts.pokes++
-      if (this.section !== 'glide' && Math.hypot(this.x - FLOUR.x, this.z - FLOUR.z) < FLOUR.r + 6) this.findFlour()
+      if (this.poked('flour') === 1) this.talk(L.canoe.found, true)
+      if (this.section !== 'glide' && Math.hypot(this.x - FLOUR.x, this.z - FLOUR.z) < FLOUR.r + 6) this.findChick()
     } else {
       // Anywhere else on the water: a little plop where she tapped.
       this.foam.emit(water.x, 0.02, water.z, 0, 0, 0, 1, 0.9)
@@ -1475,10 +1712,12 @@ export class RedCanoe implements World3D {
 
   // ---------------------------------------------------------------- the hint: how to paddle
 
-  /** Where the story wants her to paddle now (the milky water, Lulu's bubbles), or null (anywhere: glide). */
+  /** Where the story wants her to paddle now (the chick in the milky water, Lulu's bubbles), or tap (Lulu, to sing),
+   *  or null (anywhere: glide). */
   private goal(out: Vector3): Vector3 | null {
     if (this.doneT >= 0 || this.section === 'story') return null
-    if (this.section === 'stream' && !this.found) return out.set(FLOUR.x, 0, FLOUR.z)
+    if (this.section === 'stream' && !this.found) return out.copy(this.chick.root.position).setY(0)
+    if (this.loonPhase === 'family') return out.copy(this.mama.root.position).setY(0.5)
     if (this.loonPhase === 'bubbles' || this.loonPhase === 'float') return out.set(this.loonAt.x, 0, this.loonAt.z)
     return null
   }
@@ -1487,10 +1726,22 @@ export class RedCanoe implements World3D {
     const el = this.hintEl
     if (!el) return
     const idle = t - this.lastTouch
-    const show = this.doneT < 0 && !this.finger && this.section !== 'story' && this.sectionT > 1.5 && ((this.counts.holds + this.counts.taps === 0 && idle > 2.4) || idle > HINT_S)
+    const singing = this.loonPhase === 'family'
+    const show =
+      this.doneT < 0 &&
+      !this.finger &&
+      this.section !== 'story' &&
+      this.sectionT > 1.5 &&
+      ((this.counts.holds + this.counts.taps === 0 && idle > 2.4) || idle > HINT_S || (singing && this.quietT > SING_HINT_S && this.songT < 0))
     const want = show ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     if (!show) return
+    // Lulu's song: the hand taps Lulu herself.
+    if (singing) {
+      const p = this.toScreen(tmp.copy(this.mama.root.position).setY(0.7))
+      el.style.transform = `translate3d(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px, 0)`
+      return
+    }
     // The hand presses the water ahead of the canoe, toward wherever she's going.
     const g = this.goal(tmp2)
     let dx = Math.sin(this.head)
@@ -1535,7 +1786,8 @@ export class RedCanoe implements World3D {
       else if (id === 'loon') {
         const who = this.loon.root.visible && !this.loon.under ? this.loon.root : this.mama.root.visible && !this.mama.under ? this.mama.root : null
         place(el, who, 1.3, 2)
-      } else if (id === 'ducks') place(el, close(this.ducks[0].d.root, 45), 0.5, 2.6)
+      } else if (id === 'chick') place(el, this.chickPhase === 'lost' ? close(this.chick.root, 60) : this.chickPhase === 'bow' ? this.chick.root : null, CHICK_H, 2.4)
+      else if (id === 'ducks') place(el, close(this.ducks[0].d.root, 45), 0.5, 2.6)
       else if (id === 'lodge') place(el, close(this.shore.lodge, 70), 2.4, 0.9)
       else if (id === 'moose') place(el, close(this.moose.root, 70), this.moose.height, 1)
       else if (id === 'pika') place(el, close(this.pika.root, 60), 0.4, 2.5)
@@ -1546,7 +1798,7 @@ export class RedCanoe implements World3D {
       else if (id === 'goat') place(el, close(this.goat.root, 75), 1.1, 1.8)
       else if (id === 'eagle') place(el, this.eagle.root, 0.7, 3)
       else if (id === 'logs') place(el, close(this.shore.logs, 55), 0.6, 1.2)
-      el.style.zIndex = id === 'maple' ? '3' : id === 'loon' ? '2' : '1'
+      el.style.zIndex = id === 'maple' ? '3' : id === 'loon' || id === 'chick' ? '2' : '1'
     }
   }
 
@@ -1581,6 +1833,9 @@ export class RedCanoe implements World3D {
       glow: +this.glow.toFixed(2),
       loon: this.loonPhase,
       loonFinds: this.loonFinds,
+      chick: this.chickPhase,
+      songs: this.songs,
+      singing: this.songT >= 0,
       loonDist: +Math.hypot(this.x - this.loonAt.x, this.z - this.loonAt.z).toFixed(1),
       parade: this.parade > 0,
       dizzyNow: this.canoe.isDizzy,
