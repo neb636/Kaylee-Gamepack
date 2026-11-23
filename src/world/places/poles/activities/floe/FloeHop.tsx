@@ -7,9 +7,10 @@
 // cheer, then the stamp (onDone; the film after it is Mama meeting Pebble). "Again" lays the floes out a new way.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, burst, say, speakingVoice, useAlive, wait, type Line, useTimers } from '../../../../../sdk'
+import { burst, say, speakingVoice, useAlive, wait, type Line, useTimers } from '../../../../../sdk'
 import { onDevice } from '../../../../../sdk/device'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
+import { HudButton } from '../../../../kit/Hud'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
@@ -39,7 +40,7 @@ export function FloeHop({ onDone }: ActivityProps) {
   const guide = useRef<GuideHandle>(null)
   const layoutRef = useRef(run.layout)
   layoutRef.current = run.layout
-  // The stamp comes once, after the first time home (a replay with 🔁 before it just moves it to the next time home).
+  // The stamp comes once, after the first time home (a replay with again before it just moves it to the next time home).
   const stamped = useRef(false)
   const homeRun = useRef(0)
 
@@ -163,13 +164,7 @@ export function FloeHop({ onDone }: ActivityProps) {
         )}
       </AnimatePresence>
       <Guide ref={guide} hint={home || section === 'mama' ? null : HINT[section]} quiet={home} />
-      {home && (
-        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={{ position: 'absolute', right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', zIndex: 20 }}>
-          <BigButton onClick={again} ariaLabel="Again, with new floes">
-            🔁 🧊
-          </BigButton>
-        </motion.div>
-      )}
+      {home && <HudButton role="again" icon="again" label="Again, with new floes" slot="bottom-right" delay={2.5} onClick={again} />}
     </div>
   )
 }

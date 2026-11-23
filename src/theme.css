@@ -117,3 +117,10 @@ p {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
 }
+
+/* A drawn control picture at text size (sdk/components/HudIcons.tsx). */
+.hud-glyph > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
