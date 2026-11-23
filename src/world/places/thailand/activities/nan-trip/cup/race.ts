@@ -1112,8 +1112,11 @@ export class KartRace implements World3D {
       }
     }
     d.cap = Math.min(cap * cap1, this.duckCap(k))
-    if (target) d.hold(target.x, target.z)
-    else this.rel = wrapAngle(d.heading - this.roadHeading(k.s))
+    if (target) {
+      d.hold(target.x, target.z)
+      // (Racing by herself or over the line: her angle to the road follows the kart, ready for her next push.)
+      this.rel = wrapAngle(d.heading - this.roadHeading(k.s))
+    }
     // How fast she's getting on along the road (the rivals keep up with this).
     const rate = (k.progress - this.lastProgress) / Math.max(1e-3, dt)
     this.lastProgress = k.progress
