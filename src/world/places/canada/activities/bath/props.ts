@@ -11,6 +11,8 @@ import { decoModel, mapleLeaf, SWEATER, SWEATER_RED } from '../../characters/mis
 import { berry as berry3d, leaf, type BerryParts, type BerryShape } from '../../story/sets/berries'
 
 const INK = '#2E2233'
+/** The inside of the sweater, seen through its neck. */
+const SWEATER_INSIDE = '#EADFD0'
 const MOSS = '#7DB563'
 const MOSS_DARK = '#5E9A4E'
 const BARK = '#9A5A44'
@@ -253,26 +255,41 @@ export function heldSweater(w: number, bag: Bag) {
   const root = new Group()
   const h = w * 1.05
   const d = w * 0.12
+  /** The crew neck: how wide the scoop is (half), how far it dips (of that), and the red rib's thickness. */
+  const NECK_W = w * 0.13
+  const NECK_DIP = 0.6
+  const NECK_RIB = w * 0.032
   const lined: BufferGeometry[] = [
     // The body, a soft rounded panel, and the sleeves out to each side, a little down.
     P.rbox(w, h, d, w * 0.14, SWEATER, { at: [0, -h / 2, 0] }),
     ...[-1, 1].map((s) => P.rbox(w * 0.5, w * 0.3, d * 0.9, w * 0.12, SWEATER, { at: [s * w * 0.62, -w * 0.2, 0], rot: [0, 0, s * -0.55] })),
-    P.torus(w * 0.17, w * 0.035, SWEATER_RED, { at: [0, -w * 0.02, d * 0.2], rot: [-0.2, 0, 0], scale: [1, 0.55, 1] }),
+    // The crew neck: a red ribbed scoop set into the top edge (the lower half of a ring, flat on the front).
+    P.torus(NECK_W, NECK_RIB, SWEATER_RED, { at: [0, -NECK_RIB * 0.6, d / 2], rot: [0, 0, Math.PI], scale: [1, NECK_DIP, 1] }, Math.PI),
   ]
   const front = d / 2 + 0.002
   const plain: BufferGeometry[] = [
+    // The neck opening inside the rib: the back of the sweater, a shade darker.
+    P.prism(
+      Array.from({ length: 17 }, (_, i) => {
+        const a = Math.PI + (i / 16) * Math.PI
+        return [Math.cos(a) * NECK_W, Math.sin(a) * NECK_W * NECK_DIP - NECK_RIB * 0.6] as [number, number]
+      }),
+      0.004,
+      SWEATER_INSIDE,
+      { at: [0, 0, front + 0.0005] },
+    ),
     // Red stripes across the hem and round each cuff.
     P.box(w * 0.98, h * 0.06, 0.006, SWEATER_RED, { at: [0, -h * 0.86, front] }),
     P.box(w * 0.98, h * 0.03, 0.006, SWEATER_RED, { at: [0, -h * 0.78, front] }),
     ...[-1, 1].map((s) => P.box(w * 0.07, w * 0.3, 0.006, SWEATER_RED, { at: [s * w * 0.79, -w * 0.32, d * 0.47], rot: [0, 0, s * -0.55] })),
     // The red maple leaf on the chest.
     P.prism(
-      mapleLeaf(w * 0.42).map(([x, y]) => [x * 1.08, y * 1.08]),
+      mapleLeaf(w * 0.32).map(([x, y]) => [x * 1.08, y * 1.08]),
       0.004,
       '#B8302C',
-      { at: [0, -h * 0.32, front + 0.002] },
+      { at: [0, -h * 0.38, front + 0.002] },
     ),
-    P.prism(mapleLeaf(w * 0.42), 0.004, SWEATER_RED, { at: [0, -h * 0.32, front + 0.005] }),
+    P.prism(mapleLeaf(w * 0.32), 0.004, SWEATER_RED, { at: [0, -h * 0.38, front + 0.005] }),
   ]
   root.add(solidMix(lined, plain, bag, 2.4))
   /** Where her paw print goes (local), and the group it's built into. */
