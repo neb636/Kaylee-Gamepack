@@ -1,1 +1,0 @@
-async function e(e,t){try{return await navigator.clipboard.writeText(e),`${t} copied`}catch{return window.prompt(`Copy ${t.toLowerCase()}:`,e),`Copy the text from the dialog`}}export{e as t};
