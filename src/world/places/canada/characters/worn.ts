@@ -26,6 +26,8 @@ import { mistyCoat } from './mistyLook'
 import type { ToyActor } from './toy'
 import { cheekParts, crestGeo, hatParts, WHITE, type HatId } from './wear'
 
+/** The name of anything on a toy's head that a hat goes on instead of (Lulu's flick of feathers): hidden under a hat. */
+export const UNDER_HAT = 'under-hat'
 /** The name of the team's pink scarf group on anyone who wears it (story/cast.ts, tuque.ts, lulu.ts). */
 export const TEAM_SCARF = 'team-scarf'
 
@@ -328,6 +330,11 @@ export function dressToy(actor: ToyActor, who: TeamId, worn: Worn, bag: Bag): vo
     hat.name = 'cabin-hat'
     spots.hat.add(hat)
     d.added.push(hat)
+    const under = actor.root.getObjectByName(UNDER_HAT)
+    if (under) {
+      under.visible = false
+      d.undo.push(() => (under.visible = true))
+    }
     const flop = spots.flop
     if (flop) {
       const was = flop.rotation.z
