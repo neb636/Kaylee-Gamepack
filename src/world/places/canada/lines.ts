@@ -335,13 +335,14 @@ export const L = {
     // She has fallen over laughing three times: she gives up.
     sorry: roxy("Oops, sorry! Let's share."),
     // The roast: the flashlight is put away, the camera comes close to the fire, and everyone shows which marshmallow
-    // they want in a wish bubble (a picture: squishy, golden, burnt, Monty's giant one). Maple, then Sparkle; on fire
-    // (Sparkle); her hint with a toasted one and nobody given it.
+    // they want in a wish bubble (a picture: squishy, golden, burnt, Monty's giant one). A stick is propped over the
+    // fire; a marshmallow from the bag toasts on it by itself. Maple, then Sparkle; on fire (Sparkle); her hint when
+    // it looks like somebody's picture and is still on the stick.
     roast: maple("Let's roast more!"),
-    marshmallow: onDevice('Hold the marshmallow near the fire.', 'Click and hold the marshmallow near the fire.'),
+    marshmallow: 'Put a marshmallow on the stick! Toast it like the picture.',
     onFire: onDevice("It's on fire! Tap it to blow it out!", "It's on fire! Click it to blow it out!"),
     marshmallowHint: 'Who wants that one?',
-    // Who gets it: Maple wants golden, a kit squishy, Roxy and a kit burnt, Monty the giant one (he eats the stick).
+    // Who gets it: Maple wants golden, a kit squishy (white, straight out of the bag), Roxy and a kit burnt, Monty the giant one (he eats the stick).
     golden: maple('Golden! Yummy!'),
     kitSquishy: roxy('Squishy! Yay!'),
     burntYum: roxy('Crunchy! My favorite!'),

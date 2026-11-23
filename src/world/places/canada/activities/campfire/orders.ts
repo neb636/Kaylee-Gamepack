@@ -9,7 +9,7 @@ import { makeHull } from '../../../../engine3d/outline'
 import { clamp, damp } from '../../../../../sdk/math'
 import type { Want } from './roast'
 
-const MALLOW: Record<Want, string> = { squishy: '#FFFDF8', golden: '#E8B15A', burnt: '#3A2E36', giant: '#F2CF8A' }
+const MALLOW: Record<Want, string> = { squishy: '#FFF3DC', golden: '#E8B15A', burnt: '#3A2E36', giant: '#F2CF8A' }
 const LINE = '#8E5FB8'
 
 /** A wish bubble over somebody's head. */
@@ -111,6 +111,8 @@ export class OrderBubble {
     this.out += (this.goal - this.out) * damp(dt, 10)
     this.ready += ((ready ? 1 : 0) - this.ready) * damp(dt, 8)
     this.root.position.copy(head)
+    // (Big: the picture is the instruction.)
+    this.root.scale.setScalar(1.25)
     this.root.quaternion.copy(camera.quaternion)
     if (this.starT >= 0) {
       this.starT += dt
@@ -135,6 +137,6 @@ export class OrderBubble {
     this.card.scale.setScalar(Math.max(0.001, this.out * (1 + pop + bounce)))
     this.card.position.y = Math.sin(t * 2 + head.x) * 0.025 + this.ready * Math.abs(Math.sin(t * 9)) * 0.04
     this.card.rotation.z = this.ready * Math.sin(t * 14) * 0.08
-    this.glowMat.opacity = this.ready * (0.55 + 0.25 * Math.sin(t * 9))
+    this.glowMat.opacity = this.ready * (0.72 + 0.25 * Math.sin(t * 9))
   }
 }
