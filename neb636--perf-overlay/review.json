@@ -1,0 +1,10 @@
+{
+  "title": "A stutter finder for your phone",
+  "checkIn": "fix",
+  "kaylee": "Nothing changes for her. Add ?perf=1 to a link and a little frame-time graph appears, with a Copy button that grabs every slow frame and what was happening.",
+  "questions": [],
+  "pictures": [{ "title": "The overlay on the bike", "after": "perf-overlay.png", "caption": "Green bars are smooth frames, yellow and red are slow. Ride a few deep turns, tap Copy, paste it to me." }],
+  "links": [
+    { "label": "Bike with the overlay", "hash": "#/world/canada/bike/berms" }
+  ]
+}
