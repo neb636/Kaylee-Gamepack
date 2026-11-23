@@ -11,6 +11,7 @@ and local builds send nothing. Read it with the PostHog MCP (`execute-sql`, the 
 
 | Who | How it's tagged | What it sends |
 |---|---|---|
+| _None right now_ | | |
 | **Her** (the target audience) | `target_audience: true` on every event, and one identified person, `target-audience`, for all her devices | everything |
 | **The user** (a tester) | `?tester=1` once per browser (`?tester=0` undoes it), before the `#` or after it (`…/#/world?tester=1`); `tester: true` on its events | errors (`$exception`) and logs only |
 | Anyone else on the public site | nothing | everything, untagged: leave it out |
@@ -35,6 +36,7 @@ and local builds send nothing. Read it with the PostHog MCP (`execute-sql`, the 
 
 | Event | Properties | From |
 |---|---|---|
+| _None right now_ | | |
 | `world_section_entered` / `world_section_left` | `place`, `activity`, `section`; on leave `seconds`, `taps`, `hints`, `why` (`next`, `away`, `hidden`) | `src/world/diary.ts` |
 | `world_activity_started` / `world_activity_completed` | `place_id`, `activity_id` (+ `stamp_count` on complete) | `src/world/PlaceFrame.tsx` |
 | `world_place_opened`, `world_trophy_won` | `place_id` | `PlaceFrame.tsx` |
@@ -85,7 +87,8 @@ Unfinished work can merge to main behind a PostHog feature flag, so the live sit
 
 | Flag | Gates | Since |
 |---|---|---|
-| `new-canada-pin` | The new Canada (Maple's Team) on the world map and the game shelf | 2026-11-21 |
+| _None right now_ | | |
+| _None right now_ | | |
 
 ## Asking it
 

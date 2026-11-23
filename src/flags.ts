@@ -16,10 +16,7 @@ import posthog, { isPostHogEnabled } from './posthog'
  * `useFlag()` (components) or `flagOn()`. A place can take one in its meta (`featureFlag`) to stay off the map until it's on.
  * Delete it here and in PostHog once the work ships to everyone.
  */
-export const FLAGS = {
-  /** The new Canada (Maple's Team) on the world map and the game shelf. */
-  newCanadaPin: 'new-canada-pin',
-} as const
+export const FLAGS = {} as const
 
 export type FeatureFlag = (typeof FLAGS)[keyof typeof FLAGS]
 
