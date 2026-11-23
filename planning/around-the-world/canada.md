@@ -167,7 +167,10 @@ fix is what the team needs.
   through nobody. Kind rules: it toasts slower while it matches (`linger`), a let-go over the fire is the stick and
   not Monty behind it, a tap is never a hand-over, whoever's order it is counts as nearer. Monty's giant one waits on
   the bag and toasts on a thick branch, which he eats too. Robots: `canada-campfire-roast`, `-roast-sloppy` (a
-  five-year-old's aim), `-roast-giant`. The film sticks sit in the paws by `pawGrip()` (`story/sets/campfire.ts`),
+  five-year-old's aim), `-roast-giant`. A squishy one is white, straight from the bag (its picture is white). The
+  hint's hand shows the whole hand-over (a press on the marshmallow, then across to who wants it). Open after the
+  fresh-eyes pass: it toasts by itself, so her finger waits 3-6 s an order (a poke at the fire makes it hotter);
+  if she drifts off in the roast, give the waiting something to do. The film sticks sit in the paws by `pawGrip()` (`story/sets/campfire.ts`),
   and the little paw's arm is only as long as the bush is deep.
 - **Whale Peek-a-Boo** (`activities/whales/`): the whales are characters (`whale.ts` on the modelling kit `body.ts`);
   `?lab=grey|humpback|grandma|mama|baby&view=...` looks at one. Ollie's rock is `characters/rock.ts`. Sections `story`,

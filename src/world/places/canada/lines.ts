@@ -342,7 +342,7 @@ export const L = {
     marshmallow: 'Put a marshmallow on the stick! Toast it like the picture.',
     onFire: onDevice("It's on fire! Tap it to blow it out!", "It's on fire! Click it to blow it out!"),
     marshmallowHint: 'Who wants that one?',
-    // Who gets it: Maple wants golden, a kit squishy, Roxy and a kit burnt, Monty the giant one (he eats the stick).
+    // Who gets it: Maple wants golden, a kit squishy (white, straight out of the bag), Roxy and a kit burnt, Monty the giant one (he eats the stick).
     golden: maple('Golden! Yummy!'),
     kitSquishy: roxy('Squishy! Yay!'),
     burntYum: roxy('Crunchy! My favorite!'),

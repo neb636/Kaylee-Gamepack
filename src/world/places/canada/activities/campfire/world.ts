@@ -85,7 +85,7 @@ const ROAST = knobs('campRoast', 'Roast a marshmallow', FILE, {
   linger: { value: 0.45, min: 0.1, max: 1, step: 0.05, label: 'Slower while it matches', unit: '×', note: 'while it is just what somebody wants it toasts this much slower, so she has time to take it off (1 = no help)', main: true },
   grab: { value: 90, min: 40, max: 200, step: 5, label: 'Grab reach', unit: 'px', note: 'how near the marshmallow (or the bag) her finger has to land to pick one up', main: true },
   lift: { value: 40, min: 0, max: 120, step: 2, label: 'Marshmallow above finger', unit: 'px', note: 'on a touch screen, how far above her fingertip the marshmallow rides, so her finger doesn’t cover it (a mouse: none)' },
-  squishy: { value: 0.2, min: 0, max: 0.7, step: 0.05, label: 'Squishy after', note: 'how warm a squishy one has to be (of the way to golden); it stops being squishy at 0.8' },
+  squishy: { value: 0, min: 0, max: 0.7, step: 0.05, label: 'Squishy after', note: 'how warm a squishy one has to be (of the way to golden; 0: white from the bag counts, like its picture); it stops being squishy at 0.8' },
   giant: { value: 1.5, min: 1, max: 3, step: 0.1, label: 'Giant one slower', unit: '×', note: 'Monty’s giant marshmallow toasts this many times slower' },
   give: { value: 0.6, min: 0.2, max: 1, step: 0.05, label: 'Hand-over reach', note: 'how near somebody the marshmallow has to be when she lets go (of their height, round their whole body)', main: true },
 }, { sections: ['roast'] })
@@ -1166,8 +1166,10 @@ export class FlashlightStatues implements World3D {
   /** Is the marshmallow in play just what somebody with a bubble out wants? */
   private wantedBy() {
     const m = this.mallow
-    if (this.mallowAt === 'bag' || !(m.toast > 0.02 || m.charred || m.fire)) return null
-    return this.active().find((o) => o.bubble.showing && m.matches(o.want, ROAST, o.miss)) ?? null
+    if (this.mallowAt === 'bag') return null
+    // (A white one is only what a squishy order wants: not "anything will do" after two misses, until it's warm.)
+    const warm = m.toast > 0.02 || m.charred || m.fire
+    return this.active().find((o) => o.bubble.showing && (warm || o.want === 'squishy') && m.matches(o.want, ROAST, o.miss)) ?? null
   }
 
   /** A marshmallow out of the bag, into her fingers. */
@@ -1196,7 +1198,10 @@ export class FlashlightStatues implements World3D {
     const pos = m.root.position
     this.bagT += dt
     // (The bag squashes and springs back when a marshmallow comes out or it's poked.)
-    this.set.bag.scale.y = this.bagT < 0.35 ? 1 - 0.16 * Math.sin((this.bagT / 0.35) * Math.PI) : 1
+    // While it's the thing to touch it bounces a little, asking.
+    const ask = this.bagOpen && this.mallowAt === 'bag' ? 0.07 * Math.abs(Math.sin(this.time * 3.5)) : 0
+    this.set.bag.scale.y = (this.bagT < 0.35 ? 1 - 0.16 * Math.sin((this.bagT / 0.35) * Math.PI) : 1) + ask
+    this.set.bag.scale.x = this.set.bag.scale.z = 1 + ask * 0.5
     this.giantOnBag.visible = this.bagOpen && this.mallowAt === 'bag' && this.giantNext()
     if (this.mallowAt === 'hand' && this.finger) {
       // Her finger holds it, in an upright plane in front of everybody (so it goes through nobody), a little above
@@ -1205,7 +1210,7 @@ export class FlashlightStatues implements World3D {
       if (p) pos.lerp(p.set(clamp(p.x, -3.4, 3.4), clamp(p.y, 0.2, 3), CARRY_Z), damp(dt, 22))
       // (Nearer the camera than the fire is: kept a touch bigger than on the stick, not looming over their faces.)
       const cam = this.rig.camera.position
-      m.grow += ((1.15 * cam.distanceTo(pos)) / cam.distanceTo(this.spit.tip) - m.grow) * damp(dt, 12)
+      m.grow += (((m.size > 1 ? 0.8 : 1.15) * cam.distanceTo(pos)) / cam.distanceTo(this.spit.tip) - m.grow) * damp(dt, 12)
       m.root.quaternion.slerp(NO_TURN, damp(dt, 12))
     } else if (this.mallowAt === 'stick') {
       pos.copy(this.spit.tip)
@@ -1226,10 +1231,10 @@ export class FlashlightStatues implements World3D {
       }
     }
     // Toasting: only on the stick, in the flames (a poke at the fire makes it flare: hotter for a moment). While it's
-    // just what somebody wants it toasts slower, so there's time to take it off (not when somebody wants a burnt one).
+    // just what somebody wants it toasts slower, so there's time to take it off.
     const on = this.mallowAt === 'stick'
     const wanted = this.wantedBy()
-    const wait = on && wanted && !m.fire && !m.charred && !this.active().some((o) => o.want === 'burnt') ? ROAST.linger : 1
+    const wait = on && wanted && wanted.want !== 'burnt' && !m.fire && !m.charred ? ROAST.linger : 1
     const heat = on ? (1 + 2.2 * this.set.flare) * wait : 0
     const ev = m.update(dt, this.time, heat, ROAST)
     if (heat > 0.08 && this.time - this.sizzleAt > (camp.synthCrackle ? 0.15 : 1.3) / (0.4 + Math.min(1, heat))) {
@@ -1289,7 +1294,7 @@ export class FlashlightStatues implements World3D {
     for (const o of this.orders) {
       const a = this.receivers().find(([id]) => id === o.who)?.[1]
       if (!a) continue
-      const r = roast && o.bubble.showing && m.matches(o.want, ROAST, o.miss) && (m.toast > 0.02 || m.charred || m.fire || o.miss >= 2)
+      const r = roast && o.bubble.showing && m.matches(o.want, ROAST, o.miss) && (m.toast > 0.02 || m.charred || m.fire || o.miss >= 2 || o.want === 'squishy')
       ready ||= r
       const head = a.at(1, tmp2)
       head.y += 0.3
@@ -1905,7 +1910,14 @@ export class FlashlightStatues implements World3D {
     else if (this.section === 'peek' && this.stuck) at = this.tail.getWorldPosition(tmp)
     else if (this.section === 'roast' && this.mallowAt === 'bag' && this.bagOpen && this.time - this.lastTouch > (this.roasted ? HINT_S : 4) && this.sectionT > 5) at = this.bagTop(tmp)
     // (On the stick and just what somebody wants, or on fire: the hand is on the marshmallow.)
-    else if (this.section === 'roast' && this.mallowAt === 'stick' && (this.readyT > 2 || (this.mallow.fire && this.mallow.fireT > 1.2))) at = this.mallow.root.position
+    else if (this.section === 'roast' && this.mallowAt === 'stick' && this.mallow.fire && this.mallow.fireT > 1.2) at = this.mallow.root.position
+    else if (this.section === 'roast' && this.mallowAt === 'stick' && this.readyT > 2) {
+      // (It shows the whole hand-over: a press on the marshmallow, then across to whoever wants it, again and again.)
+      const to = this.receivers().find(([id]) => id === this.wantedBy()?.who)?.[1]
+      const k = ((this.readyT - 2) % 2.4) / 2.4
+      at = tmp.copy(this.mallow.root.position)
+      if (to) at.lerp(to.at(0.7, tmp2), clamp((k - 0.25) / 0.5))
+    }
     if (!at) {
       if (el.style.display !== 'none') el.style.display = 'none'
       return

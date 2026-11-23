@@ -24,7 +24,8 @@ export interface RoastKnobs {
   out: number
   /** The giant one toasts this many times slower. */
   giant: number
-  /** A squishy one: warm at least this much (0..1 of the way to golden). */
+  /** A squishy one: warm at least this much (0..1 of the way to golden; 0: white, straight out of the bag, as its
+   *  picture shows). */
   squishy: number
 }
 
@@ -191,6 +192,9 @@ export class Mallow {
     else if (g < 0.5) c.lerpColors(WHITE, CREAM, g / 0.5)
     else if (g < 1) c.lerpColors(CREAM, GOLD, (g - 0.5) / 0.5)
     else c.lerpColors(GOLD, BROWN, clamp((g - 1) * 1.4))
+    // (It glows a little by itself: in her fingers it's in front of the fire, its lit side away from us, and its
+    // toast color has to show just when she's judging it against the picture.)
+    this.mat.emissive.copy(c).multiplyScalar(this.charred ? 0.25 : 0.55)
     // It puffs up as it toasts, jiggles while it's hot, pops on fresh.
     this.popT += dt
     const puff = (1 + 0.25 * clamp(g) - (this.charred ? 0.12 : 0)) * this.size * this.grow
