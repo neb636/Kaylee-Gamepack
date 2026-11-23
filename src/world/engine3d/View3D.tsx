@@ -2,7 +2,7 @@
 // routes taps and drags (from the canvas and from the DOM tap targets over it) and cleans everything up when it
 // unmounts. If the iPad takes the GPU back (a lost context), it tells the screen, which offers to wake it.
 //
-// A world that roams (roam.ts) also gets Roblox's iPad controls: the thumbstick and jump button (RoamPad.tsx), a
+// A world that roams (roam.ts) also gets Roblox's iPad controls: the thumbstick (RoamPad.tsx), a
 // one-finger drag that swings the camera, a two-finger pinch that moves it in and out (toward the spot between the
 // fingers), and WASD / arrows / space on a keyboard for Dad. On a Mac the trackpad's pinch and a scroll zoom too.
 import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
@@ -216,7 +216,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
           const roaming = world.roam?.() ?? null
           pad.current?.show(roaming)
           // (A map that only turns isn't walking: its turning is the board's, not Roblox's.)
-          const walking = !!roaming && (roaming.walk || roaming.jump)
+          const walking = !!roaming?.walk
           if (walking && !unclaimRoam) unclaimRoam = feelLab.claim(ROAM_ID)
           else if (!walking && unclaimRoam) {
             unclaimRoam()
@@ -365,7 +365,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       world.pointerDown(p.x, p.y, id)
       grabbed = world.roamGrabbed?.() ?? false
     }
-    // A keyboard walks and jumps too (Dad on a laptop): WASD or the arrows, space to jump.
+    // A keyboard walks her too (on a laptop): WASD or the arrows.
     const keys = new Set<string>()
     const KEY: Record<string, [number, number]> = { KeyW: [0, 1], ArrowUp: [0, 1], KeyS: [0, -1], ArrowDown: [0, -1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] }
     const steerKeys = () => {
@@ -382,10 +382,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     const onKeyDown = (e: KeyboardEvent) => {
       const r = world.roam?.()
       if (!r || typing(e) || e.metaKey || e.ctrlKey || e.altKey) return
-      if (e.code === 'Space' && r.jump) {
-        if (!e.repeat) world.roamJump?.()
-        e.preventDefault()
-      } else if (KEY[e.code] && r.walk) {
+      if (KEY[e.code] && r.walk) {
         keys.add(e.code)
         steerKeys()
         e.preventDefault()
@@ -516,7 +513,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
         },
         anchorEls.current,
       )}
-      <RoamPad ref={pad} onStick={(x, y) => worldRef.current?.roamStick?.(x, y)} onJump={() => worldRef.current?.roamJump?.()} />
+      <RoamPad ref={pad} onStick={(x, y) => worldRef.current?.roamStick?.(x, y)} />
     </div>
   )
 }
