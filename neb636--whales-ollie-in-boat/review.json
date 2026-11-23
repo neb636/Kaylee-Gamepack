@@ -1,0 +1,16 @@
+{
+  "title": "Whale Peek-a-Boo: Ollie rides in the boat",
+  "checkIn": "fix",
+  "kaylee": "Ollie hops into Maple's boat and rides in the front, instead of being towed behind it. Nothing on her tummy until the baby orca gives her rock back.",
+  "questions": [],
+  "pictures": [
+    { "title": "The game", "before": "pics/game-before.jpg", "after": "pics/game-after.jpg", "caption": "Before: towed on a rope, a clam on her tummy that looked like her lost rock. After: on her back in the front of the boat, tummy empty." },
+    { "title": "The film's last beat (\"Hop on!\")", "before": "pics/film-before.jpg", "after": "pics/film-after.jpg", "caption": "Before: she grabs the rope. After: she swims up, splashes, hops into the front, and the game starts with her there." },
+    { "title": "Riding the humpback", "after": "pics/ride-after.jpg", "caption": "She rides along in the boat on the whale's back." },
+    { "title": "The rock comes back", "after": "pics/rock-after.jpg", "caption": "The first time anything is on her tummy: the rock from the baby orca." }
+  ],
+  "links": [
+    { "label": "The game from the start", "hash": "#/world/canada/whales/story" },
+    { "label": "The film: Ollie hops in", "hash": "#/world/canada/story/whales-in" }
+  ]
+}
