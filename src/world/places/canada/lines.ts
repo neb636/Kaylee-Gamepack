@@ -467,10 +467,9 @@ export const L = {
     grandma: maple('The grandma leads the family!'),
     gotIt: ollie('Got it! Thank you, whales!'),
     finale: maple(`They all jumped together! Merci!`),
-    // Pokes: Maple's boat (its horn), Ollie on the rope.
+    // Pokes: Maple's boat (its horn), Ollie in the bow.
     toot: maple('Toot toot!'),
     otterHi: by('otter')('Hi hi!'),
-    otterClack: by('otter')('Yum, a clam!'),
     // The film out: Ollie on her back in the kelp, juggling her rock while they talk.
     filmOut: {
       ask: maple('Ollie! Come and play hockey with us!'),

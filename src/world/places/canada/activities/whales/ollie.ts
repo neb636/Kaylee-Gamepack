@@ -1,8 +1,9 @@
 // Ollie the sea otter (planning/around-the-world/canada.md: giggly, cuddly, silly, spins like a top), floating on her
 // back the way sea otters do: the team's rig friend in her Canada look (characters/looks.ts `otter`), tipped onto her
-// back with her face to the sky and toward whoever is looking from her toes, a clam on her tummy, bobbing on the
-// swell. The game (watch.ts) has her drift off asleep, wake, hold the boat's rope and ride along behind it; the films
-// (story/films/whales.ts, story/sets/whales.ts) float the cast's Ollie in the kelp the same way (a Floater). `spin()`
+// back with her face to the sky and toward whoever is looking from her toes, a clam on her tummy (not in the game:
+// there her tummy is empty until the baby orca gives her rock back), bobbing on the swell. The game (watch.ts) has her
+// ride in Maple's boat, on her back across the bow (boat.ts `SEAT`); the films (story/films/whales.ts,
+// story/sets/whales.ts) float the cast's Ollie in the kelp the same way (a Floater), and she hops into the boat. `spin()`
 // is her trick: round and round on her back, fast. Her lucky rock (characters/rock.ts) goes on her tummy with a Juggle:
 // tossed up and caught, higher and higher (the films, and once the baby orca gives it back), or tucked under her arm
 // (sea otters keep their favorite stone in a pocket of skin there).
@@ -17,6 +18,8 @@ import { makeRock, twinkle } from '../../characters/rock'
 /** How far back she lies (radians): not flat, so her face looks up and out past her toes. */
 export const BACK = -1.12
 const SPIN_S = 1.4
+/** How far down into the boat's bow the game's Ollie sits (in her heights). */
+const SEAT_SINK = 0.15
 
 /** Puts a clam on a rig friend's tummy; returns it (hide it with `.visible`). */
 export function addClam(actor: FilmActor, bag: Bag) {
@@ -44,8 +47,12 @@ export class Floater {
   face = 0
   /** Fast asleep (eyes shut). */
   sleepy = false
-  /** Paws on the tummy (holding a clam, or the boat's rope). */
+  /** Paws on the tummy (holding a clam, or folded). */
   paws = true
+  /** How low she lies (in her heights): 0.2 down in the water; 0 lying on top of something (the boat's bow). */
+  sink = 0.2
+  /** Lifted above the water's surface (meters): a hop up into the boat in the films. */
+  raise = 0
   private spinT = -1
   private phase = Math.random() * 6
   constructor(readonly actor: FilmActor) {
@@ -70,7 +77,7 @@ export class Floater {
     const turn = k * k * (3 - 2 * k) * Math.PI * 6
     a.root.rotation.set(0, this.face + turn, Math.sin(t * 0.9 + this.phase) * 0.07)
     // Lying back in the water, a slow bob on the swell, lifted a little in the middle of a spin.
-    a.root.position.y = this.y - 0.2 * a.height + Math.sin(t * 1.6 + this.phase) * 0.03 + bell(k) * 0.08 * a.height
+    a.root.position.y = this.y + this.raise - this.sink * a.height + Math.sin(t * 1.6 + this.phase) * 0.03 + bell(k) * 0.08 * a.height
     // Tuck her chin up from the water so her eyes and whiskers face past her flippers.
     a.rig.head.rotation.x += 0.27
     if (this.sleepy) a.rig.eyes.scale.y = 0.12
@@ -81,12 +88,12 @@ export class Floater {
   }
 }
 
-/** The game's Ollie: her own rig actor, floating where `root` is put (the world moves it on the water). */
+/** The game's Ollie: her own rig actor, lying on her back where `root` is put (the world keeps it on the boat's bow,
+ *  turned and tipped with the boat). No clam: her tummy stays empty until her rock comes back. */
 export class Ollie {
   readonly root = new Group()
   readonly actor: FilmActor
   readonly float: Floater
-  readonly clam: Group
 
   constructor(
     bag: Bag,
@@ -96,7 +103,8 @@ export class Ollie {
     this.root.add(this.actor.root)
     this.actor.place(0, 0, 0, 0)
     this.float = new Floater(this.actor)
-    this.clam = addClam(this.actor, bag)
+    // (Nestled down into the bow, her tail and hips in behind the cool box, not perched on top of it.)
+    this.float.sink = SEAT_SINK
   }
   get sleepy() {
     return this.float.sleepy

@@ -112,8 +112,11 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
   ogives, moraines, a fluted ice cliff with a cave). The creek is a smooth channel with a pebble bed, a waterfall at
   its top and its own shader (`canoe/flow.ts`), and its own sound (`canoe-creek`, louder near it). The reflection
   draws plainer trees and leaves out grass, pebbles and bushes: the scene is about 424k triangles (Samet 396k).
-- **Whale Watch:** the sleepy otter is Ollie; towed home, she asks to come and rides along on the rope, spinning at
-  every whale. The wheel steering mode is gone.
+- **Whale Watch:** the sleepy otter is Ollie; towed home, she asks to come and rides along, spinning at every whale.
+  The wheel steering mode is gone. (2026-11-23, your ask: she rides in the boat, on her back across the bow over the
+  cool box (`boat.ts` `SEAT`), not towed on a rope; the film's last beat has her hop in. Her tummy stays empty until
+  the baby orca gives the rock back: the game's Ollie has no clam, which read as the lost rock, and "Yum, a clam!" is
+  gone.)
 - **Carnival Snowballs:** the first snowman she finishes is Tuque himself (his cap, face and mittens on the balls she
   rolled) and leads the parade; a lower camera shows the castle hotel; soft shadows and lanterns.
 - **Mountain Bike:** Monty waits in the waterfall pool at the bottom, big and unmissable; the ending hands to his film.
