@@ -1014,6 +1014,10 @@ export class CanadaMapWorld implements World3D {
     if (this.closing) return
     // A tap during the arrival skips to the board (the move and Gus go on).
     if (this.onRink) this.leaveRink(0.5)
+    // A heart pin always wins: whatever stands in front of it or behind it (the balloon, the orca, a cloud, another
+    // place's box, a friend at the rink), her finger on a pin is for that pin. (Not a key press: it has no spot.)
+    const pin = x + y > 0 ? this.pinUnder(x, y) : null
+    if (pin) return this.pick(pin)
     if (id?.startsWith('go:')) {
       // A place's target is big: if her finger is really on a friend at the rink or a goose, they answer instead.
       const near = id === 'go:party' && x + y > 0 ? this.thingUnder(x, y) : null
@@ -1034,12 +1038,7 @@ export class CanadaMapWorld implements World3D {
       return this.events.team(m.id)
     }
     if (id === 'hut') return this.openHut()
-    if (id?.startsWith('poke:')) {
-      // A heart pin wins over an animal or the balloon behind it: her finger on the pin is for the pin.
-      const pin = x + y > 0 ? this.pinUnder(x, y) : null
-      if (pin) return this.pick(pin)
-      return this.poke(id.slice(5) as PokeId)
-    }
+    if (id?.startsWith('poke:')) return this.poke(id.slice(5) as PokeId)
     // Anything else: whatever her finger lands on answers.
     this.raycaster.setFromCamera(new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1), this.rig.camera)
     const cloud = this.raycaster.intersectObjects(this.clouds.map((c) => c.root), true)[0]
