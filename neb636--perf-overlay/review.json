@@ -1,10 +1,14 @@
 {
-  "title": "A stutter finder for your phone",
+  "title": "Bike: no more shivering off the side of the trail",
   "checkIn": "fix",
-  "kaylee": "Nothing changes for her. Add ?perf=1 to a link and a little frame-time graph appears, with a Copy button that grabs every slow frame and what was happening.",
+  "kaylee": "Ride off the side of the trail and Maple glides along the edge smoothly, instead of shivering and twitching for as long as she holds the push.",
   "questions": [],
-  "pictures": [{ "title": "The overlay on the bike", "after": "perf-overlay.png", "caption": "Green bars are smooth frames, yellow and red are slow. Ride a few deep turns, tap Copy, paste it to me." }],
+  "pictures": [
+    { "title": "A robot holding the push toward the trail's side for 10 s", "before": "edge-before.png", "after": "edge-after.png", "caption": "Before: the bike's turning snapped back and forth, and Maple flicked into the air every few frames (pink). After: one smooth glide; only her real hops off the bumps are left." },
+    { "title": "The stutter finder (still here)", "after": "perf-overlay.png", "caption": "Add ?perf=1 to a link for the frame-time graph and its Copy button." }
+  ],
   "links": [
-    { "label": "Bike with the overlay", "hash": "#/world/canada/bike/berms" }
+    { "label": "Ride the berms off the side", "hash": "#/world/canada/bike/berms" },
+    { "label": "Ride the green trail off the side", "hash": "#/world/canada/bike/green" }
   ]
 }
