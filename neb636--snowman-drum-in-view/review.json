@@ -1,0 +1,11 @@
+{
+  "title": "Carnival Snowballs: the drum comes into view",
+  "checkIn": "fix",
+  "kaylee": "When it's time to tap the big drum, the camera glides over to it, so she can see it and tap it on the iPhone.",
+  "questions": [],
+  "pictures": [
+    { "title": "iPhone, 'Tap the big drum!'", "before": "pics/drum-before-iphone.png", "after": "pics/drum-after-iphone.png", "caption": "Before: the drum was off the right edge. After: the drum, with the hint's finger on it." },
+    { "title": "iPad sideways", "before": "pics/drum-before-ipad.png", "after": "pics/drum-after-ipad.png", "caption": "The line, the trumpet and the drum, clear of the tree." }
+  ],
+  "links": [{ "label": "Play it: dress a snowman, then the drum", "hash": "#/world/canada/snowman/dress?snowmen=3" }]
+}
