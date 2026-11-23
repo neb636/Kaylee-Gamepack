@@ -1,7 +1,7 @@
 // How each of Kaylee's family looks as a toy animal: Dad's picks from the lineup (2026-10-17: column A, so kids share
 // their parent's animal); later Dad made Jum a chubby pink elephant and gave the big cousins (Gan, Ken, BB) phones they
 // never look up from. Kaylee and Mom are modelled vinyl toys instead (model.ts, mom-model.ts): Kaylee's entry here is
-// only the size her worn things are made for (buildWorn), and Mom has none. The concepts are in planning/around-the-world/thailand/lineup.webp;
+// only the size her worn things are made for (buildWorn), and Mom has none. The concept lineup is in git history;
 // engine3d/characters/animal.ts builds them in 3D. The vet's patients at HarborLand (a puppy, a pony, a baby elephant) are toy
 // animals too (PATIENT_LOOKS). Pure data (no three.js).
 import type { Look, Wearable } from '../../../engine3d/characters/look'

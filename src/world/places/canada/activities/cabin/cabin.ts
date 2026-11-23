@@ -1,4 +1,4 @@
-// The Team Cabin (planning/around-the-world/canada-round-2.md, part 4): inside the skate hut beside the canal, the
+// The Team Cabin (canada-round-2.md in git history, part 4): inside the skate hut beside the canal, the
 // friends who have joined sit on the bench and she dresses them. A toy on the map: no stamp, no end.
 //
 // The toy (core verb): drag a thing from the cubby shelf onto a friend, or tap it and it flies onto the friend in focus

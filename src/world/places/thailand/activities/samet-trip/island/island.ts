@@ -1,4 +1,4 @@
-// Koh Samet, the island between the stops (notes: planning/around-the-world/thailand/samet-story.md): the north half
+// Koh Samet, the island between the stops (notes: samet-story.md in git history): the north half
 // of the island at 1:10 (layout.ts, from OpenStreetMap). It was built as one open world to roam; now it is where the
 // story happens between the stops, and she never has to cross it on foot.
 //

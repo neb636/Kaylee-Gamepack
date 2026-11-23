@@ -1,4 +1,4 @@
-// The silly-face close-up (planning/around-the-world/canada-round-2.md): the laugh she repeats in Koh Samet is one
+// The silly-face close-up (canada-round-2.md in git history): the laugh she repeats in Koh Samet is one
 // small trick, a silly face in a tight shot with a wiggle and a boing. Every rebuilt toy's big moment uses this one
 // helper, so they are all the same quality: Maple soaked by a whale, Roxy frozen in the beam, Misty at the mirror.
 //

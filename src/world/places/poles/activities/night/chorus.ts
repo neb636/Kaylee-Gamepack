@@ -1,4 +1,4 @@
-// Act 2 of the Poles' new ending, Sing in the Dark (planning/around-the-world/poles-ending.md). The balloon is down
+// Act 2 of the Poles' new ending, Sing in the Dark (poles-ending.md in git history). The balloon is down
 // in the blizzard, it's dark, and Pebble's peep is too small for Papa to hear across Antarctica. So everyone sings it.
 //
 // The toy (core verb): hold Pebble, riding on Pola's back, and he sings Papa's song (party/sounds.ts TUNES[0]). The

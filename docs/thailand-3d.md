@@ -3,10 +3,10 @@
 Thailand is where the app is going: the family's own country, built in 3D with three.js. This is the builder's
 reference for it. The look, the engine, the hub, the trip kit and the labs are below.
 
-Read `planning/around-the-world/thailand.md` (the family, the house), then the notes of the trip you're working on in
-`planning/around-the-world/thailand/` (`nan-trip.md` is the road trip and the road kit, `samet-story.md` the
-island). The finished boat and mall trips (and Baan Chang) have no notes left; read their code in `trip/` and
-`activities/`. `thailand/known-issues.md` lists small things QA found, with links and code paths.
+Read `planning/around-the-world/thailand.md` (the family, the house, where each place lives). The finished trips
+and toys (boat, mall, Nan, Koh Samet, the Thailand, Krabi and Nan maps, the wardrobe, the game table) have no notes left; read their code in
+`trip/` and `activities/`, and their plans in git history. The Bangkok map still has notes:
+`planning/around-the-world/thailand/bangkok-map.md`. `thailand/known-issues.md` lists small things QA found, with links and code paths.
 
 - **The look:** flat pastel 3D. Toon shading in a few flat bands with lavender shadows, screen-space ink outlines like
   the 2D art, blob shadows, no post-processing (`engine3d/toon.ts`, `engine3d/outline.ts`).
@@ -20,7 +20,7 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
 - **The hub is a toy:** tap the floor and Kaylee walks there; tap a thing and it reacts at once, then she uses it; tap
   someone and they hop and say hello. Sacred things (the altar, the spirit house) never wobble: they glow, a bell rings,
   she does a wai.
-- **The Thailand map** (`activities/hub/map/`, 3D, plan `thailand/thailand-map.md`) is where she lands: a toy board
+- **The Thailand map** (`activities/hub/map/`, 3D) is where she lands: a toy board
   with Thailand standing up out of the sea (its real coastline, `land.ts`, written by `scripts/thailand-map-land.mjs`
   from Natural Earth), a little model and a bobbing pin for each place, and animals, boats and clouds that answer a
   poke. A drag swings the board round, a pinch brings it closer. Tapping a pin opens that place. `field.ts` works out

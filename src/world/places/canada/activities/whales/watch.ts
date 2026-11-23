@@ -1,4 +1,4 @@
-// Whale Peek-a-Boo (planning/around-the-world/canada-round-2.md, section 3; the whales chapter of Maple's Team): a
+// Whale Peek-a-Boo (canada-round-2.md in git history, section 3; the whales chapter of Maple's Team): a
 // whale's spout blew Ollie's lucky rock out to sea off Tofino. Maple's little boat is out on the Pacific with Ollie on
 // the rope behind it; bubbles come up near the boat, she touches them and a whale comes up right there (peek-a-boo!),
 // and then the whale is the toy. Sparkle gives the few instructions (events.say; WhaleWatch.tsx speaks them), Maple

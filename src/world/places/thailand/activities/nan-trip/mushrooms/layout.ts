@@ -1,4 +1,4 @@
-// Baan Huanam Mushroom Farm (plan: planning/around-the-world/thailand/nan-trip.md, "2. Baan Huanam Mushroom Farm"), in
+// Baan Huanam Mushroom Farm (plan: nan-trip.md in git history, "2. Baan Huanam Mushroom Farm"), in
 // meters: where everything stands in the mushroom house and at the farm's table, the rounds, and the basket she carries
 // from one to the other. Pure data (no three.js): sections.ts reads it at startup.
 //

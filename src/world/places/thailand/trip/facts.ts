@@ -29,7 +29,7 @@ export const MALL_FACTS = [
   { icon: '🐘', label: 'Elephants', say: L.mall.trip.facts.elephant },
 ]
 
-// The Nan road trip's tap-to-hear facts (plan: thailand/nan-trip.md, "Facts"), for its stamp screen and the passport.
+// The Nan road trip's tap-to-hear facts (plan: nan-trip.md in git history, "Facts"), for its stamp screen and the passport.
 export const NAN_FACTS = [
   { icon: '🏔️', label: 'Nan', say: L.nan.trip.facts.nan },
   { icon: '🚙', label: 'Made in Thailand', say: L.nan.trip.facts.pajero },

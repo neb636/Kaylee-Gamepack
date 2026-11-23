@@ -1,4 +1,4 @@
-// The Thailand map in 3D (plan: planning/around-the-world/thailand/thailand-map.md): a toy board she looks down on,
+// The Thailand map in 3D (plan: thailand-map.md in git history): a toy board she looks down on,
 // with Thailand standing up out of the sea, a little model of each place she can go (tap it and it opens), and animals,
 // boats and clouds that all do something when she pokes them. She can swing the board round with a drag and pinch it
 // closer, like her camera in Roblox. terrain.ts builds the still board, toys.ts the things on it; this file makes

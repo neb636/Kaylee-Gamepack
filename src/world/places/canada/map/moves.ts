@@ -1,4 +1,4 @@
-// The friends' moves at the rink (planning/around-the-world/canada-round-2.md, "The new friend shows their move"): when
+// The friends' moves at the rink (canada-round-2.md in git history, "The new friend shows their move"): when
 // she lands back on the map with a new friend, the friend pops in at the rink, then shows what they're good at, about
 // 2 s, with no words: Tuque bounces a puck off his tummy; Monty stands so still that two geese take him for a statue
 // and perch on his antlers; Roxy whisks a puck from a goose onto her own head; Lulu sings notes that float up over the

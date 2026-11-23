@@ -1,4 +1,4 @@
-// The jet ski at Hat Sai Kaew (the trip's story: planning/around-the-world/thailand/samet-story.md; the first plan:
+// The jet ski at Hat Sai Kaew (the trip's story: samet-story.md in git history; the first plan:
 // samet-trip.md (retired; in git history)): Kaylee steers, Dad sits behind her, in the island's real coordinates (island/layout.ts), so the bay
 // is the island's own bay.
 //

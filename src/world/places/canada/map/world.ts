@@ -9,7 +9,7 @@
 // bison who rolls in the dust, a beluga, Sparkle's balloon, the clouds, the ice floes, the Rockies, the snowy north,
 // Hudson Bay). She can swing the board round with a drag and pinch it closer (board.ts).
 //
-// Round two (planning/around-the-world/canada-round-2.md): a new friend arriving at the rink shows their move once
+// Round two (canada-round-2.md in git history): a new friend arriving at the rink shows their move once
 // their pop-in ends (moves.ts), and a tap on a friend already on the team plays it again; Gus, skating on the ice,
 // stops, turns to the newcomer and pulls a face while he says his line (the page says when). The team's skate hut
 // beside the canal (hut.ts) opens the Team Cabin.

@@ -156,16 +156,13 @@ Stickers: polar bear (floe), narwhal (narwhal), Arctic fox (coats), Adélie peng
   camera Pebble sits hidden behind Pola most of the ride; four lines play in about 16 s under the ice.
 - Penguin Slide: a run is about 1:45 (the course length was kept); the humpback under the sea is easy to miss; in
   portrait the station hut is mostly off the right edge.
-- The finale: the friends in the balloon's basket are small on an iPhone; Papa's song leaves empty snow above and
-  below the row in portrait; the whole chain (film, flight, film, song, film, quiz) was checked piece by piece from
-  its links, not played end to end by a robot.
 - Nobody ran `qa-pacing` on the rebuilt games: touches and minutes are unmeasured.
 - Snow Coats is an unchanged 2D game; only its films are new.
 
-## Next
+## The ending: The Longest Night (built 2026-11-16)
 
-**The new ending, The Longest Night, is playable end to end** (plan and script: [poles-ending.md](poles-ending.md), PR
-#475, with #474's 3D huddle folded into the same branch). It's `activities/night/` and it is home now: the last
+**The Longest Night is the Poles' ending** (PR #475; its plan and script, `poles-ending.md`, are in git history),
+with #474's 3D huddle folded into the same branch). It's `activities/night/` and it is home now: the last
 picture on the trail (`info.ts` READY = true, `hub/stops.ts` HOME = 'night'), in place of Emperor Huddle and the old
 finale. Its stamp earns the emperor chick, the trophy comes straight after (Place.tsx's stamp flow `after`), then the
 trail ends in the movie ticket.
@@ -173,7 +170,7 @@ trail ends in the movie ticket.
 - **Milestone 1 (2026-11-16): Act 2 and the whole script.** Every line of the ending is in `lines.ts` as `L.night`, in
   play order. Act 2, Sing in the Dark (`chorus.ts`): `#/world/poles/night/whiteout`, `/edge`, `/together`, knobs
   `chorus`.
-- **Milestone 2 (2026-11-16): the whole chapter, for you to play.** `Night.tsx` runs it as one chapter
+- **Milestone 2 (2026-11-16): the whole chapter.** `Night.tsx` runs it as one chapter
   (`steps.ts`): film → act → film … → the stamp, and remembers where she left off between acts.
   - **Act 1, Hold to Fly** (`fly.ts`, `#/world/poles/night/fly?leg=north|warm|south`): a side view, the balloon
     flying left (north) to right (south). Hold anywhere: the burner roars and it rises; let go: it sinks. The pink
@@ -211,68 +208,15 @@ trail ends in the movie ticket.
     lines (the flight's steer lines, the song game, Terry's quiz and badge); `hub.next.huddle`. Kept: `party/route.ts`,
     `party/sounds.ts` (the song), `L.party.hello`, `.balloon`, `.song.songFact`. Emperor Huddle is off the trail
     (READY = false); its links still open it.
-  - **Sounds:** no ElevenLabs key in the cloud session again, so everything reuses the Poles' recorded clips
-    (`night/sounds.ts` `flySfx`, `huddleSfx3`; `story/sounds.ts` crack, cheer, gust, blizzard, colony).
-- **Next:** you play it (check-in 3). Then: ElevenLabs sounds on a session with a key (burner roar, wind
-  ribbons, the ring shimmer, the sunrise swell, the colony's hum); the woolly hat on Pebble in the last films; a
-  walrus in the Arctic; the smooth reel on the Mac (`poles-night-*` motion runs in `activities/night/qa.mjs`).
-
-You play it, then her play data shows. Watch for: does she find Papa by his glow, does she carry Pebble back
-  without the hint, does she sit through the song. `assets/bg-huddle-night.webp` (the 2D game's painting) is unused now.
-
-## North and south at a glance (the facts the place is built on)
-
-| | 🐻‍❄️ North Pole (the Arctic) | 🐧 South Pole (Antarctica) |
-|---|---|---|
-| Under the ice | Ocean: the ice floats | Land: a continent, ice up to about 4 km thick |
-| Who lives there | Polar bears, Arctic foxes and hares, walruses, narwhals, belugas | Penguins, seals, whales; no land animals all year |
-| People | Arctic peoples have lived there for thousands of years | Only scientists at research stations |
-| Icebergs | Tall and pointy, from Greenland's glaciers | Huge and flat, from the ice shelves |
-| Seasons | Summer in June and July | Summer in December and January: the opposite |
-| Day and night | Months of daylight, then months of dark | The same, at the opposite time of year |
-| Visits both | The Arctic tern, every year: the longest trip any animal makes | |
-
-Stickers: polar bear (floe), narwhal (narwhal), Arctic fox (coats), Adélie penguin (slide), emperor chick (huddle).
-
-## Known small things (2026-11-15)
-
-- Narwhal Ride: the three waves read as flat foamy bands; from the chase
-  camera Pebble sits hidden behind Pola most of the ride; four lines play in about 16 s under the ice.
-- Penguin Slide: a run is about 1:45 (the course length was kept); the humpback under the sea is easy to miss; in
-  portrait the station hut is mostly off the right edge.
-- The finale: the friends in the balloon's basket are small on an iPhone; Papa's song leaves empty snow above and
-  below the row in portrait; the whole chain (film, flight, film, song, film, quiz) was checked piece by piece from
-  its links, not played end to end by a robot.
-- Nobody ran `qa-pacing` on the rebuilt games: touches and minutes are unmeasured.
-- Snow Coats is an unchanged 2D game; only its films are new.
+  - **Sounds:** the burner and the huddle clips are ElevenLabs (`night/sounds.ts`); the rest reuse the Poles' clips.
 
 ## Next
 
-**The new ending, The Longest Night, is being built** (plan and script: [poles-ending.md](poles-ending.md), PR #475,
-with #474's 3D huddle folded into the same branch). It's `activities/night/`, not on the globe yet (`info.ts`
-READY = false), so Emperor Huddle and the finale still play for her until it's done.
-
-- **Milestone 1 (2026-11-16): Act 2 and the whole script.** Every line of the ending is in `lines.ts` as one block,
-  `L.night`, in play order (films, acts, goodbye, the end), so `node scripts/table-read.mjs poles night` is the
-  ending as she hears it. Lines already recorded elsewhere keep their words and share their clips (the table read
-  marks them `reused`). Act 2, Sing in the Dark, is playable: `#/world/poles/night/whiteout`, `/edge`, `/together`
-  (`chorus.ts`). Hold Pebble and a dashed circle shows how far the song will go; let go and the ring rolls across the
-  snow on the ground's own shape (it rolls over the hills to the colony at the end), lighting what it passes. Each
-  friend found adds a band of color and a voice (`sounds.ts` `voice`: one synth per singer on `TUNES[0]`). Feel knobs
-  `chorus` (`?feel=1`): tap length, peep/smallest/biggest ring, hold-to-full and its curve, ring speed and width,
-  glow time, misses before a friend answers anyway, and the big song's hold.
-- Decided on my own: the hat is the slide's grey woolly hat (the plan's end film says pink; the slide's is grey);
-  holding Pola sings too (her finger may land on her, not the chick); the leopard seal's wobbly note is left out of
-  Act 2 for now; the end of Act 2 offers 🔁 until Act 3 exists. No ElevenLabs key in the cloud session: Act 2 reuses
-  the Poles' recorded clips (Weddell trill, whale, Adelie honks, tern, hat, reveal) and synthesizes the ring's shimmer.
-- **Next (milestone 2, after you hear the script):** Act 1 (the balloon), then Act 3 on the 3D huddle's world, the
-  five films, the goodbye flight, then swapping the chapter in for Emperor Huddle and the finale on the globe and
-  retiring their lines. Make the ring shimmer and a sunrise swell with ElevenLabs on a session with a key. Film the
-  reel on the Mac (`poles-night-*` in `activities/night/qa.mjs`).
-
-You play it, then her play data shows. Watch for: does she say "penguin" and "home"; does she tap the next picture without help; does she sit
-through the way-in film or hold ⏭ (her diary counts both); which chapter she replays; whether Papa's song is too hard
-or too easy by ear.
+- Small things left: the woolly hat on Pebble in the last films; a
+  walrus in the Arctic; the smooth reel on the Mac (`poles-night-*` motion runs in `activities/night/qa.mjs`).
+- Her play data decides the rest. Watch for: does she find Papa by his glow, does she carry Pebble back without the
+  hint, does she sit through the song; does she tap the next picture on the trail without help; does she sit through
+  the films or hold ⏭; which chapter she replays. `assets/bg-huddle-night.webp` (the 2D game's painting) is unused now.
 
 Still open for the user: the friends' names (recorded as Pola, Pebble, Terry and Nari: a new name means re-recording),
 and whether the Arctic should get a hello word (an Inuktitut greeting needs a checked pronunciation before it is

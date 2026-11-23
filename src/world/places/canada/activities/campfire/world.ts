@@ -1,4 +1,4 @@
-// Campfire Night, in 3D: Flashlight Statues (planning/around-the-world/canada-round-2.md, part 2). Somebody is taking
+// Campfire Night, in 3D: Flashlight Statues (canada-round-2.md in git history, part 2). Somebody is taking
 // Maple's marshmallows in the dark. Her finger is the flashlight: where it goes, the light goes, and whatever it lands
 // on does its bit at once. Everything in the dark is a dark shape with two shining eyes (shade.ts).
 //

@@ -1,4 +1,4 @@
-// Snorkeling at Ko Kudi (the trip's story: planning/around-the-world/thailand/samet-story.md), its own little world
+// Snorkeling at Ko Kudi (the trip's story: samet-story.md in git history), its own little world
 // out at the reef the snorkel boat goes to from Ao Wong Duan. Bubbles the blue firefly is here: last night's wind
 // dropped her in the sea, and she is in an air bubble down on the reef, the cuttlefish hugging it (story.ts).
 //

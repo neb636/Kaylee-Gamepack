@@ -1,4 +1,4 @@
-// Act 3 of the Poles' new ending, Through the Huddle (planning/around-the-world/poles-ending.md): Pola can't go in (the
+// Act 3 of the Poles' new ending, Through the Huddle (poles-ending.md in git history): Pola can't go in (the
 // dads are shy of bears), so Pebble goes the last bit on his own, through a huddle of a thousand dads, to Papa. It
 // stands on the 3D huddle's ice (activities/huddle/world.ts, colonyIce) in the long night.
 //

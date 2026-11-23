@@ -15,7 +15,7 @@ const ALL: [ActivityInfo, boolean][] = [
   [narwhal, narwhalReady],
   [coats, coatsReady],
   [slide, slideReady],
-  // The ending (planning/around-the-world/poles-ending.md): home, the last picture on the trail.
+  // The ending (poles-ending.md in git history): home, the last picture on the trail.
   [night, nightReady],
   // The old last chapter, off the trail now (its links still open it).
   [huddle, huddleReady],

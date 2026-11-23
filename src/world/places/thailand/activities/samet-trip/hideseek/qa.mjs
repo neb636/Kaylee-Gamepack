@@ -1,5 +1,5 @@
 // Hide and seek's QA for Peekaboo, the green firefly (hideseek.ts; the story: planning/around-the-world/thailand/
-// samet-story.md). Screens: each shot of the way-in film (the peek round the trunk, her close-up, Dad and your unicorn,
+// samet-story.md in git history). Screens: each shot of the way-in film (the peek round the trunk, her close-up, Dad and your unicorn,
 // Mom) and of the found film (the pop out, Dad cross-eyed with her on his nose, her on the horn), and Peekaboo in play
 // (twinkling over Dad's hiding place once he has given himself away, tucked in beside your unicorn behind the chairs).
 // Filmed: the way in to its end (round 1 starts), ⏭ held in the middle of it, the found film from its link to the

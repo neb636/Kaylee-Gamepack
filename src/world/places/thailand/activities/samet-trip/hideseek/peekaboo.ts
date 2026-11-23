@@ -1,4 +1,4 @@
-// Peekaboo, the green firefly of hide and seek (planning/around-the-world/thailand/samet-story.md): the story's
+// Peekaboo, the green firefly of hide and seek (samet-story.md in git history): the story's
 // firefly (story/firefly.ts) with what this stop needs on top. She heads for a point each frame and turns her face to
 // the camera when she hovers; she can be big and bright (out in the open) or dimmed to a tiny glow (hiding); she
 // carries a soft green cloud behind her and throws little sparkles when she twinkles, so she reads against Ao Prao's

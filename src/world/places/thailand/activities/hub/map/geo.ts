@@ -1,4 +1,4 @@
-// The Thailand map (plan: planning/around-the-world/thailand/thailand-map.md): where everything sits. The map is a toy
+// The Thailand map (plan: thailand-map.md in git history): where everything sits. The map is a toy
 // board in 3D: one unit is one degree, x runs east, z runs south (north is up the screen), y is up. Pure data: no
 // React, no three.js.
 import type { LonLat } from './land'

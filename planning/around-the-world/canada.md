@@ -136,7 +136,7 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
 - **Rideau Canal skaters:** six winter outfits, expressive faces and alternating skate pushes. The opening film and
   hockey finale share the figures and their continuous loops, using the existing recorded canal ambience.
 
-## Round two (built 2026-11-21; the plan and its log: `canada-round-2.md`)
+## Round two (built 2026-11-21; its plan and log, `canada-round-2.md`, are in git history)
 
 Three chapters were rebuilt on what she replays (her finger on a friend, nothing can be missed, what she makes stays,
 a silly face in close-up), and every chapter now has the same shape: the friend has a trouble, her play fixes it, the
