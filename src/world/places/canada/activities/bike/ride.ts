@@ -1228,7 +1228,8 @@ export class MountainBike implements World3D {
     }
     return {
       center: new Vector3(p.x, Math.max(g, this.y - 1.2) + 0.85 + lift, p.z),
-      half: tall ? new Vector3(2.4, 1.1, 5) : new Vector3(3.9, 1.1, 3.9),
+      // (A phone held tall: a tighter box, so she isn't tiny and the camera isn't far back among the trees.)
+      half: tall ? new Vector3(1.7, 1.1, 3.2) : new Vector3(3.9, 1.1, 3.9),
       yaw: -this.camYaw * TO_DEG,
       pitch: 12,
       minDist: 4.5 + clamp((v - 5) / 9, 0, 1) * 1.2,
@@ -1244,7 +1245,17 @@ export class MountainBike implements World3D {
     const b = t.spot(this.s + 3 + v * 0.3, this.lat * 0.85)
     const chord = Math.atan2(b.x - a.x, -(b.z - a.z))
     // (Out of the station's door the shot is from the side: it stays put while she weaves, clear of the cabins.)
-    return chord + wrapAngle(Math.PI - this.d.heading - chord) * (this.atDoor ? 0 : STEER.chase)
+    if (this.atDoor) return chord
+    // Swung behind her, but only as far as keeps the camera over the trail: swung right round while she carves across,
+    // it would stand among the trees beside it (a phone's taller shot sits further back, so it swings less).
+    const off = wrapAngle(Math.PI - this.d.heading - chord)
+    const back = (this.rig.framed()?.dist ?? 6) * Math.cos(12 * DEG) - (3 + v * 0.3)
+    for (const k of [1, 0.75, 0.5, 0.25]) {
+      const yaw = chord + off * STEER.chase * k
+      const cam = t.locate(this.d.x - Math.sin(yaw) * back, this.d.z + Math.cos(yaw) * back, this.s)
+      if (Math.abs(cam.lat) < half(cam.s) + SHOULDER + 1.2) return yaw
+    }
+    return chord
   }
 
   /** Never inside the hillside: the camera rises over the ground (and over a bank between it and Maple). */
