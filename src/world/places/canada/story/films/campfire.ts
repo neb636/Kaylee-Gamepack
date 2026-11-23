@@ -20,7 +20,7 @@ import { cam, close } from '../../../../engine3d/shots'
 import { camp } from '../../activities/campfire/sounds'
 import { L } from '../../lines'
 import { makePuck } from '../props'
-import { CAMP, CAMP_SET, makeMallow, makeRoastStick } from '../sets/campfire'
+import { CAMP, CAMP_SET, makeMallow, makeRoastStick, pawGrip } from '../sets/campfire'
 import type { StoryFilm, StoryStage } from '../stage'
 
 const IN = L.campfire.filmIn
@@ -32,14 +32,15 @@ function fireBed(s: StoryStage) {
   s.bag.add({ dispose: stop })
 }
 
-/** A puck for a rig friend `H` meters tall to hold up in their right paw (add it to `rig.armR`). */
+/** A puck for a rig friend `H` meters tall to hold up in their right paw (add it to `rig.armR`): its edge in the paw. */
 function heldPuck(H: number, s: StoryStage) {
   const g = new Group()
   const p = makePuck(s.bag, 0.08)
   // (A pink band round it, so it shows against the dark.)
   p.add(solid(P.torus(0.08, 0.012, '#FF8FB8', { at: [0, 0.022, 0], rot: [Math.PI / 2, 0, 0] }), s.bag, 0))
   p.rotation.x = Math.PI / 2
-  p.position.set(0.1 * H, -0.3 * H, 0.1 * H)
+  pawGrip(H, 1, p.position)
+  p.position.y -= 0.06
   g.add(p)
   g.visible = false
   return g
@@ -63,7 +64,8 @@ export const CAMPFIRE_IN: StoryFilm = {
   beats(s) {
     const set = s.use(CAMP_SET)
     const { maple } = s.cast
-    maple.rig.armR.add(makeRoastStick(maple.height, s.bag, 0.6))
+    // (Leaning out from her side a little, so it doesn't cross her face in the close shots.)
+    maple.rig.armR.add(makeRoastStick(maple.height, s.bag, 0.6, 0.6, 0.3))
     const [mx, my, mz] = CAMP.maple
     // The marshmallow the paw carries off (it sits in the paw's hand while it's out).
     const taken = makeMallow(s.bag, 0.045, '#FFF7F0')
@@ -162,7 +164,7 @@ export const CAMPFIRE_OUT: StoryFilm = {
     const { maple, roxy, kits } = s.cast
     const R = CAMP.ring
     // Everybody's marshmallow stick (the kits wave theirs); Maple's puck, and the one that ends up in Roxy's paw.
-    roxy.rig.armL.add(mirror(makeRoastStick(roxy.height, s.bag, 0.5)))
+    roxy.rig.armL.add(makeRoastStick(roxy.height, s.bag, 0.5, 0.75, 0, -1))
     for (const k of kits) k.rig.armR.add(makeRoastStick(k.height, s.bag, 0.34, 0.15, 0.5))
     const puckM = heldPuck(maple.height, s)
     maple.rig.armR.add(puckM)
@@ -271,10 +273,4 @@ export const CAMPFIRE_OUT: StoryFilm = {
       },
     ]
   },
-}
-
-/** The same stick for the left paw. */
-function mirror(g: Group) {
-  g.scale.x = -1
-  return g
 }

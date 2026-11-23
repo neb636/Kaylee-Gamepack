@@ -1011,6 +1011,24 @@
   "seconds": 1.2
  },
  {
+  "id": "campfire-bag",
+  "label": "A marshmallow out of the bag",
+  "prompt": "A small paper bag crinkling softly as a paw reaches in, then a tiny soft squishy pop as a marshmallow is pulled out, light and cute, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-skewer",
+  "label": "A marshmallow onto the stick",
+  "prompt": "A soft squishy cartoon squelch-plop as a marshmallow is pushed onto a wooden stick, short, light and funny, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "campfire-branch",
+  "label": "Monty eats the branch",
+  "prompt": "A big gentle cartoon moose crunching and munching a dry wooden stick: three loud woody crunches, funny and friendly, no voices.",
+  "seconds": 1.4
+ },
+ {
   "id": "whales-bubbles",
   "label": "Bubbles come up where a whale will peek out",
   "prompt": "A cluster of big round bubbles rising and popping at the surface of calm sea water, soft bubbly blub-blub-blub, playful and gentle, toy-like.",

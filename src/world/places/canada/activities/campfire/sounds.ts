@@ -47,6 +47,12 @@ export const camp = {
   zip: clip(url('campfire-zip'), (_pan: number = 0) => noise(0.45, 0.12, 'bandpass', 1800, 4200, 0, 3)),
   /** Sparks whoosh up from the fire (and a marshmallow catching fire). */
   sparks: clip(url('campfire-sparks'), (vol: number = 0.14) => noise(0.6, vol, 'bandpass', 400, 1400, 0, 0.8)),
+  /** A marshmallow comes out of Maple's paper bag. */
+  bag: clip(url('campfire-bag'), () => sounds.pop()),
+  /** It squishes onto the roasting stick. */
+  skewer: clip(url('campfire-skewer'), () => sounds.place()),
+  /** Monty crunches up the branch his giant one was toasted on. */
+  branch: clip(url('campfire-branch'), () => [0, 0.2, 0.4].forEach((d) => noise(0.09, 0.2, 'bandpass', 900, 500, d, 1.5))),
   /** Blowing a burning marshmallow out. */
   blow: clip(url('campfire-blow'), () => noise(0.35, 0.18, 'lowpass', 1600, 300)),
   /** Somebody munching. */

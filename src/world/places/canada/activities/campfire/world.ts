@@ -19,8 +19,10 @@
 //             again, a little slower each time.
 // The side verb is the roast (roast.ts, orders.ts): the flashlight is put away and the camera comes down close to the
 // fire. Everyone round it wants a marshmallow and shows which kind in a wish bubble (squishy, golden, burnt, Monty's
-// giant one); she toasts it until it's that kind (their bubble glows) and hands it over: a gold star. The wrong kind
-// they eat anyway, and their bubble stays (easier each time). And the end: the flashlight comes back; tap it to turn
+// giant one). A roasting stick is propped over the fire; she takes a marshmallow out of Maple's bag (it's the thing in
+// her fingers: no stick to wave about), lets go and it hops onto the stick and toasts by itself. When it looks like
+// the picture (their bubble glows, they hop and wave) she takes it off and feeds it to them: a gold star. The wrong
+// kind they eat anyway, and their bubble stays (easier each time). And the end: the flashlight comes back; tap it to turn
 // it off; the stars come out, then the northern lights (sky.ts).
 //
 // The clearing is the films' campsite (story/sets/campfire.ts) with the game's own things round it (clearing.ts). The
@@ -38,7 +40,7 @@ import type { FilmActor } from '../../../../engine3d/characters/actor'
 import { Letterbox, type CineFrame } from '../../../../engine3d/cinema'
 import { Bag } from '../../../../engine3d/dispose'
 import { FilmPlayer, lineSeconds, type FilmShot, type FilmState } from '../../../../engine3d/film'
-import { blobShadow, merge, P } from '../../../../engine3d/geo'
+import { blobShadow, merge, P, solid } from '../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../../engine3d/toon'
@@ -54,7 +56,7 @@ import { buildCamp, CAMP, updateCamp, type CampSet } from '../../story/sets/camp
 import { buildClearing, CLEARING, FALLEN, kitTail } from './clearing'
 import { Flashlight } from './light'
 import { OrderBubble } from './orders'
-import { Stick, type Want } from './roast'
+import { Mallow, Spit, type Want } from './roast'
 import { NightShade, RIM_FIRE, RIM_MOON } from './shade'
 import { NightSky } from './sky'
 import { camp } from './sounds'
@@ -77,14 +79,15 @@ const TORCH = knobs('torch', 'The flashlight', FILE, {
 }, { sections: ['eyes', 'peek', 'statues'] })
 /** The roast. */
 const ROAST = knobs('campRoast', 'Roast a marshmallow', FILE, {
-  heat: { value: 0.6, min: 0.2, max: 2, step: 0.05, label: 'Heat reaches', unit: 'm', note: 'how far to the side of the flames (or above them) it still toasts', main: true },
-  golden: { value: 3.2, min: 0.5, max: 12, step: 0.25, label: 'Golden in', unit: 's', note: 'held right over the flames', main: true },
+  golden: { value: 3.2, min: 0.5, max: 12, step: 0.25, label: 'Golden in', unit: 's', note: 'on the stick over the flames', main: true },
   burn: { value: 2.5, min: 0.5, max: 10, step: 0.25, label: 'Catches fire after golden', unit: 's', main: true },
   out: { value: 4, min: 1, max: 12, step: 0.5, label: 'Goes out by itself', unit: 's' },
-  grab: { value: 90, min: 40, max: 200, step: 5, label: 'Grab reach', unit: 'px', note: 'how near the marshmallow her finger has to land to pick the stick up', main: true },
+  linger: { value: 0.45, min: 0.1, max: 1, step: 0.05, label: 'Slower while it matches', unit: '×', note: 'while it is just what somebody wants it toasts this much slower, so she has time to take it off (1 = no help)', main: true },
+  grab: { value: 90, min: 40, max: 200, step: 5, label: 'Grab reach', unit: 'px', note: 'how near the marshmallow (or the bag) her finger has to land to pick one up', main: true },
+  lift: { value: 40, min: 0, max: 120, step: 2, label: 'Marshmallow above finger', unit: 'px', note: 'on a touch screen, how far above her fingertip the marshmallow rides, so her finger doesn’t cover it (a mouse: none)' },
   squishy: { value: 0.2, min: 0, max: 0.7, step: 0.05, label: 'Squishy after', note: 'how warm a squishy one has to be (of the way to golden); it stops being squishy at 0.8' },
   giant: { value: 1.5, min: 1, max: 3, step: 0.1, label: 'Giant one slower', unit: '×', note: 'Monty’s giant marshmallow toasts this many times slower' },
-  give: { value: 0.45, min: 0.2, max: 1, step: 0.05, label: 'Hand-over reach', note: 'how near somebody the marshmallow has to be to give it (of their height, round their whole body)', main: true },
+  give: { value: 0.6, min: 0.2, max: 1, step: 0.05, label: 'Hand-over reach', note: 'how near somebody the marshmallow has to be when she lets go (of their height, round their whole body)', main: true },
 }, { sections: ['roast'] })
 
 export interface CampStart {
@@ -117,7 +120,8 @@ const ORDER: CampSection[] = ['story', 'eyes', 'peek', 'statues', 'roast', 'sky'
 
 export const CAMP_ANCHORS: AnchorInfo[] = [
   { id: 'flashlight', label: 'The flashlight', kind: 'thing' },
-  { id: 'stick', label: 'The marshmallow on a stick', kind: 'thing' },
+  { id: 'stick', label: 'The marshmallow on the stick', kind: 'thing' },
+  { id: 'bag', label: 'The bag of marshmallows', kind: 'thing' },
   { id: 'maple', label: 'Maple', kind: 'thing' },
   { id: 'monty', label: 'Monty the moose', kind: 'thing' },
   { id: 'roxy', label: 'Roxy the raccoon', kind: 'thing' },
@@ -174,6 +178,12 @@ const STATUE_LINE: Record<StatueId, Line> = { tree: T.statues[0], rock: T.statue
 const ROXY_POSES: StatueId[] = ['tree', 'rock', 'whistling', 'ballerina']
 /** Which way a statue faces (radians): to us, a little to our right, where the close-up's camera stands. */
 const STATUE_YAW = 0.28
+
+/** She carries the marshmallow in this upright plane (z): in front of everybody round the fire, so it goes through nobody. */
+const CARRY_Z = 1.3
+const NO_TURN = new Quaternion()
+/** Monty's giant marshmallow, next to an ordinary one. */
+const GIANT = 1.6
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -234,7 +244,7 @@ export class FlashlightStatues implements World3D {
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
   private raycaster = new Raycaster()
-  private plane = new Plane(new Vector3(0, 0, 1), 0)
+  private plane = new Plane(new Vector3(0, 0, 1), -CARRY_Z)
   private unwatch: () => void
   private stopBed: () => void
   private w = 1
@@ -298,10 +308,20 @@ export class FlashlightStatues implements World3D {
   private wobbleCool = 0
 
   // ---- The roast.
-  private stick: Stick
-  private held = false
-  private stickTip = new Vector3()
-  private stickBack = 1
+  private spit: Spit
+  private mallow: Mallow
+  /** Where the marshmallow is: none out (they're in the bag), in her fingers, on the stick over the fire, or flying
+   *  (onto the stick, into a mouth). */
+  private mallowAt: 'bag' | 'hand' | 'stick' | 'fly' = 'bag'
+  /** A marshmallow can come out of the bag (not between rounds). */
+  private bagOpen = false
+  private bagT = 9
+  private giantOnBag: Group
+  /** Where she picked it up, and how far her finger has gone from there since (px): a tap isn't a hand-over. */
+  private grabAt = { x: 0, y: 0 }
+  private dragged = 0
+  /** How long it has been just what somebody wants, on the stick (s). */
+  private readyT = 0
   private roasted = 0
   private step = 0
   private orders: { who: string; want: Want; bubble: OrderBubble; done: boolean; miss: number; step: number }[] = []
@@ -405,10 +425,15 @@ export class FlashlightStatues implements World3D {
     this.carry.position.set(0.05 * this.roxy.height, -0.17 * this.roxy.height, 0.04 * this.roxy.height)
 
     // ---- The stick, her flashlight.
-    this.stick = new Stick(bag)
-    scene.add(this.stick.root)
-    this.stick.fresh()
-    this.stick.visible = false
+    this.spit = new Spit(bag, CAMP.fire)
+    this.spit.root.visible = false
+    this.mallow = new Mallow(bag)
+    scene.add(this.spit.root, this.mallow.root)
+    // (Monty's giant one waits on top of the bag.)
+    this.giantOnBag = solid(P.cyl(0.085 * GIANT, 0.085 * GIANT, 0.14 * GIANT, '#FFFDF8', { rot: [0.2, 0, 0.12] }, 18), bag, 1.8)
+    this.bagTop(this.giantOnBag.position).y += 0.06
+    this.giantOnBag.visible = false
+    scene.add(this.giantOnBag)
     this.light = new Flashlight(scene, bag, TORCH)
 
     // ---- Who the light can land on (their dark shapes and shining eyes).
@@ -590,7 +615,7 @@ export class FlashlightStatues implements World3D {
   }
   private fireHeldFor(s: number) {
     // Held on the fire a while: nothing happens. "It's already bright!"
-    if (s > 1.8 && this.time - this.fireSaidAt > 25 && !this.held) {
+    if (s > 1.8 && this.time - this.fireSaidAt > 25 && this.mallowAt !== 'hand') {
       this.fireSaidAt = this.time
       this.set.flare = 0.6
       camp.sparks(0.1)
@@ -650,15 +675,24 @@ export class FlashlightStatues implements World3D {
       this.light.set(false)
       this.light.toy.visible = false
       this.toRoastSeats()
-      this.stick.fresh(this.giantNext() ? 2 : 1)
-      this.stick.visible = true
-      this.stickBack = 1
+      this.spit.root.visible = true
+      this.spit.giant = this.giantNext()
+      for (const m of this.set.mallows) m.visible = true
+      // (QA's close look at the stick: a marshmallow on it.)
+      if (this.lookId === 'stick') {
+        this.mallow.fresh(1)
+        this.mallow.root.visible = true
+        this.mallowAt = 'stick'
+      }
       this.friend(T.roast, true)
       this.sparkle(T.marshmallow, true)
       this.timers.later(() => this.openStep(), 900)
     } else if (s === 'sky') {
       this.progress(4)
-      this.stick.visible = false
+      this.mallow.root.visible = false
+      this.mallowAt = 'bag'
+      this.bagOpen = false
+      this.giantOnBag.visible = false
       for (const o of this.orders) if (o.bubble.showing) o.bubble.starred()
       this.events.stars(null)
       this.light.toy.visible = true
@@ -1082,9 +1116,9 @@ export class FlashlightStatues implements World3D {
 
   // ---------------------------------------------------------------- the roast
 
-  private stickRest() {
-    const { tip, end } = CLEARING.stickRest
-    return { tip: tmp2.set(...tip), end: tmp3.set(...end) }
+  /** The top of Maple's bag, where a marshmallow comes out. */
+  private bagTop(out = new Vector3()) {
+    return out.set(CAMP.bag[0], CAMP.bag[1] + 0.34, CAMP.bag[2] + 0.04)
   }
   /** Everybody comes round the fire where the close camera sees them (Maple stays on her log). */
   private toRoastSeats(snap = false) {
@@ -1101,7 +1135,8 @@ export class FlashlightStatues implements World3D {
   private giantNext() {
     return ORDERS[this.step]?.some((o) => o.want === 'giant') ?? false
   }
-  /** A round of orders: their wish bubbles pop up. */
+  /** A round of orders: their wish bubbles pop up, and the bag is open (Monty's round: the giant one on top of it,
+   *  and the thick branch over the fire). */
   private openStep() {
     if (this.dead || this.section !== 'roast') return
     const now = this.active()
@@ -1115,6 +1150,11 @@ export class FlashlightStatues implements World3D {
           .hop()
       }, i * 450),
     )
+    this.bagOpen = true
+    if (this.giantNext() && this.spit.root.visible) {
+      this.spit.giant = true
+      camp.pop()
+    }
     this.lastNew = this.time
     // (The line at the bottom goes back to what to do: not "It's on fire!" from the last one.)
     this.events.line(T.marshmallow)
@@ -1123,39 +1163,82 @@ export class FlashlightStatues implements World3D {
   private starCount() {
     return this.orders.filter((o) => o.done).length
   }
+  /** Is the marshmallow in play just what somebody with a bubble out wants? */
+  private wantedBy() {
+    const m = this.mallow
+    if (this.mallowAt === 'bag' || !(m.toast > 0.02 || m.charred || m.fire)) return null
+    return this.active().find((o) => o.bubble.showing && m.matches(o.want, ROAST, o.miss)) ?? null
+  }
 
-  private updateStick(dt: number) {
-    if (!this.stick.root.visible) return
-    const rest = this.stickRest()
-    if (this.held && this.finger) {
-      // Her finger is the marshmallow, in the upright plane through the fire (so over the flames on the screen is over
-      // the flames); the stick comes back toward her from it.
-      const p = this.fingerAt(this.finger.x, this.finger.y, tmp)
-      if (p) {
-        p.set(clamp(p.x, -2.6, 2.6), clamp(p.y, 0.22, 2.4), 0)
-        this.stickTip.lerp(p, damp(dt, 22))
+  /** A marshmallow out of the bag, into her fingers. */
+  private fromBag() {
+    const m = this.mallow
+    m.fresh(this.giantNext() ? GIANT : 1)
+    this.bagTop(m.root.position)
+    m.root.quaternion.identity()
+    m.root.visible = true
+    this.toastedSaid = false
+    this.readyT = 0
+    camp.bag()
+    this.bagT = 0
+    this.mallowAt = 'hand'
+  }
+  /** The marshmallow flies from where it is to `to` (a little hop on the way), then `then`. */
+  private flyTo(to: Vector3, dur: number, grow: number, turn: Quaternion, then: () => void) {
+    const m = this.mallow
+    this.fly = { from: m.root.position.clone(), to: to.clone(), t: 0, dur, grow0: m.grow, grow1: grow, q0: m.root.quaternion.clone(), q1: turn.clone(), then }
+    this.mallowAt = 'fly'
+  }
+  private fly: { from: Vector3; to: Vector3; t: number; dur: number; grow0: number; grow1: number; q0: Quaternion; q1: Quaternion; then: () => void } | null = null
+
+  private updateRoast(dt: number) {
+    const m = this.mallow
+    const pos = m.root.position
+    this.bagT += dt
+    // (The bag squashes and springs back when a marshmallow comes out or it's poked.)
+    this.set.bag.scale.y = this.bagT < 0.35 ? 1 - 0.16 * Math.sin((this.bagT / 0.35) * Math.PI) : 1
+    this.giantOnBag.visible = this.bagOpen && this.mallowAt === 'bag' && this.giantNext()
+    if (this.mallowAt === 'hand' && this.finger) {
+      // Her finger holds it, in an upright plane in front of everybody (so it goes through nobody), a little above
+      // her fingertip on a touch screen so she can see it toast-colored.
+      const p = this.fingerAt(this.finger.x, this.finger.y - (IS_MOUSE ? 0 : ROAST.lift), tmp)
+      if (p) pos.lerp(p.set(clamp(p.x, -3.4, 3.4), clamp(p.y, 0.2, 3), CARRY_Z), damp(dt, 22))
+      // (Nearer the camera than the fire is: kept a touch bigger than on the stick, not looming over their faces.)
+      const cam = this.rig.camera.position
+      m.grow += ((1.15 * cam.distanceTo(pos)) / cam.distanceTo(this.spit.tip) - m.grow) * damp(dt, 12)
+      m.root.quaternion.slerp(NO_TURN, damp(dt, 12))
+    } else if (this.mallowAt === 'stick') {
+      pos.copy(this.spit.tip)
+      m.root.quaternion.copy(this.spit.turn)
+      m.grow = 1
+    } else if (this.mallowAt === 'fly' && this.fly) {
+      const f = this.fly
+      f.t += dt
+      const k = clamp(f.t / f.dur)
+      const e = k * k * (3 - 2 * k)
+      pos.lerpVectors(f.from, f.to, e)
+      pos.y += Math.sin(k * Math.PI) * 0.18
+      m.grow = lerp(f.grow0, f.grow1, e)
+      m.root.quaternion.slerpQuaternions(f.q0, f.q1, e)
+      if (k >= 1) {
+        this.fly = null
+        f.then()
       }
-      this.stickBack = Math.max(0, this.stickBack - dt * 6)
-    } else this.stickBack = Math.min(1, this.stickBack + dt * 4)
-    const tip = this.stickBack > 0 ? tmp.copy(this.stickTip).lerp(rest.tip, this.stickBack * this.stickBack * (3 - 2 * this.stickBack)) : tmp.copy(this.stickTip)
-    if (!this.held) this.stickTip.copy(tip)
-    // The other end: toward her (the camera) and down, so it reads as held from her side.
-    const cam = this.rig.camera.position
-    const toCam = tmp2.copy(cam).sub(tip).setY(0).normalize()
-    const held = tmp3.copy(tip).addScaledVector(toCam, 0.95).setY(tip.y - 0.25)
-    const end = this.stickBack > 0.001 ? held.lerp(rest.end, this.stickBack) : held
-    this.stick.lay(end, tip)
-    // Heat: in the flames or just over them is hottest (the column of hot air over the fire).
-    const d = Math.hypot(tip.x - CAMP.fire[0], Math.max(0, tip.y - 1.0) * 0.7 + Math.max(0, 0.3 - tip.y) * 2, (tip.z - CAMP.fire[2]) * 0.6)
-    const heat = this.held ? Math.pow(clamp(1 - d / ROAST.heat), 1.2) : 0
-    const ev = this.stick.update(dt, this.time, heat, ROAST)
-    if (heat > 0.08 && this.time - this.sizzleAt > (camp.synthCrackle ? 0.15 : 1.3) / (0.4 + heat)) {
+    }
+    // Toasting: only on the stick, in the flames (a poke at the fire makes it flare: hotter for a moment). While it's
+    // just what somebody wants it toasts slower, so there's time to take it off (not when somebody wants a burnt one).
+    const on = this.mallowAt === 'stick'
+    const wanted = this.wantedBy()
+    const wait = on && wanted && !m.fire && !m.charred && !this.active().some((o) => o.want === 'burnt') ? ROAST.linger : 1
+    const heat = on ? (1 + 2.2 * this.set.flare) * wait : 0
+    const ev = m.update(dt, this.time, heat, ROAST)
+    if (heat > 0.08 && this.time - this.sizzleAt > (camp.synthCrackle ? 0.15 : 1.3) / (0.4 + Math.min(1, heat))) {
       this.sizzleAt = this.time
-      camp.sizzle(0.02 + 0.03 * heat)
+      camp.sizzle(0.02 + 0.03 * Math.min(1, heat))
     }
     if (ev === 'golden') {
       sounds.sparkle()
-      this.burst(this.stick.tip, 8)
+      this.burst(pos, 8)
     } else if (ev === 'fire') {
       camp.sparks(0.12)
       this.sparkle(T.onFire)
@@ -1163,14 +1246,14 @@ export class FlashlightStatues implements World3D {
       camp.blow()
       this.counts.blownOut++
     }
-    if (this.stick.fire && Math.random() < dt * 10) this.sparks.emit(this.stick.tip.x, this.stick.tip.y + 0.1, this.stick.tip.z, (Math.random() - 0.5) * 0.3, 0.8, (Math.random() - 0.5) * 0.3, 0.6, 0.05, 0)
+    if (m.fire && Math.random() < dt * 10) this.sparks.emit(pos.x, pos.y + 0.1, pos.z, (Math.random() - 0.5) * 0.3, 0.8, (Math.random() - 0.5) * 0.3, 0.6, 0.05, 0)
     // Mouths open as it comes near.
-    if (this.held) {
+    if (this.mallowAt === 'hand') {
       const who = this.receiverNear()
       for (const [id, a] of this.receivers()) {
         if (id === who) {
           // (A look toward it, not a turn: their faces stay to us.)
-          a.headTurn = clamp(wrapAngle(Math.atan2(this.stick.tip.x - a.pos.x, this.stick.tip.z - a.pos.z) - a.root.rotation.y), -0.6, 0.6)
+          a.headTurn = clamp(wrapAngle(Math.atan2(pos.x - a.pos.x, pos.z - a.pos.z) - a.root.rotation.y), -0.6, 0.6)
           a.pull('wow', true)
           a.lean = 0.15
         } else if (this.mouthOpen.has(id)) {
@@ -1181,22 +1264,32 @@ export class FlashlightStatues implements World3D {
       }
       this.mouthOpen = new Set(who ? [who] : [])
     }
-    if (this.stick.done && !this.held && !this.toastedSaid && this.time - this.lastTouch > 5) {
+    // It's just what somebody wants, and still on the stick: they hop and wave for it; after a bit Sparkle asks who
+    // wants it (once a marshmallow).
+    const was = this.readyT
+    this.readyT = on && wanted ? this.readyT + dt : 0
+    if (wanted && Math.floor(this.readyT / 2.2) > Math.floor(was / 2.2)) {
+      const a = this.receivers().find(([id]) => id === wanted.who)?.[1]
+      a?.hop()
+      a?.wave()
+    }
+    if (this.readyT > 3.5 && !this.toastedSaid) {
       this.toastedSaid = true
       this.hint(T.marshmallowHint)
     }
-    if (!this.held && this.time - this.lastTouch > HINT_S && this.sectionT > 6) this.hint(T.marshmallow)
+    if (this.mallowAt === 'bag' && this.bagOpen && this.time - this.lastTouch > HINT_S && this.sectionT > 6) this.hint(T.marshmallow)
   }
   private mouthOpen = new Set<string>()
-  /** The wish bubbles: over their heads, glowing while the marshmallow she holds is the kind they want (a chime the
+  /** The wish bubbles: over their heads, glowing while the marshmallow in play is the kind they want (a chime the
    *  moment it is); a star floating up from one just given right. */
   private updateBubbles(dt: number) {
     let ready = false
-    const roast = this.section === 'roast' && this.stick.root.visible && this.held
+    const m = this.mallow
+    const roast = this.section === 'roast' && this.mallowAt !== 'bag'
     for (const o of this.orders) {
       const a = this.receivers().find(([id]) => id === o.who)?.[1]
       if (!a) continue
-      const r = roast && o.bubble.showing && this.stick.matches(o.want, ROAST, o.miss) && (this.stick.toast > 0.02 || this.stick.charred || o.miss >= 2)
+      const r = roast && o.bubble.showing && m.matches(o.want, ROAST, o.miss) && (m.toast > 0.02 || m.charred || m.fire || o.miss >= 2)
       ready ||= r
       const head = a.at(1, tmp2)
       head.y += 0.3
@@ -1215,17 +1308,18 @@ export class FlashlightStatues implements World3D {
     this.kits.forEach((k, i) => k.state === 'fire' && list.push([`kit${i}`, k.a]))
     return list
   }
-  /** Who the marshmallow is near on the screen: anywhere on them, feet to the top of the head (somebody with an order
-   *  out first, then the nearest). */
+  /** Who the marshmallow is on, on the screen: anywhere on them, feet to the top of the head (the nearest; somebody
+   *  whose order it is counts as nearer). Over the stick's tip it's nobody: letting go there puts it on the stick,
+   *  not into Monty behind the fire. */
   private receiverNear(): string | null {
     let best: string | null = null
     let bd = Infinity
-    // (Down in the flames it's toasting: letting go there isn't giving it to Monty behind them. Higher up, over the
-    // fire, it's on Monty.)
-    const t = this.stick.tip
-    if (Math.hypot(t.x - CAMP.fire[0], Math.max(0, t.y - 0.35), t.z - CAMP.fire[2]) < 0.5) return null
-    const tip = this.toScreen(this.stick.tip)
-    const want = new Set(this.active().map((o) => o.who))
+    const tip = this.toScreen(this.mallow.root.position)
+    const x = tip.x
+    const y = tip.y
+    const st = this.toScreen(this.spit.tip)
+    if (this.spit.root.visible && Math.hypot(st.x - x, st.y - y) < this.pxPerM(this.spit.tip) * 0.3) return null
+    const wants = this.wantedBy()?.who
     for (const [id, a] of this.receivers()) {
       const lo = this.toScreen(a.at(0.15, tmp))
       const loX = lo.x
@@ -1233,9 +1327,9 @@ export class FlashlightStatues implements World3D {
       const hi = this.toScreen(a.at(1, tmp))
       const ux = hi.x - loX
       const uy = hi.y - loY
-      const k = clamp(((tip.x - loX) * ux + (tip.y - loY) * uy) / Math.max(1, ux * ux + uy * uy))
-      const d = Math.hypot(tip.x - (loX + ux * k), tip.y - (loY + uy * k)) - (want.has(id) ? 30 : 0)
-      const reach = clamp(Math.hypot(ux, uy) * ROAST.give, 48, 110)
+      const k = clamp(((x - loX) * ux + (y - loY) * uy) / Math.max(1, ux * ux + uy * uy))
+      const d = Math.hypot(x - (loX + ux * k), y - (loY + uy * k)) - (wants === id ? 60 : 0)
+      const reach = clamp(Math.hypot(ux, uy) * ROAST.give, 56, 140)
       if (d < reach && d < bd) {
         bd = d
         best = id
@@ -1243,18 +1337,24 @@ export class FlashlightStatues implements World3D {
     }
     return best
   }
-  /** She lets go of the stick: near somebody, they eat it. The kind they ordered: a gold star (the round's last one:
-   *  the next round's bubbles). Another kind: they eat it anyway, with a silly face, and their order stays (wider each
-   *  time). Somebody with no order out: a happy munch. Anywhere else, it goes back by the fire. */
-  private give() {
-    const who = this.receiverNear()
+  /** She lets go of the marshmallow. On somebody: they eat it (`give`). Anywhere else (or she only tapped it): it hops
+   *  onto the stick over the fire, and toasts. */
+  private letGo() {
+    const who = this.dragged > 24 ? this.receiverNear() : null
     for (const id of this.mouthOpen) this.receivers().find(([r]) => r === id)?.[1].cheer()
     this.mouthOpen.clear()
-    if (!who) {
-      sounds.place()
-      return
-    }
-    const s = this.stick
+    if (who) return this.give(who)
+    if (!this.spit.root.visible) return this.give('monty')
+    this.flyTo(this.spit.tip, 0.26, 1, this.spit.turn, () => {
+      this.mallowAt = 'stick'
+      camp.skewer()
+    })
+  }
+  /** They eat it. The kind they ordered: a gold star (the round's last one: the next round's bubbles). Another kind:
+   *  they eat it anyway, with a funny shiver, and their order stays (wider each time). Somebody with no order out: a
+   *  happy munch. */
+  private give(who: string) {
+    const s = this.mallow
     const a = this.receivers().find(([r]) => r === who)![1]
     a.cheer()
     a.lean = 0
@@ -1262,8 +1362,14 @@ export class FlashlightStatues implements World3D {
     a.hop()
     camp.munch(0)
     this.burst(a.head(tmp), 10)
+    // (Into their mouth: it flies there and is gone.)
+    this.flyTo(a.head(tmp), 0.2, 0.25, s.root.quaternion, () => {
+      s.root.visible = false
+      this.mallowAt = 'bag'
+    })
     const kit = who.startsWith('kit')
     const order = this.active().find((o) => o.who === who)
+    let branch = false
     if (order && s.matches(order.want, ROAST, order.miss)) {
       // Just what they wanted: a gold star.
       order.done = true
@@ -1278,6 +1384,8 @@ export class FlashlightStatues implements World3D {
         for (const k of this.kits) if (k.a !== a) k.a.hop()
       }
       if (who === 'monty') this.monty.nod()
+      // (Monty's giant one: he eats the branch it was toasted on too. "Mmm. Crunchy stick.")
+      branch = order.want === 'giant'
       this.events.stars({ done: this.starCount(), of: this.orders.length })
     } else if (order) {
       // Not that kind: they eat it anyway (a funny shiver), and still want theirs.
@@ -1291,32 +1399,31 @@ export class FlashlightStatues implements World3D {
     else if (kit || who === 'roxy') {
       this.friend(s.charred ? T.burntYum : T.munch, true)
       camp.kits(0)
-    } else {
-      this.friend(T.montyStick, true)
-      this.monty.nod()
-    }
+    } else this.monty.nod()
     this.eaten = who
     this.roasted++
     this.counts.roasted++
     this.lastNew = this.time
-    this.toastedSaid = false
-    // The round is done: the next one's bubbles (or, all done, everybody cheers and on to the sky).
+    // The round is done: the next one's bubbles (or, all done, everybody cheers and on to the sky). Until then the
+    // bag is shut; in the middle of a round the next marshmallow can come out at once.
     const roundDone = this.active().length === 0
     if (roundDone) this.step++
     const allDone = this.step >= ORDERS.length
-    if (roundDone) this.events.section('roast', this.state('roast'))
-    // A fresh marshmallow on a stick, back by the fire (Monty's stick is gone: a new one).
-    s.visible = false
-    this.held = false
-    this.stickBack = 1
+    if (!roundDone) return
+    this.events.section('roast', this.state('roast'))
+    this.bagOpen = false
+    if (branch)
+      this.timers.later(() => {
+        if (this.dead) return
+        this.spit.root.visible = false
+        camp.branch()
+        this.burst(this.spit.tip, 14)
+      }, 650)
     this.timers.later(() => {
       if (this.dead || this.section !== 'roast') return
       if (allDone) return this.allServed()
-      s.fresh(this.giantNext() ? 2 : 1)
-      s.visible = true
-      camp.pop()
-      if (roundDone) this.openStep()
-    }, who === 'monty' ? 1100 : roundDone ? 1300 : 700)
+      this.openStep()
+    }, branch ? 1100 : 1300)
   }
   /** Every order given: everybody cheers, Maple says so, and on to the sky. */
   private allServed() {
@@ -1432,7 +1539,7 @@ export class FlashlightStatues implements World3D {
     if (this.section === 'eyes' || this.section === 'story') this.updateEyes()
     if (this.section === 'peek') this.updatePeek(dt)
     if (this.section === 'statues' || this.roxyState === 'fall' || this.roxyState === 'sorry') this.updateRoxy(dt)
-    if (this.section === 'roast') this.updateStick(dt)
+    if (this.section === 'roast') this.updateRoast(dt)
     if (this.section === 'sky' && this.skyT < 0 && this.sectionT > HINT_S && t - this.lastTouch > HINT_S) this.hint(T.off)
     if (this.skyT >= 0) this.skyT += dt
 
@@ -1513,7 +1620,7 @@ export class FlashlightStatues implements World3D {
       fire: [new Vector3(CAMP.fire[0], 0.35, CAMP.fire[2]), 0, 3.4],
       log: [new Vector3(FALLEN.x, 0.3, FALLEN.z), 0, 3.6],
       den: [new Vector3(CLEARING.den[0], 0.4, CLEARING.den[1]), 0, 4],
-      stick: [this.stick.tip, 0, 2.2],
+      stick: [this.spit.tip, -0.15, 2.6],
     }
     const a = at[id]
     if (!a) return null
@@ -1682,17 +1789,28 @@ export class FlashlightStatues implements World3D {
     this.finger = { x, y }
     if (id === 'flashlight') return
     // The marshmallow: pick it up (on fire: puff, out it goes).
-    if (this.section === 'roast' && this.stick.root.visible) {
-      const m = this.toScreen(this.stick.tip)
-      if (id === 'stick' || Math.hypot(m.x - x, m.y - y) < ROAST.grab) {
-        if (this.stick.fire && this.stick.blowOut()) {
+    if (this.section === 'roast') {
+      this.grabAt = { x, y }
+      this.dragged = 0
+      // The marshmallow on the stick: take it off (on fire: puff, out it goes).
+      const m = this.toScreen(this.mallow.root.position)
+      if (this.mallowAt === 'stick' && (id === 'stick' || Math.hypot(m.x - x, m.y - y) < ROAST.grab)) {
+        if (this.mallow.fire && this.mallow.blowOut()) {
           camp.blow()
           this.counts.blownOut++
-          this.burst(this.stick.tip, 8)
+          this.burst(this.mallow.root.position, 8)
         }
-        this.held = true
-        this.stickTip.copy(this.stick.tip)
-        this.stickBack = 0
+        this.mallowAt = 'hand'
+        return
+      }
+      // The bag: a marshmallow comes out into her fingers (one at a time: with one out already, the bag only boings).
+      const b = this.toScreen(this.bagTop(tmp))
+      if (id === 'bag' || Math.hypot(b.x - x, b.y - y) < ROAST.grab) {
+        if (this.mallowAt === 'bag' && this.bagOpen) this.fromBag()
+        else {
+          this.bagT = 0
+          sounds.pop()
+        }
         return
       }
     }
@@ -1738,12 +1856,14 @@ export class FlashlightStatues implements World3D {
     this.counts.moves++
     this.finger = { x, y }
     // (In the roast the flashlight is put away: her finger is only the marshmallow.)
-    if (this.held || this.section === 'roast') return
+    if (this.section === 'roast') {
+      this.dragged = Math.max(this.dragged, Math.hypot(x - this.grabAt.x, y - this.grabAt.y))
+      return
+    }
     this.light.point(x, y, !IS_MOUSE)
   }
   pointerUp() {
-    if (this.held) this.give()
-    this.held = false
+    if (this.mallowAt === 'hand') this.letGo()
     this.finger = null
   }
   tap(x: number, y: number, id?: string) {
@@ -1783,7 +1903,9 @@ export class FlashlightStatues implements World3D {
     let at: Vector3 | null = null
     if (this.section === 'sky' && this.skyT < 0 && this.sectionT > 5) at = this.light.toy.position
     else if (this.section === 'peek' && this.stuck) at = this.tail.getWorldPosition(tmp)
-    else if (this.section === 'roast' && !this.held && this.time - this.lastTouch > HINT_S && this.stick.root.visible) at = this.stick.tip
+    else if (this.section === 'roast' && this.mallowAt === 'bag' && this.bagOpen && this.time - this.lastTouch > (this.roasted ? HINT_S : 4) && this.sectionT > 5) at = this.bagTop(tmp)
+    // (On the stick and just what somebody wants, or on fire: the hand is on the marshmallow.)
+    else if (this.section === 'roast' && this.mallowAt === 'stick' && (this.readyT > 2 || (this.mallow.fire && this.mallow.fireT > 1.2))) at = this.mallow.root.position
     if (!at) {
       if (el.style.display !== 'none') el.style.display = 'none'
       return
@@ -1827,14 +1949,17 @@ export class FlashlightStatues implements World3D {
       }
       const spot = this.spotOf.get(id)
       if (id === 'stick') {
-        const v = this.section === 'roast' && this.stick.root.visible && !this.held
-        place(el, v ? this.stick.tip : null, sized(this.stick.tip, 0.5))
+        const v = this.section === 'roast' && this.mallowAt === 'stick'
+        place(el, v ? this.spit.tip : null, sized(this.spit.tip, 0.5))
+      } else if (id === 'bag') {
+        const v = this.section === 'roast' && this.mallowAt === 'bag' && this.bagOpen
+        place(el, v ? this.bagTop(tmp2) : null, sized(this.bagTop(tmp2), 0.5))
       } else if (spot) {
         const v = spot.live() && (id !== 'roxy' || this.roxy.root.visible)
         const p = v ? spot.at(new Vector3()) : null
         place(el, p, p ? sized(p, spot.r * 2.2) : 0)
       }
-      el.style.zIndex = id === 'stick' ? '4' : id.startsWith('kit') || id === 'roxy' ? '3' : '1'
+      el.style.zIndex = id === 'stick' || id === 'bag' ? '4' : id.startsWith('kit') || id === 'roxy' ? '3' : '1'
     }
   }
 
@@ -1856,7 +1981,7 @@ export class FlashlightStatues implements World3D {
       met: [...this.met],
       kits: { at: this.kits.map((k) => ({ state: k.state, ...scr(k.a.at(0.62, new Vector3())) })), home: this.kitsHome, peeking: this.kits.filter((k) => k.state === 'out').map((k) => `kit${k.seat}`), stuck: this.stuck ? `kit${this.stuck.seat}` : null, peeks: this.peekN },
       roxy: { state: this.roxyState, pose: statueOf(this.roxy), pos: this.roxy.pos.toArray().map((v) => +v.toFixed(2)), laughs: this.laughs, yoinks: this.yoinks, speed: +(TORCH.speed * this.roxySpeed).toFixed(2), along: +this.roxyS.toFixed(2), of: +this.pathLen.toFixed(2), hold: +this.roxyHold.toFixed(2) },
-      roast: this.section === 'roast' ? { held: this.held, toast: +this.stick.toast.toFixed(2), golden: this.stick.golden, fire: this.stick.fire, charred: this.stick.charred, giant: this.stick.size > 1, given: this.roasted, ate: this.eaten, tip: scr(this.stick.tip), step: this.step, stars: this.starCount(), of: this.orders.length, orders: this.active().map((o) => ({ who: o.who, want: o.want, miss: o.miss, showing: o.bubble.showing, ready: this.stick.matches(o.want, ROAST, o.miss) })), flashlight: this.light.toy.visible } : null,
+      roast: this.section === 'roast' ? { mallow: this.mallowAt, bagOpen: this.bagOpen, held: this.mallowAt === 'hand', toast: +this.mallow.toast.toFixed(2), golden: this.mallow.golden, fire: this.mallow.fire, charred: this.mallow.charred, giant: this.giantNext(), given: this.roasted, ate: this.eaten, tip: scr(this.mallow.root.position), bag: scr(this.bagTop(new Vector3())), stick: scr(this.spit.tip), spit: this.spit.root.visible, liftPx: IS_MOUSE ? 0 : ROAST.lift, hint: this.hintEl?.style.display !== 'none', step: this.step, stars: this.starCount(), of: this.orders.length, orders: this.active().map((o) => ({ who: o.who, want: o.want, miss: o.miss, showing: o.bubble.showing, ready: this.mallowAt !== 'bag' && this.mallow.matches(o.want, ROAST, o.miss) })), flashlight: this.light.toy.visible } : null,
       sky: this.skyT >= 0 ? { t: +this.skyT.toFixed(1), stars: +this.sky.full.toFixed(2), lights: +this.sky.lights.toFixed(2) } : null,
       flashlight: scr(this.light.toy.position),
       // (How far above her finger the light lands: a robot puts its finger this far below what it wants lit.)

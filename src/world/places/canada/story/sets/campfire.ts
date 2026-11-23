@@ -222,24 +222,34 @@ export function makeMallow(bag: Bag, r = 0.045, color = '#F7D8A0') {
   return solid(P.cyl(r, r, r * 1.5, color, {}, 12), bag, 1.4)
 }
 
-/** A roasting stick with a toasted marshmallow on its end, for a rig friend `H` meters tall: add it to `rig.armR`. It
- *  points up out of her paw, `tilt` radians forward and `out` radians away from her side (so it doesn't cross her face),
- *  the marshmallow about `len` meters away and sized to her paw. */
-export function makeRoastStick(H: number, bag: Bag, len = 0.75, tilt = 0.75, out = 0) {
-  const hand = new Vector3(0.09 * H, -0.24 * H, 0.08 * H)
-  const dir = new Vector3(Math.sin(out), Math.cos(tilt) * Math.cos(out), Math.sin(tilt) * Math.cos(out)).normalize()
+/** Where a rig friend `H` meters tall holds things: the front of the paw at the end of `rig.armR` (arm space;
+ *  characters/animal.ts builds the paw as a ball 0.054 H round at [0.05, -0.14, 0.005] H). `side` -1: `rig.armL`. */
+export function pawGrip(H: number, side: 1 | -1 = 1, out = new Vector3()) {
+  return out.set(side * 0.05 * H, -0.14 * H, 0.035 * H)
+}
+
+/** A roasting stick with a toasted marshmallow on its end, for a rig friend `H` meters tall: add it to `rig.armR`
+ *  (`side` -1: `rig.armL`). It runs through her paw (a little of it shows below, so it reads as gripped), `tilt`
+ *  radians forward and `out` radians away from her side (so it doesn't cross her face), the marshmallow about `len`
+ *  meters from the paw and sized to it. */
+export function makeRoastStick(H: number, bag: Bag, len = 0.75, tilt = 0.75, out = 0, side: 1 | -1 = 1) {
+  const paw = pawGrip(H, side)
+  const dir = new Vector3(side * Math.sin(out), Math.cos(tilt) * Math.cos(out), Math.sin(tilt) * Math.cos(out)).normalize()
   const e = new Euler().setFromQuaternion(new Quaternion().setFromUnitVectors(new Vector3(0, 1, 0), dir))
   const rot: V3 = [e.x, e.y, e.z]
-  const mid = hand.clone().addScaledVector(dir, len / 2)
+  const butt = 0.07 * H
+  const mid = paw.clone().addScaledVector(dir, (len - butt) / 2)
   const r = Math.min(0.045, 0.085 * H)
-  const tip = hand.clone().addScaledVector(dir, len + r * 0.6)
+  const tip = paw.clone().addScaledVector(dir, len + r * 0.6)
   const g = new Group()
-  g.add(solid(merge([P.cyl(0.012, 0.014, len, '#B88A5A', { at: [mid.x, mid.y, mid.z], rot }, 6), P.cyl(r, r, r * 1.55, '#F7D8A0', { at: [tip.x, tip.y, tip.z], rot }, 12)]), bag, 1.4))
+  g.add(solid(merge([P.cyl(0.012, 0.014, len + butt, '#B88A5A', { at: [mid.x, mid.y, mid.z], rot }, 6), P.cyl(r, r, r * 1.55, '#F7D8A0', { at: [tip.x, tip.y, tip.z], rot }, 12)]), bag, 1.4))
   return g
 }
 
 /** The little grey paw: a raccoon's arm (grey, a dark band at the wrist) and her dark little hand with four fingers.
- *  `slide` moves along its own +z (the reach); the arm trails back behind the hand into the bush. */
+ *  `slide` moves along its own +z (the reach); the arm trails back behind the hand into the bush. It's only as long
+ *  as the bush is deep, so its other end is always inside the leaves (a longer one stuck out of the top of the bush
+ *  with nobody on the end of it). */
 function makePaw(bag: Bag) {
   const root = new Group()
   const slide = new Group()
@@ -247,7 +257,7 @@ function makePaw(bag: Bag) {
   slide.add(
     solid(
       merge([
-        P.capsule(0.045, 1.0, C.raccoonFur, { at: [0, 0, -0.56], rot: [Math.PI / 2, 0, 0] }),
+        P.capsule(0.045, PAW_ARM, C.raccoonFur, { at: [0, 0, -0.06 - PAW_ARM / 2], rot: [Math.PI / 2, 0, 0] }),
         P.cyl(0.05, 0.05, 0.05, C.raccoonDark, { at: [0, 0, -0.1], rot: [Math.PI / 2, 0, 0] }, 10),
       ]),
       bag,
@@ -268,6 +278,10 @@ function makePaw(bag: Bag) {
   root.add(slide)
   return { root, slide, hand }
 }
+/** The paw's arm (m), how far it reaches out of the bush to the bag, and how steeply it comes down (radians). */
+const PAW_ARM = 0.62
+const PAW_REACH = 0.7
+const PAW_TILT = 0.13
 
 /** Two shining eyes in the dark (raccoon eyes: yellow-green, like in the game), a little white shine in each. */
 function makeEyes(bag: Bag) {
@@ -374,8 +388,9 @@ export function buildCamp(bag: Bag, root: Group, opts: { nearTrees?: boolean } =
   root.add(bush)
   // The paw comes out of the bush's front, toward the bag; the eyes peep from its right side.
   const pw = makePaw(bag)
-  pw.root.position.set(CAMP.bag[0] + 0.02, CAMP.bag[1] + 0.56, bz + 0.25)
-  pw.root.rotation.x = 0.36
+  // (It comes out of the bush's front, low, through its thick middle, and ends over the marshmallows in the bag.)
+  pw.root.position.set(CAMP.bag[0] + 0.02, CAMP.bag[1] + 0.32 + Math.sin(PAW_TILT) * PAW_REACH, CAMP.bag[2] - 0.06 - Math.cos(PAW_TILT) * PAW_REACH)
+  pw.root.rotation.x = PAW_TILT
   root.add(pw.root)
   const eyes = makeEyes(bag)
   eyes.position.set(...CAMP.eyes)
@@ -445,7 +460,7 @@ export function updateCamp(set: CampSet, dt: number, t: number, cam: Vector3, sp
   ;(set.fire.pool.material as MeshBasicMaterial).opacity = 0.34 * flick
   if (Math.random() < dt * (2.2 + 14 * f)) sparkle(CAMP.fire[0] + (Math.random() - 0.5) * 0.25, 0.6, CAMP.fire[2], 1 + Math.round(3 * f))
   // The paw slides out of the bush (reach 0..1).
-  set.paw.slide.position.z = -0.3 + set.paw.reach * 0.98
+  set.paw.slide.position.z = (set.paw.reach - 0.42) * PAW_REACH / 0.58
   set.paw.root.visible = set.paw.reach > 0.01
   // The eyes blink now and then.
   const blink = (t * 0.7) % 1 > 0.94 ? 0.1 : 1

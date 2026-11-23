@@ -159,6 +159,16 @@ fix is what the team needs.
   (`story/sets/campfire.ts` `buildCamp`). `light.ts` (the beam), `shade.ts` (dark shapes with shining eyes),
   `roast.ts`, `sky.ts`. The night critters live in `characters/critters.ts` (shared with the bike), the statue poses in
   `characters/statues.ts`. Sections `story`, `eyes`, `peek`, `statues`, `roast`, `sky`. Knobs `torch`, `campRoast`.
+  **The roast (rebuilt 2026-11-23):** a roasting stick is propped over the fire (`roast.ts` `Spit`: a stone on its end,
+  a forked twig under its middle), so nobody holds a stick and nothing floats. What she holds is the marshmallow
+  (`Mallow`): a touch on Maple's bag takes one out, letting go anywhere puts it on the stick (so a tap on the bag does
+  it too), it toasts by itself, and when it looks like somebody's picture (their bubble glows, they hop and wave) she
+  takes it off and lets go of it on them. She carries it in a plane in front of everybody (`CARRY_Z`), so it goes
+  through nobody. Kind rules: it toasts slower while it matches (`linger`), a let-go over the fire is the stick and
+  not Monty behind it, a tap is never a hand-over, whoever's order it is counts as nearer. Monty's giant one waits on
+  the bag and toasts on a thick branch, which he eats too. Robots: `canada-campfire-roast`, `-roast-sloppy` (a
+  five-year-old's aim), `-roast-giant`. The film sticks sit in the paws by `pawGrip()` (`story/sets/campfire.ts`),
+  and the little paw's arm is only as long as the bush is deep.
 - **Whale Peek-a-Boo** (`activities/whales/`): the whales are characters (`whale.ts` on the modelling kit `body.ts`);
   `?lab=grey|humpback|grandma|mama|baby&view=...` looks at one. Ollie's rock is `characters/rock.ts`. Sections `story`,
   `grey`, `humpback`, `orcas`. Knobs `whales`. A do-nothing player still finishes (the baby boops the boat).
@@ -206,7 +216,9 @@ her finger). Same lake, same control, same section ids; the two errands (the mil
   Flashlight Statues really takes her (a perfect-aim robot does it in about 70 s; the plan wanted 2.5 min).
 - Round three, after the canoe: the whales, then the small ties (PR #543's plan).
 - Mountain Bike is still a steering toy: rethink it only if her play data says so.
-- Small things seen and left: the flamingo statue can't lift a leg (the code-built rig has no leg bones); some moves
+- Small things seen and left: on an iPhone held upright the film `campfire-out` cuts Maple and Roxy off at the edges
+  in its first shot, and on an iPhone on its side the line at the bottom covers the front of the fire ring in the
+  roast; the flamingo statue can't lift a leg (the code-built rig has no leg bones); some moves
   still read small from the board's high camera; in the film `campfire-in` Maple's face touches the left edge in the
   snatch shot; the cabin's team photo is small per friend on a 4:3 screen; Maple alone in the cabin is about 55 px
   on an iPhone on its side; the banana slug is off-screen in the bath on an upright iPad; the porcupine's new
