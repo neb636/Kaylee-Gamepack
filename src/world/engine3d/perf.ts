@@ -4,6 +4,10 @@
 // finger events arrived, whether a shader compiled, and the world's own note (perfNote(): the bike's speed and steer).
 // "Copy" puts the log on the clipboard to paste to an agent.
 //
+// Jerks: a frame can be on time and still look like a stutter, when something moves unevenly (the camera swings, then
+// stops; Maple hops on screen). Every on-time frame where the camera's speed or turn, or the world's focus on screen
+// (perfFocus(): Maple), changes sharply from the frame before is logged as a `jerk`, with the same note.
+//
 // Reading it: a slow frame whose update + render is small was waiting on the GPU (too much to draw) or on Safari (a
 // garbage collection, the compositor); one whose update or render is big was our JavaScript. `programs +1` is a shader
 // compiling mid-play; `dpr 2→1.75` is the engine's slow-device drop (it resizes the canvas). `?dpr=N` fixes the pixel
@@ -15,6 +19,16 @@ import { flag } from './flags'
 const SLOW_MS = 25
 const KEEP = 300
 const N = 120
+
+/** Where the camera is and which way it looks (its world matrix), and the world's focus on screen (px), this frame. */
+export interface PerfView {
+  m: ArrayLike<number>
+  focus: { x: number; y: number } | null
+}
+
+const JERK_MOVE = 2.5 // m/s change in the camera's speed between two frames
+const JERK_TURN = 0.6 // rad/s change in how fast the camera turns
+const JERK_SCREEN = 450 // px/s change in how fast the focus crosses the screen
 
 /** One frame's work, measured as it ran. */
 export interface PerfFrame {
@@ -48,6 +62,9 @@ export class PerfHud {
   private copiedUntil = 0
   /** The last frame's work, waiting for the interval it ends (the time until the next frame shows what it cost). */
   private prev: { now: number; f: PerfFrame; extra: string[] } | null = null
+  /** Last frame's camera and focus, and how fast they were moving (for the jerks). */
+  private view: { now: number; p: number[]; d: number[]; s: { x: number; y: number } | null; v?: number[]; w?: number[]; sv?: number[] } | null = null
+  private jerks = 0
   private onMove = () => this.moves++
 
   constructor(host: HTMLElement) {
@@ -89,7 +106,8 @@ export class PerfHud {
 
   /** A frame ran at `now` (the frame loop's timestamp) and did the work in `f`. The time from the previous frame to
    *  this one, unclamped, is charged to the previous frame's work: that's the work the screen was waiting on. */
-  frame(now: number, f: PerfFrame) {
+  frame(now: number, f: PerfFrame, view?: PerfView) {
+    if (view) this.jerk(now, f, view)
     const extra = [...this.events]
     this.events.length = 0
     if (this.lastPrograms >= 0 && f.programs > this.lastPrograms) extra.push(`programs +${f.programs - this.lastPrograms}`)
@@ -121,6 +139,34 @@ export class PerfHud {
     }
   }
 
+  private jerk(now: number, f: PerfFrame, view: PerfView) {
+    const m = view.m
+    const p = [m[12], m[13], m[14]]
+    const d = [-m[8], -m[9], -m[10]]
+    const last = this.view
+    const prevMs = this.times[(this.n - 1 + N) % N]
+    this.view = { now, p, d, s: view.focus ? { ...view.focus } : null }
+    if (!last) return
+    const dt = (now - last.now) / 1000
+    if (dt <= 0) return
+    const v = p.map((x, i) => (x - last.p[i]) / dt)
+    const w = d.map((x, i) => (x - last.d[i]) / dt)
+    const sv = view.focus && last.s ? [(view.focus.x - last.s.x) / dt, (view.focus.y - last.s.y) / dt] : undefined
+    Object.assign(this.view, { v, w, sv })
+    // (Only between on-time frames: a slow one is logged as slow, and it makes everything look jerky.)
+    if (!last.v || !last.w || dt * 1000 > SLOW_MS || prevMs > SLOW_MS) return
+    const diff = (a: number[], b: number[]) => Math.hypot(...a.map((x, i) => x - b[i]))
+    const dv = diff(v, last.v)
+    const dw = diff(w, last.w)
+    const ds = sv && last.sv ? diff(sv, last.sv) : 0
+    const what = [dv > JERK_MOVE && `camera speed Δ${dv.toFixed(1)}m/s`, dw > JERK_TURN && `camera turn Δ${dw.toFixed(2)}rad/s`, ds > JERK_SCREEN && `on screen Δ${ds.toFixed(0)}px/s`].filter(Boolean)
+    if (!what.length) return
+    this.jerks++
+    const t = ((performance.now() - this.start) / 1000).toFixed(1)
+    this.log.push(`${t}s jerk: ${what.join(', ')} (${(dt * 1000).toFixed(0)}ms) ${f.finger ? 'finger' : 'no-finger'}${f.note ? ` | ${f.note}` : ''}`)
+    if (this.log.length > KEEP) this.log.shift()
+  }
+
   private draw(f: PerfFrame) {
     const c = this.ctx
     if (c) {
@@ -143,7 +189,7 @@ export class PerfHud {
     const count = Math.min(this.n, N)
     for (let i = 0; i < count; i++) sum += this.times[i]
     this.text.textContent =
-      `fps ${Math.round(1000 / (sum / Math.max(1, count)))}  slow ${this.slow}  worst ${this.worst.toFixed(0)}ms\n` +
+      `fps ${Math.round(1000 / (sum / Math.max(1, count)))}  slow ${this.slow}  worst ${this.worst.toFixed(0)}ms  jerks ${this.jerks}\n` +
       `calls ${f.calls}  tris ${(f.tris / 1000).toFixed(0)}k  dpr ${f.dpr}\n` +
       `upd ${f.update.toFixed(1)}  rnd ${f.render.toFixed(1)} ms` +
       (f.note ? `\n${f.note}` : '')
@@ -154,7 +200,7 @@ export class PerfHud {
       `perf log ${new Date().toISOString()}`,
       `${navigator.userAgent}`,
       `screen ${screen.width}x${screen.height} devicePixelRatio ${devicePixelRatio} page ${location.hash}`,
-      `slow frames (> ${SLOW_MS}ms): ${this.slow}, worst ${this.worst.toFixed(0)}ms, frames ${this.n}`,
+      `slow frames (> ${SLOW_MS}ms): ${this.slow}, worst ${this.worst.toFixed(0)}ms, jerks ${this.jerks}, frames ${this.n}`,
       '',
     ]
     return head.concat(this.log).join('\n')
@@ -187,6 +233,8 @@ export class PerfHud {
   private clear() {
     this.log.length = 0
     this.prev = null
+    this.view = null
+    this.jerks = 0
     this.slow = 0
     this.worst = 0
     this.start = performance.now()

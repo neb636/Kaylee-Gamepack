@@ -235,6 +235,8 @@ export class MountainBike implements World3D {
   private modeT = 0
   private s = 0
   private lat = 0
+  /** For the ?perf=1 overlay: the camera's chase step, its lift over a bank, and which edge rule steered this frame. */
+  private dbg = { k: 1, lift: 0, edge: '' }
   private y = H0
   private vy = 0
   private air = false
@@ -729,15 +731,20 @@ export class MountainBike implements World3D {
         const left = Math.min(this.room(s0, lat0, -1), this.roomAt(s0 + ahead / 2, lat0, -1), this.roomAt(s0 + ahead, lat0, -1))
         if (right < near && right < left) want = 0.35 * (1 - right / near)
         else if (left < near) want = -0.35 * (1 - left / near)
+        this.dbg.edge = want !== 0 ? 'nudge' : ''
       } else if (room < 0.35 + Math.max(0, d.speed) * 0.03) {
         // Pushing into a side that's closing in on her (the island widening): eased away from it.
         want = this.push > 0 ? 0.2 : -0.2
-      }
+        this.dbg.edge = 'away'
+      } else this.dbg.edge = room < 0.8 + cross * 0.35 ? 'fade' : ''
       const rate = Math.abs(this.push) > 0.02 || want !== 0 ? STEER.edge : STEER.settle
       carve += (want - carve) * (1 - Math.exp(-dt * rate))
       // Already right at a side and still pointing into it: straight along it, quickly.
       const into = carve < 0 ? this.room(s0, lat0, 1) : this.room(s0, lat0, -1)
-      if (into < 0.4) carve *= Math.exp(-dt * 14)
+      if (into < 0.4) {
+        carve *= Math.exp(-dt * 14)
+        this.dbg.edge += '+into'
+      }
     } else {
       // In the air: the bike keeps its angle to the trail, so a hop on a bend (fast, off the blue way's rocks) follows
       // the bend instead of flying straight off it into the island; easing straight if a side is coming up.
@@ -1272,8 +1279,12 @@ export class MountainBike implements World3D {
     for (const k of [1, 0.75, 0.5, 0.25]) {
       const yaw = chord + off * STEER.chase * k
       const cam = t.locate(this.d.x - Math.sin(yaw) * back, this.d.z + Math.cos(yaw) * back, this.s)
-      if (Math.abs(cam.lat) < half(cam.s) + SHOULDER + 1.2) return yaw
+      if (Math.abs(cam.lat) < half(cam.s) + SHOULDER + 1.2) {
+        this.dbg.k = k
+        return yaw
+      }
     }
+    this.dbg.k = 0
     return chord
   }
 
@@ -1293,6 +1304,7 @@ export class MountainBike implements World3D {
         const g = c.land(x, z, this.s) + 0.5
         if (g > yy) lift += (g - yy) / (1 - k)
       }
+    this.dbg.lift = lift
     if (lift > 0) {
       p.y += lift
       cam.lookAt(this.rig.framed()?.center ?? target)
@@ -1492,7 +1504,16 @@ export class MountainBike implements World3D {
 
   perfNote() {
     const parts = this.leaves.mesh.count + this.drift.mesh.count + this.dust.mesh.count + this.spray.mesh.count + this.foam.mesh.count
-    return `${this.mode} s ${this.s.toFixed(0)} v ${this.d.speed.toFixed(1)} steer ${this.wheel.k.toFixed(2)} carve ${Math.round(this.carve * TO_DEG)} parts ${parts}${this.air ? ' air' : ''}`
+    const edge = half(this.s) + SHOULDER
+    return (
+      `${this.mode} s ${this.s.toFixed(0)} v ${this.d.speed.toFixed(1)} steer ${this.wheel.k.toFixed(2)} carve ${Math.round(this.carve * TO_DEG)} ` +
+      `lat ${this.lat.toFixed(2)}/${edge.toFixed(1)} roll ${this.roll.toFixed(2)} edge ${this.dbg.edge || '-'} ` +
+      `cam k ${this.dbg.k} dist ${(this.rig.framed()?.dist ?? 0).toFixed(1)} lift ${this.dbg.lift.toFixed(2)} parts ${parts}${this.air ? ' air' : ''}`
+    )
+  }
+
+  perfFocus() {
+    return this.mode === 'ride' ? this.toScreen(this.bikePos(tmp2)) : null
   }
 
   qa() {

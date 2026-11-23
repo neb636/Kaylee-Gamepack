@@ -43,6 +43,8 @@ export interface World3D extends Roamable {
   qa(): Record<string, unknown>
   /** One short line on what it's doing, for the ?perf=1 overlay's slow-frame log (speed, steer, particles). */
   perfNote?(): string
+  /** Where the thing she's steering is on screen (px), for the ?perf=1 overlay's jerks. */
+  perfFocus?(): { x: number; y: number } | null
   memory(): Record<string, number>
   /** Its delayed callbacks (sdk/timers.ts): cancelled the moment it leaves the screen, even when freeing the GPU has
    *  to wait for its shaders. */
@@ -208,7 +210,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
           world.render()
           if (perf) {
             const t2 = performance.now()
-            perf.frame(now, { update: t1 - t0, render: t2 - t1, calls: world.stats.calls, tris: world.stats.tris, dpr, programs: renderer.info.programs?.length ?? 0, finger: fingers.size > 0, note: world.perfNote?.() ?? '' })
+            perf.frame(now, { update: t1 - t0, render: t2 - t1, calls: world.stats.calls, tris: world.stats.tris, dpr, programs: renderer.info.programs?.length ?? 0, finger: fingers.size > 0, note: world.perfNote?.() ?? '' }, { m: world.rig.camera.matrixWorld.elements, focus: world.perfFocus?.() ?? null })
           }
           world.placeAnchors()
           const roaming = world.roam?.() ?? null
