@@ -1,7 +1,0 @@
-{
-  "title": "Red Canoe: no more empty pink button",
-  "checkIn": "fix",
-  "kaylee": "When Lulu sings, the celebration plays straight into the stamp: no blank pink button flashing up for a few seconds first.",
-  "questions": [],
-  "links": [{ "label": "Play the ending (Lulu sings)", "hash": "#/world/canada/canoe/glacier" }]
-}
