@@ -1,4 +1,4 @@
-// Misty's Bubble Bath's two films (planning/around-the-world/canada-round-2.md): `bath-in` before the bath, `bath-out`
+// Misty's Bubble Bath's two films (canada-round-2.md in git history): `bath-in` before the bath, `bath-out`
 // after it (before the stamp). Lines: lines.ts `L.bath.filmIn` and `L.bath.filmOut`, in play order. The set is the
 // rainforest river (story/sets/bath.ts), the same place as the game: the falls face the camera, the pool at their foot
 // is where she has her bath, Maple's bank is on the left.

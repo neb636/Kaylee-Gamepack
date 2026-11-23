@@ -1,4 +1,4 @@
-// Whale Peek-a-Boo's whales as characters (planning/around-the-world/canada-round-2.md, section 3): the grey whale, the
+// Whale Peek-a-Boo's whales as characters (canada-round-2.md in git history, section 3): the grey whale, the
 // humpback and the orca family (Grandma, Mama and the baby with Ollie's rock). Toy-cute but true to the real animals,
 // built on body.ts so everything sits on the skin:
 //

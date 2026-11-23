@@ -1,4 +1,4 @@
-// The goodbye of the Poles' new ending (planning/around-the-world/poles-ending.md): Pola has her pebble, and she flies
+// The goodbye of the Poles' new ending (poles-ending.md in git history): Pola has her pebble, and she flies
 // home in Sparkle's balloon, up the toy globe from the bottom of the world to the top, where Mama Bear is waiting.
 // Terry asks the old quiz's first question ("Where do polar bears live?") and she answers by flying there.
 //

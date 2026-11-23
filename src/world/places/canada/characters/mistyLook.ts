@@ -1,4 +1,4 @@
-// Misty in the look from her bubble bath (looks.ts MistyLook; planning/around-the-world/canada-round-2.md): her coat.
+// Misty in the look from her bubble bath (looks.ts MistyLook; canada-round-2.md in git history): her coat.
 // The bath (activities/bath/) changes it live as she rubs, and `dressMisty` puts a saved look on any Misty (the films'
 // cast, the map, the big game), so she is the same bear everywhere.
 //

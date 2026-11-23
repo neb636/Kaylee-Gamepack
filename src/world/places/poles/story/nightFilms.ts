@@ -1,4 +1,4 @@
-// The films of the Poles' new ending, The Longest Night (planning/around-the-world/poles-ending.md, the script; the
+// The films of the Poles' new ending, The Longest Night (poles-ending.md in git history, the script; the
 // chapter's runner is activities/night/Night.tsx). Same stage and rules as story/films.ts: a set, the actors on their
 // marks, one line a beat (lines.ts `L.night`), the usual camera on +z looking toward -z.
 //   night-in       time to fly: the white fox, Mama's goodbye, Nari can't come, down the little globe, Papa waits

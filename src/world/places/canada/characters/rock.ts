@@ -1,4 +1,4 @@
-// Ollie's lucky rock (planning/around-the-world/canada-round-2.md): every sea otter keeps a favorite stone in a pocket
+// Ollie's lucky rock (canada-round-2.md in git history): every sea otter keeps a favorite stone in a pocket
 // of skin under her arm and juggles it, and Ollie's is why she has the fastest pass. A wave-worn grey pebble with an embedded
 // quartz vein and a little four-pointed sparkle that twinkles,
 // so it reads as special next to any other rock. One mesh and one outline, plus the sparkle.

@@ -1,4 +1,4 @@
-// An islander in a story (samet-story.md): the family's Member rig (breathing, blinking, a mouth that moves with their
+// An islander in a story (samet-story.md in git history): the family's Member rig (breathing, blinking, a mouth that moves with their
 // own voice, hops and waves) plus a waddling walk and the faces a story needs: a droop when the fireflies are gone, a
 // gasp, a big happy squint. The gecko fire dancers Tuk and Kae are made here; a stop can make its own islander the
 // same way (`new Islander('otter', 'The jet ski man', JETSKI_MAN, bag, 'otter')`).

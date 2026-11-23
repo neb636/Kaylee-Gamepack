@@ -1,4 +1,4 @@
-// The Team Cabin (planning/around-the-world/canada-round-2.md, part 4): the skate hut beside the canal, where she
+// The Team Cabin (canada-round-2.md in git history, part 4): the skate hut beside the canal, where she
 // dresses the team. A toy on the map with no stamp and no end. #/world/canada/cabin/<section>?team=...
 // Loaded at startup by the section index (keep three.js out of this file).
 import { defineSections } from '../../../../kit/sections'

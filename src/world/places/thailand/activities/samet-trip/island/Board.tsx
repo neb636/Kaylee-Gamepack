@@ -1,4 +1,4 @@
-// The pictures: how she gets round Koh Samet (samet-story.md). Four round pictures of the beaches, drawn from the
+// The pictures: how she gets round Koh Samet (samet-story.md in git history). Four round pictures of the beaches, drawn from the
 // island itself, each with its firefly (grey until she has found it). Tap one and the green taxi takes her straight
 // there (a little film on the island: island.ts ride()); the one she's standing on just closes the pictures. With all four found there is
 // one picture left: the sunset at the driftwood tree. No words to read: the labels are for the grown-up.

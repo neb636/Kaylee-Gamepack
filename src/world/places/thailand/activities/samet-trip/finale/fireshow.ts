@@ -1,4 +1,4 @@
-// The fire show on Hat Sai Kaew at night (planning/around-the-world/thailand/samet-story.md: the story's payoff; the
+// The fire show on Hat Sai Kaew at night (samet-story.md in git history: the story's payoff; the
 // first plan: samet-trip.md (retired; in git history), step 9), on the island's real beach (island/layout.ts BAY) by the lanterns, after the
 // sunset at Ao Prao (sunset.ts).
 //

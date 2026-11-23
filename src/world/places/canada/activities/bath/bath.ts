@@ -1,4 +1,4 @@
-// Misty's Bubble Bath (planning/around-the-world/canada-round-2.md, "1. Misty's Bubble Bath"): the world. Misty the
+// Misty's Bubble Bath (canada-round-2.md in git history, "1. Misty's Bubble Bath"): the world. Misty the
 // spirit bear stands in the pool at the foot of the falls on the rainforest river (the chapter's film set,
 // story/sets/bath.ts), covered in mud; Maple watches from the shallows by the left bank.
 //

@@ -1,4 +1,4 @@
-// The whales chapter's two films (planning/around-the-world/canada-round-2.md, section 3; docs/films.md), out in the kelp
+// The whales chapter's two films (canada-round-2.md in git history, section 3; docs/films.md), out in the kelp
 // off Tofino (story/sets/whales.ts, the game's own sea). Lines: lines.ts `L.whales.filmIn` and `L.whales.filmOut`, in
 // play order.
 //

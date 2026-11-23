@@ -1,4 +1,4 @@
-// The sunset at the driftwood tree on Ao Prao (planning/around-the-world/thailand/samet-story.md; the first plan:
+// The sunset at the driftwood tree on Ao Prao (samet-story.md in git history; the first plan:
 // samet-trip.md (retired; in git history), step 9, the finale's first beat), on the island's real sunset beach (island/layout.ts FRAMES.prao)
 // once all four fireflies are found.
 //

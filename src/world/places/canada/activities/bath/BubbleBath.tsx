@@ -1,4 +1,4 @@
-// Misty's Bubble Bath (planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up
+// Misty's Bubble Bath (canada-round-2.md in git history): she rubs a muddy spirit bear clean, fluffs her up
 // and paints her with berries, and Misty goes to the big game looking like that. bath.ts is the world; it also does the
 // talking (Maple's hello, Sparkle's one line as each tool comes, her help when she's stuck, Misty's and Maple's
 // reactions). After the chapter's way-in film (`filmed`) it starts with the sponge in hand and Sparkle's one line; from a

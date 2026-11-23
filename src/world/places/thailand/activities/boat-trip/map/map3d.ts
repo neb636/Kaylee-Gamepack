@@ -1,4 +1,4 @@
-// The Krabi map (section `map`; notes: planning/around-the-world/thailand/krabi-map.md): the boat trip's hub, a toy
+// The Krabi map (section `map`; notes: krabi-map.md in git history): the boat trip's hub, a toy
 // diorama of Krabi and Phang Nga Bay floating in the sky (diorama.ts; the sky, the tray and the entrance are
 // trip/sky.ts). It opens like the Thailand map: the camera is already moving behind the loading cover, then settles
 // lower and closer (KRABI_CAM, ?feel=1). North is up the screen, and like every map she can swing it round with a

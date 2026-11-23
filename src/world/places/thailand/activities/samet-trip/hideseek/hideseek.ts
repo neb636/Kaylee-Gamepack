@@ -1,4 +1,4 @@
-// Hide and seek at Ao Prao (notes: planning/around-the-world/thailand/samet-story.md; the first plan: samet-trip.md (retired; in git history)),
+// Hide and seek at Ao Prao (notes: samet-story.md in git history; the first plan: samet-trip.md (retired; in git history)),
 // on the island's real sunset beach (island/layout.ts FRAMES.prao) by the big driftwood tree from Dad's photo.
 //
 // Its firefly is Peekaboo, the green one, who loves to hide (story/firefly.ts, peekaboo.ts). She is in both films and

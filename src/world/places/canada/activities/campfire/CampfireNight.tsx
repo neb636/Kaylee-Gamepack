@@ -1,4 +1,4 @@
-// Campfire Night, in 3D: Flashlight Statues (plan: planning/around-the-world/canada-round-2.md, part 2). The clearing
+// Campfire Night, in 3D: Flashlight Statues (plan: canada-round-2.md in git history, part 2). The clearing
 // at night where her finger is the flashlight (world.ts is the world; it also does the talking: Maple's hello, Sparkle's
 // one line per part and her help when Kaylee is stuck, everybody's reactions). After the chapter's way-in film
 // (`filmed`) it starts at Sparkle's instruction; from a link or a replay Maple says her hello first. The address bar

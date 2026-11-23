@@ -304,7 +304,7 @@ export const L = {
       // A little grey paw comes out of the dark and takes a marshmallow. Then another.
       hey: maple("Hey! My marshmallow! Who's out there?"),
     },
-    // ---- The game, Flashlight Statues (planning/around-the-world/canada-round-2.md, part 2): her finger is the
+    // ---- The game, Flashlight Statues (canada-round-2.md in git history, part 2): her finger is the
     // flashlight. From a link or a replay Maple says hello first; after the film it starts at Sparkle's instruction.
     story: maple('Shh! Somebody is watching us from the dark.'),
     // Sparkle: the game opens (the line at the bottom plays it again), and her hint when nothing new has been lit for 8 s.
@@ -416,7 +416,7 @@ export const L = {
     },
   },
   whales: {
-    // Whale Peek-a-Boo (activities/whales/; planning/around-the-world/canada-round-2.md, section 3): a whale's spout
+    // Whale Peek-a-Boo (activities/whales/; canada-round-2.md in git history, section 3): a whale's spout
     // blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out.
     // The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.
     filmIn: {
@@ -472,7 +472,7 @@ export const L = {
       team: maple("Splash! You're on the team!"),
     },
   },
-  // Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear
+  // Misty's Bubble Bath (activities/bath/; canada-round-2.md in git history): she rubs a muddy spirit bear
   // clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.
   bath: {
     // The film in (story/films/bath.ts): the rainforest river, giant cedars, soft rain.

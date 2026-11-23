@@ -423,7 +423,7 @@ export const L = {
     },
   },
 
-  // ---- The new ending, The Longest Night (planning/around-the-world/poles-ending.md; activities/night/). ----
+  // ---- The new ending, The Longest Night (poles-ending.md in git history; activities/night/). ----
   // One chapter in three acts and five films, and the whole of it is here in play order, so its table read is the
   // ending as she hears it. It replaces Emperor Huddle and the finale (the blocks above) once it's built; until then
   // those still play. Lines marked ♻️ are already recorded under another key (the same words in the same voice share

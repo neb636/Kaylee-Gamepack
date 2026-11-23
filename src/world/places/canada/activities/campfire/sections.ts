@@ -1,4 +1,4 @@
-// Campfire Night, in 3D: Flashlight Statues (plan: planning/around-the-world/canada-round-2.md, part 2). One clearing
+// Campfire Night, in 3D: Flashlight Statues (plan: canada-round-2.md in git history, part 2). One clearing
 // at night; her finger is the flashlight, and whoever it lands on freezes with a silly face.
 // #/world/canada/campfire/<section>?kits=2. A section link sets the clearing up as if she had played to there (and
 // skips Maple's hello). ?feel=1 opens the feel lab on the light's knobs. Loaded at startup by the section index (keep

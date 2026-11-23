@@ -1,4 +1,4 @@
-// Bubbles' story at Ko Kudi (the trip's story: planning/around-the-world/thailand/samet-story.md; docs/films.md, how
+// Bubbles' story at Ko Kudi (the trip's story: samet-story.md in git history; docs/films.md, how
 // films work). Bubbles is the blue firefly: last night's wind dropped her in the sea, and fireflies can't swim, so she
 // is in an air bubble down on the reef, the cuttlefish hugging it. It gives the swim a reason:
 //
