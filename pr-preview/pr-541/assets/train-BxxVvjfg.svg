@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Bullet Train</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe1ee"/><stop offset="1" stop-color="#ffbcd8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <!-- the leading car: a flat roof that sweeps down into a long, round nose -->
+    <path id="bodyP" d="M-4 46H36C56 46 70 51 81 59C90 65.5 98 73 103.5 79.5C107 84 105 88.5 99.5 88.5H-4Z"/>
+    <clipPath id="body"><use href="#bodyP"/></clipPath>
+    <g id="wheel"><circle r="5" fill="#5d5078"/><circle r="2" fill="#bcb6d6"/></g>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="80" r="50" fill="url(#glow)"/>
+
+  <!-- speed lines streaming behind -->
+  <g fill="#fff">
+    <rect x="-4" y="28" width="38" height="4.5" rx="2"/><rect x="10" y="37" width="22" height="4.5" rx="2"/><rect x="42" y="33" width="12" height="4.5" rx="2" opacity="0.8"/>
+  </g>
+
+  <!-- the track -->
+  <ellipse cx="56" cy="99" rx="56" ry="5" fill="#4b3a8c" opacity="0.14"/>
+  <rect x="-4" y="94" width="128" height="4" rx="2" fill="#9790ba"/>
+  <rect x="-4" y="94" width="128" height="1.5" fill="#bcb6d6"/>
+
+  <!-- the undercarriage and wheels -->
+  <rect x="-4" y="85" width="98" height="6" fill="#9790ba"/>
+  <use href="#wheel" transform="translate(12 91)"/><use href="#wheel" transform="translate(26 91)"/>
+  <use href="#wheel" transform="translate(66 91)"/><use href="#wheel" transform="translate(80 91)"/>
+
+  <!-- the white body: a cool shade along the bottom, the blue stripe sweeping down the nose -->
+  <g clip-path="url(#body)">
+    <rect x="-4" y="44" width="114" height="46" fill="#fff"/>
+    <rect x="-4" y="79" width="114" height="11" fill="#e4ddf6"/>
+    <path d="M-4 64H64C77 64 89 70 98 79L102 84C91 76 80 72 66 72H-4Z" fill="#5fb0ea"/>
+    <path d="M-4 64H64C77 64 89 70 98 79" fill="none" stroke="#8ccfff" stroke-width="2.5"/>
+    <path d="M-4 75H66C77 75 87 78 95 84" fill="none" stroke="#ff8fb8" stroke-width="2"/>
+    <!-- windows and a door -->
+    <g fill="#5fb0ea"><rect x="-2" y="52" width="11" height="8" rx="3"/><rect x="13" y="52" width="11" height="8" rx="3"/><rect x="28" y="52" width="11" height="8" rx="3"/></g>
+    <g fill="#c9e9ff"><path d="M0 58l6-6h2l-8 8zM15 58l6-6h2l-8 8zM30 58l6-6h2l-8 8z"/></g>
+    <rect x="44" y="51" width="10" height="23" rx="3" fill="#eeeaf9"/>
+    <rect x="46" y="53" width="6" height="7" rx="2" fill="#5fb0ea"/>
+    <!-- the cockpit glass, curving over the nose -->
+    <path d="M60 48.5C69 49.5 77 53 84 58.5C80 60.5 77 61.5 73 61C69 57 64 54.5 58 53.5Z" fill="#6a7fd6"/>
+    <path d="M65 51C70 52 75 54.5 79 57.5" fill="none" stroke="#c9e9ff" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <!-- the headlight at the tip -->
+  <ellipse cx="101" cy="84.5" rx="2.5" ry="2" fill="#fff6cc"/>
+  <!-- a glint on the nose -->
+  <path d="M88 44l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#fff"/>
+</svg>
