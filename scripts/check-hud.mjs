@@ -11,7 +11,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 
-const UPGRADED = ['src/world/places/poles']
+const UPGRADED = ['src/world/places/poles', 'src/world/places/peru']
 /** The family itself. */
 const KIT = ['src/world/kit/Hud.tsx', 'src/sdk/components/HudIcons.tsx']
 const SKIP = /\/(lab|labs)\//
