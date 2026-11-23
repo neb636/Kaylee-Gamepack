@@ -1,4 +1,4 @@
-// The cast of Maple's Team (planning/around-the-world/canada.md), for the story's films (story/stage.ts), the map and
+// The cast of Maple's Team, for the story's films (story/stage.ts), the map and
 // the big game: everybody as a Performer (characters/toy.ts), built the first time somebody asks for them and hidden
 // until a film places them. The rig friends are FilmActors in their Canada looks (characters/looks.ts); Tuque, Lulu,
 // her chick and the geese are hand-built toys. Film sizes are a little bigger than life so small faces read.

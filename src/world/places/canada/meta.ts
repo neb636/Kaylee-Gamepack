@@ -15,7 +15,7 @@ import puzzleOrcas from './assets/scene-puzzle-orcas.webp'
 import type { PlaceMeta } from '../../types'
 import { L } from './lines'
 
-// Canada is one story, "Maple's Team" (planning/around-the-world/canada.md): Maple the beaver wants to win the Maple
+// Canada is one story, "Maple's Team": Maple the beaver wants to win the Maple
 // Cup, the hockey game on Ottawa's frozen canal, and her friends live all across Canada. The hub is a 3D toy map of
 // the country with each friend standing where they live; each of the six chapters (a film, the game, a film) brings
 // one friend home to the team, and with all six stamps the big game opens in Ottawa: its win is the Canada Champion

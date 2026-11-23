@@ -1,4 +1,4 @@
-// The Canada map (planning/around-the-world/canada.md, "The map"): Canada as a chunky toy tray floating in the sky, the
+// The Canada map: Canada as a chunky toy tray floating in the sky, the
 // way the Thailand maps are. Seven places stand on it east to west, each a little diorama with its friend in it, big
 // and alive: tap a place (or its friend) and it hops, the camera closes in, and the chapter opens. Ottawa's rink is the
 // story's home: Maple and the Maple Cup, Gus's geese skating rings on the ice, and every friend she has brought home

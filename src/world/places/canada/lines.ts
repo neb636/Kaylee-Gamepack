@@ -2,7 +2,7 @@
 // (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.) Plain strings are Sparkle, the guide;
 // the friends talk in their own voices from cast.json.
 //
-// Canada is one story, "Maple's Team" (planning/around-the-world/canada.md): Maple the beaver wants to win the Maple
+// Canada is one story, "Maple's Team": Maple the beaver wants to win the Maple
 // Cup, the hockey game on Ottawa's frozen canal that the geese win every year, and she can't win alone. Her friends
 // live all across Canada, and every chapter brings one home to the team. The films' lines are here in play order:
 // `story` (the way in, the big game's films), and each chapter's `filmIn` (before its game) and `filmOut` (after it,

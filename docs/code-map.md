@@ -106,7 +106,7 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 ## 🐧 The Poles (`poles`)
 
 - Code: [src/world/places/poles/](../src/world/places/poles): [meta.ts](../src/world/places/poles/meta.ts), [Place.tsx](../src/world/places/poles/Place.tsx), [lines.ts](../src/world/places/poles/lines.ts), [cast.json](../src/world/places/poles/cast.json), [qa.mjs](../src/world/places/poles/qa.mjs), [puppets/](../src/world/places/poles/puppets), [characters/](../src/world/places/poles/characters)
-- Notes: [planning/around-the-world/poles.md](../planning/around-the-world/poles.md)
+- Notes: none (read its code and git history)
 
 | Activity | Kind | Code | Sections | QA | Notes |
 |---|---|---|---|---|---|
@@ -121,7 +121,7 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 ## 🫎 Canada (`canada`)
 
 - Code: [src/world/places/canada/](../src/world/places/canada): [meta.ts](../src/world/places/canada/meta.ts), [Place.tsx](../src/world/places/canada/Place.tsx), [lines.ts](../src/world/places/canada/lines.ts), [cast.json](../src/world/places/canada/cast.json), [qa.mjs](../src/world/places/canada/qa.mjs), [puppets/](../src/world/places/canada/puppets), [characters/](../src/world/places/canada/characters)
-- Notes: [planning/around-the-world/canada.md](../planning/around-the-world/canada.md)
+- Notes: none (read its code and git history)
 
 | Activity | Kind | Code | Sections | QA | Notes |
 |---|---|---|---|---|---|

@@ -1,4 +1,4 @@
-// The snowman chapter's two films (planning/around-the-world/canada.md), on the carnival park under Quebec City's castle
+// The snowman chapter's two films, on the carnival park under Quebec City's castle
 // hotel (story/sets/snowman.ts, the game's own park). Lines: lines.ts `L.snowman.filmIn` and `L.snowman.filmOut`.
 //
 //   snowman-in (about 13 s): the carnival from the front of the park, the castle hotel up on its cliff; Maple trots in

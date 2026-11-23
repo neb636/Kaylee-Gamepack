@@ -23,7 +23,7 @@ const ALL: [ActivityInfo, boolean][] = [
 /** Which side of the globe each activity's spot shows on (the hub reads it). */
 export const ACTIVITY_POLE: Record<string, 'north' | 'south' | 'both'> = { floe: floePole, coats: coatsPole, slide: slidePole, huddle: huddlePole, narwhal: narwhalPole, night: nightPole }
 
-// The Poles: the top and the bottom of the world in one place (plan: planning/around-the-world/poles.md). The hub is a
+// The Poles: the top and the bottom of the world in one place. The hub is a
 // 3D globe she spins (top = the Arctic's sea ice, bottom = Antarctica's land) and a sun she drags, so day and night swap
 // between the poles. Its activities' spots show on the globe's sides (the floes, the narwhal ride and the coats up
 // north, the slide and the huddle down south).
