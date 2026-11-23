@@ -588,3 +588,78 @@
     flex-direction: row;
   }
 }
+
+/* ---- The controls (kit/Hud.tsx, docs/hud.md): one round button family, and the places they live. ---- */
+.world {
+  --hud-ring: 5px;
+  --hud-lip: 5px;
+  /* Layers, low to high: the toy, Sparkle, the controls, the top bar, a sheet over everything. */
+  --z-guide: 25;
+  --z-hud: 45;
+  --z-bar: 50;
+  --z-sheet: 60;
+}
+.hud-btn {
+  --hud-size: var(--target);
+  --hud-face: #fff;
+  --hud-shade: rgba(43, 35, 48, 0.16);
+  --hud-glyph: #fff;
+  flex: none;
+  width: var(--hud-size);
+  height: var(--hud-size);
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: var(--hud-ring) solid #fff;
+  background: var(--hud-face);
+  box-shadow: 0 var(--hud-lip) 0 var(--hud-shade);
+  color: var(--hud-glyph);
+  font-size: calc(var(--hud-size) * 0.48);
+  line-height: 1;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+/* A small button (the top bar's size) still takes a full-size finger. */
+.hud-btn::after {
+  content: '';
+  position: absolute;
+  inset: min(0px, calc((var(--hud-size) - var(--target)) / 2));
+  border-radius: 50%;
+}
+.hud-btn > svg {
+  width: 56%;
+  height: 56%;
+  display: block;
+}
+.hud-sm { --hud-size: var(--btn); }
+.hud-lg { --hud-size: calc(var(--target) * 1.25); }
+.hud-leave { --hud-glyph: var(--lavender-dark); }
+.hud-go { --hud-face: var(--hotpink); --hud-shade: #d4337b; }
+.hud-done { --hud-face: var(--mint); --hud-shade: #5fbfa0; --hud-glyph: var(--ink); }
+.hud-again { --hud-face: var(--lavender-dark); --hud-shade: #8f79d6; }
+.hud-open { --hud-face: var(--butter); --hud-shade: #dcc35c; --hud-glyph: var(--ink); }
+.hud-skip { --hud-size: var(--btn); --hud-face: rgba(255, 255, 255, 0.92); --hud-glyph: var(--ink-soft); }
+.hud-at { position: absolute; z-index: var(--z-hud); }
+.hud-top-right { top: calc(var(--safe-top) + 12px); right: calc(env(safe-area-inset-right, 0px) + 16px); }
+.hud-top-center { top: calc(var(--bar-clear) + 4px); left: calc(50% - var(--hud-size) / 2); }
+.hud-bottom-right { right: calc(env(safe-area-inset-right, 0px) + 14px); bottom: calc(var(--safe-bottom) + 14px); }
+.hud-bottom-left { left: calc(env(safe-area-inset-left, 0px) + 14px); bottom: calc(var(--safe-bottom) + 14px); }
+.hud-bottom-center { left: calc(50% - var(--hud-size) / 2); bottom: calc(var(--safe-bottom) + 18px); }
+.hud-end {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--safe-bottom) + 18px);
+  z-index: var(--z-hud);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, 2.6vw, 26px);
+  padding: 0 16px;
+  pointer-events: none;
+}
+.hud-end > * { pointer-events: auto; }
