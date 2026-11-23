@@ -1,4 +1,4 @@
-// Carnival Snowballs (plan: planning/around-the-world/canada.md): a snowy park below Quebec City's castle hotel, at
+// Carnival Snowballs: a snowy park below Quebec City's castle hotel, at
 // the Winter Carnival. The carnival needs snowmen for its parade; Kaylee rolls snowballs that grow, stacks them
 // and dresses them (the first is Tuque, in his red tuque and the carnival's woven sash; the others each get their own
 // hat and scarf: blue, yellow, green, a top hat), and they march off in the parade.

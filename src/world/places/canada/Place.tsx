@@ -1,4 +1,4 @@
-// Canada (planning/around-the-world/canada.md) is one story, "Maple's Team": Maple the beaver wants to win the Maple
+// Canada is one story, "Maple's Team": Maple the beaver wants to win the Maple
 // Cup, the hockey game on Ottawa's frozen canal that Gus's geese win every year, and she can't win alone. Her friends
 // live all across Canada. The home base is the 3D map of the country (activities/hub/, map/), her friends standing on
 // it where they live. Each is a chapter: a film (story/, on its own film stage), the game, a film, then its stamp and

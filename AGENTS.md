@@ -87,7 +87,7 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
 
 ## What Kaylee told us (follow it everywhere)
 
-- **Any order.** Every activity is open from the start and earns a passport stamp + animal sticker right away. (Exception: the Poles is one story, so its first time through goes in order; see `planning/around-the-world/poles.md`.)
+- **Any order.** Every activity is open from the start and earns a passport stamp + animal sticker right away. (Exception: the Poles is one story, so its first time through goes in order.)
   Collecting every stamp unlocks a short finale, then `onWin()` shows the shell's trophy ceremony (gold trophy displaying
   the country's `trophyTitle`). Don't build your own trophy screen.
 - **Talk short, play long.** What bored her was listening and forced easy rounds, never touching. At most 1-2 short
@@ -172,7 +172,7 @@ and `docs/3d-characters.md`.
 | Making art | `docs/art.md` (style, one camera per scene, white patches) |
 | Checking your work | `docs/qa.md` (robots, the fresh-eyes agent, the time budget) |
 | Finding out what she plays | `docs/play-data.md` (who's who in PostHog, the events, offline play, storage, queries) |
-| Continuing a country or trip | its notes: `planning/around-the-world/<country>.md`, or `<country>/<trip>.md` and `<country>/known-issues.md` (Thailand). Australia, Egypt, Italy, China and Peru are finished and have none: read their code |
+| Continuing a country or trip | its notes: `planning/around-the-world/<country>.md`, or `<country>/<trip>.md` and `<country>/known-issues.md` (Thailand). Australia, Egypt, Italy, China, Peru, Canada and the Poles are finished and have none: read their code |
 
 **Skills** (in `.agents/skills/`, shared by Claude Code and Codex): `pitch` (three pitch cards), `table-read` (hear a
 script), `reel` (film the game), `ship` (the review page and the PR, fixes too), `sfx` (ElevenLabs sound effects for

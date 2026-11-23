@@ -1,4 +1,4 @@
-// Canada's finale, the big game (planning/around-the-world/canada.md): the `game-in` film on the film stage (the
+// Canada's finale, the big game: the `game-in` film on the film stage (the
 // whole team skates out, Gus scoffs, Lulu sings), Pond Hockey on the frozen Rideau Canal (rink.ts), the `game-win`
 // film (the Maple Cup, taffy for everybody), then the shell's trophy (Place.tsx turns onDone into it: gold, Canada
 // Champion). The address bar follows her (sections.ts): the film, each goal of the game, the win. Sparkle gives the

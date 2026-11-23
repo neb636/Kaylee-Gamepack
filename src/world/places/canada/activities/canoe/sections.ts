@@ -1,4 +1,4 @@
-// Red Canoe (planning/around-the-world/canada.md, the Banff chapter): Kaylee paddles Maple's red canoe across the
+// Red Canoe: Kaylee paddles Maple's red canoe across the
 // turquoise lake to find Lulu the loon's lost chick in the glacier stream's milky water, takes it home to Lulu by the
 // glacier, and then taps Lulu and she sings (the glacier sings it back). #/world/canada/canoe/<section>. A section link sets the lake up as if she had played to there
 // (and skips Maple's hello). ?feel=1 opens the feel lab on the paddling's knobs. Loaded at startup by the section index

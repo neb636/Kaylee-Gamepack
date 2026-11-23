@@ -1,4 +1,4 @@
-// Red Canoe (planning/around-the-world/canada.md, "Maple's Team"): a glacier lake in Banff, bright turquoise among the
+// Red Canoe: a glacier lake in Banff, bright turquoise among the
 // snowy peaks. Lulu the loon, the best singer in Canada, can't sing: her chick has paddled off. Kaylee paddles Maple's
 // red canoe to find it, takes it home to Lulu by the glacier, and then Lulu sings for her (the try-out: the films round
 // the game ask her to sing at the big game).

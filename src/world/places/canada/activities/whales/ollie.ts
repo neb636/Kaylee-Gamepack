@@ -1,4 +1,4 @@
-// Ollie the sea otter (planning/around-the-world/canada.md: giggly, cuddly, silly, spins like a top), floating on her
+// Ollie the sea otter (giggly, cuddly, silly, spins like a top), floating on her
 // back the way sea otters do: the team's rig friend in her Canada look (characters/looks.ts `otter`), tipped onto her
 // back with her face to the sky and toward whoever is looking from her toes, a clam on her tummy (not in the game:
 // there her tummy is empty until the baby orca gives her rock back), bobbing on the swell. The game (watch.ts) has her

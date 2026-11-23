@@ -1,4 +1,4 @@
-// The bike chapter's two films (planning/around-the-world/canada.md), on Mont-Sainte-Anne (story/sets/bike.ts: the
+// The bike chapter's two films, on Mont-Sainte-Anne (story/sets/bike.ts: the
 // game's own mountain). Lines: lines.ts `L.bike.filmIn` and `L.bike.filmOut`, in play order.
 //
 // In (about 12 s): at the top of the trail by the gondola, Maple with her bike tells us about Monty, the biggest moose

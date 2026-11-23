@@ -1,4 +1,4 @@
-// The campfire chapter's two films (planning/around-the-world/canada.md): `campfire-in` before Campfire Night,
+// The campfire chapter's two films: `campfire-in` before Campfire Night,
 // `campfire-out` after it (before the stamp). Lines: lines.ts `L.campfire.filmIn` and `L.campfire.filmOut`, in order.
 //
 // In (about 12 s, funny and a tiny bit mysterious, never scary): the campsite at night, Maple on her log by the fire

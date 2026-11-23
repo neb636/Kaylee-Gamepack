@@ -1,4 +1,4 @@
-// The canoe chapter's two films (planning/around-the-world/canada.md): `canoe-in` before Red Canoe, `canoe-out` after
+// The canoe chapter's two films: `canoe-in` before Red Canoe, `canoe-out` after
 // it (before the stamp). Lines: lines.ts `L.canoe.filmIn` and `L.canoe.filmOut`, in play order. The set is the game's own
 // lake (story/sets/canoe.ts): the dock at the south end (+z), the glacier at the north end (-z). The canoe is red, in
 // the films as on the map.
