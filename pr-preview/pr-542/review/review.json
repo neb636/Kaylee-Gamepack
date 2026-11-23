@@ -1,0 +1,64 @@
+{
+ "title": "Mountain Bike, card B: the leaf meadow",
+ "checkIn": "3 of 4: play it",
+ "kaylee": "The green trail opens into two wide meadows of fallen leaves: big S-turns, a dark groove behind her wheel, leaves puffing up on every flip, and the hare and the deer jumping out of her way.",
+ "questions": [
+  "Do the meadows feel like Bottomless (yes, closer, or no)?",
+  "Is the hare and deer jumping away fun (yes or no)?"
+ ],
+ "reels": [
+  {
+   "name": "bike-carve-b",
+   "moments": [
+    "canada-bike-steer"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "label": "Ride the meadows",
+   "hash": "#/world/canada/bike/green"
+  },
+  {
+   "label": "The wider berms (blue way)",
+   "hash": "#/world/canada/bike/berms?trail=blue"
+  },
+  {
+   "label": "Tune the feel",
+   "hash": "#/world/canada/bike/green?feel=1"
+  }
+ ],
+ "pictures": [
+  {
+   "title": "Carving the meadow on a phone",
+   "after": "pics/b-groove.png",
+   "caption": "Her wheel ploughs a dark groove through the leaves; the hare sits where she carves."
+  },
+  {
+   "title": "Past the deer",
+   "after": "pics/b-deer.png"
+  },
+  {
+   "title": "Down the green trail",
+   "after": "pics/b-sheet.png",
+   "caption": "Dirt path, then the meadows open out."
+  },
+  {
+   "title": "The berms, each way 1.3 m wider",
+   "after": "pics/b-berms.png"
+  }
+ ],
+ "listens": [
+  {
+   "title": "The bike's new sound",
+   "audio": "sfx/bike.mp3",
+   "items": [
+    {
+     "text": "Tires carving through leaves (loop)",
+     "at": 0,
+     "end": 4
+    }
+   ]
+  }
+ ]
+}
