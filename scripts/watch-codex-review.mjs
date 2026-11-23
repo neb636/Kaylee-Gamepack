@@ -1,5 +1,6 @@
 // Waits for Codex's review of a PR's latest commit, prints what it found, and exits.
-// Meant to run under Claude Code's Monitor tool: silent while waiting, so it costs no context until it prints.
+// Silent while waiting, so it costs no context until it prints. Claude Code runs it in the background (Monitor or
+// run_in_background); the Codex CLI runs it as an ordinary command and waits (give it an 8-minute timeout).
 //   node scripts/watch-codex-review.mjs --pr 182 [--timeout 420] [--interval 20]
 // Output lines (each one wakes the session): FINDINGS (then one block per inline comment), CLEAN, NOREVIEW, TIMEOUT.
 // Codex keeps one summary comment on the PR with a machine-readable state (status + commit_sha); inline findings
