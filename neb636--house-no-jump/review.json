@@ -1,8 +1,11 @@
 {
-  "title": "Thailand house: no jump button",
+  "title": "No jump button anywhere",
   "checkIn": "fix",
-  "kaylee": "The yellow jump button is gone from the house; she still walks with the stick, and stools, the mattress and the stairs still hop her up by themselves.",
+  "kaylee": "The yellow jump button is gone from every scene: the house, the mall hall, Harborland and the trips. She still walks with the stick, and stools, the mattress and the stairs still hop her up on their own.",
   "questions": [],
-  "pictures": [{ "title": "Downstairs", "before": "pics/before.jpg", "after": "pics/after.jpg", "caption": "The jump button (bottom right) is gone" }],
-  "links": [{ "label": "Play it", "hash": "#/world/thailand/hub/downstairs" }]
+  "pictures": [
+    { "title": "The house", "before": "pics/before.jpg", "after": "pics/after.jpg", "caption": "The jump button (bottom right) is gone" },
+    { "title": "The mall hall", "before": "pics/hall-before.jpg", "after": "pics/hall-after.jpg", "caption": "Gone here too; the map button moves down into the corner" }
+  ],
+  "links": [{ "label": "The house", "hash": "#/world/thailand/hub/downstairs" }, { "label": "The mall hall", "hash": "#/world/thailand/mall-trip/hall" }]
 }
