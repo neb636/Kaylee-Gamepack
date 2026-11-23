@@ -12,35 +12,35 @@
       "name": "canada-film-campfire-in",
       "where": "canada-film-campfire-in",
       "seconds": 22,
-      "fps": 11,
+      "fps": 22.7,
       "status": "ok"
     },
     {
       "name": "canada-campfire-roast-sloppy",
       "where": "canada-campfire-roast-sloppy",
       "seconds": 40,
-      "fps": 11.1,
+      "fps": 13.4,
       "status": "ok"
     },
     {
       "name": "canada-campfire-roast",
       "where": "canada-campfire-roast",
       "seconds": 80,
-      "fps": 17.1,
+      "fps": 18.2,
       "status": "ok"
     },
     {
       "name": "canada-campfire-roast-sloppy",
       "where": "canada-campfire-roast-sloppy",
       "seconds": 40,
-      "fps": 14.4,
+      "fps": 14.7,
       "status": "ok"
     },
     {
       "name": "canada-campfire-roast-giant",
       "where": "canada-campfire-roast-giant",
       "seconds": 38,
-      "fps": 16.7,
+      "fps": 19.7,
       "status": "ok"
     }
   ]

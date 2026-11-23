@@ -58,11 +58,11 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <h2>Listen</h2><div class="card listen"><h3>The roast's new sounds (2.8 s made with ElevenLabs)</h3>
 <audio controls preload="metadata" src="sfx/roast.mp3"></audio>
 <ol class="meta"><li><button class="cue" data-at="0" data-end="0.8"><span class="t">0:00–0:00</span> A marshmallow out of the bag</button></li><li><button class="cue" data-at="1.5" data-end="2.1"><span class="t">0:01–0:02</span> A marshmallow onto the stick</button></li><li><button class="cue" data-at="2.8" data-end="4.16"><span class="t">0:02–0:04</span> Monty eats the branch</button></li></ol></div>
-<h2>Your call</h2><ol><li><p>Does the new roast feel right to play: a marshmallow in her fingers and a stick that stays by the fire?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Your call</h2><ol><li><p>Play the roast: the marshmallow now toasts by itself on the stick, so her finger is less busy than when she held it by the fire. Still fun, or too much waiting?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
 <h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/canada/campfire/roast">Play the roast</a> <a class="pill" href="../#/world/canada/campfire/roast?order=4">Monty's giant one</a> <a class="pill" href="../#/world/canada/story/campfire-in">Watch the opening film</a> <a class="pill" href="../#/world/canada/campfire/roast?feel=1">Feel lab: the roast's knobs</a></p>
 </main>
 <script>
-const qs=["Does the new roast feel right to play: a marshmallow in her fingers and a stick that stays by the fire?"],titles=[]
+const qs=["Play the roast: the marshmallow now toasts by itself on the stick, so her finger is less busy than when she held it by the fire. Still fun, or too much waiting?"],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
