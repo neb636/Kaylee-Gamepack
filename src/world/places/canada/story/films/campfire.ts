@@ -136,7 +136,8 @@ export const CAMPFIRE_IN: StoryFilm = {
         },
         // (On "Who's out there?" she glances at the dark bush behind her: only a glance, her face stays to us.)
         tick: (_k, t) => (maple.headTurn = t < 1.8 ? 0.4 : 0.4 + Math.min(1, (t - 1.8) / 0.4) * 0.25),
-        cues: [[0.6, () => maple.hop()], [1.9, () => (maple.armsUp = 0.25)]],
+        // (No paws up here: the arm that holds her stick would swing it across her face.)
+        cues: [[0.6, () => maple.hop()], [1.9, () => (maple.lean = 0.12)]],
       },
       {
         // Two eyes in the dark bush... a blink... a giggle... and gone, with a rustle.
@@ -144,7 +145,7 @@ export const CAMPFIRE_IN: StoryFilm = {
         shot: cam([-0.52, 0.86, 1.5], CAMP.eyes, { eye: [-0.55, 0.8, 1.05] }, { tall: { eye: [-0.55, 0.92, 2.1], to: { eye: [-0.56, 0.86, 1.7] } } }),
         dur: 2.1,
         start: () => {
-          maple.armsUp = 0
+          maple.lean = 0
           set.eyes.root.visible = true
           set.eyes.open = 1
         },

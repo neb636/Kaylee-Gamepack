@@ -1620,7 +1620,7 @@ export class FlashlightStatues implements World3D {
       fire: [new Vector3(CAMP.fire[0], 0.35, CAMP.fire[2]), 0, 3.4],
       log: [new Vector3(FALLEN.x, 0.3, FALLEN.z), 0, 3.6],
       den: [new Vector3(CLEARING.den[0], 0.4, CLEARING.den[1]), 0, 4],
-      stick: [this.spit.tip, -0.15, 2.6],
+      stick: [this.spit.tip, -0.1, 1.5],
     }
     const a = at[id]
     if (!a) return null
