@@ -53,7 +53,7 @@ Champion** and Moraine Lake earlier.
 | ⛄ | **Carnival Snowballs** `snowman` (3D) | Quebec City, the Winter Carnival | pushes snowballs that grow, stacks and dresses snowmen | nobody here plays hockey, only snow... "Let's make a player!" | her snowman in the red tuque wakes up; a snowball bounces off his tummy |
 | 🚵 | **Mountain Bike** `bike` (3D) | Mont-Sainte-Anne | steers the bike down the forest trail | Monty is having his bath at the waterfall, way down there | "What does a goalie do?" "You stand there." "I am very good at standing." Bonk |
 | ⛺ | **Campfire Night: Flashlight Statues** `campfire` (3D) | the campsite | her finger is the flashlight: whoever it lands on freezes with a silly face (the night animals, Roxy's three kits, then Roxy sneaking to the marshmallows); roasts marshmallows; turns the light off for the stars and the northern lights | a little paw takes Maple's marshmallows | Roxy has the puck before Maple can blink; her kits come to cheer |
-| 🛶 | **Red Canoe** `canoe` (3D) | Banff, the turquoise lake | paddles across the lake to the glacier | a loon calls across the water: Lulu | she will sing her best song; her chick squeaks |
+| 🛶 | **Red Canoe** `canoe` (3D) | Banff, the turquoise lake | finds Lulu's lost chick in the milky water, takes it home to her by the glacier, then taps Lulu and she sings (the glacier sings back) | a loon calls across the water: Lulu, looking for her chick. No baby, no song | she will sing at the big game; her chick squeaks |
 | 🛁 | **Misty's Bubble Bath** `bath` (3D) | the rainforest river | rubs a muddy spirit bear clean, fluffs her, paints her with berries and decorates her; the mirror pool; her paw print on a team sweater. The look stays | Misty swings at a salmon, misses and slides into the mud: a white bear, all brown | in her new look, one swing of the hockey stick sends a pinecone over the cedars |
 | 🐋 | **Whale Peek-a-Boo** `whales` (3D) | Tofino, the Pacific | touches the bubbles and a whale comes up right there: the grey whale (spout, roll, barnacles, tail), the humpback (hold it down, let go, it jumps; the longest hold is a ride), the baby orca with the rock on its nose | a whale's spout blows Ollie's lucky rock out to sea | "Hockey? Is it wet?" Ollie juggles her rock; a whale soaks everybody |
 
@@ -172,12 +172,39 @@ fix is what the team needs.
   and the close-up helper `characters/closeup.ts` (`docs/films.md`).
 - A finished Canada became unfinished: the `salmon` stamp is gone and `bath` is earned by playing it. The trophy stays.
 
+## Round three: Red Canoe (built 2026-11-22)
+
+The first of round three's try-outs (the plan is PR #543: every game's last beat is the friend's hockey talent, done by
+her finger). Same lake, same control, same section ids; the two errands (the milky water, the bubbles) are one job.
+
+- **The film in** says why she's going: Lulu by the glacier, looking all round, "Baby? Where are you?"; Maple: "No
+  baby, no song!" The user's question (lost, or hide-and-seek?) was answered as **lost, with a big hug**, the plan's
+  own wording; flipping it to hide-and-seek is a few reworded lines (`L.canoe`).
+- `stream`: the chick paddles in circles in the milky water (`CHICK` in `paddle.ts`), peeping louder as the canoe
+  nears (`snd.peep`). Paddling into the milky water (or close to the chick, or a tap on it nearby) finds it: it hops
+  onto the bow and rides there facing Maple (a little bigger, so it reads from behind). The rock-flour fact moved to
+  the first poke on the milky water.
+- `loon`: the bubbles are Lulu diving to look for her baby (`LOON_FINDS` 2): she comes up looking all round, calls,
+  Maple calls back, the chick on the bow squeaks and hops, and down she goes, nearer the glacier. The third time she
+  sees it: the chick hops from the bow onto her back (`reunite`, `homeAgain`).
+- `glacier`, the try-out: a tap on Lulu and she sings (`Loon.sing()`), the glacier sings it back twice, fainter
+  (`snd.echo`, the films' recorded call; a shimmer of sparkles runs over the ice), then the chick squeaks along. Three
+  songs and it's the celebration. Quiet for 8 s, Sparkle says how and the hand taps Lulu; for 14 s, she sings by
+  herself, so a do-nothing player still finishes.
+- **The film out** lost its song beat (she sang in the game): the ask, the yes, the chick's squeak, the scarf.
+- New and reworded lines: 16 (the PR records them). No new recorded sounds yet: this session had no ElevenLabs key,
+  so the lost chick's peep reuses `canoe-chick` (quieter far away) and the echo reuses `story-loon`; a real echo take
+  can go in `sfx/parts/canoe.json` later.
+- QA: `qa.mjs` taps Lulu after the crossing (`canada-canoe-cross`, now 75 s), and adds `canada-canoe-sing` and
+  `canada-canoe-sing-idle` (she sings by herself).
+
 ## Next
 
 - Kaylee plays it. Watch for: which of the three she goes back to; whether she finds the hut; does she hold the
   humpback or only tap (taps still grow the jump); is the campfire too dark on her iPad in a bright room; how long
   Flashlight Statues really takes her (a perfect-aim robot does it in about 70 s; the plan wanted 2.5 min).
-- Mountain Bike and Red Canoe are still steering toys: rethink them only if her play data says so.
+- Round three, after the canoe: the whales, then the small ties (PR #543's plan).
+- Mountain Bike is still a steering toy: rethink it only if her play data says so.
 - Small things seen and left: the flamingo statue can't lift a leg (the code-built rig has no leg bones); some moves
   still read small from the board's high camera; in the film `campfire-in` Maple's face touches the left edge in the
   snatch shot; the cabin's team photo is small per friend on a 4:3 screen; Maple alone in the cabin is about 55 px

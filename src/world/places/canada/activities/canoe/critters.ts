@@ -44,6 +44,9 @@ abstract class Critter {
  *  actions on top: she floats low; `dive()` tips her forward and under, `surface()` pops her back up. A poke (or a call)
  *  throws her head back with her bill open to laugh; `flap()` rears her up out of the water with her wings spread (the
  *  loon's wing-flap). With `chick`, her chick rides on her back and can `squeak()`. */
+/** How long Lulu's song lasts (s). */
+export const SING_S = 1.9
+
 export class Loon extends Critter {
   readonly height = 0.75
   readonly lulu: Lulu
@@ -54,9 +57,13 @@ export class Loon extends Critter {
   private diveT = -1
   private flapT = -1
   private squeakT = -1
+  private singT = -1
+  /** Looking all round for her chick (0..1): her head swings this way and that. */
+  looking = 0
   constructor(bag: Bag, withChick = false) {
     super()
-    this.lulu = new Lulu(bag, { height: 0.72, voice: null })
+    // (Her own voice, so her bill moves when she talks.)
+    this.lulu = new Lulu(bag, { height: 0.72 })
     this.lulu.place(0, 0, 0, 0)
     this.root.add(this.lulu.root)
     if (withChick) {
@@ -87,6 +94,14 @@ export class Loon extends Critter {
   /** Rears up out of the water and flaps her wings. */
   flap() {
     this.flapT = 0
+  }
+  /** Her song: head thrown back, bill open to the sky, for SING_S. */
+  sing() {
+    this.singT = 0
+    this.lulu.pull('happy')
+  }
+  get singing() {
+    return this.singT >= 0
   }
   /** Her chick tries to sing too: a tiny squeak, bill open, a hop. */
   squeak() {
@@ -120,6 +135,12 @@ export class Loon extends Critter {
     // A poke (or a call): her head goes up and back, bill open to the sky.
     const k = this.tick(dt, 1.4)
     L.calling = k < 0 ? 0 : bell(span(k, 0, 1))
+    if (this.singT >= 0) {
+      this.singT += dt
+      L.calling = Math.max(L.calling, Math.min(1, this.singT * 4, (SING_S - this.singT) * 3))
+      if (this.singT > SING_S) this.singT = -1
+    }
+    L.headTurn = Math.sin(t * 2.6 + this.phase) * 0.75 * this.looking
     L.update(dt, t)
     if (this.chick) {
       if (this.squeakT >= 0 && (this.squeakT += dt) > 0.9) this.squeakT = -1
