@@ -28,7 +28,8 @@ async function sing(page, ms) {
   const t0 = Date.now()
   while (Date.now() - t0 < ms && !(await state(page)).done) {
     await tapAnchor(page, 'loon')
-    await page.waitForTimeout(2900)
+    // (A song is about 5.4 s: her call and the glacier's echo.)
+    await page.waitForTimeout(5600)
   }
 }
 
@@ -89,21 +90,21 @@ export const motion = [
   {
     // The try-out from its link: Lulu home with her chick, three taps and she sings, the glacier singing back.
     name: 'canada-canoe-sing',
-    seconds: 16,
+    seconds: 22,
     setup: async (page, base) => {
       await ready(page, base, '#/world/canada/canoe/glacier')
       await page.waitForTimeout(2500)
     },
-    act: (page) => sing(page, 14000),
+    act: (page) => sing(page, 20000),
   },
   {
     // A child who doesn't tap Lulu: she sings by herself, and the game still ends.
     name: 'canada-canoe-sing-idle',
-    seconds: 50,
+    seconds: 60,
     setup: async (page, base) => {
       await ready(page, base, '#/world/canada/canoe/glacier')
     },
-    act: (page) => page.waitForFunction(() => window.__canadaCanoeQA?.().done, null, { timeout: 50000 }),
+    act: (page) => page.waitForFunction(() => window.__canadaCanoeQA?.().done, null, { timeout: 60000 }),
   },
   {
     // A child who only taps: tap tap tap toward where she's going (each tap paddles a short way).

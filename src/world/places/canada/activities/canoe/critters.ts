@@ -44,8 +44,8 @@ abstract class Critter {
  *  actions on top: she floats low; `dive()` tips her forward and under, `surface()` pops her back up. A poke (or a call)
  *  throws her head back with her bill open to laugh; `flap()` rears her up out of the water with her wings spread (the
  *  loon's wing-flap). With `chick`, her chick rides on her back and can `squeak()`. */
-/** How long Lulu's song lasts (s). */
-export const SING_S = 1.9
+/** How long Lulu's head stays thrown back for her song (s): most of the recorded call (story-loon, 4 s). */
+export const SING_S = 3.4
 
 export class Loon extends Critter {
   readonly height = 0.75

@@ -129,6 +129,10 @@ const BOW = new Vector3(0, 0.5, 1.8)
 const HOP_S = 0.75
 /** Lulu's songs before the celebration; seconds of quiet before Sparkle says how, and before Lulu sings by herself. */
 const SONGS = 3
+/** One song from start to finish: her call (story-loon, 4 s) and the glacier's echo of it from ECHO_S. No new song
+ *  (and no celebration) before it's over, so songs never play over each other. */
+const ECHO_S = 1.1
+const SONG_S = ECHO_S + 4.3
 const SING_HINT_S = 8
 const SING_SELF_S = 14
 
@@ -912,7 +916,7 @@ export class RedCanoe implements World3D {
     }
     this.updateLoon(dt, t)
     // Lulu's song: if it's quiet a while, Sparkle says how (the hand shows it too); a while longer, she sings anyway.
-    if (this.songT >= 0 && (this.songT += dt) > SING_S + 0.9) this.songT = -1
+    if (this.songT >= 0 && (this.songT += dt) > SONG_S) this.songT = -1
     if (this.loonPhase === 'family' && this.doneT < 0) {
       this.quietT += dt
       if (this.quietT > SING_HINT_S && !this.singHinted) {
@@ -1219,7 +1223,7 @@ export class RedCanoe implements World3D {
   }
 
   /** The try-out: Lulu sings (a tap on her, or by herself after a quiet while), and a moment later the glacier sings it
-   *  back, fainter, twice; then her chick squeaks along. The third song and it's the celebration. */
+   *  back, fainter; then her chick squeaks along. When the third song is over, it's the celebration. */
   private sing() {
     const l = this.mama
     if (this.loonPhase !== 'family' || this.doneT >= 0 || l.singing || this.songT >= 0) return
@@ -1228,19 +1232,17 @@ export class RedCanoe implements World3D {
     this.songT = 0
     l.sing()
     snd.song()
-    snd.echo(0.95, 0.45)
-    snd.echo(1.75, 0.2)
     const p = l.root.position
     const h = l.lulu.head(tmp)
     this.sparkle.burst(h.x, h.y + 0.3, h.z, 18, 1.2, 2.2, 0.16)
     for (let i = 0; i < 3; i++) this.foam.emit(p.x, 0.03, p.z, 0, 0, 0, 1.2 + i * 0.4, 0.8 + i * 0.9)
     const n = this.songs
-    // The glacier answers: a shimmer runs across the ice, then fainter.
-    this.timers.later(() => this.glacierSings(1), 950)
-    this.timers.later(() => this.glacierSings(0.5), 1750)
-    this.timers.later(() => (l.squeak(), snd.chick()), 2400)
-    if (n === 1) this.timers.later(() => this.talk(L.canoe.echo, true), 2000)
-    if (n >= SONGS) this.timers.later(() => this.finish(), 3000)
+    // The glacier answers: its echo, and a shimmer runs across the ice, then fainter.
+    this.timers.later(() => (snd.echo(0.4), this.glacierSings(1)), ECHO_S * 1000)
+    this.timers.later(() => this.glacierSings(0.5), (ECHO_S + 1) * 1000)
+    this.timers.later(() => (l.squeak(), snd.chick()), (SING_S + 0.3) * 1000)
+    if (n === 1) this.timers.later(() => this.talk(L.canoe.echo, true), (ECHO_S + 0.2) * 1000)
+    if (n >= SONGS) this.timers.later(() => this.finish(), SONG_S * 1000)
   }
   private glacierSings(k: number) {
     for (let i = 0; i < Math.round(30 * k); i++) {

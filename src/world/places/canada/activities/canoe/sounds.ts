@@ -48,9 +48,10 @@ export const snd = {
   },
   /** Lulu's song, long and lovely (the films' recorded call). */
   song: clip(url('story-loon'), () => synthLaugh(true), { jitter: 0.02 }),
-  /** The glacier sings it back: the same call, fainter and a little lower, after `delay` seconds. */
-  echo: (delay: number, vol: number) => {
-    if (!playClip(url('story-loon'), { vol, rate: 0.96, delay })) tone(620, 860, 0.5, 0.06 * vol, 'sine', delay)
+  /** The glacier sings it back: the same call, fainter and a little lower. (Play it from the game's own timers, so it
+   *  never sounds after she has left.) */
+  echo: (vol: number) => {
+    if (!playClip(url('story-loon'), { vol, rate: 0.96 })) tone(620, 860, 0.5, 0.06 * vol, 'sine')
   },
   /** The glacier stream tumbling into the lake (when she finds the milky water). */
   stream: clip(url('canoe-stream'), () => noise(1.2, 0.06, 'bandpass', 1400, 900, 0, 0.8)),

@@ -187,8 +187,9 @@ her finger). Same lake, same control, same section ids; the two errands (the mil
 - `loon`: the bubbles are Lulu diving to look for her baby (`LOON_FINDS` 2): she comes up looking all round, calls,
   Maple calls back, the chick on the bow squeaks and hops, and down she goes, nearer the glacier. The third time she
   sees it: the chick hops from the bow onto her back (`reunite`, `homeAgain`).
-- `glacier`, the try-out: a tap on Lulu and she sings (`Loon.sing()`), the glacier sings it back twice, fainter
-  (`snd.echo`, the films' recorded call; a shimmer of sparkles runs over the ice), then the chick squeaks along. Three
+- `glacier`, the try-out: a tap on Lulu and she sings (`Loon.sing()`), the glacier sings it back, fainter
+  (`snd.echo`, the films' recorded call; a shimmer of sparkles runs over the ice), then the chick squeaks along. A song
+  is about 5.4 s (the 4 s call and its echo), and a tap during one only makes her smile, so songs never overlap. Three
   songs and it's the celebration. Quiet for 8 s, Sparkle says how and the hand taps Lulu; for 14 s, she sings by
   herself, so a do-nothing player still finishes.
 - **The film out** lost its song beat (she sang in the game): the ask, the yes, the chick's squeak, the scarf.
