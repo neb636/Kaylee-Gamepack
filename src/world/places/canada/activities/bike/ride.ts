@@ -732,17 +732,22 @@ export class MountainBike implements World3D {
         if (right < near && right < left) want = 0.35 * (1 - right / near)
         else if (left < near) want = -0.35 * (1 - left / near)
         this.dbg.edge = want !== 0 ? 'nudge' : ''
-      } else if (room < 0.35 + Math.max(0, d.speed) * 0.03) {
-        // Pushing into a side that's closing in on her (the island widening): eased away from it.
-        want = this.push > 0 ? 0.2 : -0.2
-        this.dbg.edge = 'away'
-      } else this.dbg.edge = room < 0.8 + cross * 0.35 ? 'fade' : ''
+      } else {
+        // Pushing into a side that's closing in on her (the island widening): eased away from it, more the closer she
+        // is. (A blend, not a switch: flipping from "away" to "into" at one distance made her wobble along the edge,
+        // her heading snapping several degrees a frame, for as long as she held the push.)
+        const near = 0.35 + Math.max(0, d.speed) * 0.03
+        const a = clamp(1 - room / near, 0, 1)
+        want += ((this.push > 0 ? 0.2 : -0.2) - want) * a
+        this.dbg.edge = a > 0 ? 'away' : room < 0.8 + cross * 0.35 ? 'fade' : ''
+      }
       const rate = Math.abs(this.push) > 0.02 || want !== 0 ? STEER.edge : STEER.settle
       carve += (want - carve) * (1 - Math.exp(-dt * rate))
       // Already right at a side and still pointing into it: straight along it, quickly.
       const into = carve < 0 ? this.room(s0, lat0, 1) : this.room(s0, lat0, -1)
+      // (Ramped in over the last 0.4 m, so there's no step where it starts.)
       if (into < 0.4) {
-        carve *= Math.exp(-dt * 14)
+        carve *= Math.exp(-dt * 14 * (1 - into / 0.4))
         this.dbg.edge += '+into'
       }
     } else {
