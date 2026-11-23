@@ -525,7 +525,8 @@ export class MountainBike implements World3D {
   /** Just out of the station's door (the side shot): until she's a little way down, or weaving there a while (the
    *  cabins swing past that shot's camera). */
   private get atDoor() {
-    return this.mode === 'ride' && this.s < 3 && this.modeT < 2.4
+    // (On a phone the shot from behind sits further back: until she's that far out, it would be inside the station.)
+    return this.mode === 'ride' && this.s < 3 && (this.modeT < 2.4 || this.s < START + (this.tall ? 14 : 4))
   }
 
   /** In her gondola cabin (the story, and the ride up). */

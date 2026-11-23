@@ -65,7 +65,8 @@ export class TireLine {
     for (let i = 1; i < this.n; i++) {
       if (this.start[i]) continue
       const p = (i - 1) * 2
-      a.set([p, p + 1, p + 2, p + 1, p + 3, p + 2], q)
+      // (Wound to face up: the other way round they faced the ground and were culled.)
+      a.set([p, p + 2, p + 1, p + 1, p + 2, p + 3], q)
       q += 6
     }
     idx.needsUpdate = true
