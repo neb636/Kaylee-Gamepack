@@ -135,6 +135,10 @@ const GOND_FROM = 170
 const GOND_S = 11
 /** The story's camera, turned from the gondola's (rad): in front of Maple. */
 const STORY_YAW = 1.25
+/** Leaves thrown off the back wheel in a carve and swirling up behind it. Off while we test whether they cause the
+ *  stutters on the phone in deep turns (2026-11-22); leaf piles still burst. Set true to bring them back. */
+const WHEEL_LEAVES = false
+
 /** Leaf piles (s, lat: + right of the trail, as a share of the edge so they sit right at it) and stumps on the shoulders. */
 const PILES: [number, number][] = [
   [42, -0.8],
@@ -953,6 +957,7 @@ export class MountainBike implements World3D {
       const vx = Math.cos(a) * out * sp - Math.sin(d.heading) * (0.6 + Math.random())
       const vz = Math.sin(a) * out * sp - Math.cos(d.heading) * (0.6 + Math.random())
       const p = Math.random() < 0.6 ? this.leaves : this.dust
+      if (p === this.leaves && !WHEEL_LEAVES) continue
       p.emit(bx, g + 0.15, bz, vx, 1.6 + hard * 2.2 + Math.random() * 1.4, vz, 0.7 + Math.random() * 0.4, p === this.leaves ? 0.13 + Math.random() * 0.06 : 0.1 + hard * 0.06)
     }
   }
@@ -992,7 +997,7 @@ export class MountainBike implements World3D {
       if (wet) this.spray.emit(p.x + back.x, c.creekY + 0.2, p.z + back.z, (Math.random() - 0.5) * 2, 2 + Math.random() * 2, (Math.random() - 0.5) * 2, 0.6, 0.14)
       else if (Math.random() < 0.55) this.dust.emit(p.x + back.x, p.y + 0.08, p.z + back.z, (Math.random() - 0.5) * 1.2 - this.d.vx * 0.05, 0.6 + Math.random() * 1.2 + v * 0.06, (Math.random() - 0.5) * 1.2 - this.d.vz * 0.05, 0.6, 0.14)
       // Leaves swirl up behind the wheels.
-      if (!wet && Math.random() < 0.25 + v * 0.02) this.leaves.emit(p.x + back.x, p.y + 0.15, p.z + back.z, (Math.random() - 0.5) * 2, 1.5 + Math.random() * 2, (Math.random() - 0.5) * 2, 1.4, 0.13)
+      if (WHEEL_LEAVES && !wet && Math.random() < 0.25 + v * 0.02) this.leaves.emit(p.x + back.x, p.y + 0.15, p.z + back.z, (Math.random() - 0.5) * 2, 1.5 + Math.random() * 2, (Math.random() - 0.5) * 2, 1.4, 0.13)
     }
     // Tock tock over the bridge's planks.
     if (this.onBridge && !this.bridgeSaid) {
