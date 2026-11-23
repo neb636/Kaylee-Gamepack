@@ -198,7 +198,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       if (started || gone) return
       started = true
       stop = frameLoop(
-        (_now, dt) => {
+        (now, dt) => {
           if (pausedRef.current) return
           // Frozen in the camera lab: the moment holds, only the camera moves.
           const t0 = perf ? performance.now() : 0
@@ -208,7 +208,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
           world.render()
           if (perf) {
             const t2 = performance.now()
-            perf.frame({ dt, update: t1 - t0, render: t2 - t1, calls: world.stats.calls, tris: world.stats.tris, dpr, programs: renderer.info.programs?.length ?? 0, finger: fingers.size > 0, note: world.perfNote?.() ?? '' })
+            perf.frame(now, { update: t1 - t0, render: t2 - t1, calls: world.stats.calls, tris: world.stats.tris, dpr, programs: renderer.info.programs?.length ?? 0, finger: fingers.size > 0, note: world.perfNote?.() ?? '' })
           }
           world.placeAnchors()
           const roaming = world.roam?.() ?? null

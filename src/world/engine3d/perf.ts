@@ -16,8 +16,8 @@ const SLOW_MS = 25
 const KEEP = 300
 const N = 120
 
+/** One frame's work, measured as it ran. */
 export interface PerfFrame {
-  dt: number
   update: number
   render: number
   calls: number
@@ -46,6 +46,8 @@ export class PerfHud {
   private worst = 0
   private slow = 0
   private copiedUntil = 0
+  /** The last frame's work, waiting for the interval it ends (the time until the next frame shows what it cost). */
+  private prev: { now: number; f: PerfFrame; extra: string[] } | null = null
   private onMove = () => this.moves++
 
   constructor(host: HTMLElement) {
@@ -54,7 +56,8 @@ export class PerfHud {
       'position:absolute;right:8px;top:calc(var(--top-clear, 104px) + 8px);z-index:60;width:220px;padding:6px;border-radius:10px;' +
       'background:rgba(20,16,30,.72);color:#fff;font:11px/1.35 ui-monospace,Menlo,monospace;pointer-events:auto;touch-action:none'
     // A finger on the overlay mustn't steer the bike or turn the camera.
-    for (const t of ['pointerdown', 'pointerup', 'click']) el.addEventListener(t, (e) => e.stopPropagation())
+    // (Releases go through: a drag that began on the world and ends over the overlay must still let go.)
+    for (const t of ['pointerdown', 'click']) el.addEventListener(t, (e) => e.stopPropagation())
     const chart = (this.chart = document.createElement('canvas'))
     chart.width = 208 * 2
     chart.height = 56 * 2
@@ -84,28 +87,34 @@ export class PerfHud {
     this.events.push(what)
   }
 
-  frame(f: PerfFrame) {
-    const ms = f.dt * 1000
-    this.times[this.n++ % N] = ms
-    const t = ((performance.now() - this.start) / 1000).toFixed(1)
+  /** A frame ran at `now` (the frame loop's timestamp) and did the work in `f`. The time from the previous frame to
+   *  this one, unclamped, is charged to the previous frame's work: that's the work the screen was waiting on. */
+  frame(now: number, f: PerfFrame) {
     const extra = [...this.events]
+    this.events.length = 0
     if (this.lastPrograms >= 0 && f.programs > this.lastPrograms) extra.push(`programs +${f.programs - this.lastPrograms}`)
     this.lastPrograms = f.programs
-    this.events.length = 0
+    const prev = this.prev
+    this.prev = { now, f, extra }
+    if (!prev) return
+    const ms = now - prev.now
+    const w = prev.f
+    this.times[this.n++ % N] = ms
+    const t = ((performance.now() - this.start) / 1000).toFixed(1)
     if (ms > SLOW_MS) {
       this.slow++
       this.worst = Math.max(this.worst, ms)
-      const prev = this.times[(this.n - 2 + N) % N]
+      const before = this.times[(this.n - 2 + N) % N]
       this.log.push(
-        `${t}s ${ms.toFixed(0)}ms (prev ${prev.toFixed(0)}) upd ${f.update.toFixed(1)} rnd ${f.render.toFixed(1)} ` +
-          `calls ${f.calls} tris ${(f.tris / 1000).toFixed(0)}k dpr ${f.dpr} moves ${this.moves} ${f.finger ? 'finger' : 'no-finger'}` +
-          (f.note ? ` | ${f.note}` : '') +
-          (extra.length ? ` | ${extra.join(', ')}` : ''),
+        `${t}s ${ms.toFixed(0)}ms (prev ${before.toFixed(0)}) upd ${w.update.toFixed(1)} rnd ${w.render.toFixed(1)} ` +
+          `calls ${w.calls} tris ${(w.tris / 1000).toFixed(0)}k dpr ${w.dpr} moves ${this.moves} ${w.finger ? 'finger' : 'no-finger'}` +
+          (w.note ? ` | ${w.note}` : '') +
+          (prev.extra.length ? ` | ${prev.extra.join(', ')}` : ''),
       )
       if (this.log.length > KEEP) this.log.shift()
-    } else if (extra.length) this.log.push(`${t}s event: ${extra.join(', ')}`)
+    } else if (prev.extra.length) this.log.push(`${t}s event: ${prev.extra.join(', ')}`)
     this.moves = 0
-    if (this.n % 6 === 0) this.draw(f)
+    if (this.n % 6 === 0) this.draw(w)
     if (this.copiedUntil && performance.now() > this.copiedUntil) {
       this.copiedUntil = 0
       this.copyBtn.textContent = 'Copy'
@@ -177,6 +186,7 @@ export class PerfHud {
 
   private clear() {
     this.log.length = 0
+    this.prev = null
     this.slow = 0
     this.worst = 0
     this.start = performance.now()
