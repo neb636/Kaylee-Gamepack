@@ -37,6 +37,9 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
   const [found, setFound] = useState(false)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [done, setDone] = useState(false)
+  // The "again" button waits for the stamp: the first time through, the stamp takes over a few seconds after Lulu sings,
+  // so a button shown before it would only flash (empty, mid-pop) and vanish.
+  const [again, setAgain] = useState(false)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const finished = useRef(false)
@@ -62,8 +65,11 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
       // first time.
       if (!finished.current) {
         finished.current = true
-        stampTimer.current = timers.later(() => props.current.onDone(), DONE_S * 1000)
-      }
+        stampTimer.current = timers.later(() => {
+          props.current.onDone()
+          setAgain(true)
+        }, DONE_S * 1000)
+      } else setAgain(true)
     },
   })
 
@@ -74,6 +80,7 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
   }
   const restart = (s: CanoeSection) => {
     setDone(false)
+    setAgain(false)
     setFound(false)
     setSection(s)
     setRun((r) => ({ section: s, n: r.n + 1 }))
@@ -111,8 +118,8 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
         </button>
       )}
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
-        {done && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 4, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
+        {done && again && (
+          <motion.div initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 4, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
             <BigButton onClick={() => restart('glide')} ariaLabel="Paddle again">
               🔁 🛶
             </BigButton>
