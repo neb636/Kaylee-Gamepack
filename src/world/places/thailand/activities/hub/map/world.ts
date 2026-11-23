@@ -336,7 +336,7 @@ export class ThaiMapWorld implements World3D {
 
   /** She may swing the board round and pinch it closer (no walking, no jumping). */
   roam(): RoamState | null {
-    return this.picked ? null : { walk: false, jump: false }
+    return this.picked ? null : { walk: false }
   }
 
   get calm() {

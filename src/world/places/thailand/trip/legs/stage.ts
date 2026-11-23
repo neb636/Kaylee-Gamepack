@@ -95,7 +95,7 @@ export abstract class Stage implements World3D {
   protected roams(): boolean {
     return !!this.rig.shot?.roam
   }
-  /** Who the thumbstick and jump button move, and where they may stand (null: the camera turns, but no pad). `stop`
+  /** Who the thumbstick moves, and where they may stand (null: the camera turns, but no pad). `stop`
    *  calls off a walk the world planned (a Walker's), the moment she takes the stick. */
   protected roamer(): { k: Avatar; free: (x: number, z: number) => boolean; stop?: () => void } | null {
     return null
@@ -103,18 +103,11 @@ export abstract class Stage implements World3D {
   roam(): RoamState | null {
     if (!this.roams()) return null
     const r = this.roamer()
-    return { walk: !!r, jump: !!r }
+    return { walk: !!r }
   }
   roamStick(x: number, y: number) {
     this.stickIn.x = x
     this.stickIn.y = y
-  }
-  roamJump() {
-    const r = this.roams() ? this.roamer() : null
-    if (!r) return
-    this.lastTouch = this.time
-    this.touches++
-    if (r.k.jump(ROAM.jumpHeight, ROAM.jumpTime, ROAM.jumpReach, r.free)) sfx.boing()
   }
   /** Before the leg's own frame: the stick walks her the way it pushes, as the camera faces now. */
   private steer() {

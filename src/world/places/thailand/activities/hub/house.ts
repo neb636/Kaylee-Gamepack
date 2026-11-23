@@ -382,11 +382,11 @@ export class House implements World3D {
   // ---------------------------------------------------------------- Roblox controls (engine3d/roam.ts)
 
   /** The pad and the camera turn are hers whenever she's free to walk around (not in the arrival, the family photo, a
-   *  ride, or a plugin's own camera like the wardrobe mirror). No jump button in the house: it did nothing useful
-   *  there (the user asked for it gone, 2026-11-23); stools, the mattress and the stairs hop her up on their own. */
+   *  ride, or a plugin's own camera like the wardrobe mirror). Stools, the mattress and the stairs hop her up on
+   *  their own. */
   roam(): RoamState | null {
     if (this.arriving || this.photo || this.plugin?.shot?.() || this.kaylee.root.parent !== this.scene) return null
-    return { walk: true, jump: false }
+    return { walk: true }
   }
   roamStick(x: number, y: number) {
     this.stickIn.x = x
