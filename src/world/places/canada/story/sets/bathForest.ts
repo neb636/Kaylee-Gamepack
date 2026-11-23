@@ -71,10 +71,15 @@ export function mossyCedar(x: number, y: number, z: number, h: number, r: number
 
 /** A far trunk in the haze: tall and straight, mossy green over bark, a few tiers at the top (the fog softens it). */
 function farTrunk(x: number, y: number, z: number, h: number, r: number, i: number): BufferGeometry[] {
+  // The moss sleeve stands clearly proud of the bark (about 12%) all the way up. It used to sit within 1% of the
+  // trunk and cross inside it at its top, and far off in the haze the depth buffer couldn't tell them apart: the bark
+  // shimmered through the moss whenever the camera moved.
+  const sleeve = h * 0.18
+  const trunkAt = r * (1 - (0.4 * sleeve) / h)
   const parts = [
     P.cyl(r * 0.6, r, h, i % 3 ? GREEN.far : GREEN.farDark, { at: [x, y + h / 2, z] }, 7),
     P.cone(r * 1.6, r * 1.8, GREEN.mossDark, { at: [x, y + r * 0.85, z] }, 7),
-    P.cyl(r * 0.92, r * 1.04, h * 0.18, GREEN.mossDark, { at: [x, y + h * 0.09, z] }, 7),
+    P.cyl(trunkAt * 1.12, r * 1.14, sleeve, GREEN.mossDark, { at: [x, y + sleeve / 2, z] }, 7),
   ]
   for (let k = 0; k < 3; k++) parts.push(P.cone((1.8 - k * 0.45) * r * 1.6, h * 0.14, GREEN.canopy[(i + k) % 3], { at: [x, y + h * (0.72 + k * 0.1), z] }, 7))
   return parts
