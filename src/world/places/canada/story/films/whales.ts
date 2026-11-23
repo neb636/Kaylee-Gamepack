@@ -5,7 +5,8 @@
 //   whales-in   Ollie floats on her back in the kelp juggling her lucky rock on her tummy (Maple watches from the
 //               little pink boat): "Ollie spins faster than anybody!", "Look! My lucky rock!". Higher and higher...
 //               a grey whale comes up right beside her and its spout shoots the rock into the sky and away. "My rock!
-//               The whale took it!" "Hop on! We'll get it back!": she grabs the boat's rope. About 14 s.
+//               The whale took it!" "Hop on! We'll get it back!": she swims to the boat and hops into the bow, where
+//               she rides through the game (her tummy empty: the rock is gone). About 14 s.
 //   whales-out  Out in the kelp, the rock back on Ollie's tummy, Maple leaning over the side. Is hockey wet? It's ice,
 //               you slide! Ollie juggles while they talk and tucks the rock under her arm on "I love to slide!", then
 //               spins like a top. A humpback comes up behind them and its spout rains down on everybody; they shake
@@ -48,6 +49,13 @@ export const WHALES_IN: StoryFilm = {
       grey.root.rotation.y = heading
     }
     const watchOllie = () => (set.look = ollie.head(tA).clone())
+    /** A little splash where she jumps out of the water. */
+    const splash = (x: number, z: number) => {
+      for (let i = 0; i < 24; i++) {
+        const a = Math.random() * Math.PI * 2
+        set.mist.emit(x + Math.cos(a) * 0.3, 0.1, z + Math.sin(a) * 0.3, Math.cos(a) * 1.2, 2 + Math.random() * 1.5, Math.sin(a) * 1.2, 0.7, 0.12 + Math.random() * 0.08)
+      }
+    }
     // The rock's flight: up off her tummy to over the blowhole, then the spout shoots it up into the sky and away.
     const from = new Vector3()
     const over = new Vector3()
@@ -140,7 +148,7 @@ export const WHALES_IN: StoryFilm = {
         cues: [[0.6, () => grey.dive()]],
       },
       {
-        // Maple at the wheel: hop on! Ollie paddles to the stern and grabs the rope.
+        // Maple at the wheel: hop on! Ollie paddles to the bow and hops in, onto her back across it.
         id: 'hop',
         shot: cam([at.x + 2.4, 2.5, at.z + 9.5], [at.x, 0.9, at.z + 1.2], undefined, { tall: { eye: [at.x + 2.8, 3.2, at.z + 12] } }),
         say: I.hop,
@@ -152,14 +160,23 @@ export const WHALES_IN: StoryFilm = {
           ollie.cheer()
         },
         tick: (_k, t) => {
-          // (From her spot to just behind the stern, on the rope.)
-          const k = ease(Math.min(1, Math.max(0, (t - 0.8) / 1.4)))
-          ollie.pos.x = ox + (at.x - 4.4 - ox) * k
-          ollie.pos.z = oz + (at.z + 0.6 - oz) * k
-          float.face = -0.9 * k
-          boat.rope(k > 0.95 ? ollie.at(0.42, tB) : null)
+          // (From her spot she paddles up beside the bow, then hops up and over the tube onto her back across it,
+          // toes to the camera.)
+          const seat = boat.seatAt(tB)
+          const side = { x: seat.x + 0.4, z: seat.z + 2.1 }
+          const k = ease(Math.min(1, Math.max(0, (t - 0.7) / 1.0)))
+          const j = ease(Math.min(1, Math.max(0, (t - 1.7) / 0.5)))
+          ollie.pos.x = ox + (side.x - ox) * k + (seat.x - side.x) * j
+          ollie.pos.z = oz + (side.z - oz) * k + (seat.z - side.z) * j
+          float.face = -0.9 * k * (1 - j)
+          // (Up out of the water, over the tube, down onto the cool box.)
+          float.raise = (seat.y - float.y) * j + Math.sin(Math.PI * j) * 0.55
+          float.sink = 0.2 - 0.05 * j
         },
-        cues: [[2.1, () => (boat.cheer(), whaleSfx.squeak())]],
+        cues: [
+          [1.7, () => (whaleSfx.squeak(), s.sfx.splash(), splash(ollie.pos.x, ollie.pos.z))],
+          [2.2, () => (s.sfx.plop(), boat.cheer(), whaleSfx.giggle())],
+        ],
       },
     ]
   },

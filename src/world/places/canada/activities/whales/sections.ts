@@ -8,7 +8,7 @@ import { defineSections } from '../../../../kit/sections'
 const WHALE_SECTIONS = defineSections('canada', 'whales', {
   params: {},
   sections: [
-    { id: 'story', name: 'Ollie on the rope: "My rock! The whale took it!"' },
+    { id: 'story', name: 'Ollie in the boat: "My rock! The whale took it!"' },
     { id: 'grey', name: 'Bubbles, and the grey whale: its blowhole, back, barnacles and tail' },
     { id: 'humpback', name: 'The humpback: hold it down and let go, it jumps (the biggest: a ride on its back)', links: [{ label: 'The humpback', also: [{ label: 'feel lab', flags: { feel: '1' } }] }] },
     { id: 'orcas', name: 'The orca family: peek-a-boo with the baby, who has the rock' },
