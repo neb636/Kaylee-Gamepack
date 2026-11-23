@@ -1,0 +1,61 @@
+{
+ "title": "Mountain Bike, card C: tip the bike",
+ "checkIn": "3 of 4: play it",
+ "kaylee": "No wheel on screen: she grabs the bike and tips it, and how far it tips is how hard it carves. Tip it all the way and Maple sticks a foot out and skids.",
+ "questions": [
+  "Is tipping the bike easier for her than the wheel (yes or no)?",
+  "Is the foot-out skid fun or too much (fun or too much)?"
+ ],
+ "reels": [
+  {
+   "name": "bike-carve-c",
+   "moments": [
+    "canada-bike-steer"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "label": "Ride from the top",
+   "hash": "#/world/canada/bike/green"
+  },
+  {
+   "label": "The berms (blue way)",
+   "hash": "#/world/canada/bike/berms?trail=blue"
+  },
+  {
+   "label": "Tune the feel",
+   "hash": "#/world/canada/bike/berms?trail=green&feel=1"
+  }
+ ],
+ "pictures": [
+  {
+   "title": "Tipping right, left, then letting go",
+   "after": "pics/c-tips.png",
+   "caption": "The bike rolls toward her finger at once; on a full tip her inside foot comes out."
+  },
+  {
+   "title": "When she's stuck",
+   "after": "pics/c-hint.png",
+   "caption": "The hint hand sits on the bike and slides sideways."
+  }
+ ],
+ "listens": [
+  {
+   "title": "The bike's new sounds",
+   "audio": "sfx/bike.mp3",
+   "items": [
+    {
+     "text": "Tires carving through leaves (loop)",
+     "at": 0,
+     "end": 4
+    },
+    {
+     "text": "The back wheel skids (foot out)",
+     "at": 4.7,
+     "end": 6.06
+    }
+   ]
+  }
+ ]
+}
