@@ -1,0 +1,10 @@
+{
+  "title": "Carnival Snowballs: no more flash in the park",
+  "checkIn": "fix",
+  "kaylee": "The horse and carriage stays up on the cliff road instead of flashing into the middle of the park for a moment (the fox too).",
+  "questions": [],
+  "pictures": [
+    { "title": "The moment the carriage sets off", "before": "pics/carriage-before.png", "after": "pics/carriage-after.png", "caption": "Before: for a frame it pops up on top of the snowman. After: it starts at the far end of the cliff road, out of sight." }
+  ],
+  "links": [{ "label": "Play it", "hash": "#/world/canada/snowman/dress?snowmen=1" }]
+}
