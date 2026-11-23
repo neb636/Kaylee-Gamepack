@@ -1,0 +1,19 @@
+{
+  "title": "One set of controls: the kit, and the Poles first",
+  "checkIn": "fix",
+  "kaylee": "In the Poles, the 'again' and 'bring the summer back' buttons now always wait in the same corner (bottom right), with drawn pictures instead of emoji.",
+  "questions": [
+    "In Snow Coats, the way on is a pink button with a sun instead of a ▶. Does it read as 'go on' to her?"
+  ],
+  "pictures": [
+    { "title": "Snow Coats: bring the summer back", "before": "pics/before-coats-dusk.jpg", "after": "pics/after-coats-dusk.jpg", "caption": "Top right pill → pink round button, bottom right" },
+    { "title": "Snow Coats: again", "before": "pics/before-coats-end.jpg", "after": "pics/after-coats-end.jpg", "caption": "🔁 ❄️ pill → lavender 'again' button, bottom right" },
+    { "title": "Ice Floe Hop: again", "before": "pics/before-floe-home.jpg", "after": "pics/after-floe-home.jpg", "caption": "Same corner as before, now the shared button" },
+    { "title": "Emperor Huddle: again", "before": "pics/before-huddle-end.jpg", "after": "pics/after-huddle-end.jpg", "caption": "Top right pill → bottom right" }
+  ],
+  "links": [
+    { "label": "Snow Coats: rub the summer back", "hash": "#/world/poles/coats/summer" },
+    { "label": "Ice Floe Hop: home on Mama's ice", "hash": "#/world/poles/floe/mama" },
+    { "label": "Emperor Huddle: Papa's song", "hash": "#/world/poles/huddle/song" }
+  ]
+}
