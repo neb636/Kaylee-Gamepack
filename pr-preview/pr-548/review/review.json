@@ -1,0 +1,17 @@
+{
+  "title": "Canada: a cuter porcupine and deer",
+  "checkIn": "fix",
+  "kaylee": "The porcupine and the deer she meets on the bike trail and at the campfire look like toys now, and the deer's ears are on her head.",
+  "questions": [],
+  "links": [
+    { "label": "The deer in the character lab", "hash": "#/world/characters/deer" },
+    { "label": "The porcupine in the character lab", "hash": "#/world/characters/porcupine" }
+  ],
+  "pictures": [
+    { "title": "The deer", "before": "pics/before-deer-a.jpg", "after": "pics/after4-deer-a.jpg", "caption": "Ears grow out of her head; a bigger head, a thicker neck, the white patch on her throat" },
+    { "title": "The deer, frozen in the flashlight", "after": "pics/after4-deer-p.jpg", "caption": "Ears straight up, a mouthful of leaves" },
+    { "title": "The porcupine", "before": "pics/before-porcupine-a.jpg", "after": "pics/after4-porcupine-a.jpg", "caption": "Feet, round ears, a pale face and a twitching nose" },
+    { "title": "The porcupine from the side", "before": "pics/before-porcupine-b.jpg", "after": "pics/after4-porcupine-b.jpg", "caption": "Quills lie back along him like a coat, cream with dark tips" },
+    { "title": "The porcupine, poked", "after": "pics/after4-porcupine-p.jpg", "caption": "His quills pop straight out into a prickly ball" }
+  ]
+}
