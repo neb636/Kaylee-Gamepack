@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "bike-leaves-before",
+  "title": "Bike leaves before",
+  "video": "bike-leaves-before.mp4",
+  "gif": "bike-leaves-before.gif",
+  "seconds": 11,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-bike-steer",
+      "where": "canada-bike-steer",
+      "seconds": 9,
+      "fps": 29.8,
+      "status": "ok"
+    }
+  ]
+}
