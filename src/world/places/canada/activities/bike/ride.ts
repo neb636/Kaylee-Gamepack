@@ -936,7 +936,9 @@ export class MountainBike implements World3D {
     const back = 0.55
     const bx = d.x - Math.sin(d.heading) * back
     const bz = d.z - Math.cos(d.heading) * back
-    const g = this.course.ride(this.s, this.lat, this.onBridge)
+    // The ground under the back wheel, not under her: downhill, the back wheel is a few cm higher.
+    const at = this.course.trail.locate(bx, bz, this.s)
+    const g = this.course.ride(at.s, at.lat, this.onBridge)
     if (this.air || this.wet) this.line.lift()
     else this.line.add(bx, g + (this.onBridge ? 0.012 : 0.025), bz, d.heading)
     const hard = this.air ? 0 : Math.abs(this.push) * clamp(v / RIDE.speed, 0, 1.3)
