@@ -48,7 +48,9 @@ export function HudButton({ role = 'go', icon, label, onClick, slot, size = 'md'
       className={`hud-btn hud-${role}${size === 'md' ? '' : ` hud-${size}`}${slot ? ` hud-at hud-${slot}` : ''}${className ? ` ${className}` : ''}`}
       initial={{ scale: 0 }}
       animate={pulse ? { scale: [1, 1.1, 1] } : { scale: 1 }}
-      exit={{ scale: 0 }}
+      // The exit has its own transition: a pulse's `repeat: Infinity` would otherwise shrink it forever, and the button
+      // (and the AnimatePresence it sits in) would never leave.
+      exit={{ scale: 0, transition: { duration: 0.2 } }}
       transition={pulse ? { repeat: Infinity, duration: 1.2, ease: 'easeInOut' } : { type: 'spring', stiffness: 420, damping: 22 }}
       whileTap={{ scale: 0.86, y: 3 }}
       onClick={() => {
