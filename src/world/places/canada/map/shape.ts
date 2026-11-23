@@ -162,7 +162,7 @@ export const POKES: Record<PokeId, XZ> = {
   orca: [-7.35, -0.45],
   bison: [-2.15, 1.75],
   beluga: [0.15, -0.6],
-  balloon: [-1.6, -0.9],
+  balloon: [-2.4, -1.7],
 }
 
 /** Where ice floes drift (the Arctic and Hudson Bay). */

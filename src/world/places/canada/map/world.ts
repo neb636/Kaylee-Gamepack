@@ -1014,6 +1014,10 @@ export class CanadaMapWorld implements World3D {
     if (this.closing) return
     // A tap during the arrival skips to the board (the move and Gus go on).
     if (this.onRink) this.leaveRink(0.5)
+    // A heart pin always wins: whatever stands in front of it or behind it (the balloon, the orca, a cloud, another
+    // place's box, a friend at the rink), her finger on a pin is for that pin. (Not a key press: it has no spot.)
+    const pin = x + y > 0 ? this.pinUnder(x, y) : null
+    if (pin) return this.pick(pin)
     if (id?.startsWith('go:')) {
       // A place's target is big: if her finger is really on a friend at the rink or a goose, they answer instead.
       const near = id === 'go:party' && x + y > 0 ? this.thingUnder(x, y) : null
@@ -1090,6 +1094,27 @@ export class CanadaMapWorld implements World3D {
   }
 
   /** A friend at the rink or a goose under her finger (it answers instead of the rink opening). */
+  /** The visible heart pin under her finger, if any: its badge (and the point under it), never smaller than a thumb. */
+  private pinUnder(x: number, y: number): PlaceId | null {
+    const min = Math.min(this.w, this.h) < 500 ? 64 : 88
+    let best: PlaceId | null = null
+    let bestD = Infinity
+    for (const [id, pin] of this.pins) {
+      if (!pin.root.visible) continue
+      const s = pin.root.scale.x
+      const badge = this.toScreen(tmp.set(0, 0.2 + PIN_R * 0.9, 0).multiplyScalar(s).applyQuaternion(pin.root.quaternion).add(pin.root.position))
+      const tip = this.toScreen(pin.root.position)
+      const r = Math.max(min / 2, this.ppu(pin.root.position) * PIN_R * s * 1.25)
+      // From the badge's middle down to its point.
+      const d = Math.min(Math.hypot(x - badge.x, y - badge.y), Math.hypot(x - tip.x, y - tip.y) + r * 0.4)
+      if (d < r && d < bestD) {
+        bestD = d
+        best = id
+      }
+    }
+    return best
+  }
+
   private thingUnder(x: number, y: number): string | null {
     let best: string | null = null
     let bestD = Infinity
