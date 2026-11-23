@@ -57,7 +57,7 @@ const RIDING = ['green', 'berms', 'creek', 'falls']
 /** The finger wheel and the carve. The carve's numbers start from Bottomless's own tuning (carve 72°, edge 6/s), a
  *  little gentler for a narrow trail; the wheel's are Dad's from the Nan drive's feel lab (2026-10-27). */
 const STEER = knobs('bars', 'Steering', FILE, {
-  carve: { value: 58, min: 20, max: 85, step: 1, label: 'Carve', unit: '°', note: 'how far across the trail a full push points the bike (Bottomless: 72)', main: true },
+  carve: { value: 39, min: 20, max: 85, step: 1, label: 'Carve', unit: '°', note: 'how far across the trail a full push points the bike (Bottomless: 72)', main: true },
   edge: { value: 8, min: 2, max: 20, step: 0.5, label: 'Snap', unit: '/s', note: 'how quickly the bike answers a push (Bottomless: 6; higher = snappier)', main: true },
   settle: { value: 3, min: 0.5, max: 10, step: 0.25, label: 'Straighten up', unit: '/s', note: 'how quickly she points down the trail again after she lets go' },
   cost: { value: 0.25, min: 0, max: 0.6, step: 0.01, label: 'Turns cost speed', note: 'share of her speed a full carve across the trail takes (0 = none)', main: true },
@@ -66,13 +66,13 @@ const STEER = knobs('bars', 'Steering', FILE, {
   curve: { value: 1.2, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
   ease: { value: 0.04, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
   grip: { value: 9, min: 1, max: 16, step: 0.5, label: 'Grip', note: 'how quickly a sideways skid dies out (low = drifty)' },
-  chase: { value: 0.65, min: 0, max: 1, step: 0.05, label: 'Camera swings behind her', note: '0 = the camera looks down the trail; 1 = right behind the bike', main: true },
+  chase: { value: 0.8, min: 0, max: 1, step: 0.05, label: 'Camera swings behind her', note: '0 = the camera looks down the trail; 1 = right behind the bike', main: true },
   swing: { value: 5, min: 1, max: 14, step: 0.5, label: 'Camera swing speed', unit: '/s', note: 'how quickly the camera comes round behind her' },
   fov: { value: 10, min: 0, max: 24, step: 1, label: 'Wider at speed', unit: '°', note: 'how much the lens widens when she goes fast (and the camera pulls back)' },
 }, { sections: RIDING })
 /** The ride down the mountain. */
 const RIDE = knobs('bike', 'The ride', FILE, {
-  speed: { value: 8, min: 3, max: 16, step: 0.25, label: 'Speed', unit: 'm/s', note: 'how fast she rolls on the green trail', main: true },
+  speed: { value: 14.8, min: 3, max: 20, step: 0.1, label: 'Speed', unit: 'm/s', note: 'how fast she rolls on the green trail', main: true },
   steep: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'Steeper is faster', note: 'how much the steep bits (the berms) speed her up' },
   accel: { value: 3, min: 0.5, max: 10, step: 0.25, label: 'Speeding up', unit: 'm/s²', note: 'how fast she gets rolling' },
   lean: { value: 0.62, min: 0, max: 1.2, step: 0.02, label: 'Lean', unit: 'rad', note: 'how far Maple and the bike lean into a push at full speed', main: true },
@@ -701,7 +701,7 @@ export class MountainBike implements World3D {
 
     // ---- The carve (after Bottomless): how far she pushes is how far across the trail the bike points, and it gets
     // there at once. Let go and it points down the trail again, keeping her line; the trail's bends turn it by
-    // themselves. In the air the bike keeps the way it was pointing.
+    // themselves.
     const down = Math.PI - phi(s0)
     let carve = wrapAngle(d.heading - down)
     if (!this.air) {
@@ -717,11 +717,15 @@ export class MountainBike implements World3D {
       if (Math.abs(this.push) <= 0.02) {
         // Nobody pushing and a side closing in ahead (the island's nose, a way narrowing): a gentle nudge away, so a
         // straight line never runs into the trees.
-        const right = Math.min(this.room(s0, lat0, 1), this.roomAt(s0 + 7, lat0, 1))
-        const left = Math.min(this.room(s0, lat0, -1), this.roomAt(s0 + 7, lat0, -1))
-        if (right < 0.9 && right < left) want = 0.35 * (1 - right / 0.9)
-        else if (left < 0.9) want = -0.35 * (1 - left / 0.9)
-      } else if (room < 0.35) {
+        // (Further ahead and sooner the faster she goes.)
+        const v = Math.max(0, d.speed)
+        const ahead = Math.max(7, v * 0.9)
+        const near = 0.9 + v * 0.07
+        const right = Math.min(this.room(s0, lat0, 1), this.roomAt(s0 + ahead / 2, lat0, 1), this.roomAt(s0 + ahead, lat0, 1))
+        const left = Math.min(this.room(s0, lat0, -1), this.roomAt(s0 + ahead / 2, lat0, -1), this.roomAt(s0 + ahead, lat0, -1))
+        if (right < near && right < left) want = 0.35 * (1 - right / near)
+        else if (left < near) want = -0.35 * (1 - left / near)
+      } else if (room < 0.35 + Math.max(0, d.speed) * 0.03) {
         // Pushing into a side that's closing in on her (the island widening): eased away from it.
         want = this.push > 0 ? 0.2 : -0.2
       }
@@ -730,6 +734,12 @@ export class MountainBike implements World3D {
       // Already right at a side and still pointing into it: straight along it, quickly.
       const into = carve < 0 ? this.room(s0, lat0, 1) : this.room(s0, lat0, -1)
       if (into < 0.4) carve *= Math.exp(-dt * 14)
+    } else {
+      // In the air: the bike keeps its angle to the trail, so a hop on a bend (fast, off the blue way's rocks) follows
+      // the bend instead of flying straight off it into the island; easing straight if a side is coming up.
+      carve = this.carve
+      const room = carve < 0 ? this.room(s0, lat0, 1) : this.room(s0, lat0, -1)
+      if (room < 1 + Math.max(0, d.speed) * 0.1) carve *= Math.exp(-dt * STEER.edge)
     }
     this.carve = carve
     const heading = down + carve
@@ -747,10 +757,11 @@ export class MountainBike implements World3D {
     let fwd = fwd0
     if (s0 > END - 1.5) fwd *= Math.exp(-dt * 3)
     else if (!this.air) fwd += clamp(top * cap - fwd0, -RIDE.accel * 1.4 * dt, RIDE.accel * dt)
-    // A sideways skid left over from the turn dies out (less grip in the air), then she moves.
+    // A sideways skid left over from the turn dies out, then she moves.
     const hx = Math.sin(heading)
     const hz = Math.cos(heading)
-    const side = (d.vx * hz - d.vz * hx) * Math.exp(-(this.air ? 2 : STEER.grip) * dt)
+    // (In the air too: a hop on a bend follows the bend rather than sailing off it.)
+    const side = (d.vx * hz - d.vz * hx) * Math.exp(-STEER.grip * dt)
     d.yawRate = wrapAngle(heading - d.heading) / Math.max(dt, 1e-3)
     d.heading = heading
     d.vx = hx * fwd + hz * side
@@ -900,7 +911,7 @@ export class MountainBike implements World3D {
   private room(s: number, lat: number, dir: 1 | -1): number {
     // (Alongside the island, a few meters ahead too: it widens toward her.)
     const here = this.roomAt(s, lat, dir)
-    return island(s) > 0.3 ? Math.min(here, this.roomAt(s + 3, lat, dir)) : here
+    return island(s) > 0.3 ? Math.min(here, this.roomAt(s + 3 + Math.max(0, this.d.speed) * 0.25, lat, dir)) : here
   }
   private roomAt(s: number, lat: number, dir: 1 | -1) {
     let lo = -(half(s) + SHOULDER)
