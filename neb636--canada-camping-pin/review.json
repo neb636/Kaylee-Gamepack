@@ -1,11 +1,12 @@
 {
-  "title": "Canada map: the camping pin wins",
+  "title": "Canada map: every heart pin wins its tap",
   "checkIn": "fix",
-  "kaylee": "Tapping the camping pin on the Canada map opens camping, even when Sparkle's balloon floats right behind it.",
+  "kaylee": "Tapping any heart pin on the Canada map opens that place, even when an animal, the balloon or another place sits on top of it.",
   "questions": [],
   "pictures": [
-    { "title": "iPhone", "before": "pics/camping-before.png", "after": "pics/camping-after.png", "caption": "The balloon used to hide behind the camping pin and catch your taps. Now a tap on any heart pin goes to the pin." },
-    { "title": "iPad", "before": "pics/ipad-before.png", "after": "pics/ipad-after.png", "caption": "The balloon floats a little further north, clear of the camping pin." }
+    { "title": "Why taps went missing (iPhone)", "after": "pics/animal-boxes.png", "caption": "Red: the animals' tap boxes. They sat over the pins and caught the taps. The orca covered the whole whale-scene pin. Now a pin always wins." },
+    { "title": "Camping pin, iPhone", "before": "pics/camping-before.png", "after": "pics/camping-after.png", "caption": "The balloon also floats a little further north." },
+    { "title": "iPad", "before": "pics/ipad-before.png", "after": "pics/ipad-after.png", "caption": "The balloon is now clear of the camping pin." }
   ],
-  "links": [{ "label": "Try the map", "hash": "#/world/canada/hub/map?team=snowman,bike" }]
+  "links": [{ "label": "Try the map", "hash": "#/world/canada/hub/map?team=none" }]
 }
