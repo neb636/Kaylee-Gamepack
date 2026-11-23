@@ -71,20 +71,29 @@ const RACE = ['race']
 const KART = knobs('kart', 'Her kart', FILE, {
   top: { value: 17.5, min: 6, max: 26, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Dad, 2026-11-09: 35% faster (was 13)', main: true },
   accel: { value: 12, min: 2, max: 25, step: 0.5, label: 'Speeding up', unit: 'm/s²' },
-  turn: { value: 2.4, min: 0.8, max: 5, step: 0.1, label: 'Turn toward her line', unit: 'rad/s', note: 'how hard it turns toward where she steers', main: true },
+  turn: { value: 2.4, min: 0.8, max: 5, step: 0.1, label: 'Rivals turn', unit: 'rad/s', note: 'how hard the rivals (and she, racing by herself) turn toward their line' },
   grip: { value: 4, min: 0.5, max: 12, step: 0.1, label: 'Grip', unit: '1/s', note: 'low = it slides wide through the bends', main: true },
-  near: { value: 9, min: 3, max: 20, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'how far up the road the kart aims for her line (plus a bit more when fast)' },
-  offRoad: { value: 1.5, min: 0, max: 4, step: 0.1, label: 'Steer onto the grass, up to', unit: 'm past the road', note: 'a full push holds there and steers no further' },
+  offRoad: { value: 0.6, min: 0, max: 4, step: 0.1, label: 'Steer onto the grass, up to', unit: 'm past the road', note: 'past this the steering fades: she runs along it instead of into the bales' },
   cruise: { value: 0.62, min: 0.2, max: 1, step: 0.02, label: 'No finger: cruising', unit: '× top' },
   grass: { value: 0.6, min: 0.2, max: 1, step: 0.02, label: 'On the grass', unit: '× top' },
   coin: { value: 0.012, min: 0, max: 0.05, step: 0.002, label: 'Each coin', unit: '× top', note: 'up to ten coins' },
   pad: { value: 1.3, min: 0.3, max: 3, step: 0.1, label: 'Arrow pad', unit: 's of burst' },
   boost: { value: 1.6, min: 1, max: 2.5, step: 0.05, label: 'Burst speed', unit: '× top' },
 }, { sections: RACE })
+/** Her steering (after the Mountain Bike's carve, #539, made for a kart): her push turns the wheel at once (a turn
+ *  rate, not a spot on the road to aim for), and the road's bends turn her by themselves, so a held finger in the
+ *  middle keeps her line. How far she can point across the road is capped (a kart turns, it doesn't carve sideways). */
+const STEER = knobs('steer', 'Steering', FILE, {
+  rate: { value: 1.2, min: 0.4, max: 4, step: 0.05, label: 'Steering', unit: 'rad/s', note: 'how fast a full push swings her across the road', main: true },
+  snap: { value: 12, min: 3, max: 25, step: 0.5, label: 'Snap', unit: '/s', note: 'how quickly the wheel answers a push (higher = snappier)', main: true },
+  angle: { value: 32, min: 10, max: 60, step: 1, label: 'Most across the road', unit: '°', note: 'how far across the road the kart can point' },
+  settle: { value: 4, min: 0.5, max: 10, step: 0.25, label: 'Keep her line', unit: '/s', note: 'how quickly she settles back on her line when her push is back in the middle' },
+  cost: { value: 0.12, min: 0, max: 0.4, step: 0.01, label: 'Turns cost speed', note: 'share of her speed pointing right across the road takes (0 = none)' },
+  chase: { value: 0.6, min: 0, max: 1, step: 0.05, label: 'Camera swings behind her', note: '0 = the camera looks along the road; 1 = right behind the kart', main: true },
+}, { sections: RACE })
 /** Her finger wheel (sled style, engine3d/wheel.ts): the Nan drive's numbers (drive/mountain.ts STEER, Dad's, tuned
- *  by hand 2026-10-27), with a slide to suit the kart. */
-const WHEEL = knobs('wheel', 'Steering (the finger wheel)', FILE, {
-  slide: { value: 7, min: 1, max: 14, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the kart across the road', main: true },
+ *  by hand 2026-10-27). */
+const WHEEL = knobs('wheel', 'The finger wheel', FILE, {
   reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)', main: true },
   dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
   curve: { value: 1.3, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
@@ -153,6 +162,8 @@ interface Racer {
   v: Kart
   d: Driver
   feel: Feel
+  /** Leaning into her push (rad of roll; hers only). */
+  lean: number
   /** Its usual top speed (coins and the rubber band raise it). */
   base: number
   rival: Rival | null
@@ -250,8 +261,6 @@ export class KartRace implements World3D {
   private wheel = new FingerWheel()
   /** Her push this frame (-1..1, + = right on screen). */
   private push = 0
-  /** Where across the road she's steering (the feel lab's graph). */
-  private fingerLat = 0
   private wheelEl: HTMLElement | null = null
   private w = 1
   private h = 1
@@ -270,7 +279,11 @@ export class KartRace implements World3D {
   private photoFinish = false
   private rocket = false
   private told = new Set<string>()
-  private aimLat = 0
+  /** Her kart's angle to the road (rad, + = pointing left across it): what her push turns. */
+  private rel = 0
+  /** Where across the road she was when her push came back to the middle (the line she keeps), and last frame. */
+  private holdLat: number | null = null
+  private lastLat = 0
   private counts = { coinsTaken: 0, pads: 0, bounces: 0, bigBounces: 0, bales: 0, grass: 0, bumps: 0, honks: 0, pokes: 0, splashes: 0, washes: 0, lanterns: 0, showers: 0, fords: 0 }
   /** Its delayed callbacks: cancelled when it's disposed. */
   readonly timers = new Timers()
@@ -339,7 +352,7 @@ export class KartRace implements World3D {
     const plan = scripts(start.track, start.result)
     const racer = (id: RacerId, v: Kart, rival: Rival | null): Racer => {
       v.feel.top = KART.top * (rival?.pace ?? 1)
-      const r: Racer = { id, v, d: new Driver(v.feel), feel: v.feel, base: v.feel.top, rival, rider: null, dress: null, script: rival ? plan[rival.id] : null, roll: { x: 0, v: 0 }, pitch: { x: 0, v: 0 }, squash: 1, i: 0, s: 0, lat: 0, progress: 0, y: 0, done: -1, coins: 0, grass: false, bumpCool: 0, padCool: 0, bounceCool: 0, splashCool: 0, mud: 0, splats: [], sway: Math.random() * 6 }
+      const r: Racer = { id, v, d: new Driver(v.feel), feel: v.feel, lean: 0, base: v.feel.top, rival, rider: null, dress: null, script: rival ? plan[rival.id] : null, roll: { x: 0, v: 0 }, pitch: { x: 0, v: 0 }, squash: 1, i: 0, s: 0, lat: 0, progress: 0, y: 0, done: -1, coins: 0, grass: false, bumpCool: 0, padCool: 0, bounceCool: 0, splashCool: 0, mud: 0, splats: [], sway: Math.random() * 6 }
       v.root.add(blobShadow(1.3, bag))
       if (this.track.puddles.length) r.splats = this.mudSplats(v)
       scene.add(v.root)
@@ -364,7 +377,7 @@ export class KartRace implements World3D {
 
     this.unwatch = watch('kart', () => {
       const edge = this.track.edge
-      return { 'her finger (m across)': [this.wheel.steering ? this.fingerLat : this.k.lat, edge], 'the kart (m across)': [this.k.lat, edge], 'speed (m/s)': [this.k.d.speed, KART.top * KART.boost] }
+      return { 'her push': [this.push, 1], 'angle to the road (°)': [this.rel / deg, STEER.angle], 'the kart (m across)': [this.k.lat, edge], 'speed (m/s)': [this.k.d.speed, KART.top * KART.boost] }
     })
     this.toGrid()
     this.emitHud()
@@ -720,7 +733,9 @@ export class KartRace implements World3D {
     // Anywhere open it steers at once (before GO it revs: still down at GO is a rocket start); on a tap target it
     // steers once it moves or is held a moment (a quick tap there pokes it).
     this.wheel.down(x, y, this.time, id)
-    this.aimLat = this.k.lat
+    this.rel = wrapAngle(this.k.d.heading - this.roadHeading(this.k.s))
+    this.holdLat = null
+    this.lastLat = this.k.lat
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     this.wheel.move(x, y, downX, downY, held)
@@ -813,6 +828,12 @@ export class KartRace implements World3D {
       r.feel.accel = KART.accel * (r.rival ? 1.1 : 1)
       r.feel.turn = KART.turn
       r.feel.grip = KART.grip
+      // (Her kart's wheel answers her push at once.)
+      if (r === this.k) {
+        r.feel.turn = Math.max(KART.turn, STEER.rate * 2)
+        r.feel.gain = 10
+        r.feel.snap = STEER.snap
+      }
       r.feel.boost = KART.boost
     }
     this.k.base = KART.top
@@ -830,7 +851,7 @@ export class KartRace implements World3D {
     for (const r of this.racers) {
       this.poseKart(r, dt, t)
       this.trail(r, dt)
-      r.rider?.update(dt, t, clamp(-r.d.yawRate / r.feel.turn, -1, 1))
+      r.rider?.update(dt, t, this.bars(r))
       r.dress?.update(t, clamp(Math.abs(r.d.speed) / KART.top, 0, 1))
     }
     this.kaylee.setWind(clamp(Math.abs(this.k.d.speed) / KART.top, 0, 1))
@@ -857,7 +878,11 @@ export class KartRace implements World3D {
 
     // ---- The camera ----
     const d = this.k.d
-    this.camHeading += wrapAngle(d.heading - this.camHeading) * (1 - Math.exp(-dt / 0.45))
+    // (Behind her but only partly round: swung right behind a kart pointing across the road, it would sit off the
+    // road among the trees.)
+    const along = this.roadHeading(this.k.s)
+    const want = this.phase === 'race' && this.k.done < 0 ? along + wrapAngle(d.heading - along) * STEER.chase : d.heading
+    this.camHeading += wrapAngle(want - this.camHeading) * (1 - Math.exp(-dt / 0.45))
     this.rig.setShot(this.shot())
     this.rig.update(rawDt)
     this.clearTerrain()
@@ -1031,18 +1056,41 @@ export class KartRace implements World3D {
     const edge = this.track.edge - 0.9
     let target: { x: number; z: number } | null = null
     let cap = 1
+    // (Steering: pointing across the road costs her a little speed.)
+    let cap1 = 1
     if (k.done >= 0) {
       target = road.spotAt(Math.min(k.s + 14, road.length - 1), PARK.kaylee)
       cap = this.rollOut(k)
     } else if (this.wheel.steering) {
-      // Sled style: a push right of the circle slides her right across the road (lat is + to the left), as long as
-      // she holds it there; held in the middle, she keeps her line round the bends.
+      // Her push turns the wheel, at once: a push right of the circle swings her right (lat is + to the left, and a
+      // heading turning + turns left), for as long as she holds it, up to a cap across the road. Back in the middle,
+      // she keeps her line: the kart steers itself to stay where across the road she was (through the bends too,
+      // where the low grip would otherwise slide her wide onto the grass).
       const most = Math.min(edge, this.track.def.half + KART.offRoad)
-      this.aimLat = clamp(this.aimLat - this.push * WHEEL.slide * dt, Math.max(-most, k.lat - 5), Math.min(most, k.lat + 5))
-      this.fingerLat = this.aimLat
-      target = road.spotAt(k.s + KART.near + Math.abs(d.speed) * 0.3, this.aimLat)
+      const along = this.roadHeading(k.s + 2 + Math.abs(d.speed) * 0.15)
+      const most1 = STEER.angle * deg
+      let rel = clamp(this.rel, -most1, most1)
+      const across = (k.lat - this.lastLat) / Math.max(dt, 1e-3)
+      if (Math.abs(this.push) > 0.02) {
+        rel = clamp(rel - this.push * STEER.rate * dt, -most1, most1)
+        this.holdLat = null
+      } else {
+        // (Her line is where she is once the swerve has died down, not where she let go mid-swerve.)
+        if (this.holdLat === null && Math.abs(across) < 0.4) this.holdLat = clamp(k.lat, -most, most)
+        const want = clamp((this.holdLat === null ? 0 : 0.12 * (this.holdLat - k.lat)) - 0.07 * across, -0.35, 0.35)
+        rel += (want - rel) * (1 - Math.exp(-dt * STEER.settle))
+      }
+      // Near the edge she's pointing at (the grass's limit, then the bales), the angle fades: she runs along it.
+      // (The faster she's crossing, the sooner it fades.)
+      const cross = Math.abs(Math.sin(rel)) * Math.max(0, d.speed)
+      const room = rel > 0 ? most - k.lat : most + k.lat
+      rel *= clamp(room / (1.2 + cross * 0.45), 0, 1)
+      this.rel = rel
+      this.lastLat = k.lat
+      d.face(along + rel)
+      cap1 = 1 - STEER.cost * Math.abs(Math.sin(rel))
     }
-    if (!target) {
+    if (!target && !this.wheel.steering) {
       // By herself: along the inside of the next bend, but straight over a mushroom or a pad just ahead (the good bits
       // shouldn't need her to aim).
       const look = k.s + this.lookAhead(k.s, 10 + Math.abs(d.speed) * 0.45)
@@ -1063,12 +1111,19 @@ export class KartRace implements World3D {
         cap = Math.min(cap, lim)
       }
     }
-    d.cap = Math.min(cap, this.duckCap(k))
-    d.hold(target.x, target.z)
+    d.cap = Math.min(cap * cap1, this.duckCap(k))
+    if (target) d.hold(target.x, target.z)
+    else this.rel = wrapAngle(d.heading - this.roadHeading(k.s))
     // How fast she's getting on along the road (the rivals keep up with this).
     const rate = (k.progress - this.lastProgress) / Math.max(1e-3, dt)
     this.lastProgress = k.progress
     if (Math.abs(rate) < 60) this.herRate += (rate - this.herRate) * (1 - Math.exp(-dt / 1))
+  }
+
+  /** Which way the road runs at s (a heading: 0 faces +z, turning toward +x). */
+  private roadHeading(s: number) {
+    const p = this.track.road.sampleAt(Math.min(s, this.track.road.length))
+    return Math.atan2(p.tx, p.tz)
   }
 
   /** How far ahead to aim, driving by itself: nearer in a tight bend (so the line doesn't cut across the grass). */
@@ -1499,11 +1554,20 @@ export class KartRace implements World3D {
     const shake = r.grass && !d.airborne ? Math.sin(t * 47 + r.sway) * 0.035 * Math.min(1, Math.abs(sp) * 2) : 0
     v.root.position.set(d.x, r.y + d.y, d.z)
     v.root.rotation.set(0, d.heading, 0)
-    v.body.rotation.set(r.pitch.x, 0, d.roll + r.roll.x * 0.12 + shake)
+    // (Her kart leans into her push at once, before the turn has built: more the faster she goes.)
+    const into = r === this.k && this.wheel.steering && !d.airborne ? this.push * 0.1 * clamp(Math.abs(sp), 0, 1) : 0
+    r.lean += (into - r.lean) * Math.min(1, dt * 12)
+    v.body.rotation.set(r.pitch.x, 0, d.roll + r.lean + r.roll.x * 0.12 + shake)
     v.body.position.y = Math.abs(shake) * 2
     const s = r.squash < 1 ? Math.cos(r.squash * Math.PI * 3) * (1 - r.squash) ** 2 : 0
     v.body.scale.set(1 + 0.1 * s, 1 - 0.18 * s, 1 + 0.05 * s)
-    v.animate(clamp(-d.yawRate / d.feel.turn, -1, 1), Math.min(1.5, Math.abs(sp)), t, dt)
+    v.animate(this.bars(r), Math.min(1.5, Math.abs(sp)), t, dt)
+  }
+
+  /** Where the front wheels point (-1..1, + = right): with the turn, and for her kart with her push at once. */
+  private bars(r: Racer) {
+    const turn = -r.d.yawRate / r.feel.turn
+    return clamp(r === this.k && this.wheel.steering ? turn * 0.6 + this.push * 0.6 : turn, -1, 1)
   }
 
   /** Dust off the back wheels (more on the grass, and fast), sparkles while a burst lasts. */
@@ -1516,6 +1580,16 @@ export class KartRace implements World3D {
       const b = this.back(r, 0)
       const q = (Math.random() - 0.5) * 1.2
       this.dust.emit(b.x + Math.cos(d.heading) * q, r.y + 0.2, b.z - Math.sin(d.heading) * q, -Math.sin(d.heading) * 1.5, 1.2 + Math.random(), -Math.cos(d.heading) * 1.5, 0.7, r.grass ? 0.3 : 0.22, r.grass ? 3 : Math.floor(Math.random() * 3))
+    }
+    // Steering hard at speed: dirt thrown off the back wheel on the outside of the turn.
+    const hard = r === this.k && this.wheel.steering && !r.grass ? Math.abs(this.push) * clamp(speed / KART.top, 0, 1.2) : 0
+    if (hard > 0.35 && Math.random() < hard * dt * 30) {
+      const b = this.back(r, 0)
+      // (Pushing right turns her right: the dirt goes out to her left, + across the kart.)
+      const out = Math.sign(this.push)
+      const lx = Math.cos(d.heading) * out
+      const lz = -Math.sin(d.heading) * out
+      this.dust.emit(b.x + lx * 0.6, r.y + 0.2, b.z + lz * 0.6, lx * (1.5 + hard * 2) - Math.sin(d.heading), 1.4 + hard * 1.5, lz * (1.5 + hard * 2) - Math.cos(d.heading), 0.6, 0.2 + hard * 0.08, Math.floor(Math.random() * 3))
     }
     if (d.boostT > 0 && Math.random() < dt * 40) {
       const b = this.back(r, 0.2)
@@ -1751,7 +1825,8 @@ export class KartRace implements World3D {
       aim: (() => {
         const f = this.wheel.finger
         if (!f) return { x: Math.round(this.w / 2), y: Math.round(this.h * 0.62) }
-        return { x: Math.round(f.ox + clamp(this.k.lat / 3, -1, 1) * this.wheel.radius(WHEEL.reach)), y: Math.round(f.oy) }
+        // (Toward the middle, steadied by her angle to the road so the robot doesn't weave.)
+        return { x: Math.round(f.ox + clamp(this.k.lat / 4 + this.rel * 1.6, -1, 1) * this.wheel.radius(WHEEL.reach)), y: Math.round(f.oy) }
       })(),
       wheel: { push: r2(this.wheel.push), k: r2(this.wheel.k) },
       ...this.counts,

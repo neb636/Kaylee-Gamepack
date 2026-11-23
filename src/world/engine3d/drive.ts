@@ -35,6 +35,8 @@ export interface Feel {
   lean: number
   /** How hard a finger off to one side asks for a turn (turn rate per radian of error, 3 if not set). */
   gain?: number
+  /** How quickly the turn answers (1/s, 6 if not set): higher = snappier. */
+  snap?: number
 }
 
 export interface StepEvents {
@@ -61,9 +63,11 @@ export class Driver {
   /** A speed limit as a share of its top speed (a village where boats go slowly): 1 = none. */
   cap = 1
   private target: { x: number; z: number } | null = null
-  private mode: 'hold' | 'goto' | null = null
+  private mode: 'hold' | 'goto' | 'face' | null = null
   /** A waypoint on the way somewhere: no slowing down, and it doesn't stop there. */
   private passing = false
+  /** face(): the heading it's turning to. */
+  private faceTo = 0
 
   constructor(public feel: Feel) {}
 
@@ -88,9 +92,15 @@ export class Driver {
   }
   /** Where it's going (a tap or her finger), if anywhere. */
   get goal() {
-    return this.mode ? this.target : null
+    return this.mode && this.mode !== 'face' ? this.target : null
   }
 
+  /** Every frame: full speed, turning to face this heading as fast as its turn rate allows (gain: how hard). A
+   *  steering wheel rather than a spot to go to (the Nan Cup's kart: her push turns the wheel). */
+  face(heading: number) {
+    this.faceTo = heading
+    this.mode = 'face'
+  }
   hold(x: number, z: number) {
     this.target = { x, z }
     this.mode = 'hold'
@@ -101,7 +111,7 @@ export class Driver {
     this.passing = passing
   }
   release() {
-    if (this.mode === 'hold') this.mode = null
+    if (this.mode === 'hold' || this.mode === 'face') this.mode = null
   }
   stop() {
     this.mode = null
@@ -155,7 +165,10 @@ export class Driver {
     let lat = this.vx * sz - this.vz * sx
     let want: number | null = null
     let err = 0
-    if (this.mode && this.target) {
+    if (this.mode === 'face') {
+      want = f.top
+      err = wrapAngle(this.faceTo - this.heading)
+    } else if (this.mode && this.target) {
       const dx = this.target.x - this.x
       const dz = this.target.z - this.z
       const dist = Math.hypot(dx, dz)
@@ -197,7 +210,7 @@ export class Driver {
       const max = f.turn * (0.5 + 0.5 * Math.min(1, sp * 1.4))
       const aim = this.mode === 'hold' ? Math.sign(err) * Math.max(0, Math.abs(err) - f.dead) : err
       const wantRate = want === null ? 0 : clamp(aim * (f.gain ?? 3), -max, max)
-      this.yawRate += (wantRate - this.yawRate) * (1 - Math.exp(-dt * (want === null ? 3 : 6)))
+      this.yawRate += (wantRate - this.yawRate) * (1 - Math.exp(-dt * (want === null ? 3 : (f.snap ?? 6))))
       this.heading += this.yawRate * dt
     }
     // Sideways sliding dies out (drift through turns), then the velocity follows the new heading.
