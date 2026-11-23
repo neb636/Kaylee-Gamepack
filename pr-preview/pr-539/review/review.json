@@ -1,0 +1,51 @@
+{
+ "title": "Mountain Bike: carve like Bottomless (your pick, tuned)",
+ "checkIn": "3 of 4: play it",
+ "kaylee": "Your feel-lab numbers are in: a gentler carve (39\u00b0), almost twice the speed (14.8 m/s) and the camera swung further behind her. Hops off the blue way's rocks now follow the bend instead of landing her in the island.",
+ "questions": [
+  "Ready for her iPad, or another round on the feel (ready or tune)?"
+ ],
+ "reels": [
+  {
+   "name": "bike-carve-a",
+   "moments": [
+    "canada-bike-steer"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "label": "Ride from the top",
+   "hash": "#/world/canada/bike/green"
+  },
+  {
+   "label": "The berms (blue way)",
+   "hash": "#/world/canada/bike/berms?trail=blue"
+  },
+  {
+   "label": "Tune the feel",
+   "hash": "#/world/canada/bike/falls?feel=1"
+  }
+ ],
+ "pictures": [
+  {
+   "title": "Same pushes, before and after (0.6 s a frame)",
+   "before": "pics/bike-before.png",
+   "after": "pics/bike-after.png",
+   "caption": "Before, the bike drifted toward a spot and the camera stayed on the trail. Now it carves across, Maple leans hard into it and the camera swings behind her."
+  }
+ ],
+ "listens": [
+  {
+   "title": "The bike's new sound",
+   "audio": "sfx/bike.mp3",
+   "items": [
+    {
+     "text": "Tires carving through leaves (loop)",
+     "at": 0,
+     "end": 4
+    }
+   ]
+  }
+ ]
+}
