@@ -1,0 +1,8 @@
+import{Et as e,Kn as t,P as n,Wt as r,b as i,f as a,fr as o,yt as s}from"./tune-DM-4b7S_.js";import{U as c,W as l}from"./water-C_B57R14.js";function u(e,t,c,l={}){for(let t of Object.keys(e.attributes))t!==`position`&&t!==`normal`&&e.deleteAttribute(t);let[u,d,f]=l.rot??[0,0,0];e.applyMatrix4(new s().compose(new o(...l.at??[0,0,0]),new r().setFromEuler(new n(u,d,f,`YXZ`)),new o(...l.scale??[1,1,1])));let p=new i(t),m=e.attributes.position.count,h=new Float32Array(m*3);for(let e=0;e<m;e++)h.set([p.r,p.g,p.b],e*3);return e.setAttribute(`color`,new a(h,3)),e.setAttribute(`tint`,new a(new Float32Array(m).fill(c),1)),e}function d(e,n,r,i,a,o=[6,4],s){let c=new t(e,o[0],o[1]),l=c.attributes.position;for(let t=0;t<l.count;t++){let n=l.getX(t),r=l.getY(t),i=l.getZ(t),o=1+.13*Math.sin(n*3.1/e+a)*Math.cos(i*2.7/e+a*1.3)+.07*Math.sin(r*4.3/e+a*.7);l.setXYZ(t,n*o,r*o,i*o)}return u(c,n,1,{at:r,scale:i,rot:s})}function f(e){let t=l(e,!1);for(let t of e)t.dispose();return t}var p=null;function m(){if(p)return p;let t=new e({vertexColors:!0,gradientMap:c()});return t.onBeforeCompile=e=>{e.vertexShader=e.vertexShader.replace(`#include <common>`,`#include <common>
+attribute float tint;`).replace(`#include <color_vertex>`,`vColor = vec3(1.0);
+      #ifdef USE_COLOR
+        vColor *= color;
+      #endif
+      #ifdef USE_INSTANCING_COLOR
+        vColor *= mix(vec3(1.0), instanceColor.rgb, tint);
+      #endif`)},t.customProgramCacheKey=()=>`tinted-toon`,p=t}export{m as i,d as n,u as r,f as t};
