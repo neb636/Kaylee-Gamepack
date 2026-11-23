@@ -1,0 +1,23 @@
+{
+  "title": "Red Canoe: bring Lulu's chick home",
+  "checkIn": "3 of 4: play it",
+  "kaylee": "Lulu can't sing: her chick has paddled off. You find it in the milky water, it rides home on the bow, and then a tap on Lulu and she sings, and the glacier sings it back.",
+  "questions": [
+    "I went with the chick lost (a big hug at the end), not hide-and-seek. Keep it?",
+    "Three songs before the stamp: too many, or just right?"
+  ],
+  "pictures": [
+    { "title": "1. Find the chick", "after": "pics/canoe-find.jpg", "caption": "A tiny peep from the milky water, louder as you paddle near. There you are!" },
+    { "title": "2. It rides on the bow", "after": "pics/canoe-bow.jpg", "caption": "Facing Maple, squeaking now and then. Lulu dives twice looking for it" },
+    { "title": "3. Home to Lulu", "after": "pics/canoe-home.jpg", "caption": "The third time she comes up, she sees it: hop, onto her back" },
+    { "title": "4. The try-out", "after": "pics/canoe-sing.jpg", "caption": "Tap Lulu and she sings; the glacier sparkles and sings it back. Three songs, then the stamp" }
+  ],
+  "links": [
+    { "label": "Play it from the start", "hash": "#/world/canada/canoe" },
+    { "label": "Find the chick", "hash": "#/world/canada/canoe/stream" },
+    { "label": "Take it to Lulu", "hash": "#/world/canada/canoe/loon" },
+    { "label": "Lulu sings", "hash": "#/world/canada/canoe/glacier" },
+    { "label": "The film in", "hash": "#/world/canada/story/canoe-in" },
+    { "label": "The film out", "hash": "#/world/canada/story/canoe-out" }
+  ]
+}
