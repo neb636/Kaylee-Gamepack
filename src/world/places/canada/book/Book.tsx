@@ -4,6 +4,7 @@
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { say, sounds } from '../../../../sdk'
+import { HudButton } from '../../../kit/Hud'
 import { L } from '../lines'
 import { ANIMALS, picOf, STOP_PAGES, type Animal, type Stop } from './animals'
 import { useMet } from './met'
@@ -29,9 +30,7 @@ export function Book({ onClose, page: first = 'quebec' }: { onClose: () => void;
           <div style={{ fontSize: 'clamp(20px, 3.4vmin, 30px)', fontWeight: 700, flex: '1 1 auto' }}>
             📒 Maple's animals <span style={{ color: 'var(--lavender-dark)', fontSize: '0.75em' }}>{ANIMALS.filter((a) => met.includes(a.id)).length} / {ANIMALS.length}</span>
           </div>
-          <button aria-label="Close the book" onClick={onClose} style={{ ...ROUND, background: 'var(--pink)' }}>
-            ✖️
-          </button>
+          <HudButton role="leave" icon="close" size="sm" label="Close the book" pop={false} onClick={onClose} />
         </div>
         <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
           {STOP_PAGES.map((p) => {
@@ -90,5 +89,4 @@ function Slot({ a, met }: { a: Animal; met: boolean }) {
   )
 }
 
-const ROUND = { width: 64, height: 64, borderRadius: '50%', border: 'none', fontSize: 28, boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center' } as const
 const TAB = { minWidth: 72, minHeight: 72, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: 20, border: 'none', boxShadow: 'var(--shadow)', fontFamily: 'inherit', padding: '4px 10px' } as const

@@ -9,7 +9,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, SparklePuppet, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
+import { HudGlyph, BigButton, burst, lineText, say, SparklePuppet, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type QAKey, type RenderMode } from '../../../../engine3d/View3D'
@@ -133,8 +133,8 @@ export function BubbleBath({ onDone, setProgress, filmed }: CanadaActivityProps)
       <div style={{ position: 'absolute', left: 'min(300px, 36vw)', right: 12, top: 'calc(var(--safe-top) + 12px)', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
         {done && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 4, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
-            <BigButton onClick={restart} ariaLabel="Another bath">
-              🔁 🛁
+            <BigButton color="lavender" onClick={restart} ariaLabel="Another bath">
+              <HudGlyph icon="again" /> 🛁
             </BigButton>
           </motion.div>
         )}

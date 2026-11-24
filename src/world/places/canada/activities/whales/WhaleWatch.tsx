@@ -8,7 +8,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, stopSpeaking, useAlive, type Line, useTimers } from '../../../../../sdk'
+import { HudGlyph, BigButton, burst, stopSpeaking, useAlive, type Line, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import type { FilmState } from '../../../../engine3d/film'
@@ -132,8 +132,8 @@ export function WhaleWatch({ onDone, setProgress, filmed }: CanadaActivityProps)
       {done && (
         <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', justifyContent: 'center', pointerEvents: 'none', zIndex: 20 }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: STAMP_AFTER_S + 0.5, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
-            <BigButton onClick={() => restart('grey')} ariaLabel="Play with the whales again">
-              🔁 🐋
+            <BigButton color="lavender" onClick={() => restart('grey')} ariaLabel="Play with the whales again">
+              <HudGlyph icon="again" /> 🐋
             </BigButton>
           </motion.div>
         </div>

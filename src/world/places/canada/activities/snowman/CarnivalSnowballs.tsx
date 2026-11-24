@@ -8,7 +8,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, SparklePuppet, spendHint, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
+import { HudGlyph, BigButton, burst, lineText, say, SparklePuppet, spendHint, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
@@ -161,8 +161,8 @@ export function CarnivalSnowballs({ onDone, setProgress, filmed }: Partial<Canad
       <div style={{ position: 'absolute', left: 'calc(var(--target, 88px) + 16px)', right: 'calc(var(--target, 88px) + 16px)', bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
         {done && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 3, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
-            <BigButton onClick={() => restart('roll')} ariaLabel="Make more snowmen">
-              🔁 ⛄
+            <BigButton color="lavender" onClick={() => restart('roll')} ariaLabel="Make more snowmen">
+              <HudGlyph icon="again" /> ⛄
             </BigButton>
           </motion.div>
         )}

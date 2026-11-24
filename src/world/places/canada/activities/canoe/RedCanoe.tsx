@@ -9,7 +9,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, type Line, useTimers } from '../../../../../sdk'
+import { HudGlyph, BigButton, burst, lineText, say, type Line, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
@@ -120,8 +120,8 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
         {done && again && (
           <motion.div initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 4, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
-            <BigButton onClick={() => restart('glide')} ariaLabel="Paddle again">
-              🔁 🛶
+            <BigButton color="lavender" onClick={() => restart('glide')} ariaLabel="Paddle again">
+              <HudGlyph icon="again" /> 🛶
             </BigButton>
           </motion.div>
         )}
