@@ -1,0 +1,7 @@
+{
+  "title": "Nick in the family lineup",
+  "checkIn": "fix",
+  "kaylee": "Nick wears his yellow polo and has a short brown fringe, a little smile, and soft pink-centered unicorn ears.",
+  "pictures": [{"title":"Front view","before":"pics/before.png","after":"pics/after.png"}],
+  "links": [{"label":"Turn Nick around", "hash":"#/world/characters/nick?spin=1"}]
+}
