@@ -40,7 +40,7 @@ export interface SceneryEvents {
  *  (not family). */
 export const CROWD: Look[] = [
   { species: 'puppy', height: 1.1, fur: '#F4C47E', light: '#FFF1DC', dark: '#4A3640', ear: '#D99A55', outfit: { kind: 'tee', color: '#8FC9F5' }, open: true },
-  { species: 'fox', height: 1.25, fur: '#FFB07A', light: '#FFF1E2', dark: '#2B2330', ear: '#FFE6CC', outfit: { kind: 'blouse', color: '#C9B5F7' }, lashes: true, open: true },
+  { species: 'fox', sculpted: true, height: 1.25, fur: '#FFB07A', light: '#FFF1E2', dark: '#2B2330', ear: '#FFE6CC', outfit: { kind: 'blouse', color: '#C9B5F7' }, lashes: true, open: true },
   { species: 'monkey', height: 1.0, fur: '#C08A5E', light: '#FFE6CC', dark: '#7A5340', ear: '#FFC2B0', outfit: { kind: 'tee', color: '#FBE78A' }, open: true },
   { species: 'panda', height: 1.3, fur: '#FFF6EE', light: '#FFFDF8', dark: '#4A3F4F', ear: '#FFB3C7', outfit: { kind: 'shirt', color: '#A7EBD0' }, extras: ['sunhat'], open: true },
   { species: 'pony', height: 1.05, fur: '#E9B486', light: '#FFF0E0', dark: '#8A5A4A', ear: '#FFC2C8', mane: ['#9A5E4E', '#B87A62'], hair: 'medium', outfit: { kind: 'dress', color: '#FF9CC8' }, lashes: true, open: true },
