@@ -1,7 +1,7 @@
 {
   "title": "Gan and Ken: foxes like their mom",
   "checkIn": "fix",
-  "kaylee": "Joy's boys now look like her new fox: pink puffy cheeks, a white snout, brows, cupped ears, brown paws and a big bushy tail.",
+  "kaylee": "Joy's boys now look like her new fox: white puffy cheeks (hers stay pink), a white snout, brows, cupped ears, brown paws and a big bushy tail.",
   "questions": ["Brown paws on the boys too, or cream like before?"],
   "pictures": [
     { "title": "Gan", "before": "pics/gan-old.png", "after": "pics/gan-new.png", "caption": "His cap still fits the new head" },
