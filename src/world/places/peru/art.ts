@@ -4,20 +4,11 @@ import beetle from './assets/beetle.webp'
 import bgAmazon from './assets/bg-amazon.webp'
 import bgAndesTall from './assets/bg-andes-tall.webp'
 import bgAndes from './assets/bg-andes.webp'
-import bgCanyonFar from './assets/bg-canyon-far.webp'
 import bird from './assets/bird.webp'
 import brush from './assets/brush.webp'
 import burr from './assets/burr.webp'
 import butterfly from './assets/butterfly.webp'
 import cactus from './assets/cactus.webp'
-import canyonCactus from './assets/canyon-cactus.webp'
-import canyonCloud from './assets/canyon-cloud.webp'
-import coco from './assets/canyon-coco.webp'
-import canyonPerched from './assets/canyon-condor-perched.webp'
-import pluma from './assets/canyon-pluma.webp'
-import canyonSwallow from './assets/canyon-swallow-nest.webp'
-import canyonTourists from './assets/canyon-tourists.webp'
-import canyonViscacha from './assets/canyon-viscacha.webp'
 import canoe from './assets/canoe.webp'
 import capybaraBaby from './assets/capybara-baby.webp'
 import capybara from './assets/capybara.webp'
@@ -74,5 +65,5 @@ import seaRock from './assets/sea-rock.webp'
 import sock from './assets/seaweed-sock.webp'
 
 export const art = {
-  abuela, basket, bear, beetle, bgAmazon, bgAndes, bgAndesTall, bgCanyonFar, bgCoast, bgCoastTall, bgMp, bgMpTall, bird, boat, brush, burr, bush, butterfly, cactus, canoe, canyonCactus, canyonCloud, canyonPerched, canyonSwallow, canyonTourists, canyonViscacha, capybara, capybaraBaby, cliff, clippers, cockRock, coco, corn, cover, crab, cria, dandelion, doorway, fish, frog, hummingbird, jellyfish, kantuta, kelp, lizard, llamaBrown, llamaGrey, luna, macaw, map, monkey, mpPin, paco, pelicanFloat, pelicanFly, pepa, pluma, pond, post, potatoPlant, rosa, seaRock, sloth, sock, stoneWall, tern, tika, toucan, treeMonkey, treeSloth, twig, viscacha,
+  abuela, basket, bear, beetle, bgAmazon, bgAndes, bgAndesTall, bgCoast, bgCoastTall, bgMp, bgMpTall, bird, boat, brush, burr, bush, butterfly, cactus, canoe, capybara, capybaraBaby, cliff, clippers, cockRock, corn, cover, crab, cria, dandelion, doorway, fish, frog, hummingbird, jellyfish, kantuta, kelp, lizard, llamaBrown, llamaGrey, luna, macaw, map, monkey, mpPin, paco, pelicanFloat, pelicanFly, pepa, pond, post, potatoPlant, rosa, seaRock, sloth, sock, stoneWall, tern, tika, toucan, treeMonkey, treeSloth, twig, viscacha,
 }

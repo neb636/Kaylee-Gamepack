@@ -46,19 +46,6 @@ export const screens = [
       await p.waitForTimeout(to === 'parade' ? 3200 : to === 'twist' ? 2400 : 1800)
     },
   })),
-  { name: 'condor-story', hash: '#/world/peru/condor/story', reset: true, wait: 400 },
-  { name: 'condor-start', hash: '#/world/peru/condor/start', reset: true, wait: 1500 },
-  // Coco's Canyon Glide moments, opened through section URLs: leading Pluma to the places,
-  // the sun on the other wall (the ridge), Pluma flying by herself, the condor circle at the end.
-  ...['follow', 'ridge', 'solo', 'finale'].map((to) => ({
-    name: `condor-${to}`,
-    hash: `#/world/peru/condor/${to}`,
-    reset: true,
-    act: async (p) => {
-      await p.waitForTimeout(500)
-      await p.waitForTimeout(to === 'finale' ? 1200 : 3000)
-    },
-  })),
   { name: 'river-story', hash: '#/world/peru/river/story', reset: true, wait: 400 },
   { name: 'river-play', hash: '#/world/peru/river/forest', reset: true, wait: 1800 },
   // Rosa's Rainy River moments, opened through section URLs: raining on the river, the river
@@ -91,7 +78,6 @@ export const pacing = [
   { name: "peru luna's fluffy day", id: 'alpaca', hash: '#/world/peru/alpaca', reset: true },
   { name: "peru tika's mountain terraces", id: 'machu-picchu', hash: '#/world/peru/machu-picchu', reset: true },
   { name: "peru pepa's penguin cliff", id: 'penguins', hash: '#/world/peru/penguins', reset: true },
-  { name: "peru coco's canyon glide", id: 'condor', hash: '#/world/peru/condor', reset: true },
   { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
 ]
 
@@ -181,43 +167,6 @@ const penguinLaunch = (name, seconds, jump, pull) => ({
   },
 })
 motion.push(penguinLaunch('penguin-launch', 8, null, 0.13), penguinLaunch('penguin-fish', 5, 'fish', 0.09), penguinLaunch('penguin-chick-swim', 4.5, 'swim', 0.08))
-
-// Coco's Canyon Glide: hold a finger in the sky and Coco banks after it, sinking slowly in plain air; steer him into a
-// swirl of warm air and he circles up (wings up, fingers spread); pull down for a dive (wings fold) and a swoop.
-const canyonFly = (name, seconds, jump, path) => ({
-  name,
-  seconds,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/condor/${jump || 'start'}`)
-    await page.waitForTimeout(600)
-    await page.waitForTimeout(900)
-  },
-  act: async (page) => {
-    const vp = page.viewportSize()
-    // `path`: world targets [x, y, ms]; the finger sits where that point is on screen (clamped to the screen).
-    let down = false
-    for (const [x, y, ms] of path) {
-      const end = Date.now() + ms
-      while (Date.now() < end) {
-        const w = await page.evaluate(() => window.__canyonQA?.where())
-        if (!w) break
-        const sx = Math.min(vp.width - 20, Math.max(20, (x - w.cam.x) * w.s))
-        const sy = Math.min(vp.height - 20, Math.max(140, (y - w.cam.y) * w.s))
-        if (!down) {
-          await page.mouse.move(sx, sy)
-          await page.mouse.down()
-          down = true
-        } else await page.mouse.move(sx, sy)
-        await page.waitForTimeout(100)
-      }
-    }
-    await page.mouse.up()
-  },
-})
-motion.push(
-  canyonFly('canyon-ride', 4, null, [[1340, 1800, 1500], [1340, 900, 2500]]),
-  canyonFly('canyon-dive', 3.2, 'follow', [[1700, 2600, 2000], [2000, 2100, 1200]]),
-)
 
 // Rosa's Rainy River: grab the cloud and squeeze it (it squishes and rains), wiggle it over the river (harder rain, a
 // rumble), then a lily bud unrolling in the lagoon's rain.
