@@ -44,7 +44,11 @@ const PENGUIN = { species: 'penguin' as const, fur: '#3F365F', light: '#FFF6EC',
 export const LOOKS: Record<string, Look> = {
   // Not a toy any more: the size the game's hats, glasses and costumes are built at (avatar.ts, closet/, model-wear.ts).
   kaylee: { species: 'unicorn', height: 1.0, fur: '#CDB9F6', light: '#F4EDFF', dark: '#A88EE8', ear: '#FFB3D1', mane: ['#FF6FAE', '#FBE27A', '#8FE3C8', '#8EC9F5'], hair: 'medium', outfit: { kind: 'dress', color: '#FF5FA2' }, lashes: true },
-  nick: { species: 'unicorn', height: 1.7, fur: '#A9EBD6', light: '#E2FAF1', dark: '#9C86DA', ear: '#FFB3C7', mane: ['#8EC9F5', '#B9A6F5'], hair: 'short', outfit: { kind: 'polo', color: '#FBE78A' }, open: true },
+  // Dad looks a little like himself (the user's photos, 2026-11-23; engine3d/characters/dad.ts): short light-brown hair
+  // cropped close, light brows, blue eyes, a day's stubble and a full round face, on a mint unicorn in Kaylee's and
+  // Mom's style (their ears, a pink nose, a hair-colored tail). His shirt stays yellow (the user's pick).
+  // `mane` is his hair's browns (the barber's strands and snips start out in them).
+  nick: { species: 'unicorn', height: 1.7, fur: '#B4EBCF', light: '#F6F3E4', dark: '#A980D6', ear: '#F9A9BE', mane: ['#9A7250', '#8B6546', '#A87E5A'], hairdo: { style: 'crop', color: '#9A7250' }, eyes: '#4F86C6', brows: '#8B6546', stubble: '#B39A7C', outfit: { kind: 'tee', color: '#FBE78A', shorts: '#D8C3A2', cut: 'roomy' } },
   agong: { species: 'panda', height: 1.45, fur: '#FFF6EE', light: '#FFFDF8', dark: '#4A3F4F', ear: '#FFB3C7', outfit: { kind: 'shirt', color: '#FFF0DA' }, extras: ['glasses', 'moustache', 'cane'] },
   jum: { species: 'elephant', height: 1.5, chub: 1.25, fur: '#FFB3CF', light: '#FFE3EE', dark: '#F28CB3', ear: '#FF94BC', outfit: { kind: 'blouse', color: '#A7EBD0' }, lashes: true },
   // Joy and Bird look a little like themselves (the family's photos, 2026-10-24; Joy again 2026-11-23): Joy's long

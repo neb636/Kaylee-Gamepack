@@ -240,6 +240,21 @@ every pose, voice and wearable working untouched:
 - Check it like a model: the lab from the front, three-quarter, side and back, every pose, the lineup beside the
   family, then `node scripts/qa-mom.mjs --who=joy` for the real scenes.
 
+### Dad (2026-11-23)
+
+Dad is code-built too, and looks a little like himself (the user's photos): `hairdo: { style: 'crop' }` on a unicorn
+picks his own head (`engine3d/characters/dad.ts`).
+
+- **His hair is one sculpted ball**, not tufts: `hairRadius` sinks it under the skin below `HAIRLINE` (a height for
+  each angle round the head: fringe, higher temples, sideburn, nape) and lifts it into a short crop above, so the
+  hairline comes out as a smooth line. The fringe's points are a sawtooth in that line. It lives in the rig's `mane`
+  group: the barber's strands replace it, and `Rig.shortHair` stops the wind swinging it.
+- **Stubble** (`Look.stubble`) is flat dots laid on the muzzle and jaw. `Look.eyes` gives an iris color (his are blue)
+  and `Look.brows` his brows.
+- **His ears are Kaylee's and Mom's**: upright, a soft rounded tip, pink inside (`earShape`). His horn stands on its
+  own pivot (`Rig.horn`), which the barber's scissors boing.
+- His height, body and pivots are the rig's usual ones, so scenes, seats and poses fit as before.
+
 ## Open questions
 
 - A GLB of a family member is OK in this repo (user feedback, 2026-10-25); photos never are.

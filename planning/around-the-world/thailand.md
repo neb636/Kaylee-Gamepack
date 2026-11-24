@@ -14,7 +14,7 @@ The user decides the family: who each person is, which animal, who comes on a tr
 |---|---|---|---|
 | Kaylee | her | visiting | lilac unicorn, rainbow mane, gold horn, pink dress (nothing like Sparkle); a modelled vinyl toy |
 | Ji | Mom | visiting | cream unicorn, long lavender-pink hair, peach sundress; a modelled vinyl toy |
-| Nick | Dad | visiting | mint unicorn, short sky-lavender mane, yellow polo, big grin; a modelled vinyl toy |
+| Nick | Dad | visiting | mint unicorn who looks a little like him: short light-brown hair, blue eyes, stubble, yellow tee, small smile |
 | Agong (อากง) | Grandpa | yes | panda with round gold glasses, a moustache, a cream shirt and a cane |
 | Jum | aunt | yes | chubby pink elephant, mint blouse |
 | Joy | aunt | yes | fox with straight brown hair to the shoulders, parted in the middle, a big toothy smile, a white blouse with a pink lace collar |
@@ -28,7 +28,7 @@ The user decides the family: who each person is, which animal, who comes on a tr
 
 Kids share their parent's animal, so Kaylee can see who belongs to whom. Each animal looks a little like the real
 person (their hair, a face detail, the clothes they wear), from the user's photos, which stay outside this repo.
-Kaylee, Mom and Dad are modelled vinyl toys (Tripo3D, `docs/3d-characters.md`); the rest are code-built chibi rigs,
+Kaylee and Mom are modelled vinyl toys (Tripo3D, `docs/3d-characters.md`); the rest are code-built chibi rigs,
 to be modelled the same way one at a time. The character lab (`#/world/characters/<id>`) shows every one of them.
 
 ## Agong's house (the hub)

@@ -413,7 +413,7 @@ export class JetSki implements World3D {
     const f = this.nick.rig.face
     this.cap = new Group()
     this.cap.add(capMesh(bag, f.R))
-    this.cap.position.set(0, f.headY + f.R * 0.72, -f.R * 0.05)
+    this.cap.position.set(0, f.headY + f.R * 0.86, -f.R * 0.05)
     this.nick.rig.head.add(this.cap)
 
     // Mom on the sand at the water's edge, the jet ski man by his hut (or on his own jet ski in the race).
@@ -1586,7 +1586,7 @@ export class JetSki implements World3D {
       this.capT += dt / 1.4
       const k = this.capT
       const f = this.nick.rig.face
-      const rest = tmp2.set(0, f.headY + f.R * 0.72, -f.R * 0.05)
+      const rest = tmp2.set(0, f.headY + f.R * 0.86, -f.R * 0.05)
       this.cap.position.set(rest.x + Math.sin(k * 8) * bellK(k) * 0.4, rest.y + bellK(k) * 1.6, rest.z - bellK(k) * 0.7)
       this.cap.rotation.set(k * 14 * bellK(k), k * 6, 0)
       if (k > 0.85 && k - dt / 1.4 <= 0.85) this.nick.react('hop')

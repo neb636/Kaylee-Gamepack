@@ -140,7 +140,7 @@ export class Mane {
     this.makeStrands()
     this.set(typeof hairdo === 'string' ? decodeHair(hairdo) : hairdo)
     rig.head.add(this.root)
-    // The toy's own back locks give way to the strands.
+    // The toy's own back locks (or Dad's short hair) give way to the strands.
     if (rig.mane) rig.mane.visible = false
   }
 
@@ -261,7 +261,7 @@ export class Mane {
   }
 
   colorOf(s: Strand) {
-    return s.color === 'n' ? (s.tuft >= TUFTS ? this.look.dark : ownColor(this.look, s.tuft)) : HAIR_COLORS[s.color]
+    return s.color === 'n' ? (s.tuft >= TUFTS ? (this.look.brows ?? this.look.dark) : ownColor(this.look, s.tuft)) : HAIR_COLORS[s.color]
   }
 
   // ---------------------------------------------------------------- bows and clips

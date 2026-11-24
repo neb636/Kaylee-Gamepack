@@ -13,6 +13,7 @@
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
+import { dadHead } from './dad'
 import { mooseAntler } from './moose'
 import { bellyPatch, beaverTail } from './beaver'
 import { raccoonHead, raccoonTail, raccoonTummy } from './raccoon'
@@ -37,14 +38,16 @@ export interface Rig {
   beak?: { top: Group; bottom: Group; open(k: number): void; k: number }
   armL: Group
   armR: Group
-  /** Sample a model-authored wave from rest (0) through its return to rest (1). */
-  wave?: (progress: number) => void
   /** A sculpted face can pose its features together from the filtered voice level. */
   expression?: (level: number) => void
   tail: Group | null
   /** A unicorn's mane locks (down the back and sides), pivoting at the top of the back of the head: the wind swings
    *  them (Wind). */
   mane: Group | null
+  /** The mane is a short hairdo (Dad's tousled hair): the wind leaves it be. */
+  shortHair?: boolean
+  /** A horn on its own pivot at its root (Dad's): the barber's scissors make it boing. */
+  horn?: Group
   height: number
   /** Body radius (lying down lifts the body by this). */
   radius: number
@@ -77,21 +80,9 @@ export interface Rig {
   /** Where things sit on a modelled head whose shape isn't the code-built ball (the modelled Mom's), head-local meters:
    *  the top of the head under the hair (a hat's middle, with the hat's inner radius `hat`), the tip of the nose (a dab
    *  of cream), between the eyes on the face (sunglasses). */
-  spots?: { crown: V3; hat: number; nose: V3; eyes: V3; brow?: V3; horn?: V3 }
+  spots?: { crown: V3; hat: number; nose: V3; eyes: V3 }
   /** A modelled toy's own ears (the modelled Mom's stick out at her temples): a hat tucks them under it. */
   ears?: Object3D[]
-  /** A modelled toy's own hairdo (the modelled Dad's), a group on the head: the barber's strands replace it and the
-   *  vet's suds fluff it up. Unlike `mane`, the wind leaves it be. `hairColors`: its browns, dark to light (the
-   *  barber's strands start out in them). `brows`: his eyebrows (the barber's strands grow new ones over them).
-   *  `horn`: his horn (the barber's horn, one a snip can boing, stands in for it). `spots.brow` is the middle of the
-   *  left brow and `spots.horn` the tip of the horn (head-local meters). */
-  hair?: Group
-  hairColors?: string[]
-  brows?: Group
-  horn?: Object3D
-  /** A modelled leg below the shorts, in its hip pivot's space (meters, the left leg; the right is mirrored): its
-   *  middle across and front to back, how thick it is, and the heights of the sole and of the hem it goes up under. */
-  shin?: { x: number; z: number; r: number; sole: number; hem: number }
 }
 
 /** One worn thing, a group for each pivot it rides on (null where there's nothing). */
@@ -327,8 +318,10 @@ export class Wind {
     this.k += (this.goal - this.k) * (1 - Math.exp(-dt * 4))
     const k = this.k
     if (!rig.mane) return
-    rig.mane.rotation.x = k * (0.62 + Math.sin(t * 13) * 0.08 + Math.sin(t * 5.3) * 0.06)
-    rig.mane.rotation.z = k * Math.sin(t * 9.1) * 0.05
+    if (!rig.shortHair) {
+      rig.mane.rotation.x = k * (0.62 + Math.sin(t * 13) * 0.08 + Math.sin(t * 5.3) * 0.06)
+      rig.mane.rotation.z = k * Math.sin(t * 9.1) * 0.05
+    }
     if (rig.tail) {
       rig.tail.rotation.x = k * (0.75 + Math.sin(t * 11 + 1) * 0.12)
       rig.tail.rotation.y = k * Math.sin(t * 7) * 0.12
@@ -374,6 +367,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const beaverBrows: Group[] = []
   /** A unicorn's locks, which swing in the wind (their own group on the head). */
   const locks: Parts = []
+  /** A horn that stands on its own pivot (Dad's). */
+  const hornParts: Parts = []
   /** Where the mouth is (head-local): the resting mouth and the talking one are built around it. */
   let mouthAt: V3 = [0, 0, 0]
   /** A beak's two halves and where they hinge (head-local): they swing apart when they talk. */
@@ -470,7 +465,19 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       const long = o.kind === 'shirt'
       torso.push(P.capsule(0.163 * H, (long ? 0.1 : 0.06) * H, o.color, { at: [0, (long ? 0.35 : 0.37) * H, 0], scale: round }))
       if (o.kind === 'dress') torso.push(frustum(0.15 * H, 0.235 * H, 0.17 * H, o.color, { at: [0, 0.235 * H, 0], scale: round }))
-      if (o.shorts) torso.push(frustum(0.16 * H, 0.168 * H, 0.09 * H, o.shorts, { at: [0, 0.205 * H, 0], scale: round }))
+      if (o.shorts && o.cut === 'roomy') {
+        // Real shorts: a seat, a leg each to just above the hoof and a turned-up cuff, under a tee whose hem flares
+        // out over them, with a ribbed crew neck.
+        const lx = 0.085 * H * (1 + (c - 1) * 0.7)
+        torso.push(frustum(0.166 * H, 0.172 * H, 0.08 * H, o.shorts, { at: [0, 0.215 * H, 0], scale: round }))
+        for (const s of [-1, 1]) {
+          torso.push(P.cyl(0.084 * H, 0.09 * H, 0.08 * H, o.shorts, { at: [s * lx, 0.155 * H, 0] }, 18))
+          torso.push(P.torus(0.088 * H, 0.013 * H, o.shorts, { at: [s * lx, 0.12 * H, 0], rot: [Math.PI / 2, 0, 0] }))
+        }
+        torso.push(frustum(0.164 * H, 0.176 * H, 0.09 * H, o.color, { at: [0, 0.295 * H, 0], scale: round }))
+        torso.push(P.torus(0.178 * H, 0.011 * H, o.color, { at: [0, 0.254 * H, 0], rot: [Math.PI / 2, 0, 0], scale: round }))
+        torso.push(P.torus(0.1 * H, 0.014 * H, o.color, { at: [0, 0.528 * H, 0.012 * H], rot: [Math.PI / 2 - 0.18, 0, 0], scale: round }))
+      } else if (o.shorts) torso.push(frustum(0.16 * H, 0.168 * H, 0.09 * H, o.shorts, { at: [0, 0.205 * H, 0], scale: round }))
       if (o.kind === 'polo') {
         for (const s of [-1, 1]) torso.push(P.box(0.08 * H, 0.012 * H, 0.06 * H, o.color, { at: [s * 0.045 * H, 0.535 * H, 0.1 * H], rot: [0.5, 0, s * -0.4] }))
         torsoPlain.push(...[0.47, 0.42].map((y) => P.sphere(0.009 * H, WHITE, { at: [0, y * H, 0.162 * H * round[2]] })))
@@ -528,7 +535,13 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       const hand = look.sculpted ? FOX_SOCK : (darkPaws || seaOtter) ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' || look.species === 'otter' || polar ? look.light : look.fur
       parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * 0.025 * H, -0.075 * H, 0], rot: [0, 0, s * 0.35] }))
       parts.push(P.sphere(0.054 * H, hand, { at: [s * 0.05 * H, -0.14 * H, 0.005 * H], scale: seaOtter ? [0.84, 1.2, 0.67] : undefined }))
-      if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))
+      if (o?.cut === 'roomy') {
+        // A short sleeve down the arm (it hangs out at 0.35 rad), with a hem round its end.
+        const along = (d: number): V3 => [s * Math.sin(0.35) * d * H, -Math.cos(0.35) * d * H, 0]
+        parts.push(P.sphere(0.066 * H, o.color, { at: [s * 0.002 * H, -0.008 * H, 0] }))
+        parts.push(P.cyl(0.061 * H, 0.066 * H, 0.05 * H, o.color, { at: along(0.036), rot: [0, 0, s * 0.35] }, 18))
+        parts.push(P.torus(0.065 * H, 0.008 * H, o.color, { at: along(0.06), rot: [Math.PI / 2, s * 0.35, 0] }))
+      } else if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))
       // (The lace blouse's short sleeves have a pink edge.)
       if (o?.lace) parts.push(P.torus(0.054 * H, 0.01 * H, o.lace, { at: [s * 0.021 * H, -0.062 * H, 0], rot: [Math.PI / 2, s * 0.35, 0] }))
       if (o?.print) flower(parts, [s * 0.035 * H, -0.01 * H, 0.058 * H], [0, s * 0.55, 0], 0.024 * H, o.print[side === 'L' ? 1 : 0], 0)
@@ -538,9 +551,20 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   // ---- The face: big shiny eyes, blush, a smile (or a big open happy mouth) ----
   for (const s of [-1, 1]) {
     const x = s * eyeX
-    eyes.push(P.sphere(eyeSize, INK, { at: on(x, eyeY, lift - 0.03 * R), rot: turnTo(x), scale: [0.78, 1, 0.42] }))
-    eyesPlain.push(P.sphere(eyeSize * 0.3, WHITE, { at: on(x + s * 0.05 * R, eyeY + 0.08 * R, lift + 0.035 * R) }))
-    eyesPlain.push(P.sphere(eyeSize * 0.14, WHITE, { at: on(x - s * 0.05 * R, eyeY - 0.07 * R, lift + 0.035 * R) }))
+    if (look.eyes) {
+      // Big round eyes with a white, a colored iris and a dark pupil (the ink line round the white is the lid).
+      const rot = turnTo(x)
+      const e = eyeSize * 1.14
+      eyes.push(P.sphere(e, WHITE, { at: on(x, eyeY, lift - 0.03 * R), rot, scale: [0.94, 1, 0.42] }, 22))
+      eyesPlain.push(P.sphere(e * 0.84, look.eyes, { at: on(x, eyeY - 0.012 * R, lift + 0.062 * R), rot, scale: [1, 1, 0.3] }, 20))
+      eyesPlain.push(P.sphere(e * 0.5, INK, { at: on(x, eyeY - 0.012 * R, lift + 0.094 * R), rot, scale: [1, 1, 0.3] }, 24))
+      eyesPlain.push(P.sphere(e * 0.2, WHITE, { at: on(x + s * 0.06 * R, eyeY + 0.075 * R, lift + 0.12 * R), rot, scale: [1, 1, 0.4] }))
+      eyesPlain.push(P.sphere(e * 0.09, WHITE, { at: on(x - s * 0.07 * R, eyeY - 0.08 * R, lift + 0.12 * R), rot, scale: [1, 1, 0.4] }))
+    } else {
+      eyes.push(P.sphere(eyeSize, INK, { at: on(x, eyeY, lift - 0.03 * R), rot: turnTo(x), scale: [0.78, 1, 0.42] }))
+      eyesPlain.push(P.sphere(eyeSize * 0.3, WHITE, { at: on(x + s * 0.05 * R, eyeY + 0.08 * R, lift + 0.035 * R) }))
+      eyesPlain.push(P.sphere(eyeSize * 0.14, WHITE, { at: on(x - s * 0.05 * R, eyeY - 0.07 * R, lift + 0.035 * R) }))
+    }
     if (look.extras?.includes('lids')) {
       // Heavy, kind old eyelids: the top of each eye under a lid in the face's color (in the eyes group, so they blink
       // with them), and two little smile creases at the outer corner.
@@ -550,7 +574,9 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     if (look.extras?.includes('eye-ring')) headPlain.push(P.sphere(eyeSize * 1.55, WHITE, { at: on(x, eyeY, lift - 0.06 * R), rot: turnTo(x), scale: [0.9, 1.05, 0.3] }, 16))
     if (look.lashes) for (const k of [0, 1]) eyesPlain.push(P.capsule(0.012 * R, 0.07 * R, INK, { at: on(x + s * (0.16 + k * 0.05) * R, eyeY + (0.17 - k * 0.07) * R, lift + 0.01 * R), rot: [0, 0, s * (-0.9 - k * 0.5)] }))
     const blushY = look.species === 'unicorn' || look.species === 'pony' ? -0.08 * R : -0.2 * R
-    if (!seaOtter && look.species !== 'raccoon' && !look.sculpted) headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
+    // (Dad's sits on his round cheeks, under his big eyes.)
+    if (look.hairdo?.style === 'crop') headPlain.push(P.sphere(0.15 * R, BLUSH, { at: [s * 0.75 * R, headY - 0.2 * R, 0.645 * R], rot: [0.15, s * 0.86, 0], scale: [1.1, 0.8, 0.25] }))
+    else if (!seaOtter && look.species !== 'raccoon' && !look.sculpted) headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
   }
   const mouthPoint = (y: number, z?: number): V3 => (z === undefined ? on(0, y, 0.005 * R) : [0, headY + y, z])
   /** The resting mouth, built around the origin (its group sits at `mouthAt`). */
@@ -573,6 +599,27 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     case 'unicorn': {
       const mane = look.mane ?? [look.fur]
       const m = (i: number) => mane[i % mane.length]
+      if (look.hairdo?.style === 'crop') {
+        // Dad: his own head (dad.ts), his hair in the mane's group and his horn on its own pivot.
+        const face = dadHead(look, f)
+        head.push(...face.outlined)
+        headPlain.push(...face.plain)
+        locks.push(...face.hair)
+        hornParts.push(...face.horn)
+        mouth(face.mouth)
+        // A curl of a tail in his hair's color, like Kaylee's and Mom's, swung out to one side so it shows from the front.
+        const curl: [number, number, number, number][] = [
+          [-0.02, 0.27, -0.15, 0.062],
+          [-0.09, 0.22, -0.19, 0.07],
+          [-0.17, 0.175, -0.2, 0.073],
+          [-0.245, 0.165, -0.175, 0.066],
+          [-0.285, 0.21, -0.15, 0.056],
+          [-0.26, 0.26, -0.14, 0.044],
+          [-0.215, 0.255, -0.145, 0.03],
+        ]
+        curl.forEach(([x, y, z, r], i) => tail.push(P.sphere(r * H, m(i), { at: [x * H, y * H, z * H] }, 14)))
+        break
+      }
       head.push(P.sphere(R, look.fur, { at: [0, headY, 0] }, 26))
       head.push(P.sphere(0.52 * R, look.light, { at: [0, headY - 0.36 * R, 0.6 * R], scale: [1.05, 0.66, 0.6] }))
       headPlain.push(...[-1, 1].map((s) => P.sphere(0.032 * R, INK, { at: [s * 0.16 * R, headY - 0.27 * R, 0.91 * R], scale: [1, 0.7, 0.6] })))
@@ -1031,7 +1078,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   }
 
   // ---- Their own hair ----
-  if (look.hairdo) hairdo(look.hairdo, f, head)
+  if (look.hairdo && look.hairdo.style !== 'crop') hairdo(look.hairdo, f, head)
 
   // ---- Extras ----
   for (const e of look.extras ?? []) {
@@ -1200,6 +1247,11 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     maneGroup = pivoted(locks, look.species === 'pony' ? [0, headY + 0.6 * R, 0] : [0, headY + 0.5 * R, -0.6 * R], bag, px)
     headPivot.add(maneGroup)
   }
+  let hornGroup: Group | undefined
+  if (hornParts.length) {
+    hornGroup = pivoted(hornParts, [0, headY + 0.98 * R, 0.3 * R], bag, px)
+    headPivot.add(hornGroup)
+  }
   armL.add(solidMix(arm.L, [], bag, px))
   armR.add(solidMix(arm.R, [], bag, px))
   let tailGroup: Group | null = null
@@ -1207,7 +1259,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px, tailPlain)
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, expression, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
+  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, expression, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, shortHair: look.hairdo?.style === 'crop' || undefined, horn: hornGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
 }
 
 /** A five-petal flower (with two leaves behind it) printed on a surface at `at`, turned by `rot` to face out. */
