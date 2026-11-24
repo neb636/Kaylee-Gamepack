@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 215" width="240" height="215">
+  <title>An Inca stone doorway</title>
+  <ellipse cx="120" cy="208" rx="112" ry="7" fill="#2b2330" opacity="0.14"/>
+  <!-- the dark way through -->
+  <path d="M74 206L88 40H152L166 206Z" fill="#5b4a7a"/>
+  <path d="M96 206L104 70H136L144 206Z" fill="#473866"/>
+  <path d="M100 206Q120 150 140 206Z" fill="#8fd99a" opacity="0.5"/>
+  <path d="M22 166L81.5 166L78 206L18 206Z" fill="#bcb6d6"/><path d="M26 168L77 168L74 200L22.5 200Z" fill="#e6e2f4"/><path d="M26 126L84.5 126L81.5 166L22 166Z" fill="#d6c3a8"/><path d="M30 128L80.5 128L77.5 160L26.5 160Z" fill="#f1e3cf"/><path d="M30 86L88 86L84.5 126L26 126Z" fill="#b3adcf"/><path d="M34 88L84 88L81 120L30.5 120Z" fill="#dedaf0"/><path d="M34 44L91.5 44L88 86L30 86Z" fill="#cfc0b0"/><path d="M38 46L87.5 46L84.5 80L34.5 80Z" fill="#eadfd2"/><path d="M218 166L158.5 166L162 206L222 206Z" fill="#d6c3a8"/><path d="M214 168L163 168L166 200L217.5 200Z" fill="#f1e3cf"/><path d="M214 126L155.5 126L158.5 166L218 166Z" fill="#b3adcf"/><path d="M210 128L159.5 128L162.5 160L213.5 160Z" fill="#dedaf0"/><path d="M210 86L152 86L155.5 126L214 126Z" fill="#cfc0b0"/><path d="M206 88L156 88L159 120L209.5 120Z" fill="#eadfd2"/><path d="M206 44L148.5 44L152 86L210 86Z" fill="#bcb6d6"/><path d="M202 46L152.5 46L155.5 80L205.5 80Z" fill="#e6e2f4"/>
+  <!-- the lintel -->
+  <path d="M26 46Q22 8 44 8H196Q218 8 214 46Z" fill="#bcb6d6"/>
+  <path d="M30 38Q28 12 46 12H194Q212 12 210 38Z" fill="#ebe7f7"/>
+  <path d="M52 20H120" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+</svg>

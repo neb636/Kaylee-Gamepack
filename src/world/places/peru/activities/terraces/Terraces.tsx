@@ -14,7 +14,7 @@ import SECTIONS from './sections'
 // re-render per move).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import { BigButton, burst, Buddy, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
+import { BigButton, burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { HudButton } from '../../../../kit/Hud'
@@ -22,15 +22,14 @@ import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
 import { L } from '../../lines'
 import type { ActivityProps } from '../../Place'
-import { INK } from '../../puppets/Alpaca'
-import { Tika, TIKA_POSES, TIKA_VIEW, type TikaPose } from '../../puppets/Tika'
+import { Llama, LLAMA_COATS, Tika, TIKA_POSES, TIKA_VIEW, type TikaPose } from '../../puppets/Tika'
 import { pickLayout, world, type StageLayout, type World } from './layout'
-import { CloudShape, Dust, Hole, Mountain, SeedBag, Stone } from './Scene'
+import { CameraIcon, CloudShape, Dust, Foreground, Hole, MEADOW, Mountain, SeedBag, SKY, Stone } from './Scene'
+import { TerracesOpening } from './Opening'
 import { tsfx } from './sfx'
 import { buildWall, WALLS, type StoneShape } from './stones'
 
 const T = L.terraces
-const SKY = '#8DD3FC'
 const PAD = 36
 const N = WALLS.length
 const GAPS = WALLS.reduce((a, w) => a + w.gaps.length, 0)
@@ -40,14 +39,15 @@ const TOTAL = 8
 type Phase = 'story' | 'build' | 'busy' | 'seeds' | 'photo' | 'end'
 type Crop = 'potato' | 'corn' | 'flower'
 const CROPS: { id: Crop; img: string; color: string }[] = [
-  { id: 'potato', img: art.potatoPlant, color: '#C89A6A' },
+  { id: 'potato', img: art.potatoPlant, color: '#E5B78F' },
   { id: 'corn', img: art.corn, color: '#FBEA9A' },
   { id: 'flower', img: art.kantuta, color: '#FF8FB8' },
 ]
+/** Tika's friends: the same hand-drawn llama in other coats (the baby is smaller). */
 const FRIENDS = [
-  { id: 'brown', img: art.llamaBrown, facesRight: true, k: 1 },
-  { id: 'grey', img: art.llamaGrey, facesRight: false, k: 1 },
-  { id: 'cria', img: art.cria, facesRight: true, k: 0.62 },
+  { id: 'brown', coat: LLAMA_COATS.brown, k: 1 },
+  { id: 'grey', coat: LLAMA_COATS.grey, k: 1 },
+  { id: 'cria', coat: LLAMA_COATS.cria, k: 0.66 },
 ] as const
 /** Stage-space clouds (fractions of the stage); more appear the higher she climbs. */
 const CLOUDS = [
@@ -339,7 +339,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
       const f = kk - 1
       timers.later(() => {
         if (!alive()) return
-        void friendRefs.current[f]?.play('jump')
+        void friendRefs.current[f]?.play('hop')
         sfx.boing()
         setHopping(f)
         timers.later(() => {
@@ -621,13 +621,13 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     }
   }
   const tapFriend = (i: number) => {
-    void friendRefs.current[i]?.play(i === 2 ? 'jump' : 'nod')
+    void friendRefs.current[i]?.play(i === 2 ? 'hop' : 'nod')
     tsfx.hum()
     // The grey llama spits a tiny grass ball at the brown one (llamas really spit!).
     if (i === 1 && friendAt[0] === friendAt[1]) {
       tsfx.spit()
       setSpitBall((b) => b + 1)
-      timers.later(() => alive() && void friendRefs.current[0]?.play('wiggle'), 450)
+      timers.later(() => alive() && void friendRefs.current[0]?.play('giggle'), 450)
     }
   }
   const tapBush = () => {
@@ -726,6 +726,8 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
   if (!S || !W) return <div ref={root} style={{ position: 'absolute', inset: 0, background: SKY }} />
 
   const tikaH = S.tikaH
+  // At the summit the meadow slides away and Sparkle stands over the mountainside: not so big that she hides it.
+  const sparkleH = phase === 'photo' || phase === 'end' ? Math.min(S.sparkle.h, 215) : S.sparkle.h
   const tikaW = (tikaH * TIKA_VIEW.w) / TIKA_VIEW.h
   /** Where llamas stand on ledge j (-1 = the valley floor): at the end of the ledge on their side. */
   const llamaSpot = (j: number, w: number, inward = 0) => {
@@ -736,7 +738,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
   }
   const photoXs = [W.cx - 160, W.cx + 70, W.cx + 230]
   const tikaPos = phase === 'photo' || phase === 'end' ? { x: mx(photoXs[photoSpot]), y: W.ledgeFeet(N - 1) } : llamaSpot(tikaLedge, tikaW, S.tall ? 0 : -34)
-  const friendW = (i: number) => S.llamaH * FRIENDS[i].k * 0.85
+  const friendW = (i: number) => (S.llamaH * FRIENDS[i].k * TIKA_VIEW.w) / TIKA_VIEW.h
   const frontSpot = (i: number) => ({ x: mx(S.friends.x - (1 - i) * S.friends.gap), y: S.friends.feet })
   const cloudLevel = revealed ? -1 : k
   const camT = `translate(${(S.w * (1 - cam.s)) / 2}px, ${-cam.y * cam.s}px) scale(${cam.s})`
@@ -849,7 +851,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           key={pokeKey('humm')}
           animate={pokeKey('humm') ? { x: [0, 80, 40, -60, 0], y: [0, -70, -110, -50, 0], rotate: [0, 20, 360, 340, 360] } : {}}
           transition={{ duration: 1.3 }}
-          src={art.hummingbird}
+          src={art.colibri}
           alt=""
           draggable={false}
           className="terr-hover"
@@ -867,7 +869,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
         <img src={art.doorway} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: '50% 100%', pointerEvents: 'none' }} />
         {pokeKey('door') > 0 &&
           [0, 1, 2].map((i) => (
-            <motion.span key={`${pokeKey('door')}-${i}`} initial={{ x: -10, y: 0, opacity: 1, rotate: 0 }} animate={{ x: side * 260, y: -60 - i * 30, opacity: 0, rotate: 300 }} transition={{ duration: 1.2, delay: i * 0.12 }} style={{ position: 'absolute', left: '42%', top: `${48 + i * 12}%`, width: 26, height: 16, borderRadius: '50% 0', background: '#6CC56E', border: `3px solid ${INK}`, pointerEvents: 'none' }} />
+            <motion.span key={`${pokeKey('door')}-${i}`} initial={{ x: -10, y: 0, opacity: 1, rotate: 0 }} animate={{ x: side * 260, y: -60 - i * 30, opacity: 0, rotate: 300 }} transition={{ duration: 1.2, delay: i * 0.12 }} style={{ position: 'absolute', left: '42%', top: `${48 + i * 12}%`, width: 26, height: 16, borderRadius: '50% 0', background: '#48A96C', pointerEvents: 'none' }} />
           ))}
       </button>
 
@@ -878,7 +880,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
         const w = friendW(i)
         const at = llamaSpot(j, w, i === 2 ? 10 : 0)
         return (
-          <FriendLlama key={f.id} i={i} at={at} h={S.llamaH * f.k} facesRight={f.facesRight} side={side} refs={friendRefs} onTap={() => tapFriend(i)} z={3} />
+          <FriendLlama key={f.id} i={i} at={at} h={S.llamaH * f.k} side={side} refs={friendRefs} onTap={() => tapFriend(i)} z={3} />
         )
       })}
 
@@ -901,7 +903,8 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
         onPointerCancel={onUp}
         style={{ position: 'absolute', left: ox, top: oy, width: S.w, height: S.h, transform: `scale(${scale})`, transformOrigin: '0 0' }}
       >
-        {/* Far away: Machu Picchu and Huayna Picchu (only seen above the mountainside). Wide screens extend it sideways. */}
+        {/* Far away: Machu Picchu and Huayna Picchu (only seen above the mountainside). The wide drawing has spare
+            hills either side, so wider screens see more of it instead of a bigger crop. */}
         <img
           src={S.tall ? art.bgMpTall : art.bgMp}
           alt=""
@@ -909,9 +912,9 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           style={{ position: 'absolute', left: -ox / scale, width: size.W / scale, top: paintTop, height: S.paintH, objectFit: 'cover', objectPosition: '50% 0', transition: `top ${cam.dur}s cubic-bezier(.45,0,.3,1)`, pointerEvents: 'none' }}
         />
         {/* A bank of cloud hides Machu Picchu as she climbs, and rolls away at the top. */}
-        <div aria-hidden style={{ position: 'absolute', left: -ox / scale, width: size.W / scale, top: paintTop + (S.tall ? 0.48 : 0.58) * S.paintH - S.h * 0.26, height: S.h * 0.52, background: '#F4F1FA', borderRadius: '40% 40% 30% 30%', boxShadow: '0 0 60px 40px #F4F1FA', opacity: revealed ? 0 : k >= 2 ? 1 : 0.75, transform: revealed ? 'translateY(-60%) scale(1.2)' : 'none', transition: `opacity 1.6s, transform 2s, top ${cam.dur}s cubic-bezier(.45,0,.3,1)`, pointerEvents: 'none' }} />
+        <div aria-hidden style={{ position: 'absolute', left: -ox / scale, width: size.W / scale, top: paintTop + (S.tall ? 0.48 : 0.58) * S.paintH - Math.min(S.h, 1400) * 0.26, height: Math.min(S.h, 1400) * 0.52, background: '#FFFFFF', borderRadius: '40% 40% 30% 30%', boxShadow: '0 0 60px 40px #FFFFFF', opacity: revealed ? 0 : k >= 2 ? 1 : 0.75, transform: revealed ? 'translateY(-60%) scale(1.2)' : 'none', transition: `opacity 1.6s, transform 2s, top ${cam.dur}s cubic-bezier(.45,0,.3,1)`, pointerEvents: 'none' }} />
         {/* Below the painting: more of its green hills. */}
-        <div style={{ position: 'absolute', left: -ox / scale, width: size.W / scale, top: paintTop + S.paintH - 4, height: S.h * 2, background: S.tall ? '#91DC9C' : '#A8D879', transition: `top ${cam.dur}s cubic-bezier(.45,0,.3,1)`, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', left: -ox / scale, width: size.W / scale, top: paintTop + S.paintH - 4, height: S.h * 2, background: MEADOW, transition: `top ${cam.dur}s cubic-bezier(.45,0,.3,1)`, pointerEvents: 'none' }} />
         {worldEl}
 
         {/* Clouds: thicker the higher she climbs; they roll back at the top. */}
@@ -943,10 +946,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
 
         {/* The foreground ledge we stand on: the stone pile and the llama friends waiting their turn. */}
         <div style={{ position: 'absolute', left: -ox / scale, width: size.W / scale, top: S.front, height: S.h - S.front + oy / scale + 300, zIndex: 8, transform: revealed ? `translateY(${S.h - S.front + 60}px)` : 'none', transition: 'transform 1.4s cubic-bezier(.5,0,.6,1)', pointerEvents: 'none' }}>
-          <svg viewBox="0 0 1000 300" preserveAspectRatio="none" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-            <path d="M-20 40Q120 0 260 22T520 18T780 26T1020 30V320H-20Z" fill="#7FCC6A" stroke={INK} strokeWidth="5" vectorEffect="non-scaling-stroke" />
-            <path d="M-20 70Q200 50 420 66T1020 64V320H-20Z" fill="#6DBB5C" />
-          </svg>
+          <Foreground w={size.W / scale} h={S.h - S.front + oy / scale + 300} />
         </div>
         {FRIENDS.map((f, i) => {
           if (friendAt[i] !== null) return null
@@ -956,9 +956,9 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           const at = hop ? { x: target.x, y: target.y - cam.y } : front
           return (
             <div key={f.id} style={{ position: 'absolute', inset: 0, zIndex: hop ? 12 : 9, transform: revealed ? `translateY(${S.h - S.front + 60}px)` : 'none', transition: 'transform 1.4s cubic-bezier(.5,0,.6,1)', pointerEvents: 'none' }}>
-              <FriendLlama i={i} at={at} h={S.llamaH * f.k} facesRight={f.facesRight} side={side} refs={friendRefs} onTap={() => tapFriend(i)} z={1} />
+              <FriendLlama i={i} at={at} h={S.llamaH * f.k} side={side} refs={friendRefs} onTap={() => tapFriend(i)} z={1} />
               {i === 1 && spitBall > 0 && (
-                <motion.div key={spitBall} initial={{ x: front.x - side * 30, y: front.y - S.llamaH * 0.8, opacity: 1 }} animate={{ x: frontSpot(0).x, y: [front.y - S.llamaH * 0.8, front.y - S.llamaH * 1.05, frontSpot(0).y - S.llamaH * 0.75], opacity: [1, 1, 0] }} transition={{ duration: 0.5 }} style={{ position: 'absolute', left: -12, top: -12, width: 24, height: 24, borderRadius: '50%', background: '#7FCC6A', border: `3px solid ${INK}` }} />
+                <motion.div key={spitBall} initial={{ x: front.x - side * 30, y: front.y - S.llamaH * 0.8, opacity: 1 }} animate={{ x: frontSpot(0).x, y: [front.y - S.llamaH * 0.8, front.y - S.llamaH * 1.05, frontSpot(0).y - S.llamaH * 0.75], opacity: [1, 1, 0] }} transition={{ duration: 0.5 }} style={{ position: 'absolute', left: -12, top: -12, width: 24, height: 24, borderRadius: '50%', background: '#73CF86' }} />
               )}
             </div>
           )
@@ -1003,9 +1003,9 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
             sounds.pop()
             say1([T.puzzle, T.potatoes, T.carry, L.facts.machuPicchu][g.current.facts++ % 4])
           }}
-          style={{ position: 'absolute', left: (phase === 'photo' ? S.sparkle.cx : mx(S.sparkle.cx)) - S.sparkle.h * 0.45, top: S.sparkle.bottom - S.sparkle.h, width: S.sparkle.h * 0.9, height: S.sparkle.h, padding: 0, background: 'none', border: 'none', zIndex: 15, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
+          style={{ position: 'absolute', left: (phase === 'photo' ? S.sparkle.cx : mx(S.sparkle.cx)) - sparkleH * 0.45, top: S.sparkle.bottom - sparkleH, width: sparkleH * 0.9, height: sparkleH, padding: 0, background: 'none', border: 'none', zIndex: 15, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
         >
-          <SparklePuppet ref={sparkle} height={`${S.sparkle.h}px`} lookToward={phase === 'photo' || side > 0 ? 0.7 : 0.3} />
+          <SparklePuppet ref={sparkle} height={`${sparkleH}px`} lookToward={phase === 'photo' || side > 0 ? 0.7 : 0.3} />
         </motion.button>
 
         {/* Seed bags over the new terrace. */}
@@ -1025,7 +1025,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
                   whileTap={{ scale: 0.9 }}
                   onClick={() => void plant(c.id)}
                   className="world-glow"
-                  style={{ position: 'absolute', left: W.cx + (i - 1) * (size + 40) - size / 2, top: y - size / 2 - (S.tall ? 30 : 20), width: size, height: size, borderRadius: 30, padding: 10, background: '#FFF7F0', border: `5px solid ${INK}`, boxShadow: '0 8px 0 rgba(43,35,48,.18)', zIndex: 22 }}
+                  style={{ position: 'absolute', left: W.cx + (i - 1) * (size + 40) - size / 2, top: y - size / 2 - (S.tall ? 30 : 20), width: size, height: size, borderRadius: 34, padding: 12, background: '#FFFFFF', border: 'none', boxShadow: '0 8px 0 rgba(106,87,199,.22), 0 14px 26px rgba(60,40,90,.18)', zIndex: 22 }}
                 >
                   <SeedBag img={c.img} color={c.color} />
                 </motion.button>
@@ -1065,7 +1065,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
       {phase === 'photo' && (
         <div style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom) + 18px)', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: 22, zIndex: 27 }}>
           <BigButton onClick={() => void snap()} ariaLabel="Take a picture" size="lg">
-            📷
+            <CameraIcon />
           </BigButton>
         </div>
       )}
@@ -1077,8 +1077,8 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
         // The pile of pictures sits just above the done button, so the two read as one: her photos, then done.
         <div aria-hidden style={{ position: 'absolute', right: 'max(16px, var(--safe-right, 0px))', bottom: 'calc(var(--safe-bottom) + var(--target) + 30px)', width: 'min(130px, 18vw)', height: 'min(150px, 21vw)', zIndex: 26 }}>
           {photos.map((p, i) => (
-            <motion.div key={i} initial={{ scale: 1.6, opacity: 0, rotate: 0 }} animate={{ scale: 1, opacity: 1, rotate: ((i * 37) % 17) - 8 }} style={{ position: 'absolute', inset: 0, background: '#FFF7F0', border: `4px solid ${INK}`, borderRadius: 10, padding: '8% 8% 24%', boxShadow: '0 6px 0 rgba(43,35,48,.2)' }}>
-              <div style={{ width: '100%', height: '100%', background: `url(${art.bgMp}) 60% 60% / cover`, borderRadius: 4, overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
+            <motion.div key={i} initial={{ scale: 1.6, opacity: 0, rotate: 0 }} animate={{ scale: 1, opacity: 1, rotate: ((i * 37) % 17) - 8 }} style={{ position: 'absolute', inset: 0, background: '#FFFFFF', borderRadius: 12, padding: '8% 8% 24%', boxShadow: '0 6px 0 rgba(106,87,199,.2), 0 10px 22px rgba(60,40,90,.22)' }}>
+              <div style={{ width: '100%', height: '100%', background: `url(${art.bgMp}) 52% 50% / cover`, borderRadius: 6, overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
                 <Tika height="92%" pose={p} />
               </div>
             </motion.div>
@@ -1088,7 +1088,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
 
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.8 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 28 }} />}</AnimatePresence>
 
-      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={T.story} bg={art.bgMp} friend={<Tika height="100%" />} onDone={startPlay} />}
+      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={T.story} scene={<TerracesOpening />} friend={<Tika height="100%" />} onDone={startPlay} />}
     </div>
   )
 }
@@ -1118,13 +1118,12 @@ function Hopper({ x, y, z, snapKey, children }: { x: number; y: number; z: numbe
   )
 }
 
-function FriendLlama({ i, at, h, facesRight, side, refs, onTap, z }: { i: number; at: { x: number; y: number }; h: number; facesRight: boolean; side: number; refs: { current: (PuppetHandle | null)[] }; onTap: () => void; z: number }) {
-  // Face inward, toward the stones.
-  const flip = side > 0 ? facesRight : !facesRight
+function FriendLlama({ i, at, h, side, refs, onTap, z }: { i: number; at: { x: number; y: number }; h: number; side: number; refs: { current: (PuppetHandle | null)[] }; onTap: () => void; z: number }) {
+  // Drawn facing right; they face inward, toward the stones.
   return (
     <Hopper x={at.x} y={at.y} z={z} snapKey="f">
       <button aria-label="llama" onClick={onTap} style={{ padding: 0, background: 'none', border: 'none', display: 'block', pointerEvents: 'auto' }}>
-        <Buddy ref={(r) => void (refs.current[i] = r)} img={FRIENDS[i].img} height={`${h}px`} flip={flip} />
+        <Llama ref={(r) => void (refs.current[i] = r)} coat={FRIENDS[i].coat} height={`${h}px`} flip={side > 0} />
       </button>
     </Hopper>
   )

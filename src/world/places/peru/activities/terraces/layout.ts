@@ -1,5 +1,6 @@
-// Tika's Mountain Terraces lays out on a logical stage that scales to fit (AGENTS.md "Screens"): one for wide screens
-// and one for tall ones. Stage units throughout.
+// Tika's Mountain Terraces lays out on a logical stage that scales to fit (AGENTS.md "Screens"): one for wide screens,
+// one for tall ones (an iPad upright) and one for very tall ones (a phone upright), where the extra height shows more of
+// the climb above and gives the friends at the bottom room to be big. Stage units throughout.
 //
 // The mountainside is a tall *world* (straight-on side view, terraces stacked like a staircase seen from the front)
 // that the camera climbs, one wall at a time. In front of it, a grassy *foreground* ledge at the bottom of the stage
@@ -53,7 +54,7 @@ const WIDE: StageLayout = {
   friends: { x: 1320, feet: 992, gap: 110 },
   tikaH: 250,
   llamaH: 205,
-  cityAt: 470,
+  cityAt: 500,
   paintH: 1000,
 }
 
@@ -78,7 +79,28 @@ const TALL: StageLayout = {
   paintH: 1500,
 }
 
-export const pickLayout = (W: number, H: number) => (W >= H ? WIDE : TALL)
+const PHONE: StageLayout = {
+  tall: true,
+  w: 1000,
+  h: 2000,
+  wallW: [960, 860, 760, 660],
+  wallH: 230,
+  ledgeH: 100,
+  ground: 340,
+  sky: 1700,
+  wallAt: 1290,
+  summitAt: 1380,
+  front: 1400,
+  pile: { x0: 30, x1: 970, y0: 1400, y1: 1630, rows: 1 },
+  sparkle: { cx: 150, bottom: 1975, h: 300 },
+  friends: { x: 740, feet: 1975, gap: 132 },
+  tikaH: 230,
+  llamaH: 215,
+  cityAt: 1080,
+  paintH: 2000,
+}
+
+export const pickLayout = (W: number, H: number) => (W >= H ? WIDE : H >= W * 1.8 ? PHONE : TALL)
 
 /** Geometry of the mountainside world (stage units, y down, 0 at the top of the sky). */
 export function world(S: StageLayout) {

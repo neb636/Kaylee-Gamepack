@@ -7,6 +7,11 @@ screens, stickers and character references.
 - **The Poles' stickers are drawn by hand too** (user feedback, 2026-11-24: the generated ones looked cheesy): round SVG
   badges in the shelf's look, `src/world/places/poles/assets/sticker-*.svg`. They are the pictures on the globe's trail,
   the stamp screen and the passport. Check them with `node scripts/shelf-sheet.mjs icons <files>`.
+- **Peru's Machu Picchu level is drawn by hand as well** (user feedback, 2026-11-24: the generated pictures looked
+  cheesy and the drawn llama looked bad). The view behind (`bg-machu-picchu*.svg`), the critters, the crops and Tika's
+  sticker are SVG files in the shelf's look (no dark outlines; a base, a shade and a light tone); the walls, the
+  terraces and the opening picture are drawn in code (`activities/terraces/Scene.tsx`, `Opening.tsx`); Tika and her
+  friends are one puppet in four coats (`puppets/Tika.tsx`). New art for that level follows the same look.
 - Save to `art/source/world/<id>/<name>.png`, run `npm run art -- world`, then
   `node scripts/contact-sheet.mjs src/world/places/<id>/assets` and **look at** `/tmp/contact-sheet.png`.
   Regenerate anything that cut out badly.
