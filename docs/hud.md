@@ -10,7 +10,7 @@ enough to play through. `scripts/check-hud.mjs` (part of `npm run verify`) check
 | Place | What goes there | How |
 |---|---|---|
 | Top left | **Leave.** The only back button. One level up per tap; its picture says where it goes | The shell draws it (`PlaceFrame`). A game inside a trip or a room takes it over with `useTopLeft` (`kit/topLeft.ts`) |
-| Beside it | **Progress.** One pill, never a second row of the game's own | `setProgress(done, total)` |
+| Beside it | **Progress.** One pill, never a second row of the game's own | `setProgress(done, total)`; a game in parts passes `parts` and they show as dashes under the stars |
 | Top right | **Tools** she opens and closes (dress-up, the games shelf) | `<HudButton role="open" size="sm" slot="top-right" />` |
 | Bottom left | **Sparkle** and her bubble; tap her to hear it again | `kit/Guide.tsx` |
 | Bottom centre | **The end card**, only when a round is over: a small again, a big way on | `<EndCard>` with `<HudButton role="again" />` and `<HudButton role="go" size="lg" pulse />` |
@@ -61,7 +61,7 @@ own.
 | Egypt | done: it draws no buttons of its own. The Nile's lotus row (moved from bottom right to top right) and the passage's scarab row stay as picture counters, both top right (pictures of the thing she collects, inside the part the star pill counts); the ✅ on map stops and recipe steps are status marks, not controls |
 | Italy | done: the three ticks on "done" pills (the mask shop, the pizza toppings, the pizza cutter) are the drawn check (`HudGlyph`), same mint pills in the same places. The stamp pills (🍕 ⭐, 🏛️ ⭐, 🫒 ⭐), the "let's cook" and "next customers" pills (🍕 ▶) and the oven's 🍕⬇️ / 🔄 are pictures of the thing she does, so they stay; the ✅ on map stops and pizza tickets are status marks |
 | China | done: the Great Wall's "follow Hou Hou" arrow is a pink `HudButton` with the drawn play (the way on, breathing while Hou Hou waits); it stays halfway up the side it points to and turns round (`hud-flip`) when she has to walk back. The dumpling pills (🥟 ▶) are pictures of the thing she does, the ▶ on video cards is part of the picture, and the ✅ on map stops and tickets are status marks |
-| Canada | next, with the progress pill's `parts` (the campfire roast's second star row moves into the shell's pill) and the `PlaceFrame` fix for stars going missing when the country's code is already loaded |
+| Canada | done: the five "again" pills (bath, canoe, snowmen, campfire, whales) are lavender with the drawn again (`HudGlyph`) beside the picture of the game, where they were. The campfire roast's own star row is gone: its order stars go in the shell's pill, with the campfire's parts as pink dashes under them (`setProgress(done, total, parts)`). The animal book's ✖️ is a white `HudButton` with the drawn close. `PlaceFrame` keeps stars with the activity that set them, so they no longer vanish when the country's code is already loaded |
 | Thailand | last and biggest: one back button (`useTopLeft` as a stack, so the game table hands it back to the house), the mall games' way on bottom right, end cards for Nan, the farm stops, the boat race and the board games |
 | Shared screens | their own PR: the stamp screen, story beat, videos, trophy, film skip, colouring undo, puzzle book, `SayButton` |
 

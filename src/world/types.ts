@@ -97,8 +97,9 @@ export interface PlaceProps {
   earnStamp: (activityId: string) => void
   /** Call from the finale once every stamp is collected. Shows the trophy ceremony. */
   onWin: () => void
-  /** Fills the stars in the top bar during an activity. */
-  setProgress: (done: number, total: number) => void
+  /** Fills the stars in the top bar during an activity. `parts`: the stars are one part of the game (the orders of
+   *  the roast) and the parts show as dashes under them, in the same pill (never a second row of the game's own). */
+  setProgress: (done: number, total: number, parts?: { done: number; total: number }) => void
 }
 
 /** A character for the puppet lab (#/world/puppets). Countries list theirs in places/<id>/puppets/index.ts. */

@@ -21,7 +21,7 @@ export interface ActivityProps {
   /** Call once when she's done: the stamp, then the video (if any), then the country's map. */
   onDone: () => void
   /** Fills the stars in the top bar, e.g. setProgress(2, 6). */
-  setProgress: (done: number, total: number) => void
+  setProgress: (done: number, total: number, parts?: { done: number; total: number }) => void
 }
 
 export interface StampFlowOptions {
