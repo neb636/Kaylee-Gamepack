@@ -262,7 +262,7 @@ function Trail({ stops, next, all, going, pick }: { stops: Stop[]; next: number;
                   cursor: 'pointer',
                 }}
               >
-                {s.id === MOVIES.id ? <Ticket /> : home ? <PapaWaits found={all} /> : <img src={s.img} alt="" draggable={false} style={{ width: '84%', height: '84%', objectFit: 'contain', pointerEvents: 'none' }} />}
+                {s.id === MOVIES.id ? <Ticket /> : home ? <PapaWaits found={all} /> : <img src={s.img} alt="" draggable={false} style={{ width: '100%', height: '100%', borderRadius: '50%', pointerEvents: 'none' }} />}
                 {s.done && <StampMark />}
                 {isNext && (
                   <motion.span animate={{ y: [0, -4, 0], rotate: [-5, 5, -5] }} transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }} style={{ position: 'absolute', left: '-22%', top: '-34%', width: '52%' }}>

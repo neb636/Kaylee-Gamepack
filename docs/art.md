@@ -4,6 +4,9 @@ Follow `art/STYLE.md` exactly (style prompt, sprites on pure white, backgrounds 
 Generate with Codex (the command is in `docs/building.md`, A country's folder). The game shelf is the exception: its banners and icons are SVG drawn by hand in the flat
 travel-app look of `src/world/shelf/STYLE.md`, never generated (user feedback, 2026-10-30). In 3D, the world and the characters are built from code; generated pictures are for 2D
 screens, stickers and character references.
+- **The Poles' stickers are drawn by hand too** (user feedback, 2026-11-24: the generated ones looked cheesy): round SVG
+  badges in the shelf's look, `src/world/places/poles/assets/sticker-*.svg`. They are the pictures on the globe's trail,
+  the stamp screen and the passport. Check them with `node scripts/shelf-sheet.mjs icons <files>`.
 - Save to `art/source/world/<id>/<name>.png`, run `npm run art -- world`, then
   `node scripts/contact-sheet.mjs src/world/places/<id>/assets` and **look at** `/tmp/contact-sheet.png`.
   Regenerate anything that cut out badly.

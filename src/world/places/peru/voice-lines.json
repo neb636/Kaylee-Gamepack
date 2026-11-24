@@ -421,100 +421,6 @@
   "Click a chick, pull it back, then let go!",
   "Penguin sticker! Penguins live in Peru too!",
   {
-    "text": "My chick Pluma is scared to fly.",
-    "voice": "coco"
-  },
-  "Grab Coco and show her how!",
-  "Fly into the warm air!",
-  {
-    "text": "Ahh, warm air! Up we go!",
-    "voice": "coco"
-  },
-  {
-    "text": "I need warm air to go up!",
-    "voice": "coco"
-  },
-  {
-    "text": "Whoooosh!",
-    "voice": "coco"
-  },
-  {
-    "text": "Achoo!",
-    "voice": "coco"
-  },
-  {
-    "text": "It's so high!",
-    "voice": "pluma"
-  },
-  {
-    "text": "Come on, Pluma! Fly with me!",
-    "voice": "coco"
-  },
-  {
-    "text": "I'll try! Here I come!",
-    "voice": "pluma"
-  },
-  "Lead Pluma to the shiny circles!",
-  {
-    "text": "Wait for me!",
-    "voice": "pluma"
-  },
-  {
-    "text": "Wheee!",
-    "voice": "pluma"
-  },
-  {
-    "text": "I'm dizzy!",
-    "voice": "pluma"
-  },
-  {
-    "text": "Ooh, a waterfall!",
-    "voice": "pluma"
-  },
-  {
-    "text": "Hello, friends!",
-    "voice": "coco"
-  },
-  {
-    "text": "People are waving!",
-    "voice": "pluma"
-  },
-  {
-    "text": "Smile for the photo!",
-    "voice": "coco"
-  },
-  "The sun moved! Find the new warm air!",
-  "Fly to the very top!",
-  {
-    "text": "I can fly by myself!",
-    "voice": "pluma"
-  },
-  "Now you fly Pluma!",
-  "Fly Pluma into the big swirl!",
-  {
-    "text": "Look at me!",
-    "voice": "pluma"
-  },
-  {
-    "text": "My Pluma can fly! Gracias!",
-    "voice": "coco"
-  },
-  {
-    "text": "Hi, Dad!",
-    "voice": "pluma"
-  },
-  "Grab Coco and fly!",
-  "Fly to a shiny circle!",
-  "Condors hardly flap their wings!",
-  "Condor wings are wider than a grown-up is tall!",
-  "This canyon is super deep!",
-  "The sun warms the air, and warm air rises!",
-  {
-    "text": "I can fly!",
-    "voice": "pluma"
-  },
-  "Condor sticker! Condors soar on warm air!",
-  {
     "text": "Hola! I want to visit my forest friends!",
     "voice": "rosa"
   },
@@ -606,7 +512,6 @@
   "Drag a friend onto a lily pad!",
   "Pink dolphin sticker! These dolphins live in rivers!",
   "Alpaca sticker! Alpacas have soft, warm fleece!",
-  "Want to see real condors?",
   "Want to see Machu Picchu?",
   "Want to see real penguins?",
   "Want to see real alpacas?",

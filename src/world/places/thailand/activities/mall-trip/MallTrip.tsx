@@ -37,7 +37,8 @@ import type { Round as SkyRound } from './games/skypod/layout'
 import { SkyPod } from './games/skypod/SkyPod'
 import { Vet } from './games/vet/Vet'
 import { HallScreen } from './hall/HallScreen'
-import { GAME_ICON, type DoorId, type GameDoor } from './hall/layout'
+import { GAME_ART } from './hall/art'
+import { type DoorId, type GameDoor } from './hall/layout'
 import { FrameScreen } from './harborland/FrameScreen'
 import type { At } from './harborland/layout'
 import type { PizzaId } from './pizza/layout'
@@ -53,7 +54,7 @@ type GameId = (typeof GAMES)[number]
 const OLD_RIDES = ['pool', 'donut', 'zip', 'roller', 'dragon']
 const list = (s: string) => s.split(',').map((x) => (OLD_RIDES.includes(x) ? 'frame' : x)).filter((x): x is GameId => (GAMES as readonly string[]).includes(x))
 /** Her sock band: a slot for each mini game she can play (the rest add theirs when they're built). */
-const BAND: { id: GameDoor; icon: string }[] = (['vet', 'cafe', 'barber', 'race', 'frame', 'blocks', 'mountain', 'boxing', 'skypod'] as const).map((id) => ({ id, icon: GAME_ICON[id] }))
+const BAND: { id: GameDoor; art: string }[] = (['vet', 'cafe', 'barber', 'race', 'frame', 'blocks', 'mountain', 'boxing', 'skypod'] as const).map((id) => ({ id, art: GAME_ART[id] }))
 const bandOf = (games: GameId[]): GameDoor[] => BAND.map((b) => b.id).filter((id) => games.includes(id))
 /** The way in each section is behind (where she comes back out). */
 const DOOR_OF: Partial<Record<MallSection, DoorId>> = { vet: 'vet', cafe: 'cafe', race: 'race', barber: 'barber', frame: 'frame', blocks: 'blocks', mountain: 'mountain', boxing: 'boxing', skypod: 'skypod' }
@@ -353,18 +354,12 @@ export function SockBand({ done, color }: { done: GameDoor[]; color: string }) {
       aria-label={`Stickers: ${done.length} of ${BAND.length}`}
       style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 12px)', top: 'calc(var(--safe-top) + 14px)', display: 'grid', gridTemplateColumns: `repeat(${narrow ? Math.ceil(BAND.length / 2) : BAND.length}, var(--dot))`, gap: 'clamp(4px, 0.8vw, 8px)', padding: 'clamp(5px, 0.9vw, 8px) clamp(8px, 1.4vw, 12px)', borderRadius: narrow ? 24 : 999, background: color, border: '4px solid #fff', boxShadow: 'var(--shadow)', zIndex: 30, pointerEvents: 'none', ['--dot' as string]: narrow ? 'clamp(30px, 9vw, 40px)' : 'clamp(34px, 5.2vmin, 48px)' }}
     >
-      {BAND.map(({ id, icon }) => (
-        <div key={id} style={{ position: 'relative', width: 'var(--dot)', height: 'var(--dot)', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.55)', border: '2px dashed rgba(255,255,255,.9)', fontSize: 'calc(var(--dot) * 0.62)' }}>
-          {!done.includes(id) && (
-            <span aria-hidden style={{ position: 'absolute', opacity: 0.3, filter: 'grayscale(1)' }}>
-              {icon}
-            </span>
-          )}
+      {BAND.map(({ id, art }) => (
+        <div key={id} style={{ position: 'relative', width: 'var(--dot)', height: 'var(--dot)', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.55)', border: '2px dashed rgba(255,255,255,.9)' }}>
+          {!done.includes(id) && <img src={art} alt="" aria-hidden draggable={false} style={{ position: 'absolute', inset: 2, width: 'calc(100% - 4px)', height: 'calc(100% - 4px)', borderRadius: '50%', objectFit: 'cover', opacity: 0.3, filter: 'grayscale(1)' }} />}
           <AnimatePresence>
             {done.includes(id) && (
-              <motion.span key={id} initial={{ scale: 0, rotate: -40 }} animate={{ scale: [0, 1.5, 1], rotate: 0 }} transition={{ duration: 0.5 }}>
-                {icon}
-              </motion.span>
+              <motion.img key={id} src={art} alt="" draggable={false} initial={{ scale: 0, rotate: -40 }} animate={{ scale: [0, 1.5, 1], rotate: 0 }} transition={{ duration: 0.5 }} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '2px solid #fff', boxSizing: 'border-box' }} />
             )}
           </AnimatePresence>
         </div>
