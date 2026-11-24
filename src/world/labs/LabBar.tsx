@@ -44,6 +44,8 @@ interface Scene {
   place: string
   activity: string
   section?: string
+  /** The game's state when you left it (round=2, hair=pink...). */
+  params?: Record<string, string>
 }
 interface Memory {
   tab?: LabTab
@@ -87,9 +89,33 @@ function sceneNow(place?: string, activity?: string): Scene | undefined {
  *  (replaceState), so the route's params can be the link it was opened from. */
 const liveParams = () => Object.fromEntries(new URLSearchParams(location.hash.split('?')[1] ?? ''))
 
-/** A guess at a game's block in lines.ts: `mall-trip` / `barber` → `mall.barber` (the dialogue lab falls back to `mall`,
- *  then to the country's first game). */
+/** Games whose script blocks aren't named after the game (lines.ts keys): the boat trip speaks `trip` on the way, `bay`
+ *  and `race` in Phang Nga Bay and `chang` at Baan Chang; Home base's game table speaks `games`. */
+const SCRIPTS: Record<string, (section?: string) => string> = {
+  'thailand/boat-trip': (s = '') =>
+    ['invite'].includes(s)
+      ? 'trip.ask'
+      : ['pack', 'goodbye', 'airport'].includes(s)
+        ? `trip.${s}`
+        : ['takeoff', 'fly', 'land'].includes(s)
+          ? 'trip.plane'
+          : ['race', 'podium'].includes(s)
+            ? 'race'
+            : ['chang', 'sign', 'drinks', 'boardwalk', 'feed', 'favorites', 'lamyai', 'splash'].includes(s)
+              ? 'chang'
+              : s === 'home'
+                ? 'home'
+                : s
+                  ? 'bay'
+                  : 'trip',
+  'thailand/hub': (s) => (s === 'table' || s === 'colors' ? 'games' : (s ?? 'house')),
+}
+
+/** The scene's block in lines.ts: the table above, else a guess (`mall-trip` / `barber` → `mall.barber`; the dialogue
+ *  lab falls back to `mall`, then to a block named like the section, then to the country's first). */
 const groupFor = (s: Scene) => {
+  const mapped = SCRIPTS[`${s.place}/${s.activity}`]
+  if (mapped) return mapped(s.section)
   const base = s.activity.replace(/-trip$/, '')
   return s.section ? `${base}.${s.section}` : base
 }
@@ -106,17 +132,17 @@ export function labLink(tab: LabTab, here: { place?: string; activity?: string }
     case 'camera': {
       if (scene && THREE_D.includes(scene.place)) return sceneLink(scene, { ...state, cam: '1' })
       const last = mem.scene && THREE_D.includes(mem.scene.place) ? mem.scene : undefined
-      const s =
+      const s: Scene | undefined =
         last ??
         (() => {
           const f = firstScene('thailand')
           return f ? { place: 'thailand', ...f } : undefined
         })()
-      return s ? sceneLink(s, { cam: '1' }) : '#/world?feel=1'
+      return s ? sceneLink(s, { ...s.params, cam: '1' }) : '#/world?feel=1'
     }
     case 'feel': {
       if (scene) return sceneLink(scene, { ...state, feel: '1' })
-      return mem.scene ? sceneLink(mem.scene, { feel: '1' }) : '#/world?feel=1'
+      return mem.scene ? sceneLink(mem.scene, { ...mem.scene.params, feel: '1' }) : '#/world?feel=1'
     }
     case 'dialogue': {
       if (scene) return `#/world/dialogue/${encodeURIComponent(scene.place)}/${encodeURIComponent(groupFor(scene))}`
@@ -160,7 +186,14 @@ export function LabBar({ active, place, activity, section }: { active: LabTab; p
             onClick={(e) => {
               // Re-reads the live section at the moment of the tap (the href was built at the last render).
               e.preventDefault()
-              if (t.id !== active) location.hash = labLink(t.id, here, active)
+              if (t.id === active) return
+              // Leaving a game: keep the section she's in now (it moves on by replaceState, which re-renders nothing here),
+              // so coming back to camera or feel opens where you left.
+              if (active === 'camera' || active === 'feel') {
+                const s = sceneNow(place, activity)
+                if (s) remember({ scene: { ...s, params: gameState(liveParams()) } })
+              }
+              location.hash = labLink(t.id, here, active)
             }}
           >
             <span aria-hidden="true">{t.icon}</span>
