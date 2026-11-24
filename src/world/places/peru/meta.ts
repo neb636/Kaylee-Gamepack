@@ -3,7 +3,8 @@ import { art } from './art'
 import { L } from './lines'
 
 // Peru is built one activity at a time (plan: planning/around-the-world/peru.md (retired; in git history)). Luna's Fluffy Day, Pepa's Penguin
-// Cliff, Tika's Mountain Terraces, Coco's Canyon Glide and Rosa's Rainy River are all built; the balloon finale comes next.
+// Cliff, Tika's Mountain Terraces and Rosa's Rainy River are all built; the balloon finale comes next. (Coco's Canyon Glide
+// was retired 2026-11-24: too hard to play and too heavy for the iPad. It's in git history.)
 const meta: PlaceMeta = {
   id: 'peru',
   name: 'Peru',
@@ -16,7 +17,6 @@ const meta: PlaceMeta = {
     { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', pos: { x: 70, y: 74 }, sticker: { name: 'Alpaca', img: art.luna, fact: L.sticker } },
     { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', pos: { x: 51.5, y: 60 }, sticker: { name: 'Llama', img: art.tika, fact: L.terracesSticker } },
     { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', pos: { x: 38.75, y: 75 }, sticker: { name: 'Humboldt penguin', img: art.pepa, fact: L.penguinSticker } },
-    { id: 'condor', name: "Coco's Canyon Glide", icon: '🦅', pos: { x: 57.5, y: 88 }, sticker: { name: 'Condor', img: art.canyonPerched, fact: L.condorSticker } },
     { id: 'river', name: "Rosa's Rainy River", icon: '🌧️', pos: { x: 61, y: 28 }, sticker: { name: 'Pink dolphin', img: art.rosa, fact: L.river.sticker } },
   ],
   facts: [
@@ -34,7 +34,6 @@ const meta: PlaceMeta = {
   coloringPages: [],
   // Offered after the matching activity's stamp, and available anytime in the Theater.
   videos: [
-    { id: 'condor', youtubeId: 'ErDB-fIKoa0', icon: '🦅', title: 'Real condors', say: L.videos.condor, after: 'condor' },
     { id: 'machu-picchu', youtubeId: '4OXaQuMpdN8', icon: '⛰️', title: 'Machu Picchu', say: L.videos.machuPicchu, after: 'machu-picchu' },
     { id: 'penguins', youtubeId: 'O8qilxaBR20', icon: '🐧', title: 'Real penguins', say: L.videos.penguins, after: 'penguins' },
     { id: 'alpacas', youtubeId: 'BVl_Y9heRyk', icon: '🦙', title: 'Real alpacas', say: L.videos.alpacas, after: 'alpaca' },

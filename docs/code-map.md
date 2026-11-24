@@ -85,7 +85,6 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 | ✂️ Luna's Fluffy Day (`alpaca`) | live | [activities/fluffy/](../src/world/places/peru/activities/fluffy) | [activities/fluffy/sections.ts](../src/world/places/peru/activities/fluffy/sections.ts) (7) | country qa.mjs |  |
 | ⛰️ Tika's Mountain Terraces (`machu-picchu`) | live | [activities/terraces/](../src/world/places/peru/activities/terraces) | [activities/terraces/sections.ts](../src/world/places/peru/activities/terraces/sections.ts) (9) | country qa.mjs |  |
 | 🐧 Pepa's Penguin Cliff (`penguins`) | live | [activities/penguins/](../src/world/places/peru/activities/penguins) | [activities/penguins/sections.ts](../src/world/places/peru/activities/penguins/sections.ts) (7) | country qa.mjs |  |
-| 🦅 Coco's Canyon Glide (`condor`) | live | [activities/canyon/](../src/world/places/peru/activities/canyon) | [activities/canyon/sections.ts](../src/world/places/peru/activities/canyon/sections.ts) (7) | country qa.mjs |  |
 | 🌧️ Rosa's Rainy River (`river`) | live | [activities/river/](../src/world/places/peru/activities/river) | [activities/river/sections.ts](../src/world/places/peru/activities/river/sections.ts) (7) | country qa.mjs |  |
 | 🎉 Finale (`party`) | finale |  | [activities/BalloonSoon.sections.ts](../src/world/places/peru/activities/BalloonSoon.sections.ts) (1) | country qa.mjs |  |
 

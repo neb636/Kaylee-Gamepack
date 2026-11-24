@@ -1,8 +1,8 @@
 import { useSections } from '../../kit/sections'
 import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
-// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md (retired; in git history)). All five
-// places on Luna's map are built: Pepa's Penguin Cliff, Tika's Mountain Terraces, Luna's Fluffy Day, Coco's Canyon Glide
-// and Rosa's Rainy River. The balloon finale (route `party`) isn't built yet: it shows `BalloonSoon`.
+// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md (retired; in git history)). All four
+// places on Luna's map are built: Pepa's Penguin Cliff, Tika's Mountain Terraces, Luna's Fluffy Day and Rosa's Rainy
+// River. The balloon finale (route `party`) isn't built yet: it shows `BalloonSoon`.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle, useTimers } from '../../../sdk'
@@ -11,7 +11,6 @@ import { HudButton } from '../../kit/Hud'
 import { useStampFlow, type ActivityProps } from '../../kit/stampFlow'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
-import { CanyonGlide } from './activities/canyon/CanyonGlide'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
 import { PenguinCliff } from './activities/penguins/PenguinCliff'
 import { RainyRiver } from './activities/river/RainyRiver'
@@ -25,14 +24,13 @@ import './peru.css'
 
 export type { ActivityProps } from '../../kit/stampFlow'
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, 'machu-picchu': Terraces, condor: CanyonGlide, river: RainyRiver }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, 'machu-picchu': Terraces, river: RainyRiver }
 
-/** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
+/** The four places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
   { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', x: 38.75, y: 75 },
   { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', x: 51.5, y: 60 },
   { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', x: 71.7, y: 73 },
-  { id: 'condor', name: "Coco's Canyon Glide", icon: '🦅', x: 57.5, y: 88 },
   { id: 'river', name: "Rosa's Rainy River", icon: '🐬', x: 61.25, y: 27.5 },
 ]
 
@@ -55,7 +53,7 @@ export default function Place(props: PlaceProps) {
 }
 
 /** Pins that show their friend instead of an emoji. */
-const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.mpPin, condor: art.coco, river: art.rosa }
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.mpPin, river: art.rosa }
 
 // Luna says hello once per visit to the app.
 let introSeen = false
@@ -177,10 +175,10 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
   )
 }
 
-/** Luna's explorer journal: five picture windows, one per corner of Peru, filled as she earns each stamp. */
+/** Luna's explorer journal: four picture windows, one per corner of Peru, filled as she earns each stamp. */
 function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string, string | null> | null; open: (id: string) => void }) {
   return (
-    <div aria-label="Explorer journal" className="peru-journal" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: 'min(8px, 2cqmin)', background: '#FF8FB8', border: `4px solid ${INK}`, borderRadius: 20, padding: 'min(8px, 2cqmin)' }}>
+    <div aria-label="Explorer journal" className="peru-journal" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: 'min(8px, 2cqmin)', background: '#FF8FB8', border: `4px solid ${INK}`, borderRadius: 20, padding: 'min(8px, 2cqmin)' }}>
       {SPOTS.map((spot, i) => {
         const done = stamps.includes(spot.id)
         return (
@@ -193,7 +191,6 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
               if (done && spot.id === 'alpaca') void say(L.alpacaWindow)
               else if (done && spot.id === 'penguins') void say(L.penguinWindow)
               else if (done && spot.id === 'machu-picchu') void say(L.terracesWindow)
-              else if (done && spot.id === 'condor') void say(L.condorWindow)
               else if (done && spot.id === 'river') void say(L.riverWindow)
               else if (PIN_IMG[spot.id]) open(spot.id)
               else void say(L.soon)
@@ -217,12 +214,6 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
             ) : done && spot.id === 'penguins' ? (
               // Pepa and her three round chicks, porpoising home.
               <img src={art.pepa} alt="" style={{ height: '88%', maxWidth: '90%', objectFit: 'contain' }} />
-            ) : done && spot.id === 'condor' ? (
-              // Coco and Pluma, wingtip to wingtip.
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', gap: '2%' }}>
-                <img src={art.coco} alt="" style={{ width: '58%', maxHeight: '90%', objectFit: 'contain' }} />
-                <img src={art.pluma} alt="" style={{ width: '32%', maxHeight: '70%', objectFit: 'contain' }} />
-              </div>
             ) : done && spot.id === 'river' ? (
               // Rosa leaping under the rainbow she made.
               <div style={{ position: 'relative', width: '100%', height: '100%' }}>
