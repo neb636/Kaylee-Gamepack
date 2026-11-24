@@ -160,13 +160,8 @@ export class Salon extends Stage {
       ...[-1, 0, 1].map((s) => P.sphere(0.022 * H, PAL.pink, { at: [s * 0.12 * H, 0.28 * H, 0.26 * H], scale: [1, 1, 0.4] })),
     ]), bag, 2.5)
     nr.body.add(this.cape)
-    // His horn, on its own (a snip makes it boing): a copy sitting just over the toy's own.
-    const R = nr.face.R
-    const horn = solid(P.cone(0.155 * R, 0.8 * R, '#FFC83D', { at: [0, 0.4 * R, 0] }), bag, 2.5)
-    horn.position.set(0, nr.face.headY + 0.72 * R, 0.14 * R)
-    horn.rotation.x = 0.28
-    nr.head.add(horn)
-    this.horn = { g: horn, k: 1 }
+    // His horn (a snip makes it boing): the toy's own, which stands on its own pivot.
+    this.horn = { g: nr.horn!, k: 1 }
     this.mane = new Mane(nr, LOOKS.nick, bag, start.hair)
     // ---- Effects ----
     this.falls = new Floaters(new CapsuleGeometry(0.22, 0.6, 3, 6), FALL_COLORS, 140, bag, 3.5, 1.2)

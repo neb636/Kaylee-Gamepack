@@ -43,6 +43,8 @@ export interface Rig {
   mane: Group | null
   /** The mane is a short hairdo (Dad's tousled hair): the wind leaves it be. */
   shortHair?: boolean
+  /** A horn on its own pivot at its root (Dad's): the barber's scissors make it boing. */
+  horn?: Group
   height: number
   /** Body radius (lying down lifts the body by this). */
   radius: number
@@ -364,6 +366,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const beaverBrows: Group[] = []
   /** A unicorn's locks, which swing in the wind (their own group on the head). */
   const locks: Parts = []
+  /** A horn that stands on its own pivot (Dad's). */
+  const hornParts: Parts = []
   /** Where the mouth is (head-local): the resting mouth and the talking one are built around it. */
   let mouthAt: V3 = [0, 0, 0]
   /** A beak's two halves and where they hinge (head-local): they swing apart when they talk. */
@@ -603,7 +607,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         // The horn: a soft twist of gold, each turn smaller and a little off to one side of the last.
         let hy = 1.1
         ;[0.215, 0.185, 0.155, 0.122, 0.09, 0.058].forEach((r, i) => {
-          head.push(P.sphere(r * R, i % 2 ? '#F2A024' : '#FFB733', { at: [(i % 2 ? 0.018 : -0.018) * R, headY + hy * R, (0.2 + hy * 0.1) * R], rot: [0.2, 0, i % 2 ? 0.16 : -0.16], scale: [1, 0.72, 1] }, 14))
+          hornParts.push(P.sphere(r * R, i % 2 ? '#F2A024' : '#FFB733', { at: [(i % 2 ? 0.018 : -0.018) * R, headY + hy * R, (0.2 + hy * 0.1) * R], rot: [0.2, 0, i % 2 ? 0.16 : -0.16], scale: [1, 0.72, 1] }, 14))
           hy += r * 0.86
         })
         tousledHair(look, f, locks, head)
@@ -1248,6 +1252,11 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     maneGroup = pivoted(locks, look.species === 'pony' ? [0, headY + 0.6 * R, 0] : [0, headY + 0.5 * R, -0.6 * R], bag, px)
     headPivot.add(maneGroup)
   }
+  let hornGroup: Group | undefined
+  if (hornParts.length) {
+    hornGroup = pivoted(hornParts, [0, headY + 0.98 * R, 0.3 * R], bag, px)
+    headPivot.add(hornGroup)
+  }
   armL.add(solidMix(arm.L, [], bag, px))
   armR.add(solidMix(arm.R, [], bag, px))
   let tailGroup: Group | null = null
@@ -1255,7 +1264,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px, tailPlain)
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, expression, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, shortHair: look.hairdo?.style === 'tousled' || undefined, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
+  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, expression, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, shortHair: look.hairdo?.style === 'tousled' || undefined, horn: hornGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
 }
 
 /** A five-petal flower (with two leaves behind it) printed on a surface at `at`, turned by `rot` to face out. */
