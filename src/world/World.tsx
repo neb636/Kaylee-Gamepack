@@ -1,5 +1,5 @@
 // Around the World: the shell section with the world map, the passport, the coloring book, the theater and every country
-// (and the labs: 2D puppets, 3D characters, the camera lab, the feel lab).
+// (and the labs: 2D puppets, 3D characters, the camera lab, the feel lab, the dialogue lab).
 import { lazy, Suspense, useMemo, useState } from 'react'
 import { go } from '../router'
 import { PuzzleBook } from './PuzzleBook'
@@ -22,6 +22,8 @@ const CameraLab = lazy(() => import('./labs/camera/CameraLab'))
 // The feel lab (?feel=1 on any section): sliders over the playing game for every knob it declares (kit/knobs.ts).
 const FeelLab = lazy(() => import('./labs/feel/FeelLab'))
 const FeelStart = lazy(() => import('./labs/feel/FeelStart'))
+// The dialogue lab (#/world/dialogue/<place>/<group>): read a mini-game's script and hear every line in its voice.
+const DialogueLab = lazy(() => import('./labs/dialogue/DialogueLab'))
 
 /** The labs' own params (?cam=1, cam.*, ?feel=1, feel.*): never part of the game's state. */
 const isLab = (k: string) => k === 'cam' || k.startsWith('cam.') || isFeelParam(k)
@@ -39,6 +41,12 @@ export function World({ place, activity, section, params = {} }: { place?: strin
     screen = (
       <Suspense fallback={null}>
         <CharacterLab id={activity} params={params} />
+      </Suspense>
+    )
+  else if (place === 'dialogue')
+    screen = (
+      <Suspense fallback={null}>
+        <DialogueLab place={activity} group={section} />
       </Suspense>
     )
   else if (place === 'sections') screen = <SectionIndex />

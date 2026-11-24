@@ -171,6 +171,11 @@ export function lineMs(line: Line): number {
   return clips.get(keyOf(lineVoice(line), lineText(line)))?.ms ?? 0
 }
 
+/** Whether a line has a recorded clip (the dialogue lab flags the ones that don't yet). */
+export function hasClip(line: Line): boolean {
+  return clips.has(keyOf(lineVoice(line), lineText(line)))
+}
+
 export function stopSpeaking() {
   generation++
   current?.stop()

@@ -2,7 +2,7 @@
 //   import { say, sounds, SparklePuppet } from '../../sdk'
 
 export { DEVICE, IS_MOUSE, onDevice, type Device } from './device'
-export { say, sayAlong, stopSpeaking, lineMs, lineText, lineVoice, speechLevel, speakingVoice, type Line, type SayOptions } from './speech'
+export { say, sayAlong, stopSpeaking, hasClip, lineMs, lineText, lineVoice, speechLevel, speakingVoice, type Line, type SayOptions } from './speech'
 export { sounds } from './sounds'
 export { burst, bigCelebration } from './confetti'
 export { KID_NAME, wait, pick, shuffle, sample, numberWord } from './helpers'

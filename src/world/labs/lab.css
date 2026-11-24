@@ -3,7 +3,8 @@
    The camera lab (?cam=1, camera/) uses the same cards and controls in its panel (.cam-panel): its tokens stay off the
    game it frames, which has its own --radius and --shadow. */
 .cast-lab,
-.cam-panel {
+.cam-panel,
+.dialogue-lab {
   --studio: #f2f2f3;
   --card: #ffffff;
   --line: #ececee;
@@ -72,7 +73,8 @@
   }
 }
 .cast-lab button,
-.cam-panel button {
+.cam-panel button,
+.dialogue-lab button {
   font: inherit;
   color: inherit;
 }
@@ -1103,4 +1105,213 @@
 }
 .feel-elsewhere {
   margin-top: 8px;
+}
+
+/* ---------------------------------------------------------------- the dialogue lab (#/world/dialogue, dialogue/) */
+.dialogue-lab {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+  padding: calc(var(--safe-top) + var(--gutter)) var(--gutter) 0;
+  background: var(--studio);
+  user-select: text;
+  -webkit-user-select: text;
+}
+.dl-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+}
+.dl-title {
+  font-size: 14px;
+  margin-right: 4px;
+}
+.dl-spacer {
+  flex: 1;
+}
+.dl-bar .cl-select > button {
+  max-width: min(260px, 70vw);
+}
+.dl-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 14px;
+  border-radius: 9px;
+  border: none;
+  background: var(--accent);
+  color: #fff !important;
+  font-weight: 600;
+  cursor: pointer;
+}
+.dl-play:disabled {
+  opacity: 0.4;
+}
+.dl-opt {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 16px;
+}
+.dl-opt.sub {
+  padding-left: 14px;
+}
+.dl-page {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+  padding-bottom: calc(var(--safe-bottom) + 24px);
+}
+.dl-page > * {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.dl-note {
+  padding: 16px;
+}
+.dl-cast {
+  padding: 12px 14px;
+}
+.dl-cast-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.dl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.dl-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--soft);
+  cursor: pointer;
+}
+.dl-chip[aria-pressed='true'] {
+  background: var(--active);
+  border-color: var(--line-strong);
+}
+.dl-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.dl-chip-name {
+  font-weight: 600;
+}
+.dl-voice {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.dl-about {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.dl-game {
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.dl-script {
+  padding: 6px 0;
+}
+.dl-part {
+  margin: 0;
+  padding: 14px 14px 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.dl-line {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: baseline;
+  width: 100%;
+  padding: 9px 14px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.dl-line:hover {
+  background: var(--hover);
+}
+.dl-line.on {
+  background: #fff0f6;
+  box-shadow: inset 3px 0 0 var(--pinkish);
+}
+.dl-line.mute {
+  cursor: default;
+  opacity: 0.65;
+}
+.dl-who {
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.dl-text {
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+.dl-when {
+  display: block;
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.dl-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.dl-long {
+  color: #d9480f;
+}
+.dl-flag {
+  color: #d9480f;
+  font-weight: 600;
+}
+@media (max-width: 600px) {
+  .dl-line {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .dl-who {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    gap: 6px;
+    align-items: baseline;
+  }
 }
