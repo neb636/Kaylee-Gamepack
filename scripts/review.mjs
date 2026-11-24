@@ -42,7 +42,8 @@
 // Publishing: the media never goes into git history on main or the toy branch. `--publish` commits review/ to the
 // `review-pages` branch in a folder named after the current branch, and the PR preview workflow copies that folder to
 // <preview>/review/ (and adds the script sheet of any changed lines by itself, without audio: the runner has no
-// ffmpeg). So: publish, then push the toy branch.
+// ffmpeg). Publishing also starts .github/workflows/review-page.yml, which puts the page up for an open PR at once, and a
+// comment on the PR says when it's live. A merged or closed PR's folder is removed (review-cleanup.yml).
 import { execFileSync, spawnSync } from 'node:child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
@@ -275,5 +276,10 @@ function publish() {
   const tree = g('write-tree')
   const commit = g('commit-tree', tree, ...(parent ? ['-p', parent] : []), '-m', `Review page for ${branch}`)
   execFileSync('git', ['push', 'origin', `${commit}:refs/heads/review-pages`], { cwd: root, stdio: 'inherit' })
-  console.log(`Published review/ (${(bytes / 1e6).toFixed(1)} MB) to review-pages:${slug}/. Push the toy branch now so the preview picks it up.`)
+  console.log(`Published review/ (${(bytes / 1e6).toFixed(1)} MB) to review-pages:${slug}/.`)
+  // With the PR open, the page goes up now (.github/workflows/review-page.yml) instead of waiting for a push.
+  const run = spawnSync('gh', ['workflow', 'run', 'review-page.yml', '--ref', 'main', '-f', `branch=${branch}`], { cwd: root, encoding: 'utf8' })
+  if (run.status === 0) console.log('Started the Review page workflow: with the PR open, a PR comment says when the page is live (a minute or two).')
+  else console.log(`Couldn't start the Review page workflow (${(run.stderr || run.error?.message || '').trim()}); push the toy branch and the preview picks it up.`)
+  console.log('No PR yet? Push the toy branch and open it: the preview puts the page up.')
 }

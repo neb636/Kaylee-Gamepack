@@ -1,0 +1,41 @@
+name: Review page cleanup
+
+# A merged or closed PR's review page comes off the review-pages branch (scripts/ci-review-cleanup.sh). A weekly
+# sweep catches any the close missed; run it by hand (Actions > Review page cleanup > Run workflow) to sweep now.
+on:
+  pull_request:
+    types: [closed]
+  schedule:
+    - cron: '23 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+# Two cleanups never push to review-pages at once (an agent's publish can, and the push retries on top of it).
+concurrency:
+  group: review-pages-write
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    # A fork's branch name could match one of ours; its PR never published here anyway.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          sparse-checkout: scripts
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.head_ref }}
+          WHY: PR #${{ github.event.number }} ${{ github.event.pull_request.merged && 'merged' || 'closed' }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = pull_request ]; then
+            scripts/ci-review-cleanup.sh "$BRANCH" "$WHY"
+          else
+            scripts/ci-review-cleanup.sh --sweep
+          fi
