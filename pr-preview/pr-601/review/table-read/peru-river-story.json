@@ -1,0 +1,44 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "river.story",
+  "title": "Peru › River › Story",
+  "intro": "The story: one line from Rosa, then her hands are busy.",
+  "page": "peru-river-story.html",
+  "audio": null,
+  "lines": 1,
+  "seconds": 3,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "river.story.0",
+      "text": "The river is in the treetops! Swim with me!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Hola! I want to visit my forest friends!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "river",
+        "story",
+        "0"
+      ],
+      "text": "The river is in the treetops! Swim with me!",
+      "voice": "rosa",
+      "key": "river.story.0",
+      "part": "river › story",
+      "when": "The story: one line from Rosa, then her hands are busy.",
+      "ms": 3048,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Hola! I want to visit my forest friends!"
+    }
+  ]
+}
