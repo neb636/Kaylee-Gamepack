@@ -423,7 +423,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     torso.push(...seaOtterBody(look, round))
   } else {
     const legColor = look.species === 'panda' ? look.dark : look.fur
-    const feetColor = look.sculpted ? FOX_SOCK : darkPaws ? look.dark : look.light
+    const feetColor = look.sculpted ? (look.paws ?? FOX_SOCK) : darkPaws ? look.dark : look.light
     const legX = 0.085 * H * (1 + (c - 1) * 0.7)
     const legR = 0.07 * H * (1 + (c - 1) * 0.6)
     for (const s of [-1, 1]) {
@@ -525,7 +525,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       if (o) parts.push(P.sphere(0.06 * H, o.color, { at: [0, -0.01 * H, 0] }))
     } else {
       const armColor = look.species === 'panda' ? look.dark : look.fur
-      const hand = look.sculpted ? FOX_SOCK : (darkPaws || seaOtter) ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' || look.species === 'otter' || polar ? look.light : look.fur
+      const hand = look.sculpted ? (look.paws ?? FOX_SOCK) : (darkPaws || seaOtter) ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' || look.species === 'otter' || polar ? look.light : look.fur
       parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * 0.025 * H, -0.075 * H, 0], rot: [0, 0, s * 0.35] }))
       parts.push(P.sphere(0.054 * H, hand, { at: [s * 0.05 * H, -0.14 * H, 0.005 * H], scale: seaOtter ? [0.84, 1.2, 0.67] : undefined }))
       if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))

@@ -11,7 +11,7 @@ import { KID_LOOKS, Racer } from '../games/race/racer'
 export type Move = { walk: [number, number, number] } | { hop: [number, number, number]; dur?: number; arc?: number } | { slide: Curve<Vector3>; speed: number } | { wait: number } | { cheer: number }
 
 /** A third kid (a fox in mint), and the staff: a buffalo and a penguin in bright red and yellow polos and caps. */
-export const KID_C: Look = { species: 'fox', height: 1.0, fur: '#FF9A4D', light: '#FFF1E2', dark: '#2B2330', ear: '#FFE6CC', outfit: { kind: 'tee', color: '#8FE3C8', shorts: '#5D7BB0' }, open: true }
+export const KID_C: Look = { species: 'fox', sculpted: true, cheeks: 'white', height: 1.0, fur: '#FF9A4D', light: '#FFF1E2', dark: '#2B2330', ear: '#FFE6CC', outfit: { kind: 'tee', color: '#8FE3C8', shorts: '#5D7BB0' }, open: true }
 export const STAFF_LOOKS: Look[] = [
   { species: 'buffalo', height: 1.5, fur: '#94A0C8', light: '#DCD8EE', dark: '#4C4F6B', ear: '#FFB8CC', outfit: { kind: 'polo', color: '#FF6F6F' }, extras: ['cap'], open: true },
   { species: 'penguin', height: 1.4, fur: '#3F365F', light: '#FFF6EC', dark: '#FFA640', outfit: { kind: 'polo', color: '#FBEA9A' }, extras: ['cap'], open: true },

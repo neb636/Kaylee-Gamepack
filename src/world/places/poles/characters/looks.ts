@@ -39,7 +39,7 @@ export const POLES_LOOKS: Record<PolesFriend, Look> = {
   /** An Adélie (Penguin Slide's slope): small, all black on top with a white tummy and a white ring round each eye. */
   adelie: { species: 'penguin', height: 0.86, fur: C.adelieBlack, light: C.chickFace, dark: C.adelieBeak, extras: ['eye-ring'] },
   /** The Arctic fox in the story films: brown in summer, white once the snow comes. */
-  fox: { species: 'fox', height: 0.7, fur: '#A9764E', light: '#F3DDC4', dark: C.nose, ear: C.bearEar },
-  snowfox: { species: 'fox', height: 0.7, fur: '#FFFFFF', light: '#FFFFFF', dark: C.nose, ear: C.bearEar },
+  fox: { species: 'fox', sculpted: true, cheeks: 'white', ears: 'short', paws: '#A9764E', height: 0.7, fur: '#A9764E', light: '#F3DDC4', dark: C.nose, ear: C.bearEar },
+  snowfox: { species: 'fox', sculpted: true, cheeks: 'white', ears: 'short', paws: '#FFFFFF', height: 0.7, fur: '#FFFFFF', light: '#FFFFFF', dark: C.nose, ear: C.bearEar },
   terry: { species: 'tern', height: 0.8, fur: C.ternGrey, light: C.ternWhite, dark: C.ternBeak, cap: C.ternCap, open: false },
 }

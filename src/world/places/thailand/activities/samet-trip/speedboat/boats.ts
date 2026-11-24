@@ -133,7 +133,7 @@ export const SEA_FOLK: Look[] = [
   { species: 'raccoon', height: 1.05, fur: '#A9A3B8', light: '#F4F0FA', dark: '#4A4458', ear: '#FFC2C8', outfit: { kind: 'shirt', color: '#8FD3FF' }, extras: ['sunglasses'], open: true },
   { species: 'monkey', height: 1.0, fur: '#C08A5E', light: '#FFE6CC', dark: '#7A5340', ear: '#FFC2B0', outfit: { kind: 'dress', color: '#FFE07A' }, lashes: true, open: true },
   { species: 'beaver', height: 1.1, chub: 1.15, fur: '#9C6B4E', light: '#F6DCC0', dark: '#5E3E30', ear: '#FFC2B0', outfit: { kind: 'polo', color: '#9EE6B8' }, extras: ['cap'], open: true },
-  { species: 'fox', height: 1.0, fur: '#F29A5C', light: '#FFF1E0', dark: '#6E4A3A', ear: '#FFC2B0', outfit: { kind: 'blouse', color: '#C9B5F7' }, extras: ['sunglasses'], lashes: true, open: true },
+  { species: 'fox', sculpted: true, height: 1.0, fur: '#F29A5C', light: '#FFF1E0', dark: '#6E4A3A', ear: '#FFC2B0', outfit: { kind: 'blouse', color: '#C9B5F7' }, extras: ['sunglasses'], lashes: true, open: true },
   { species: 'gecko', height: 1.0, fur: '#9BDB8A', light: '#E8F8D8', dark: '#5AA06A', ear: '#FFD48A', outfit: { kind: 'tee', color: '#FFB36B' }, open: true },
   { species: 'bear', height: 1.15, chub: 1.2, fur: '#7A5A4E', light: '#FFD9A8', dark: '#3A2A30', ear: '#FFB8A8', outfit: { kind: 'shirt', color: '#FFFFFF', shorts: '#3F6FB8' }, extras: ['cap'], open: true },
 ]

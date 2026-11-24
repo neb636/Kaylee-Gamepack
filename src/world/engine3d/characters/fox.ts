@@ -1,4 +1,4 @@
-// A fox sculpted in more detail for the shared chibi rig (`Look.sculpted`: Joy, Gan and Ken). The plain fox is a ball with two cones
+// A fox sculpted in more detail for the shared chibi rig (`Look.sculpted`: Joy, Gan and Ken, and every other fox). The plain fox is a ball with two cones
 // and two cheek balls; this one has cupped pointed ears, a white snout that narrows to a little turned-up nose (only
 // the snout is white: white cheeks and chin read as a beard, 2026-11-23), low puffy pink cheeks, soft brows, and a big bushy tail that sweeps out to one side and up, so its white tip shows from the front.
 // Head coordinates are in head radii R, the tail's in body heights H.
@@ -42,12 +42,16 @@ export function foxHead(look: Look, f: Frame, brow: string) {
   const at = (x: number, y: number, z: number): V3 => [R * x, headY + R * y, R * z]
   const outlined: BufferGeometry[] = [P.sphere(R, look.fur, { at: at(0, 0, 0), scale: HEAD }, 44)]
   const plain: BufferGeometry[] = []
-  const inner = '#' + new Color(look.fur).lerp(new Color('#FFFFFF'), 0.45).getHexString()
+  // Inside the ears, a paler shade of the fur; the Arctic fox's short ears keep their own (pink) color, which shows on
+  // its white winter coat.
+  const inner = look.ears === 'short' && look.ear ? look.ear : '#' + new Color(look.fur).lerp(new Color('#FFFFFF'), 0.45).getHexString()
   for (const s of [-1, 1]) {
-    // Pointed ears set wide and leaning out: fur outside, a paler shade of it inside.
+    // Pointed ears set wide and leaning out.
     const lean: V3 = [-0.12, s * 0.3, -s * 0.34]
-    outlined.push(sculpt(look.fur, 36, earShape, { at: at(s * 0.64, 0.9, -0.1), rot: lean, scale: [0.4 * R, 0.54 * R, 0.4 * R] }))
-    plain.push(sculpt(inner, 28, earShape, { at: at(s * 0.628, 0.83, -0.02), rot: lean, scale: [0.23 * R, 0.36 * R, 0.24 * R] }))
+    // (Short ears, the Arctic fox's, keep their size across but stand lower: they keep the heat in.)
+    const tall = look.ears === 'short' ? 0.62 : 1
+    outlined.push(sculpt(look.fur, 36, earShape, { at: at(s * 0.64, 0.9 - 0.54 * (1 - tall) * 0.6, -0.1), rot: lean, scale: [0.4 * R, 0.54 * tall * R, 0.4 * R] }))
+    plain.push(sculpt(inner, 28, earShape, { at: at(s * 0.628, 0.83 - 0.54 * (1 - tall) * 0.6, -0.02), rot: lean, scale: [0.23 * R, 0.36 * tall * R, 0.24 * R] }))
     // A soft arched brow over each eye.
     const bx = s * (eyeX + 0.02 * R)
     plain.push(P.torus(0.2 * R, 0.02 * R, brow, { at: on(bx, eyeY + 0.18 * R, 0.004 * R), rot: [0, turnTo(bx)[1], Math.PI / 2 - 0.45 + s * 0.06], scale: [1, 1, 0.5] }, 0.9))
