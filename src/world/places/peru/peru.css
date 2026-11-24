@@ -211,3 +211,56 @@
 .terr-root {
   overflow: clip;
 }
+
+/* Swim with Rosa (the flooded forest): water plants sway and fish wag their tails. Transforms only. */
+.rio-sway {
+  transform-origin: 50% 100%;
+  animation: rio-sway 4.4s ease-in-out infinite alternate;
+}
+@keyframes rio-sway {
+  from {
+    transform: rotate(-5deg);
+  }
+  to {
+    transform: rotate(5deg);
+  }
+}
+.rio-wag {
+  transform-box: fill-box;
+  transform-origin: 100% 50%;
+  animation: rio-wag 0.42s ease-in-out infinite alternate;
+}
+@keyframes rio-wag {
+  from {
+    transform: scaleX(1) skewY(-9deg);
+  }
+  to {
+    transform: scaleX(0.72) skewY(9deg);
+  }
+}
+.rio-pop {
+  animation: rio-pop 0.75s ease-out forwards;
+}
+@keyframes rio-pop {
+  from {
+    transform: scale(0.35);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+.rio-rise {
+  animation: rio-rise 1.5s ease-out forwards;
+}
+@keyframes rio-rise {
+  from {
+    transform: translateY(0) scale(0.6);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(-150px) scale(1.1);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,21 @@
+[
+ { "id": "forest-bed", "label": "the forest all around", "prompt": "Gentle daytime Amazon rainforest ambience beside calm water: soft tropical bird calls, a few insects, light water lapping against tree trunks. Calm, bright and friendly. Seamless loop, no music, no voices.", "seconds": 15, "loop": true },
+ { "id": "splash", "label": "a small splash", "prompt": "A small soft splash as a little animal slips into calm water. Clean close recording, no music, no voices.", "seconds": 1 },
+ { "id": "big-splash", "label": "Rosa lands from a leap", "prompt": "A big happy splash as a dolphin lands back in a calm river after a jump, round and full, then a little fizz of bubbles. Not harsh. No music, no voices.", "seconds": 1.6 },
+ { "id": "leap", "label": "Rosa bursts out of the water", "prompt": "A dolphin bursts up out of calm water: a quick whoosh of spray and dripping water. Bright and light. No music, no voices.", "seconds": 1 },
+ { "id": "spout", "label": "Rosa's spout", "prompt": "A dolphin breathes out through its blowhole at the surface: one soft short pfff of air and spray. No music, no voices.", "seconds": 0.8 },
+ { "id": "whistle", "label": "Rosa's happy whistle", "prompt": "A friendly dolphin's happy rising whistle followed by a few quick clicks. Cute and gentle. No music, no voices.", "seconds": 1.2 },
+ { "id": "boop", "label": "her nose boops a fruit", "prompt": "A soft rubbery boop as a nose taps a ripe fruit off its stem, with a little leafy rustle. Cartoon-light. No music, no voices.", "seconds": 0.6 },
+ { "id": "plop", "label": "a fruit plops in", "prompt": "A round fruit plops into calm water: one deep cute plop and a small splash. No music, no voices.", "seconds": 0.8 },
+ { "id": "nibble", "label": "the fish nibble", "prompt": "Little fish nibbling at a floating fruit: a few tiny quick wet nibbles and bubbles. Cute, soft. No music, no voices.", "seconds": 1 },
+ { "id": "creak", "label": "a vine lets down", "prompt": "A jungle vine creaks and stretches as it is let down a little, a short woody rope creak with rustling leaves. No music, no voices.", "seconds": 0.9 },
+ { "id": "macaw", "label": "the macaw", "prompt": "A scarlet macaw gives one short friendly squawk. Close, clean, not harsh. No music, no voices.", "seconds": 0.9 },
+ { "id": "toucan", "label": "the toucan", "prompt": "A toucan clacks its big beak three times and gives a short croaky call. Close, clean. No music, no voices.", "seconds": 1 },
+ { "id": "monkeys", "label": "the monkeys", "prompt": "Two small squirrel monkeys chatter excitedly for a moment, high quick happy chirps. Cute, not shrill. No music, no voices.", "seconds": 1.2 },
+ { "id": "capybara", "label": "the capybara", "prompt": "A capybara makes one soft content squeak-purr. Close, gentle. No music, no voices.", "seconds": 0.7 },
+ { "id": "sloth-yawn", "label": "the sloth yawns", "prompt": "A small sleepy animal gives one long slow gentle yawn with a tiny squeak at the end. Cute. No music, no human voice.", "seconds": 1.6 },
+ { "id": "frog", "label": "the frog", "prompt": "A small tree frog croaks twice, rib-bit, round and cute. Close, clean. No music, no voices.", "seconds": 0.8 },
+ { "id": "otter", "label": "the otters", "prompt": "A playful river otter gives two quick chirpy squeaks. Cute, bright. No music, no voices.", "seconds": 0.7 },
+ { "id": "bonk", "label": "a bump on a log", "prompt": "A soft hollow wooden bonk as something bumps a floating log, with a little water slosh. Cartoon-light, not hard. No music, no voices.", "seconds": 0.6 },
+ { "id": "flutter", "label": "wings take off", "prompt": "A small bird flutters its wings and takes off, a quick soft flutter. No music, no voices.", "seconds": 0.7 }
+]

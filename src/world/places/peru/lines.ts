@@ -15,6 +15,7 @@ const rosa = as('rosa')
 const sloth = as('sloth')
 const capy = as('capy')
 const monkey = as('monkey')
+const otter = as('otter')
 
 export const L = {
   name: 'Peru',
@@ -145,40 +146,49 @@ export const L = {
     },
   },
   penguinSticker: 'Penguin sticker! Penguins live in Peru too!',
-  // ---- 3. Rosa's Rainy River (make it rain in the Amazon) ----
+  // ---- 3. Swim with Rosa (the flooded forest: swim her, leap for the fruit, race the otters) ----
   river: {
-    story: [rosa('Hola! I want to visit my forest friends!')],
-    squeeze: onDevice('Squeeze the cloud to make rain!', 'Click and hold the cloud to make rain!'),
-    // Things in the forest answer the rain (the sloth and Sparkle talk; the rest is sounds and motion).
-    slothWake: sloth('Hiiiiii...'),
-    slothYawn: sloth('Ooh... a shower...'),
-    wet: "I'm all wet! Hee hee!",
-    river: 'Make it rain on the river!',
-    more: rosa('Wheee! More water!'),
-    // Each step of the river lets Rosa reach a friend.
-    hello: {
-      capy: [rosa('Hola, capybaras!'), capy('Ahh... a swim!')],
-      sloth: [rosa('Hola, sloth!'), sloth('Hiii, Rosa...')],
-      monkey: [rosa('Hola, monkeys!'), monkey('Splash! Splash!')],
-    },
-    flooded: 'The river grows into the forest!',
-    lagoonGo: rosa("Let's swim to the lagoon!"),
-    lagoon: 'Rain on the lagoon!',
-    buds: 'Rain on the lily buds!',
-    pads: 'Lily pads! Help the friends hop on!',
-    hop: { frog: 'Hop, frog!', monkey: monkey('Wheee!'), capy: capy('Comfy!'), macaw: 'Flap, flap, macaw!' },
-    sun: 'Bye-bye, cloud! Hello, sun!',
-    rainbow: rosa(`A rainbow! Gracias!`),
-    photo: 'Click! A picture for Luna!',
+    // The story: one line from Rosa, then her hands are busy.
+    story: [rosa('The river is in the treetops! Swim with me!')],
+    // Sparkle, as the forest appears.
+    swim: onDevice('Hold Rosa and swim!', 'Click and hold Rosa, then swim!'),
+    // Rosa reaches the capybaras; the baby climbs on her back for a ride.
+    capy: [rosa('Hola, capybaras!'), capy('Ahh... a swim!')],
+    // Under the sleeping sloth. Sparkle, once.
+    leap: 'Swim up fast, and Rosa leaps!',
+    // The splash wakes the sloth.
+    sloth: [sloth('Ooh... a shower...'), rosa('Hola, sloth!')],
+    // The monkeys, when Rosa swims under their fruit.
+    monkeys: monkey('Fruit! Leap for the fruit!'),
+    // A monkey, each time a fruit falls in the water (one of these).
+    fruitDown: [monkey('Splash! Splash!'), monkey('Wheee!'), monkey('You got it!')],
+    // Sparkle, the first time the fish come to nibble a fruit.
+    fruit: 'Some fish eat fruit!',
+    // A monkey lets a fruit down a little after two leaps that missed it.
+    lower: monkey('Here! Lower!'),
+    // The otters pop up past the fruit tree.
+    dare: otter('Race you to the rainbow!'),
+    go: otter('Ready... go!'),
+    // An otter, if she turns back or stops during the race.
+    comeOn: otter('Come on, Rosa!'),
+    // She bumps a log.
+    bonk: rosa('Oopsie! Bonk!'),
+    // The finish. She wins most of the time.
+    win: [otter('You win! So fast!'), rosa('Wheee! Gracias!')],
+    // The otters got there first: one more go, or on to the stamp.
+    lose: otter('So close! Again?'),
+    // Taps: Rosa (a spout and one of these, then her fact), the sloth, the sleepy capybara.
     spout: [rosa('Hee hee!'), rosa('Pfff! Bubbles!'), rosa('Splashy!')],
     rosaTap: rosa('I live in a river, not the sea!'),
-    facts: ['This dolphin lives in a river!', 'Half of Peru is rainforest!', 'The river grows into the forest!', 'Some fish eat fruit!'],
-    fruit: 'Some fish eat fruit!',
+    slothTap: sloth('Hiiiiii...'),
+    // Sparkle, the first time she pokes Rosa, a bird or a tree trunk.
+    facts: { rosa: 'This dolphin lives in a river!', forest: 'Half of Peru is rainforest!', flood: 'The river grows into the forest!' },
+    // Sparkle, when nothing has happened for a while.
     idle: {
-      squeeze: onDevice('Hold the cloud to make rain!', 'Click and hold the cloud to make rain!'),
-      river: 'Drag the cloud over the river!',
-      lagoon: 'Drag the cloud over the lagoon!',
-      pads: 'Drag a friend onto a lily pad!',
+      swim: onDevice('Hold the water, and Rosa swims to you!', 'Click and hold the water, and Rosa swims to you!'),
+      sloth: 'Splash the sleepy sloth!',
+      fruit: 'Leap up to the fruit!',
+      race: 'Swim to the rainbow!',
     },
     sticker: 'Pink dolphin sticker! These dolphins live in rivers!',
   },

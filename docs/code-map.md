@@ -78,14 +78,14 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 ## 🦙 Peru (`peru`)
 
 - Code: [src/world/places/peru/](../src/world/places/peru): [meta.ts](../src/world/places/peru/meta.ts), [Place.tsx](../src/world/places/peru/Place.tsx), [lines.ts](../src/world/places/peru/lines.ts), [cast.json](../src/world/places/peru/cast.json), [qa.mjs](../src/world/places/peru/qa.mjs), [puppets/](../src/world/places/peru/puppets)
-- Notes: none (read its code and git history)
+- Notes: [planning/around-the-world/peru.md](../planning/around-the-world/peru.md)
 
 | Activity | Kind | Code | Sections | QA | Notes |
 |---|---|---|---|---|---|
 | ✂️ Luna's Fluffy Day (`alpaca`) | live | [activities/fluffy/](../src/world/places/peru/activities/fluffy) | [activities/fluffy/sections.ts](../src/world/places/peru/activities/fluffy/sections.ts) (7) | country qa.mjs |  |
 | ⛰️ Tika's Mountain Terraces (`machu-picchu`) | live | [activities/terraces/](../src/world/places/peru/activities/terraces) | [activities/terraces/sections.ts](../src/world/places/peru/activities/terraces/sections.ts) (9) | country qa.mjs |  |
 | 🐧 Pepa's Penguin Cliff (`penguins`) | live | [activities/penguins/](../src/world/places/peru/activities/penguins) | [activities/penguins/sections.ts](../src/world/places/peru/activities/penguins/sections.ts) (7) | country qa.mjs |  |
-| 🌧️ Rosa's Rainy River (`river`) | live | [activities/river/](../src/world/places/peru/activities/river) | [activities/river/sections.ts](../src/world/places/peru/activities/river/sections.ts) (7) | country qa.mjs |  |
+| 🐬 Swim with Rosa (`river`) | live | [activities/river/](../src/world/places/peru/activities/river) | [activities/river/sections.ts](../src/world/places/peru/activities/river/sections.ts) (5) | country qa.mjs |  |
 | 🎉 Finale (`party`) | finale |  | [activities/BalloonSoon.sections.ts](../src/world/places/peru/activities/BalloonSoon.sections.ts) (1) | country qa.mjs |  |
 
 ## 🐘 Thailand (`thailand`)

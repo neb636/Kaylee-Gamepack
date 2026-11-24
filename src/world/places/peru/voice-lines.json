@@ -421,25 +421,11 @@
   "Click a chick, pull it back, then let go!",
   "Penguin sticker! Penguins live in Peru too!",
   {
-    "text": "Hola! I want to visit my forest friends!",
+    "text": "The river is in the treetops! Swim with me!",
     "voice": "rosa"
   },
-  "Squeeze the cloud to make rain!",
-  "Click and hold the cloud to make rain!",
-  {
-    "text": "Hiiiiii...",
-    "voice": "sloth"
-  },
-  {
-    "text": "Ooh... a shower...",
-    "voice": "sloth"
-  },
-  "I'm all wet! Hee hee!",
-  "Make it rain on the river!",
-  {
-    "text": "Wheee! More water!",
-    "voice": "rosa"
-  },
+  "Hold Rosa and swim!",
+  "Click and hold Rosa, then swim!",
   {
     "text": "Hola, capybaras!",
     "voice": "rosa"
@@ -448,46 +434,64 @@
     "text": "Ahh... a swim!",
     "voice": "capy"
   },
+  "Swim up fast, and Rosa leaps!",
+  {
+    "text": "Ooh... a shower...",
+    "voice": "sloth"
+  },
   {
     "text": "Hola, sloth!",
     "voice": "rosa"
   },
   {
-    "text": "Hiii, Rosa...",
-    "voice": "sloth"
-  },
-  {
-    "text": "Hola, monkeys!",
-    "voice": "rosa"
+    "text": "Fruit! Leap for the fruit!",
+    "voice": "monkey"
   },
   {
     "text": "Splash! Splash!",
     "voice": "monkey"
   },
-  "The river grows into the forest!",
-  {
-    "text": "Let's swim to the lagoon!",
-    "voice": "rosa"
-  },
-  "Rain on the lagoon!",
-  "Rain on the lily buds!",
-  "Lily pads! Help the friends hop on!",
-  "Hop, frog!",
   {
     "text": "Wheee!",
     "voice": "monkey"
   },
   {
-    "text": "Comfy!",
-    "voice": "capy"
+    "text": "You got it!",
+    "voice": "monkey"
   },
-  "Flap, flap, macaw!",
-  "Bye-bye, cloud! Hello, sun!",
+  "Some fish eat fruit!",
   {
-    "text": "A rainbow! Gracias!",
+    "text": "Here! Lower!",
+    "voice": "monkey"
+  },
+  {
+    "text": "Race you to the rainbow!",
+    "voice": "otter"
+  },
+  {
+    "text": "Ready... go!",
+    "voice": "otter"
+  },
+  {
+    "text": "Come on, Rosa!",
+    "voice": "otter"
+  },
+  {
+    "text": "Oopsie! Bonk!",
     "voice": "rosa"
   },
-  "Click! A picture for Luna!",
+  {
+    "text": "You win! So fast!",
+    "voice": "otter"
+  },
+  {
+    "text": "Wheee! Gracias!",
+    "voice": "rosa"
+  },
+  {
+    "text": "So close! Again?",
+    "voice": "otter"
+  },
   {
     "text": "Hee hee!",
     "voice": "rosa"
@@ -504,12 +508,17 @@
     "text": "I live in a river, not the sea!",
     "voice": "rosa"
   },
+  {
+    "text": "Hiiiiii...",
+    "voice": "sloth"
+  },
   "This dolphin lives in a river!",
-  "Some fish eat fruit!",
-  "Hold the cloud to make rain!",
-  "Drag the cloud over the river!",
-  "Drag the cloud over the lagoon!",
-  "Drag a friend onto a lily pad!",
+  "The river grows into the forest!",
+  "Hold the water, and Rosa swims to you!",
+  "Click and hold the water, and Rosa swims to you!",
+  "Splash the sleepy sloth!",
+  "Leap up to the fruit!",
+  "Swim to the rainbow!",
   "Pink dolphin sticker! These dolphins live in rivers!",
   "Alpaca sticker! Alpacas have soft, warm fleece!",
   "Want to see Machu Picchu?",

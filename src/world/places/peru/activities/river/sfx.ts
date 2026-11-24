@@ -1,7 +1,9 @@
-// Rosa's Rainy River sounds (synthesized, like ../fluffy/sfx.ts): the rain itself (a soft hiss that swells while she
-// squeezes the cloud), a gentle thunder rumble, frogs singing, things growing, splashes, Rosa's spout and the forest's
-// birds and monkeys.
+// Swim with Rosa's sounds: her splashes and leaps, the fruit, the forest's animals, the race. Each one is a recorded
+// clip from ./sfx (ElevenLabs, made from sfx/sfx.json by scripts/generate-sfx.mjs) with the synthesized sound below as
+// its fallback: that is what plays until a clip is made or has loaded, and in test browsers.
+import { bed, clip } from '../../../../kit/clips'
 import { audio } from '../../../../kit/sfx'
+import { rioClip } from './sfx/index'
 
 function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0, vibrato = 0) {
   const a = audio()
@@ -61,67 +63,16 @@ function noise(dur: number, vol: number, filter: BiquadFilterType, freq: number,
   src.stop(t + dur + 0.05)
 }
 
-// The rain: one looping hiss whose loudness follows how hard she's squeezing (0..1), smoothed so it never clicks.
-let rainGain: GainNode | undefined
-function rainNode() {
-  const a = audio()
-  if (!a) return undefined
-  if (!rainGain) {
-    const src = noiseSource(a)
-    const hp = a.createBiquadFilter()
-    hp.type = 'highpass'
-    hp.frequency.value = 1400
-    const lp = a.createBiquadFilter()
-    lp.type = 'lowpass'
-    lp.frequency.value = 7000
-    rainGain = a.createGain()
-    rainGain.gain.value = 0
-    src.connect(hp).connect(lp).connect(rainGain).connect(a.destination)
-    src.start()
-  }
-  return rainGain
-}
-
-export const rsfx = {
-  /** How hard it's raining now (0 = dry). Call every frame or on change; it glides. */
-  rain: (level: number) => {
-    const g = rainNode()
-    const a = audio()
-    if (!g || !a) return
-    g.gain.setTargetAtTime(Math.max(0, Math.min(1, level)) * 0.09, a.currentTime, 0.12)
-  },
-  /** Silence the rain right now (when she leaves the activity). */
-  stopRain: () => {
-    const a = audio()
-    if (!rainGain || !a) return
-    rainGain.gain.cancelScheduledValues(a.currentTime)
-    rainGain.gain.setValueAtTime(0, a.currentTime)
-  },
-  /** A soft, far-away thunder rumble (never scary). */
-  rumble: () => {
-    noise(1.6, 0.16, 'lowpass', 220, 80, 0, 0.8)
-    tone(55, 40, 1.4, 0.06, 'sine', 0.05)
-  },
-  /** One plink of a big drop on a leaf (pitch varies a little). */
-  plink: () => tone(1500 + Math.random() * 900, 900, 0.08, 0.04, 'sine'),
-  /** Frog song: two quick "rib-bit" croaks. */
-  croak: () => {
-    tone(260, 180, 0.11, 0.12, 'square')
-    tone(320, 210, 0.13, 0.11, 'square', 0.16)
-  },
-  /** A plant shooting up: three rising bloops. */
-  grow: () => [0, 0.09, 0.18].forEach((d, i) => tone(400 + i * 180, 700 + i * 220, 0.12, 0.07, 'sine', d)),
-  /** A flower or a lily pad opening: a soft rising chime. */
-  bloom: () => [0, 0.08, 0.16, 0.26].forEach((d, i) => tone([660, 830, 990, 1320][i], [660, 830, 990, 1320][i] * 1.01, 0.35, 0.06, 'triangle', d)),
-  /** Water filling up a little: a bubbly gloop. */
-  gloop: () => {
-    tone(320, 620, 0.16, 0.08, 'sine')
-    tone(420, 780, 0.12, 0.05, 'sine', 0.1)
-  },
+const synth = {
   /** Something lands in the water. */
   splash: (big = false) => {
     noise(big ? 0.7 : 0.4, big ? 0.22 : 0.14, 'bandpass', 1200, 400, 0, 0.8)
     tone(big ? 300 : 500, 140, 0.2, 0.06, 'sine')
+  },
+  /** Rosa bursts out of the water: a quick rush of spray. */
+  leap: () => {
+    noise(0.35, 0.16, 'bandpass', 900, 3200, 0, 0.9)
+    tone(520, 1040, 0.22, 0.05, 'sine')
   },
   /** Rosa breathes out of her blowhole: "pfff". */
   spout: () => noise(0.45, 0.14, 'bandpass', 2600, 1200, 0, 1.4),
@@ -130,6 +81,22 @@ export const rsfx = {
     tone(1400, 2600, 0.22, 0.05, 'sine', 0, 30)
     ;[0.25, 0.3, 0.35, 0.4].forEach((d) => tone(2400, 2200, 0.025, 0.04, 'square', d))
   },
+  /** Her nose boops a fruit off its vine. */
+  boop: () => {
+    tone(700, 1100, 0.09, 0.1, 'triangle')
+    noise(0.08, 0.12, 'bandpass', 2400, 1800, 0, 3)
+  },
+  /** A fruit plops into the water. */
+  plop: () => {
+    tone(480, 150, 0.18, 0.1, 'sine')
+    noise(0.25, 0.1, 'bandpass', 1400, 600, 0.03, 1)
+  },
+  /** The fish nibble. */
+  nibble: () => [0, 0.1, 0.2].forEach((d) => tone(1200, 900, 0.05, 0.06, 'square', d)),
+  /** A little bubble. */
+  bubble: () => tone(500 + Math.random() * 300, 1100, 0.09, 0.03, 'sine'),
+  /** A vine lets down a little. */
+  creak: () => tone(210, 150, 0.3, 0.06, 'sawtooth', 0, 8),
   /** Macaw squawk. */
   squawk: () => {
     tone(900, 620, 0.22, 0.08, 'sawtooth', 0, 60)
@@ -139,16 +106,53 @@ export const rsfx = {
   clack: () => [0, 0.11, 0.2].forEach((d) => noise(0.05, 0.2, 'bandpass', 1800, 1500, d, 4)),
   /** Monkey chatter: quick high "ee-ee-ee". */
   chatter: () => [0, 0.09, 0.18, 0.27].forEach((d) => tone(1300, 1900, 0.07, 0.06, 'triangle', d)),
-  /** Capybara: a soft content squeak-purr. */
+  /** Capybara: a soft content squeak. */
   squeak: () => tone(700, 520, 0.18, 0.06, 'triangle', 0, 20),
   /** A long sleepy sloth yawn. */
   yawn: () => tone(320, 180, 1.4, 0.06, 'triangle', 0, 6),
-  /** Fruit falling from a tree, then a fish's nibble. */
-  drop: () => tone(900, 300, 0.25, 0.08, 'sine'),
-  nibble: () => [0, 0.1, 0.2].forEach((d) => tone(1200, 900, 0.05, 0.06, 'square', d)),
-  /** Camera shutter. */
-  click: () => {
-    noise(0.04, 0.3, 'highpass', 2000, 3000)
-    noise(0.05, 0.25, 'highpass', 1500, 2500, 0.09)
+  /** Frog song: two quick "rib-bit" croaks. */
+  croak: () => {
+    tone(260, 180, 0.11, 0.12, 'square')
+    tone(320, 210, 0.13, 0.11, 'square', 0.16)
   },
+  /** An otter's chirpy squeak. */
+  chirp: () => {
+    tone(1500, 2100, 0.08, 0.06, 'sine')
+    tone(1700, 2400, 0.1, 0.06, 'sine', 0.11)
+  },
+  /** A hollow knock on a floating log. */
+  bonk: () => {
+    tone(190, 120, 0.16, 0.16, 'sine')
+    noise(0.06, 0.16, 'bandpass', 700, 500, 0, 3)
+  },
+  /** A butterfly or a bird takes off: a tiny flutter. */
+  flutter: () => [0, 0.05, 0.1, 0.15, 0.2].forEach((d) => noise(0.04, 0.06, 'highpass', 3000, 4000, d)),
+  /** The fish dart away. */
+  dart: () => [0, 0.05, 0.1].forEach((d) => tone(900 + Math.random() * 500, 1500, 0.06, 0.035, 'sine', d)),
+}
+
+const one = <A extends unknown[]>(id: string, fallback: (...a: A) => void, vol = 1) => clip(rioClip(id), fallback, { vol })
+export const rsfx = {
+  splash: one('splash', () => synth.splash(false), 0.8),
+  bigSplash: one('big-splash', () => synth.splash(true)),
+  leap: one('leap', synth.leap, 0.8),
+  spout: one('spout', synth.spout),
+  whistle: one('whistle', synth.whistle, 0.7),
+  boop: one('boop', synth.boop),
+  plop: one('plop', synth.plop),
+  nibble: one('nibble', synth.nibble, 0.8),
+  bubble: synth.bubble,
+  creak: one('creak', synth.creak, 0.7),
+  squawk: one('macaw', synth.squawk, 0.7),
+  clack: one('toucan', synth.clack, 0.7),
+  chatter: one('monkeys', synth.chatter, 0.7),
+  squeak: one('capybara', synth.squeak, 0.8),
+  yawn: one('sloth-yawn', synth.yawn, 0.8),
+  croak: one('frog', synth.croak, 0.8),
+  chirp: one('otter', synth.chirp, 0.8),
+  bonk: one('bonk', synth.bonk),
+  flutter: one('flutter', synth.flutter, 0.6),
+  dart: synth.dart,
+  /** The forest all around: birds, insects, lapping water. Returns its stop. */
+  forest: () => bed(rioClip('forest-bed'), 0.22),
 }

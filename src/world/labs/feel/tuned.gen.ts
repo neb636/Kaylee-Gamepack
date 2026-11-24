@@ -10,6 +10,7 @@ export const TUNED: Record<string, '*' | string[]> = {
   'canada/party': ['hockey'],
   'canada/snowman': ['dress', 'roll', 'stack'],
   'canada/whales': ['grey', 'humpback', 'orcas'],
+  'peru/river': '*',
   'poles/coats': '*',
   'poles/floe': ['drift', 'melt', 'steady'],
   'poles/hub': ['globe', 'sun'],

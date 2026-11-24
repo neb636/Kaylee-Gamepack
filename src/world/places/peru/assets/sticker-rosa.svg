@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Pink river dolphin</title>
+  <defs>
+    <clipPath id="round"><circle cx="60" cy="60" r="60"/></clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2ff"/><stop offset="1" stop-color="#fff3df"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="river" x1="0" y1="82" x2="0" y2="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7fdcd5"/><stop offset="1" stop-color="#2396ad"/></linearGradient>
+  </defs>
+  <!-- a round sticker: everything sits inside the circle -->
+  <g clip-path="url(#round)">
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="50" r="52" fill="url(#glow)"/>
+
+  <!-- the rainbow she races to -->
+  <g fill="none" stroke-width="5.5" opacity="0.9">
+    <path d="M8.0 84A52.0 52.0 0 0 1 112.0 84" stroke="#ff8fb8"/><path d="M13.5 84A46.5 46.5 0 0 1 106.5 84" stroke="#ffc595"/><path d="M19.0 84A41.0 41.0 0 0 1 101.0 84" stroke="#fbea9a"/><path d="M24.5 84A35.5 35.5 0 0 1 95.5 84" stroke="#aee8b7"/><path d="M30.0 84A30.0 30.0 0 0 1 90.0 84" stroke="#8ccfff"/><path d="M35.5 84A24.5 24.5 0 0 1 84.5 84" stroke="#b9a6f5"/>
+  </g>
+
+  <!-- the hazy forest, then the river -->
+  <path d="M0 84L0 70C5 64 12 64 16 69C20 62 30 62 33 70C37 66 43 67 45 72L45 84ZM120 84L120 68C114 63 107 64 104 70C99 64 90 65 88 72C84 68 78 70 77 75L77 84Z" fill="#9fd9b6"/>
+  <rect y="82" width="120" height="38" fill="url(#river)"/>
+  <g fill="#fff" opacity="0.5"><rect x="74" y="92" width="24" height="3" rx="1.5"/><rect x="18" y="104" width="18" height="3" rx="1.5"/><rect x="60" y="110" width="20" height="3" rx="1.5"/></g>
+
+  <!-- Rosa, leaping -->
+  <g transform="translate(62 56) rotate(-27) scale(0.4)">
+    <path d="M-90 6C-106 -4 -120 -24 -138 -28C-134 -10 -126 0 -114 8C-126 16 -134 30 -138 46C-120 40 -102 24 -88 14Z" fill="#e7699c"/>
+    <path d="M12 22C8 46 -8 62 -28 66C-22 50 -16 36 -14 20Z" fill="#e7699c"/>
+    <path d="M-97 8C-74 -30 -15 -50 36 -42C64 -37 84 -20 84 0C84 24 50 42 0 40C-40 38 -76 24 -97 8Z" fill="#ff8fb8"/>
+    <path d="M-80 17C-40 36 20 44 60 24C76 16 82 6 84 0C84 24 50 42 0 40C-34 38 -62 28 -80 17Z" fill="#ffdce8"/>
+    <path d="M-38 -33C-30 -50 -12 -52 -2 -42Z" fill="#e7699c"/>
+    <rect x="66" y="-4" width="58" height="15" rx="7.5" fill="#ff8fb8"/>
+    <path d="M80 6.5Q102 11 120 4.5" fill="none" stroke="#c2447e" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M-52 -22C-22 -38 18 -40 46 -30" fill="none" stroke="#ffc4da" stroke-width="6" stroke-linecap="round"/>
+    <ellipse cx="57" cy="-11" rx="5.4" ry="6.4" fill="#2b2330"/><circle cx="59" cy="-13.5" r="2.1" fill="#fff"/>
+    <ellipse cx="50" cy="6" rx="10" ry="5.5" fill="#ff4f9a" opacity="0.45"/>
+  </g>
+
+  <!-- the splash where her tail leaves the water -->
+  <path d="M14 86C16 76 21 72 25 80C27 71 34 69 36 79C39 73 45 75 48 86Z" fill="#fff" opacity="0.94"/>
+  <g fill="#fff"><circle cx="13" cy="72" r="2.2"/><circle cx="22" cy="64" r="1.7"/><circle cx="44" cy="68" r="1.9"/></g>
+  </g>
+</svg>
