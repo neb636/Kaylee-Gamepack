@@ -31,7 +31,7 @@ function painted(color: string, seg: number, shape: (p: Vector3) => void, tint: 
 }
 
 /** An ear's shape from a ball: wide low down, a point on top, thin, and cupped (its edges come forward). */
-const earShape = (p: Vector3) => {
+export const earShape = (p: Vector3) => {
   const t = (p.y + 1) / 2
   p.x *= 1.12 - 0.86 * t ** 1.25
   p.z = p.z * 0.3 * (1 - 0.45 * t) + 0.3 * p.x * p.x
