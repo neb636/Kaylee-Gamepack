@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>The Colosseum</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2ff"/><stop offset="1" stop-color="#b3dbff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="wall"><path d="M12 95V36C22 33 34 31.5 46 31V35H50V39H54V43H58V47H62C80 47.5 96 49.5 108 53V95C80 99 40 99 12 95Z"/></clipPath>
+    <!-- one arch: a round-topped opening -->
+    <path id="arch" d="M-3 0V-6a3 3 0 0 1 6 0V0Z"/>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="52" fill="url(#glow)"/>
+  <circle cx="96" cy="22" r="8" fill="#fff6d2"/>
+  <g fill="#fff" opacity="0.9"><circle cx="20" cy="20" r="5"/><circle cx="27" cy="16.5" r="6.5"/><circle cx="34" cy="20.5" r="4.5"/><rect x="15" y="19" width="24" height="6" rx="3"/></g>
+
+  <!-- grass in front -->
+  <path d="M-2 97C30 93 90 93 122 97V122H-2Z" fill="#8fd99a"/>
+  <path d="M-2 104C40 100 80 100 122 104V122H-2Z" fill="#73cf86"/>
+  <ellipse cx="60" cy="97.5" rx="50" ry="3.5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the walls: warm stone, lit at the left end, shaded where the round wall turns away on the right -->
+  <g clip-path="url(#wall)">
+    <rect x="10" y="28" width="100" height="72" fill="#f5dba8"/>
+    <rect x="10" y="28" width="10" height="72" fill="#fdeecc"/>
+    <rect x="86" y="28" width="9" height="72" fill="#ecca90"/>
+    <rect x="95" y="28" width="15" height="72" fill="#e3bb7a"/>
+    <!-- the inner ring showing through the broken top -->
+    <path d="M62 47C80 47.5 96 49.5 108 53V56C96 52.5 80 50.5 62 50Z" fill="#e3bb7a"/>
+    <!-- cornices between the storeys -->
+    <path d="M12 47H62M12 61C40 59.5 80 59.5 108 63M12 77C40 75.5 80 75.5 108 79" fill="none" stroke="#fdeecc" stroke-width="2.6"/>
+    <path d="M12 49H62M12 63C40 61.5 80 61.5 108 65M12 79C40 77.5 80 77.5 108 81" fill="none" stroke="#e3bb7a" stroke-width="1.4"/>
+    <!-- three rows of arches, little windows in the top storey -->
+    <g fill="#c4977a">
+      <use href="#arch" x="17" y="93"/><use href="#arch" x="26" y="93"/><use href="#arch" x="35" y="93.5"/><use href="#arch" x="44" y="93.5"/><use href="#arch" x="53" y="93.8"/><use href="#arch" x="62" y="93.8"/><use href="#arch" x="71" y="93.8"/><use href="#arch" x="80" y="93.5"/><use href="#arch" x="89" y="93.2"/><use href="#arch" x="98" y="93"/>
+      <use href="#arch" x="17" y="75" transform="translate(0 0)"/><use href="#arch" x="26" y="75"/><use href="#arch" x="35" y="74.6"/><use href="#arch" x="44" y="74.5"/><use href="#arch" x="53" y="74.4"/><use href="#arch" x="62" y="74.4"/><use href="#arch" x="71" y="74.5"/><use href="#arch" x="80" y="74.7"/><use href="#arch" x="89" y="75.2"/><use href="#arch" x="98" y="75.8"/>
+      <use href="#arch" x="17" y="59"/><use href="#arch" x="26" y="58.8"/><use href="#arch" x="35" y="58.6"/><use href="#arch" x="44" y="58.5"/><use href="#arch" x="53" y="58.4"/><use href="#arch" x="62" y="58.4"/><use href="#arch" x="71" y="58.5"/><use href="#arch" x="80" y="58.8"/><use href="#arch" x="89" y="59.4"/><use href="#arch" x="98" y="60"/>
+      <rect x="15.5" y="38" width="4" height="5" rx="1"/><rect x="25" y="37.5" width="4" height="5" rx="1"/><rect x="34.5" y="37" width="4" height="5" rx="1"/><rect x="44" y="37" width="4" height="5" rx="1"/>
+    </g>
+    <g fill="#a87e68">
+      <use href="#arch" x="89" y="93.2"/><use href="#arch" x="98" y="93"/><use href="#arch" x="89" y="75.2"/><use href="#arch" x="98" y="75.8"/><use href="#arch" x="89" y="59.4"/><use href="#arch" x="98" y="60"/>
+    </g>
+    <!-- light catching the arch tops on the left -->
+    <path d="M14.5 85a3 3 0 0 1 3-3M14.5 67a3 3 0 0 1 3-3M14.5 51a3 3 0 0 1 3-3" fill="none" stroke="#fff7f0" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <!-- broken stones along the stepped edge -->
+  <g fill="#e3bb7a"><rect x="46" y="31" width="4" height="4"/><rect x="50" y="35" width="4" height="4"/><rect x="54" y="39" width="4" height="4"/><rect x="58" y="43" width="4" height="4"/></g>
+  <path d="M14 36C24 33.5 34 32.2 44 31.8" fill="none" stroke="#fff7f0" stroke-width="2" stroke-linecap="round"/>
+</svg>
