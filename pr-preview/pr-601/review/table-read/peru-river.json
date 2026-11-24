@@ -5,218 +5,24 @@
   "title": "Peru › River",
   "intro": "---- 3. Swim with Rosa (the flooded forest: swim her, leap for the fruit, race the otters) ----",
   "page": "peru-river.html",
-  "audio": null,
-  "lines": 35,
-  "seconds": 79,
+  "audio": "peru-river.mp3",
+  "lines": 33,
+  "seconds": 70,
   "missing": 0,
   "names": 0,
   "flags": [
     {
-      "key": "river.story.0",
-      "text": "The river is in the treetops!",
-      "flags": [
-        "changed"
-      ],
-      "was": "Hola! I want to visit my forest friends!"
-    },
-    {
-      "key": "river.swim.touch",
-      "text": "Hold Rosa and swim!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.swim.mouse",
-      "text": "Click and hold Rosa to swim!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.capy.0",
-      "text": "Hola, capybaras!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "river.capy.1",
-      "text": "Ahh... a swim!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
       "key": "river.leap",
       "text": "Swim up fast to leap!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "river.sloth.0",
-      "text": "Ooh... a shower...",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "river.sloth.1",
-      "text": "Hola, sloth!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "river.monkeys",
-      "text": "Fruit! Leap for the fruit!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.fruitDown.0",
-      "text": "Splash! Splash!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "river.fruitDown.1",
-      "text": "Wheee!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "river.fruitDown.2",
-      "text": "You got it!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.lower",
-      "text": "Here! Lower!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.dare",
-      "text": "Race you to the rainbow!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.go",
-      "text": "Ready... go!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.comeOn",
-      "text": "Come on, Rosa!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.bonk",
-      "text": "Oopsie! Bonk!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.win.0",
-      "text": "You win! So fast!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.win.1",
-      "text": "Wheee! Gracias!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.lose",
-      "text": "So close! Again?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.slothTap",
-      "text": "Hiiiiii...",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "river.facts.rosa",
-      "text": "This dolphin lives in a river!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "river.facts.forest",
-      "text": "Half of Peru is rainforest!",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "river.facts.flood",
       "text": "The river grows into the forest!",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "river.idle.swim.touch",
-      "text": "Hold the water! Rosa comes!",
-      "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "river.idle.swim.mouse",
-      "text": "Click and hold the water! Rosa comes!",
-      "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "river.idle.sloth",
-      "text": "Splash the sleepy sloth!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.idle.fruit",
-      "text": "Leap up to the fruit!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "river.idle.race",
-      "text": "Swim to the rainbow!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
@@ -240,10 +46,11 @@
       "part": "river › story",
       "when": "The story: one line from Rosa, then her hands are busy.",
       "ms": 2208,
-      "flags": [
-        "changed"
-      ],
-      "was": "Hola! I want to visit my forest friends!"
+      "flags": [],
+      "span": [
+        0,
+        2.1
+      ]
     },
     {
       "path": [
@@ -257,8 +64,10 @@
       "part": "river › swim",
       "when": "Sparkle, as the forest appears.",
       "ms": 2256,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        3.78,
+        5.93
       ]
     },
     {
@@ -273,8 +82,10 @@
       "part": "river › swim",
       "when": "",
       "ms": 2256,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        6.32,
+        8.46
       ]
     },
     {
@@ -289,8 +100,10 @@
       "part": "river › capy",
       "when": "Rosa reaches the capybaras; the baby climbs on her back for a ride.",
       "ms": 1710,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        10.15,
+        11.84
       ]
     },
     {
@@ -305,8 +118,10 @@
       "part": "river › capy",
       "when": "",
       "ms": 2093,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        12.22,
+        14.28
       ]
     },
     {
@@ -321,8 +136,11 @@
       "when": "Under the sleeping sloth. Sparkle, once.",
       "ms": 3024,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        15.97,
+        18.84
       ]
     },
     {
@@ -337,8 +155,10 @@
       "part": "river › sloth",
       "when": "The splash wakes the sloth.",
       "ms": 2629,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        20.53,
+        23.09
       ]
     },
     {
@@ -353,8 +173,10 @@
       "part": "river › sloth",
       "when": "",
       "ms": 1670,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        23.48,
+        25.11
       ]
     },
     {
@@ -368,8 +190,10 @@
       "part": "river",
       "when": "The monkeys, when Rosa swims under their fruit.",
       "ms": 2112,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        26.8,
+        28.81
       ]
     },
     {
@@ -384,8 +208,10 @@
       "part": "river › fruitDown",
       "when": "A monkey, each time a fruit falls in the water (one of these).",
       "ms": 1701,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        30.5,
+        32.16
       ]
     },
     {
@@ -400,8 +226,10 @@
       "part": "river › fruitDown",
       "when": "",
       "ms": 1062,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        32.55,
+        33.63
       ]
     },
     {
@@ -416,8 +244,10 @@
       "part": "river › fruitDown",
       "when": "",
       "ms": 1224,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        34.01,
+        35.18
       ]
     },
     {
@@ -431,7 +261,11 @@
       "part": "river",
       "when": "Sparkle, the first time the fish come to nibble a fruit.",
       "ms": 2600,
-      "flags": []
+      "flags": [],
+      "span": [
+        36.86,
+        39.4
+      ]
     },
     {
       "path": [
@@ -444,8 +278,10 @@
       "part": "river",
       "when": "A monkey lets a fruit down a little after two leaps that missed it.",
       "ms": 1464,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        39.79,
+        41.17
       ]
     },
     {
@@ -459,8 +295,10 @@
       "part": "river",
       "when": "The otters pop up past the fruit tree.",
       "ms": 1920,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        41.56,
+        43.39
       ]
     },
     {
@@ -474,8 +312,10 @@
       "part": "river",
       "when": "",
       "ms": 1920,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        43.78,
+        45.6
       ]
     },
     {
@@ -489,8 +329,10 @@
       "part": "river",
       "when": "An otter, if she turns back or stops during the race.",
       "ms": 1824,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        45.98,
+        47.72
       ]
     },
     {
@@ -504,8 +346,10 @@
       "part": "river",
       "when": "She bumps a log.",
       "ms": 1464,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        48.11,
+        49.5
       ]
     },
     {
@@ -520,8 +364,10 @@
       "part": "river › win",
       "when": "The finish. She wins most of the time.",
       "ms": 2688,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        51.19,
+        53.74
       ]
     },
     {
@@ -536,8 +382,10 @@
       "part": "river › win",
       "when": "",
       "ms": 1944,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        54.13,
+        55.98
       ]
     },
     {
@@ -551,8 +399,10 @@
       "part": "river",
       "when": "The otters got there first: one more go, or on to the stamp.",
       "ms": 2472,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        57.66,
+        60.01
       ]
     },
     {
@@ -567,7 +417,11 @@
       "part": "river › spout",
       "when": "Taps: Rosa (a spout and one of these, then her fact), the sloth, the sleepy capybara.",
       "ms": 458,
-      "flags": []
+      "flags": [],
+      "span": [
+        61.7,
+        62.21
+      ]
     },
     {
       "path": [
@@ -581,7 +435,11 @@
       "part": "river › spout",
       "when": "",
       "ms": 1622,
-      "flags": []
+      "flags": [],
+      "span": [
+        62.6,
+        64.19
+      ]
     },
     {
       "path": [
@@ -595,7 +453,11 @@
       "part": "river › spout",
       "when": "",
       "ms": 883,
-      "flags": []
+      "flags": [],
+      "span": [
+        64.57,
+        65.47
+      ]
     },
     {
       "path": [
@@ -608,7 +470,11 @@
       "part": "river",
       "when": "",
       "ms": 2249,
-      "flags": []
+      "flags": [],
+      "span": [
+        67.16,
+        69.35
+      ]
     },
     {
       "path": [
@@ -621,8 +487,10 @@
       "part": "river",
       "when": "",
       "ms": 2558,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        69.73,
+        72.22
       ]
     },
     {
@@ -637,8 +505,10 @@
       "part": "river › facts",
       "when": "Sparkle, the first time she pokes Rosa, a bird or a tree trunk.",
       "ms": 2614,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        73.91,
+        76.44
       ]
     },
     {
@@ -653,8 +523,10 @@
       "part": "river › facts",
       "when": "",
       "ms": 2901,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        76.83,
+        79.63
       ]
     },
     {
@@ -670,44 +542,11 @@
       "when": "",
       "ms": 3030,
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "path": [
-        "river",
-        "idle",
-        "swim",
-        "touch"
+        "long"
       ],
-      "text": "Hold the water! Rosa comes!",
-      "voice": "sparkle",
-      "key": "river.idle.swim.touch",
-      "part": "river › idle › swim",
-      "when": "Sparkle, when nothing has happened for a while.",
-      "ms": 4032,
-      "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "path": [
-        "river",
-        "idle",
-        "swim",
-        "mouse"
-      ],
-      "text": "Click and hold the water! Rosa comes!",
-      "voice": "sparkle",
-      "key": "river.idle.swim.mouse",
-      "part": "river › idle › swim",
-      "when": "",
-      "ms": 4632,
-      "flags": [
-        "long",
-        "new"
+      "span": [
+        80.02,
+        82.97
       ]
     },
     {
@@ -720,10 +559,12 @@
       "voice": "sparkle",
       "key": "river.idle.sloth",
       "part": "river › idle",
-      "when": "Sparkle, when nothing has happened for a while.",
+      "when": "Sparkle, when nothing has happened for a while (before the sloth it's her first line again).",
       "ms": 2880,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        84.65,
+        87.38
       ]
     },
     {
@@ -736,10 +577,12 @@
       "voice": "sparkle",
       "key": "river.idle.fruit",
       "part": "river › idle",
-      "when": "Sparkle, when nothing has happened for a while.",
+      "when": "Sparkle, when nothing has happened for a while (before the sloth it's her first line again).",
       "ms": 1752,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        87.77,
+        89.44
       ]
     },
     {
@@ -752,10 +595,12 @@
       "voice": "sparkle",
       "key": "river.idle.race",
       "part": "river › idle",
-      "when": "Sparkle, when nothing has happened for a while.",
+      "when": "Sparkle, when nothing has happened for a while (before the sloth it's her first line again).",
       "ms": 2112,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        89.83,
+        91.83
       ]
     },
     {
@@ -771,6 +616,10 @@
       "ms": 4707,
       "flags": [
         "long"
+      ],
+      "span": [
+        93.52,
+        98.07
       ]
     }
   ]

@@ -1,0 +1,16 @@
+{
+  "title": "Swim with Rosa",
+  "checkIn": "2 of 4: hear the script",
+  "kaylee": "She holds Rosa the pink dolphin and swims her through the flooded forest: hello to the capybaras, a splash for the sleepy sloth, leaps for the monkeys' fruit, a race with the otters to the rainbow. Every picture is drawn by hand.",
+  "questions": [
+    "Is this the look you wanted for the level?",
+    "The otters say \"So close! Again?\" when they win: kind, or teasing?",
+    "Rosa says \"Oopsie! Bonk!\" when she bumps a log: funny, or too babyish?"
+  ],
+  "tableReads": [["peru", "river"]],
+  "reels": [{ "name": "swim-with-rosa", "moments": ["river-swim", "river-leap", "river-fruit", "river-race"] }],
+  "links": [
+    { "label": "Play it", "hash": "#/world/peru/river" },
+    { "label": "Tune how the swim and the leap feel", "hash": "#/world/peru/river/treetops?feel=1" }
+  ]
+}

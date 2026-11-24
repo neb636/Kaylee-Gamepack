@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Script check: World › Shelf › Games, Peru › River › Story, Peru › River › Swim, Peru › River › Capy, Peru › River</title>
+<title>Swim with Rosa</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -35,38 +35,29 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .solo img{width:100%;border-radius:12px;display:block;background:var(--lav)}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
+<span class="chip">Check-in 2 of 4: hear the script</span>
+<h1>Swim with Rosa</h1>
+<p class="kaylee">She holds Rosa the pink dolphin and swims her through the flooded forest: hello to the capybaras, a splash for the sleepy sloth, leaps for the monkeys' fruit, a race with the otters to the rainbow. Every picture is drawn by hand.</p>
 
-<h1>Script check: World › Shelf › Games, Peru › River › Story, Peru › River › Swim, Peru › River › Capy, Peru › River</h1>
+<h2>Watch</h2><figure><video src="reel/swim-with-rosa.mp4" poster="" controls playsinline muted autoplay loop></video>
+<figcaption>Swim with rosa · 50 s</figcaption></figure>
 
-
-
-
-<h2>Hear the script</h2><div class="card"><h3>World › Shelf › Games</h3>
+<h2>Hear the script</h2><div class="card"><h3>Peru › River</h3>
+<p class="meta">33 lines · 70 s of talk · her name 0× · 3 flagged</p>
+<audio controls preload="metadata" src="table-read/peru-river.mp3"></audio>
+<p><a href="table-read/peru-river.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>World › Shelf › Games</h3>
 <p class="meta">66 lines (1 new) · 106 s of talk · her name 0×</p>
 
 <p><a href="table-read/world-shelf-games.html">Read along: who says what, and when</a></p></div>
-<div class="card"><h3>Peru › River › Story</h3>
-<p class="meta">1 lines (1 new) · 2 s of talk · her name 0×</p>
 
-<p><a href="table-read/peru-river-story.html">Read along: who says what, and when</a></p></div>
-<div class="card"><h3>Peru › River › Swim</h3>
-<p class="meta">2 lines (2 new) · 5 s of talk · her name 0×</p>
-
-<p><a href="table-read/peru-river-swim.html">Read along: who says what, and when</a></p></div>
-<div class="card"><h3>Peru › River › Capy</h3>
-<p class="meta">2 lines · 4 s of talk · her name 0×</p>
-
-<p><a href="table-read/peru-river-capy.html">Read along: who says what, and when</a></p></div>
-<div class="card"><h3>Peru › River</h3>
-<p class="meta">35 lines (19 new) · 79 s of talk · her name 0× · 5 flagged</p>
-
-<p><a href="table-read/peru-river.html">Read along: who says what, and when</a></p></div>
-
-
-
+<h2>Your call</h2><ol><li><p>Is this the look you wanted for the level?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
+<li><p>The otters say &quot;So close! Again?&quot; when they win: kind, or teasing?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li>
+<li><p>Rosa says &quot;Oopsie! Bonk!&quot; when she bumps a log: funny, or too babyish?</p><textarea rows="2" data-q="2" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/601">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/peru/river">Play it</a> <a class="pill" href="../#/world/peru/river/treetops?feel=1">Tune how the swim and the leap feel</a></p>
 </main>
 <script>
-const qs=[],titles=[]
+const qs=["Is this the look you wanted for the level?","The otters say \"So close! Again?\" when they win: kind, or teasing?","Rosa says \"Oopsie! Bonk!\" when she bumps a log: funny, or too babyish?"],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
