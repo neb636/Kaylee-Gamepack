@@ -10,9 +10,9 @@
 //
 // Sizes are fractions of the character's height H, so the same recipe makes Agong and little Putter; `chub` makes the
 // body rounder (Mom, and Jum the elephant).
-import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
+import { CurvePath, Euler, Group, LineCurve3, Matrix4, Quaternion, TubeGeometry, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'
-import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
+import { bake, blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
 import { mooseAntler } from './moose'
 import { bellyPatch, beaverTail } from './beaver'
 import { raccoonHead, raccoonTail, raccoonTummy } from './raccoon'
@@ -1102,8 +1102,23 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       phonePlain.push(P.rbox(0.11 * H, 0.18 * H, 0.006 * H, 0.012 * H, '#BFE9FF', { at: off(0.012 * H), rot: tilt }))
     }
     if (e === 'cane') {
-      arm.L.push(P.cyl(0.018 * H, 0.018 * H, 0.42 * H, '#B07A4A', { at: [-0.09 * H, -0.32 * H, 0.04 * H] }))
-      arm.L.push(P.torus(0.04 * H, 0.016 * H, '#B07A4A', { at: [-0.06 * H, -0.11 * H, 0.04 * H] }, Math.PI))
+      // One bent stick: the shaft rises just outside the paw, the crook curls over the top of it and its tip tucks
+      // down into the paw. One tube with rounded ends, so there's no seam or open end where the hook meets the shaft.
+      const r = 0.017 * H
+      const c = { x: -0.065 * H, y: -0.125 * H, z: 0.03 * H }
+      const R = 0.04 * H
+      // The foot stands on the ground (the arm pivot is shoulder[1] above it).
+      const pts: Vector3[] = [new Vector3(c.x - R, -shoulder[1], c.z)]
+      for (let i = 0; i <= 16; i++) {
+        const a = Math.PI - (i / 16) * Math.PI * 1.12
+        pts.push(new Vector3(c.x + Math.cos(a) * R, c.y + Math.sin(a) * R, c.z))
+      }
+      const path = new CurvePath<Vector3>()
+      for (let i = 1; i < pts.length; i++) path.add(new LineCurve3(pts[i - 1], pts[i]))
+      arm.L.push(bake(new TubeGeometry(path, 64, r, 10, false), '#B07A4A', {}, true))
+      const tip = pts[pts.length - 1]
+      arm.L.push(P.sphere(r, '#B07A4A', { at: [tip.x, tip.y, tip.z] }, 12))
+      arm.L.push(P.cyl(r * 1.15, r * 1.25, 0.03 * H, '#4A3F4F', { at: [pts[0].x, pts[0].y + 0.012 * H, pts[0].z] }))
     }
     if (isWearable(e)) {
       const w = wornParts(e, f, look)
