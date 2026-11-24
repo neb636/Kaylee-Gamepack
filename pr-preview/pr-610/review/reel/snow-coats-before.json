@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "snow-coats-before",
+  "title": "Snow coats before",
+  "video": "snow-coats-before.mp4",
+  "gif": "snow-coats-before.gif",
+  "seconds": 20,
+  "browser": "chromium",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "poles-coats-rub",
+      "where": "poles-coats-rub",
+      "seconds": 6,
+      "fps": 2.6,
+      "status": "ok"
+    },
+    {
+      "name": "Poles coats hide",
+      "where": "#/world/poles/coats/hide?painted=fox",
+      "seconds": 5,
+      "fps": 8.8,
+      "status": "ok"
+    },
+    {
+      "name": "Poles coats summer",
+      "where": "#/world/poles/coats/summer",
+      "seconds": 4,
+      "fps": 8.7,
+      "status": "ok"
+    }
+  ]
+}
