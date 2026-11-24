@@ -11,9 +11,9 @@ import { inkPass, useInk } from '../../../kit/ink'
 export const ROSA_ACTIONS = { spout: 1.3, jump: 1.5, nod: 0.7, giggle: 1.1, cheer: 1.3 }
 
 const INK = '#2B2330'
-const PINK = '#FF7FAE'
-const SHINE = '#FFB8D2'
-const BELLY = '#FFD0BC'
+const PINK0 = '#FF7FAE'
+const SHINE0 = '#FFB8D2'
+const BELLY0 = '#FFD0BC'
 const BLUSH = '#FF4F8E'
 const MOUTH = '#B7356A'
 const TONGUE = '#FF8FA8'
@@ -75,11 +75,21 @@ export interface RosaProps {
   /** 0..1: how fast she's swimming now (her tail beats harder and faster). */
   speed?: () => number
   label?: string
+  /** The flat, outline-free look of her new river (shelf/STYLE.md): no ink line round her, softer pinks. */
+  flat?: boolean
 }
 
+/** Her colours in the flat look. */
+const FLAT = { pink: '#FF8FB8', shine: '#FFC4DA', belly: '#FFDCE8', fin: '#E7699C', line: '#C2447E' }
+
 /** Rosa the pink river dolphin. Voice: rosa. */
-export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, style, speed, label = 'Rosa' }, ref) {
+export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, style, speed, label = 'Rosa', flat = false }, ref) {
   const id = useId().replace(/:/g, '')
+  const PINK = flat ? FLAT.pink : PINK0
+  const SHINE = flat ? FLAT.shine : SHINE0
+  const BELLY = flat ? FLAT.belly : BELLY0
+  const FIN = flat ? FLAT.fin : PINK0
+  const LINE = flat ? FLAT.line : INK
   const ink = useInk<Part>()
   const st = useRef({ tail: spring(110, 9), flip: spring(70, 7), head: spring(80, 10), bend: spring(60, 9), jaw: 0, phase: 0, swim: 0 }).current
   const speedRef = useRef(speed)
@@ -268,7 +278,7 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
       </defs>
       <g ref={part('root')} strokeLinejoin="round" strokeLinecap="round">
         {/* One outline around tail, body, flipper and head together (see kit/ink.ts), so she reads as one dolphin. */}
-        <g {...inkPass(W / 2, INK)}>
+        {!flat && <g {...inkPass(W / 2, INK)}>
           <g ref={ink.twin('tail')}>
             <path d={FLUKES} />
           </g>
@@ -282,14 +292,14 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
               <path d={JAW} />
             </g>
           </g>
-        </g>
+        </g>}
         <g ref={part('tail')}>
-          <path d={FLUKES} fill={PINK} />
+          <path d={FLUKES} fill={FIN} />
           <path d="M-20 -36 C-46 -60 -70 -86 -92 -108 M-20 36 C-46 60 -70 86 -92 108" fill="none" stroke={SHINE} strokeWidth="12" />
         </g>
         {/* The flipper's fill sits under the body's, so its root tucks into her chest and only the paddle shows. */}
         <g ref={part('flipper')}>
-          <path d={FLIPPER} fill={PINK} />
+          <path d={FLIPPER} fill={FIN} />
           <path d="M-10 40 C-20 90 -44 140 -72 180" fill="none" stroke={SHINE} strokeWidth="12" />
         </g>
         <path ref={part('body')} fill={PINK} />
@@ -312,9 +322,9 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
           <path d="M990 370 C1024 392 1044 420 1050 452" fill="none" stroke={SHINE} strokeWidth="18" />
           <path d="M1120 514 C1160 524 1196 530 1220 536" fill="none" stroke={SHINE} strokeWidth="10" />
           {/* The mouth line, curling up into a smile at the corner. */}
-          <path ref={part('smile')} d="M1222 565 C1150 572 1060 582 998 590 C986 592 980 586 980 578" fill="none" stroke={INK} strokeWidth={W * 0.75} />
+          <path ref={part('smile')} d="M1222 565 C1150 572 1060 582 998 590 C986 592 980 586 980 578" fill="none" stroke={LINE} strokeWidth={W * 0.75} />
           <ellipse ref={part('blush')} rx="34" ry="20" fill={BLUSH} opacity="0.5" transform="translate(902 606)" />
-          <path d="M896 488 Q922 470 950 484" fill="none" stroke={INK} strokeWidth={W * 0.75} />
+          {!flat && <path d="M896 488 Q922 470 950 484" fill="none" stroke={INK} strokeWidth={W * 0.75} />}
           <g ref={part('eyeOpen')}>
             <circle cx="935" cy="548" r="42" fill={INK} />
             <g ref={part('pupil')}>
@@ -325,10 +335,10 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
           <path ref={part('eyeHappy')} d="M900 556 Q935 518 970 556" fill="none" stroke={INK} strokeWidth={W * 1.1} style={{ display: 'none' }} />
           {/* The spout: a puff of spray out of the blowhole, drawn upward from (0,0). */}
           <g ref={part('spout')} style={{ display: 'none' }}>
-            <path d="M0 0 C-30 -60 -90 -110 -110 -170 C-80 -150 -40 -170 -20 -210 C0 -170 30 -170 40 -215 C60 -170 100 -160 120 -175 C100 -110 40 -60 0 0Z" fill="#BFE6FF" stroke={INK} strokeWidth={W * 0.8} />
-            <circle cx="-120" cy="-215" r="14" fill="#BFE6FF" stroke={INK} strokeWidth={W * 0.6} />
-            <circle cx="20" cy="-250" r="12" fill="#BFE6FF" stroke={INK} strokeWidth={W * 0.6} />
-            <circle cx="135" cy="-215" r="11" fill="#BFE6FF" stroke={INK} strokeWidth={W * 0.6} />
+            <path d="M0 0 C-30 -60 -90 -110 -110 -170 C-80 -150 -40 -170 -20 -210 C0 -170 30 -170 40 -215 C60 -170 100 -160 120 -175 C100 -110 40 -60 0 0Z" fill={flat ? '#fff' : '#BFE6FF'} stroke={flat ? 'none' : INK} strokeWidth={W * 0.8} />
+            <circle cx="-120" cy="-215" r="14" fill={flat ? '#fff' : '#BFE6FF'} stroke={flat ? 'none' : INK} strokeWidth={W * 0.6} />
+            <circle cx="20" cy="-250" r="12" fill={flat ? '#fff' : '#BFE6FF'} stroke={flat ? 'none' : INK} strokeWidth={W * 0.6} />
+            <circle cx="135" cy="-215" r="11" fill={flat ? '#fff' : '#BFE6FF'} stroke={flat ? 'none' : INK} strokeWidth={W * 0.6} />
           </g>
         </g>
       </g>

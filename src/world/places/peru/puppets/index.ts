@@ -36,5 +36,5 @@ export const PUPPETS: PuppetEntry[] = [
   { id: 'chick-round', name: 'Penguin chick (well fed)', render: (ref, height) => createElement(PenguinChick, { ref, height, full: 1, tuft: 2 }), actions: Object.keys(PENGUIN_CHICK_ACTIONS) },
   { id: 'lobo', name: 'Lobo the sea lion', render: (ref, height) => createElement(Lobo, { ref, height }), actions: Object.keys(LOBO_ACTIONS), lines: [...P.lobo, ...P.loboTap] },
   { id: 'lobo-seaweed', name: 'Lobo (seaweed hat)', render: (ref, height) => createElement(Lobo, { ref, height, seaweed: true }), actions: Object.keys(LOBO_ACTIONS) },
-  { id: 'rosa', name: 'Rosa the pink river dolphin', render: (ref, height) => createElement(Rosa, { ref, height }), actions: Object.keys(ROSA_ACTIONS), lines: [...R.story, R.more, R.lagoonGo, R.rainbow, ...R.spout, R.rosaTap] },
+  { id: 'rosa', name: 'Rosa the pink river dolphin', render: (ref, height) => createElement(Rosa, { ref, height, flat: true }), actions: Object.keys(ROSA_ACTIONS), lines: [...R.story, R.capy[0], R.sloth[1], R.bonk, R.win[1], ...R.spout, R.rosaTap] },
 ]

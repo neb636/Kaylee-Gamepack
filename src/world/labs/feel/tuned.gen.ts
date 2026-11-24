@@ -11,6 +11,7 @@ export const TUNED: Record<string, '*' | string[]> = {
   'canada/snowman': ['dress', 'roll', 'stack'],
   'canada/whales': ['grey', 'humpback', 'orcas'],
   'egypt/nile': ['farm-1', 'farm-2', 'sail-1', 'sail-2'],
+  'peru/river': '*',
   'poles/coats': '*',
   'poles/floe': ['drift', 'melt', 'steady'],
   'poles/hub': ['globe', 'sun'],
