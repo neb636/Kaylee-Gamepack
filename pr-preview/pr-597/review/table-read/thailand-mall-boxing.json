@@ -7,7 +7,7 @@
   "page": "thailand-mall-boxing.html",
   "audio": null,
   "lines": 27,
-  "seconds": 49,
+  "seconds": 45,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -62,9 +62,8 @@
     },
     {
       "key": "mall.boxing.super",
-      "text": "Gold gloves! Super punch!",
+      "text": "Super punch!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -112,9 +111,8 @@
     },
     {
       "key": "mall.boxing.waiKru",
-      "text": "Before a fight, a boxer bows to say thank you to the teacher!",
+      "text": "A boxer bows to thank the teacher!",
       "flags": [
-        "long",
         "changed"
       ],
       "was": "The wai kru dance says thank you to your teacher!"
@@ -309,14 +307,13 @@
         "boxing",
         "super"
       ],
-      "text": "Gold gloves! Super punch!",
+      "text": "Super punch!",
       "voice": "sparkle",
       "key": "mall.boxing.super",
       "part": "mall › boxing",
       "when": "",
-      "ms": 3048,
+      "ms": 1368,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -525,14 +522,13 @@
         "boxing",
         "waiKru"
       ],
-      "text": "Before a fight, a boxer bows to say thank you to the teacher!",
+      "text": "A boxer bows to thank the teacher!",
       "voice": "coach",
       "key": "mall.boxing.waiKru",
       "part": "mall › boxing",
       "when": "The facts: the first time she pokes the coach, and the star board.",
-      "ms": 5088,
+      "ms": 2784,
       "flags": [
-        "long",
         "changed"
       ],
       "was": "The wai kru dance says thank you to your teacher!"
