@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "campfire-rock-before",
+  "title": "Campfire rock before",
+  "video": "campfire-rock-before.mp4",
+  "gif": "campfire-rock-before.gif",
+  "seconds": 7,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Canada campfire roast",
+      "where": "#/world/canada/campfire/roast?statue=rock",
+      "seconds": 5,
+      "fps": 73.1,
+      "status": "ok"
+    }
+  ]
+}

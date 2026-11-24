@@ -1,0 +1,81 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "campfire.statues",
+  "title": "Canada › Campfire › Statues",
+  "intro": "Her statues (one each time she's caught in the beam): the tree, the whistle, the stretch.",
+  "page": "canada-campfire-statues.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "campfire.statues.1",
+      "text": "Nobody here!",
+      "flags": [
+        "changed"
+      ],
+      "was": "I'm a rock."
+    },
+    {
+      "key": "campfire.statues.2",
+      "text": "Just stretching!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Nobody here!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "campfire",
+        "statues",
+        "0"
+      ],
+      "text": "I'm a tree.",
+      "voice": "raccoon",
+      "key": "campfire.statues.0",
+      "part": "campfire › statues",
+      "when": "Her statues (one each time she's caught in the beam): the tree, the whistle, the stretch.",
+      "ms": 1440,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "statues",
+        "1"
+      ],
+      "text": "Nobody here!",
+      "voice": "raccoon",
+      "key": "campfire.statues.1",
+      "part": "campfire › statues",
+      "when": "",
+      "ms": 1176,
+      "flags": [
+        "changed"
+      ],
+      "was": "I'm a rock."
+    },
+    {
+      "path": [
+        "campfire",
+        "statues",
+        "2"
+      ],
+      "text": "Just stretching!",
+      "voice": "raccoon",
+      "key": "campfire.statues.2",
+      "part": "campfire › statues",
+      "when": "",
+      "ms": 1560,
+      "flags": [
+        "changed"
+      ],
+      "was": "Nobody here!"
+    }
+  ]
+}
