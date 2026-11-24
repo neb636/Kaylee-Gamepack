@@ -54,9 +54,11 @@ export interface Look {
   hairdo?: { style: 'long' | 'spiky'; color: string }
   /** A big smile showing the top teeth (Joy): it stretches when they talk. */
   smile?: 'teeth'
-  /** A fox sculpted in more detail (Joy: fox.ts): cupped pointed ears, a white snout, puffy pink cheeks, brows, brown paws and
+  /** A fox sculpted in more detail (Joy and her boys Gan and Ken: fox.ts): cupped pointed ears, a white snout, puffy pink cheeks, brows, brown paws and
    *  a big bushy tail. Without it, the plain fox. */
   sculpted?: boolean
+  /** A sculpted fox's puffy cheeks in its light fur instead of pink (Gan and Ken). */
+  cheeks?: 'white'
   extras?: Extra[]
   /** Lashes on the eyes. */
   lashes?: boolean

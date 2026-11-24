@@ -717,6 +717,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         head.push(...face.outlined)
         headPlain.push(...face.plain)
         mouth(face.mouth)
+        // Without a hairdo (Gan, Ken), the same little tuft of fur on top as the plain fox, between the ears.
+        if (!look.hairdo) head.push(...[-0.2, 0.05, 0.28].map((x, i) => P.sphere((0.24 - i * 0.03) * R, look.fur, { at: [x * R, headY + (0.82 - i * 0.06) * R, 0.48 * R] })))
         tailRoot = [0.02 * H, 0.25 * H, -0.12 * H]
         tail.push(foxTail(look, tailRoot))
         break

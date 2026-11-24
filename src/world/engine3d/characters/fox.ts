@@ -1,4 +1,4 @@
-// A fox sculpted in more detail for the shared chibi rig (`Look.sculpted`: Joy). The plain fox is a ball with two cones
+// A fox sculpted in more detail for the shared chibi rig (`Look.sculpted`: Joy, Gan and Ken). The plain fox is a ball with two cones
 // and two cheek balls; this one has cupped pointed ears, a white snout that narrows to a little turned-up nose (only
 // the snout is white: white cheeks and chin read as a beard, 2026-11-23), low puffy pink cheeks, soft brows, and a big bushy tail that sweeps out to one side and up, so its white tip shows from the front.
 // Head coordinates are in head radii R, the tail's in body heights H.
@@ -12,7 +12,7 @@ const HEAD: V3 = [1.1, 1, 1]
 /** A fox's dark paws: warm brown, not black, so they stay soft beside the pastels. */
 export const FOX_SOCK = '#6A4234'
 const NOSE = '#3A2A33'
-/** Her puffy cheeks: a softer pink than the cast's blush, so they read as fur. */
+/** Her puffy cheeks: a softer pink than the cast's blush, so they read as fur (Joy; her boys' are white, `Look.cheeks`). */
 const CHEEK = '#FFB5C8'
 
 /** A sculpted ball painted before it's placed: `tint` gives point `i` of the shaped ball another color (or null).
@@ -55,7 +55,7 @@ export function foxHead(look: Look, f: Frame, brow: string) {
     // from the snout. Much flatter than the plain fox's cheek balls, and it is her blush too.
     const n: V3 = [s * 0.5, -0.43, 0.75]
     const r = 0.25
-    outlined.push(P.sphere(r * R, CHEEK, { at: at(s * 0.63 - n[0] * 0.2 * r, -0.43 - n[1] * 0.2 * r, 0.665 - n[2] * 0.2 * r), rot: [0.52, s * 0.6, 0], scale: [0.98, 0.95, 0.42] }, 32))
+    outlined.push(P.sphere(r * R, look.cheeks === 'white' ? look.light : CHEEK, { at: at(s * 0.63 - n[0] * 0.2 * r, -0.43 - n[1] * 0.2 * r, 0.665 - n[2] * 0.2 * r), rot: [0.52, s * 0.6, 0], scale: [0.98, 0.95, 0.42] }, 32))
   }
   // The snout: it narrows toward the nose and tips up a little at the end.
   outlined.push(sculpt(look.light, 32, (p) => {
