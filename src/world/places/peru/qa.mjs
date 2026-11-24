@@ -221,3 +221,25 @@ motion.push(
     await page.waitForTimeout(1500)
   }),
 )
+
+// Luna's map (the hub): tap each of Peru's three worlds (a wave rolls in, the snowcap glints, a pink dolphin leaps),
+// then Luna in her meadow. Spots are in the map's own 1000 units (mapLand.ts).
+motion.push({
+  name: 'hub-worlds',
+  seconds: 8,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/peru`)
+    await page.waitForTimeout(900)
+    await skip(page)
+    await page.waitForTimeout(900)
+  },
+  act: async (page) => {
+    const b = await page.getByRole('button', { name: "Peru's three worlds" }).boundingBox()
+    if (!b) throw new Error('no map found')
+    for (const [x, y] of [[300, 520], [392, 470], [520, 180]]) {
+      await page.mouse.click(b.x + (x / 1000) * b.width, b.y + (y / 1000) * b.height)
+      await page.waitForTimeout(1900)
+    }
+    await page.getByRole('button', { name: 'Luna', exact: true }).click({ force: true })
+  },
+})

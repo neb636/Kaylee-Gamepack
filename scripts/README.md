@@ -51,6 +51,7 @@ One line each; the header comment at the top of every script says how to run it.
 | `shelf-sheet.mjs` | The game shelf's banners and icons on one sheet (`src/world/shelf/STYLE.md`) |
 | `thailand-map-land.mjs` | Writes the 3D Thailand map's coasts and borders from Natural Earth |
 | `bangkok-map-land.mjs` | Writes the Bangkok map's river, khlongs, main roads and parks from OpenStreetMap |
+| `peru-map.mjs` | Draws Peru's hub map (the SVG and `mapLand.ts`): the real outline, rivers and lake from Natural Earth, the rest by hand |
 
 ## Build plugins (`vite.config.ts`)
 
