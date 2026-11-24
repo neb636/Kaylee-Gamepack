@@ -11,8 +11,8 @@
 // Each animal is a flat puppet (animals.ts) in its summer coat, with its white coat on top masked by her strokes
 // (perfect-freehand outlines, in the animal's own units so the paint moves with it). Its head and tail turn on their
 // own pivots, it breathes, blinks, watches her finger, giggles and hops. A grid of cells under each coat says how white
-// it is; past "finishes itself at" the rest puffs on by itself. The tundra is painted (art.coats): the far hills and the
-// ground of each season, the winter ones fading in as the snow settles and out as it melts. Sparkle (kit/Guide) says
+// it is; past "finishes itself at" the rest puffs on by itself. The tundra is drawn by hand (Tundra.tsx): the sky, the far
+// hills and the ground of each season, the winter ones fading in as the snow settles and out as it melts. Sparkle (kit/Guide) says
 // one short line as each part starts, a hint when nothing's been touched for a while, and a fact the first time she
 // pokes an animal. The summer all brown: the stamp. The brush and the coats are knobs (?feel=1). 2D only: SVG written
 // to every frame, no three.js.
@@ -24,14 +24,12 @@ import { HudButton } from '../../../../kit/Hud'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
-import { art } from '../../art'
 import { L } from '../../lines'
 import type { ActivityProps } from '../../Place'
-import { COAT_IDS, coatGrid, DARK, GROUPS, inShape, SHAPES, TALL, VOICE, WIDE, type CoatGrid, type CoatId, type Detail, type Group, type Part, type Shape, type StageDef } from './animals'
+import { COAT_IDS, coatGrid, DARK, GROUPS, inShape, SHAPES, TALL, VOICE, WIDE, type CoatGrid, type CoatId, type Detail, type Geo, type Group, type Mark, type Part, type Shape, type StageDef } from './animals'
 import COATS_SECTIONS, { type CoatsSection } from './sections'
 import { smooth } from '../../../../../sdk/math'
-
-type Geo = { e: [number, number, number, number, number?] } | { p: number[] }
+import { Backdrop, Ground, Rock, SKY, SNOW, Stars, Sun, type GroundLook, type Season } from './Tundra'
 
 const FILE = 'src/world/places/poles/activities/coats/SnowCoats.tsx'
 /** Her finger's brush (live in the feel lab: ?feel=1). Sizes are stage units: the wide stage is 1600 x 1000, the tall
@@ -56,7 +54,8 @@ const COAT = knobs('coats', 'Coats and hiding', FILE, {
 
 const INK = [0x4a, 0x3b, 0x57]
 const PALE = [0xd4, 0xdd, 0xec]
-const SNOW = '#F7FAFE'
+/** A white coat's shade (the far legs, a wing, the underside), so a winter animal still has a shape. */
+const SNOW_SHADE = '#E3E6F6'
 const GROUND_CELL = 40
 
 /** What Sparkle says as each part starts, and again when nothing's been touched for a while. */
@@ -87,14 +86,15 @@ const partEl = (pt: Geo, key: number, props: Record<string, unknown>) =>
   'e' in pt ? (
     <ellipse key={key} cx={pt.e[0]} cy={pt.e[1]} rx={pt.e[2]} ry={pt.e[3]} transform={pt.e[4] ? `rotate(${pt.e[4]} ${pt.e[0]} ${pt.e[1]})` : undefined} {...props} />
   ) : (
-    <polygon key={key} points={pt.p.join(' ')} strokeLinejoin="round" {...props} />
+    <path key={key} d={pt.d} strokeLinejoin="round" {...props} />
   )
 
-/** The 5-unit ink outline: every part filled and stroked in ink, under the fills (so no lines inside the shape). */
+/** The 5-unit ink outline: every part filled and stroked in ink, under the fills (so one line round the whole animal). */
 const Silhouette = ({ parts, s }: { parts: Geo[]; s: number }) => <g style={{ fill: 'var(--ci)', stroke: 'var(--ci)' }}>{parts.map((pt, i) => partEl(pt, i, { strokeWidth: 10 / s }))}</g>
-const Fill = ({ parts, color }: { parts: Geo[]; color: string }) => <g fill={color}>{parts.map((pt, i) => partEl(pt, i, {}))}</g>
 const coatColor = (sh: Shape, pt: Part) => (pt.c === 'l' ? sh.light : pt.c === 'd' ? sh.dark : sh.brown)
 const inGroup = (g: Group) => (x: { g?: Group }) => (x.g ?? 'body') === g
+const toned = (m: Mark): m is Mark & { c: 'l' | 'd' } => 'c' in m
+const fixed = (m: Mark): m is Mark & { fix: string } => 'fix' in m
 
 /** What sits on top of the coat whatever the season: eyes (they blink and look at her finger), nose, mouth, blush. */
 function DetailEl({ d, k }: { d: Detail; k: string }) {
@@ -119,7 +119,11 @@ function DetailEl({ d, k }: { d: Detail; k: string }) {
     case 'nose':
       return (
         <g>
-          <ellipse cx={d.x} cy={d.y} rx={d.r} ry={d.r * 0.8} fill={d.color ?? DARK} />
+          {d.tri ? (
+            <path d={`M${d.x - d.r} ${d.y - d.r * 0.45} Q${d.x} ${d.y - d.r * 0.95} ${d.x + d.r} ${d.y - d.r * 0.45} Q${d.x + d.r * 0.7} ${d.y + d.r * 0.6} ${d.x} ${d.y + d.r * 0.75} Q${d.x - d.r * 0.7} ${d.y + d.r * 0.6} ${d.x - d.r} ${d.y - d.r * 0.45}Z`} fill={d.color ?? DARK} />
+          ) : (
+            <ellipse cx={d.x} cy={d.y} rx={d.r} ry={d.r * 0.8} fill={d.color ?? DARK} />
+          )}
           <ellipse cx={d.x - d.r * 0.3} cy={d.y - d.r * 0.3} rx={d.r * 0.32} ry={d.r * 0.22} fill="#fff" opacity={0.7} />
         </g>
       )
@@ -128,7 +132,15 @@ function DetailEl({ d, k }: { d: Detail; k: string }) {
     case 'mouth':
       return (
         <g>
-          <path data-k={`${k}-smile`} d={`M${d.x - d.w} ${d.y} Q${d.x} ${d.y + d.w * 0.95} ${d.x + d.w} ${d.y}`} fill="none" stroke={DARK} strokeWidth={3.2} strokeLinecap="round" />
+          <path
+            data-k={`${k}-smile`}
+            d={d.cat ? `M${d.x - d.w} ${d.y} Q${d.x - d.w * 0.5} ${d.y + d.w * 0.9} ${d.x} ${d.y} Q${d.x + d.w * 0.5} ${d.y + d.w * 0.9} ${d.x + d.w} ${d.y}` : `M${d.x - d.w} ${d.y} Q${d.x} ${d.y + d.w * 0.95} ${d.x + d.w} ${d.y}`}
+            fill="none"
+            stroke={DARK}
+            strokeWidth={3.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
           <path
             data-k={`${k}-open`}
             d={`M${d.x - d.w * 1.1} ${d.y - 1} Q${d.x} ${d.y - 3} ${d.x + d.w * 1.1} ${d.y - 1} C${d.x + d.w * 1.1} ${d.y + d.w * 1.3} ${d.x - d.w * 1.1} ${d.y + d.w * 1.3} ${d.x - d.w * 1.1} ${d.y - 1}Z`}
@@ -140,28 +152,32 @@ function DetailEl({ d, k }: { d: Detail; k: string }) {
           />
         </g>
       )
-    case 'ell':
-      return partEl({ e: d.e }, 0, { fill: d.color })
-    case 'poly':
-      return <polygon points={d.p.join(' ')} fill={d.color} stroke={d.color} strokeWidth={3} strokeLinejoin="round" />
+    case 'path':
+      return <path d={d.d} fill={d.color} stroke={d.color} strokeWidth={3} strokeLinejoin="round" />
     case 'line':
       return <path d={d.d} fill="none" stroke={d.color ?? 'var(--ci)'} strokeWidth={d.w ?? 4} strokeLinecap="round" strokeLinejoin="round" />
   }
 }
 
-/** A puppet: its tail, body and head on their own pivots (back to front), each drawn as an ink silhouette, the fluff
- *  (paintable coats only), the summer coat, the white coat under her strokes (`mid`), then the details. The bear and
- *  the owl pass no grid and no mask: they're white all year. */
-function AnimalEl({ id, sh, grid, mid, s = 1 }: { id: string; sh: Shape; grid?: CoatGrid; mid?: string; s?: number }) {
+/** A puppet: its tail, body and head on their own pivots (back to front). Each is an ink silhouette, the fluff
+ *  (paintable coats only), then, clipped to its own outline: the summer coat with its light and dark marks, the white
+ *  coat under her strokes (`paint`) with a soft shade where the dark marks were, and what keeps its color all year.
+ *  The details go on top. The bear and the owl aren't painted: they're white all year. */
+function AnimalEl({ id, sh, grid, mid, paint, s = 1 }: { id: string; sh: Shape; grid?: CoatGrid; mid: string; paint?: boolean; s?: number }) {
   return (
     <g data-k={`${id}-body`}>
       {GROUPS.map((g) => {
         const parts = sh.parts.filter(inGroup(g))
+        const marks = sh.marks.filter(inGroup(g))
         const details = sh.details.filter(inGroup(g))
         if (!parts.length && !details.length) return null
         const edge = grid ? grid.edge.map((e, i) => [e, i] as const).filter(([, i]) => grid.edgeGroup[i] === g) : []
+        const clip = `${mid}-${id}-${g}`
+        const under = parts.filter((pt) => !pt.top)
+        const over = parts.filter((pt) => pt.top)
         return (
           <g key={g} data-k={`${id}-g-${g}`}>
+            <clipPath id={clip}>{parts.map((pt, i) => partEl(pt, i, {}))}</clipPath>
             <Silhouette parts={parts} s={s} />
             {grid && (
               <>
@@ -177,12 +193,19 @@ function AnimalEl({ id, sh, grid, mid, s = 1 }: { id: string; sh: Shape; grid?: 
                 </g>
               </>
             )}
-            <g>{parts.map((pt, i) => partEl(pt, i, { fill: coatColor(sh, pt) }))}</g>
-            {mid && (
-              <g mask={`url(#${mid}-${id})`}>
-                <Fill parts={parts} color={SNOW} />
-              </g>
-            )}
+            <g clipPath={`url(#${clip})`}>
+              {under.map((pt, i) => partEl(pt, i, { fill: coatColor(sh, pt) }))}
+              {marks.filter(toned).map((m, i) => partEl(m, i, { fill: m.c === 'l' ? sh.light : sh.dark }))}
+              {over.map((pt, i) => partEl(pt, i, { fill: coatColor(sh, pt) }))}
+              {paint && (
+                <g mask={`url(#${mid}-${id})`}>
+                  {under.map((pt, i) => partEl(pt, i, { fill: pt.c === 'd' ? SNOW_SHADE : SNOW }))}
+                  {marks.filter(toned).map((m, i) => m.c === 'd' && partEl(m, i, { fill: SNOW_SHADE }))}
+                  {over.map((pt, i) => partEl(pt, i, { fill: SNOW }))}
+                </g>
+              )}
+              {marks.filter(fixed).map((m, i) => partEl(m, i, { fill: m.fix }))}
+            </g>
             {details.map((d, i) => (
               <DetailEl key={i} d={d} k={id} />
             ))}
@@ -207,7 +230,7 @@ function CoatEl({ id, mid, base }: { id: CoatId; mid: string; base: 'white' | 'b
           <rect data-k={`${id}-finish`} x={x - m} y={y - m} width={w + 2 * m} height={h + 2 * m} fill={base === 'black' ? 'white' : 'black'} opacity={0} />
         </mask>
       </defs>
-      <AnimalEl id={id} sh={sh} grid={GRIDS[id]} mid={mid} />
+      <AnimalEl id={id} sh={sh} grid={GRIDS[id]} mid={mid} paint />
     </g>
   )
 }
@@ -338,6 +361,7 @@ class CoatsWorld {
   lastRub = 0
   lastTouched: Coat | null = null
   flakes: { el: SVGCircleElement; x: number; y: number; vy: number; ph: number }[] = []
+  clouds: { el: SVGGElement; i: number }[] = []
   vb = { x: 0, y: 0, w: 1600, h: 1000 }
   now = 0
   t0 = 0
@@ -399,7 +423,8 @@ class CoatsWorld {
     g.settle = q('ground-settle')
     g.flowers = q('flowers')
     for (const el of qa<SVGCircleElement>('flake')) this.flakes.push({ el, x: Math.random(), y: Math.random(), vy: 0.6 + Math.random() * 0.8, ph: Math.random() * 6 })
-    for (const k of ['bear-root', 'bear-body', 'bear-q', 'owl-root', 'owl-body', 'dusk', 'aurora', 'sun', 'hint', 'hills-alt', 'ground-alt']) this.els[k] = q(k)
+    for (const k of ['bear-root', 'bear-body', 'bear-q', 'owl-root', 'owl-body', 'dusk', 'night', 'aurora', 'sun', 'sun-rays', 'hint', 'hills-alt']) this.els[k] = q(k)
+    this.clouds = qa<SVGGElement>('cloud').map((el) => ({ el, i: +(el.dataset.i ?? 0) }))
     this.bearRig = this.els['bear-body'] ? findRig(svg, 'bear', SHAPES.bear) : null
     this.owlRig = this.els['owl-body'] ? findRig(svg, 'owl', SHAPES.owl) : null
     this.setStage(stage)
@@ -630,7 +655,7 @@ class CoatsWorld {
   private flower(x: number, y: number) {
     const g = this.ground.flowers
     if (!g || g.childElementCount > 140) return
-    const colors = ['#FF8FC3', '#FFD84D', '#C9A7FF', '#FFFFFF', '#FF9E7A']
+    const colors = ['#FF8FB8', '#FFE189', '#B9A6F5', '#FFFFFF', '#FFA3A3']
     const col = colors[Math.floor(Math.random() * colors.length)]
     const ns = 'http://www.w3.org/2000/svg'
     const fl = document.createElementNS(ns, 'g')
@@ -638,9 +663,11 @@ class CoatsWorld {
     const inner = document.createElementNS(ns, 'g')
     inner.setAttribute('class', 'coats-pop')
     const sz = 0.8 + Math.random() * 0.5
-    inner.innerHTML = `<path d="M0 0 V${-26 * sz}" stroke="#5E8C3A" stroke-width="4" stroke-linecap="round"/>${[0, 72, 144, 216, 288]
-      .map((a) => `<circle cx="${(Math.cos((a * Math.PI) / 180) * 8 * sz).toFixed(1)}" cy="${(-26 * sz + Math.sin((a * Math.PI) / 180) * 8 * sz).toFixed(1)}" r="${6.5 * sz}" fill="${col}" stroke="#4A3B57" stroke-width="2.5"/>`)
-      .join('')}<circle cx="0" cy="${-26 * sz}" r="${4.5 * sz}" fill="#FFC93C" stroke="#4A3B57" stroke-width="2"/>`
+    // Scenery: flat tones, no outline. A stem with a leaf, five round petals, a butter middle.
+    const top = -28 * sz
+    inner.innerHTML = `<path d="M0 0 V${top}" stroke="#48A96C" stroke-width="4" stroke-linecap="round"/><path d="M0 ${-9 * sz} C${9 * sz} ${-20 * sz} ${17 * sz} ${-16 * sz} ${18 * sz} ${-8 * sz} C${11 * sz} ${-5 * sz} ${5 * sz} ${-5 * sz} 0 ${-9 * sz}Z" fill="#73CF86"/>${[0, 72, 144, 216, 288]
+      .map((a) => `<circle cx="${(Math.sin((a * Math.PI) / 180) * 9 * sz).toFixed(1)}" cy="${(top - Math.cos((a * Math.PI) / 180) * 9 * sz).toFixed(1)}" r="${7 * sz}" fill="${col}"/>`)
+      .join('')}<circle cx="0" cy="${top}" r="${5 * sz}" fill="#FFC83D"/>`
     fl.appendChild(inner)
     g.appendChild(fl)
     if (Math.random() < 0.5) tone(900 + Math.random() * 500, 1600, 0.1, 0.05, 'sine')
@@ -771,6 +798,9 @@ class CoatsWorld {
     const duskTarget = this.phase === 'dusk' ? 1 : 0
     this.dusk += (duskTarget - this.dusk) * Math.min(1, dt * 0.8)
     this.els.dusk?.setAttribute('opacity', this.dusk.toFixed(3))
+    this.els.night?.setAttribute('opacity', (this.dusk * 0.26).toFixed(3))
+    // The clouds drift slowly to and fro.
+    for (const c of this.clouds) c.el.setAttribute('transform', `translate(${(+c.el.dataset.x! + Math.sin(now * (0.05 + c.i * 0.013) + c.i * 2) * (70 + c.i * 30)).toFixed(1)} ${c.el.dataset.y})`)
     const au = this.els.aurora
     if (au) {
       const kick = Math.max(0, 1 - (now - this.aurora) / 1.5)
@@ -780,7 +810,8 @@ class CoatsWorld {
     const sun = this.els.sun
     if (sun) {
       const k = Math.max(0, 1 - (now - this.sunPulse) / 0.6)
-      sun.setAttribute('transform', `translate(${st.sun[0]} ${st.sun[1]}) rotate(${(now * 8).toFixed(1)}) scale(${(1 + 0.18 * k * Math.sin(k * 9)).toFixed(3)})`)
+      sun.setAttribute('transform', `translate(${st.sun[0]} ${st.sun[1]}) scale(${(1 + 0.18 * k * Math.sin(k * 9)).toFixed(3)})`)
+      this.els['sun-rays']?.setAttribute('transform', `rotate(${(now * 8).toFixed(1)})`)
     }
     if (now - this.owlNoteAt > 3.2 && this.owlNoteAt > 0) {
       this.owlNoteAt = -9
@@ -1203,11 +1234,11 @@ export function SnowCoats({ onDone }: ActivityProps) {
   const big = 6000
   const ids: CoatId[] = section === 'fox' ? ['fox'] : [...COAT_IDS].sort((a, b) => stage.spots[a].y - stage.spots[b].y)
   const g0 = stage.ground
-  // The painted hills keep about the same height on every screen (stretched a little sideways on a very wide one).
-  const hillsH = wide ? 700 : 760
+  // The hills and the ground's bushes are drawn a little smaller on the tall stage, which shows less of them across.
+  const hillsK = wide ? 1 : 0.8
 
   return (
-    <div ref={box} style={{ position: 'absolute', inset: 0, background: SKY[scene.from], overflow: 'clip' }}>
+    <div ref={box} style={{ position: 'absolute', inset: 0, background: SKY[scene.from].top, overflow: 'clip' }}>
       <style>{CSS}</style>
       <svg
         key={run.n}
@@ -1224,10 +1255,6 @@ export function SnowCoats({ onDone }: ActivityProps) {
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', touchAction: 'none', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' }}
       >
         <defs>
-          <linearGradient id={`${mid}-dusk`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#252E5E" />
-            <stop offset="1" stopColor="#7A6AA6" />
-          </linearGradient>
           <linearGradient id={`${mid}-aurora`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#7DFFC8" stopOpacity="0" />
             <stop offset="0.5" stopColor="#7DFFC8" stopOpacity="0.8" />
@@ -1240,16 +1267,21 @@ export function SnowCoats({ onDone }: ActivityProps) {
             <rect data-k="ground-finish" x={-big} y={-200} width={big * 2} height={big} fill={summer ? 'black' : 'white'} opacity={0} />
           </mask>
         </defs>
-        {/* The painted sky and far hills (the season she starts in), and the winter ones over them that come and go
-            with the snow on the ground (settling while she paints the fox, melting in the summer). */}
-        <Backdrop scene={scene.from} vb={vb} g0={g0} h={hillsH} big={big} />
+        {/* The sky and far hills of the season she starts in, and the winter ones over them that come and go with the
+            snow on the ground (settling while she paints the fox, melting in the summer). */}
+        <Backdrop id={mid} land={scene.from} w={stage.w} g0={g0} k={hillsK} big={big} />
         {scene.to && (
           <g data-k="hills-alt" opacity={section === 'summer' ? 1 : 0}>
-            <Backdrop scene={scene.to} vb={vb} g0={g0} h={hillsH} big={big} />
+            <Backdrop id={mid} land={scene.to} w={stage.w} g0={g0} k={hillsK} big={big} />
           </g>
         )}
-        {/* Dusk and the northern lights. */}
-        <rect data-k="dusk" x={-big} y={-big} width={big * 2} height={big + g0} fill={`url(#${mid}-dusk)`} opacity={0} />
+        {/* Dusk: the night sky with its stars, the hills gone dark, and the northern lights. */}
+        {section === 'hide' && (
+          <g data-k="dusk" opacity={0}>
+            <Backdrop id={mid} land="night" w={stage.w} g0={g0} k={hillsK} big={big} clouds={false} />
+            <Stars w={stage.w} g0={g0} />
+          </g>
+        )}
         <g data-k="aurora" opacity={0}>
           {[0, 1, 2].map((i) => (
             <path key={i} d={`M${-200 + i * 120} ${g0 * 0.42 + i * 40} C ${stage.w * 0.25} ${g0 * 0.12 + i * 30}, ${stage.w * 0.55} ${g0 * 0.55 - i * 20}, ${stage.w + 200} ${g0 * 0.2 + i * 50} l 0 ${-140 + i * 20} C ${stage.w * 0.55} ${g0 * 0.35 - i * 20}, ${stage.w * 0.25} ${g0 * -0.05 + i * 30}, ${-200 + i * 120} ${g0 * 0.28 + i * 40} Z`} fill={`url(#${mid}-aurora)`} opacity={0.75 - i * 0.18} />
@@ -1257,34 +1289,29 @@ export function SnowCoats({ onDone }: ActivityProps) {
         </g>
         {summer && (
           <g data-k="sun" transform={`translate(${stage.sun[0]} ${stage.sun[1]})`}>
-            {Array.from({ length: 12 }, (_, i) => (
-              <rect key={i} x={-9} y={-150} width={18} height={44} rx={9} fill="#FFD84D" stroke="#4A3B57" strokeWidth={5} transform={`rotate(${i * 30})`} />
-            ))}
-            <circle r={88} fill="#FFE27A" stroke="#4A3B57" strokeWidth={5} />
+            <Sun id={mid} />
           </g>
         )}
-        {/* The ground: the painted tundra, the painted snow over it under her strokes, flowers where it melted. */}
-        <image href={scene.ground} x={vb.x} y={g0} width={vb.w} height={Math.max(60, vb.y + vb.h - g0)} preserveAspectRatio="xMidYMin slice" />
+        {/* The ground: the tundra, the snow over it under her strokes, flowers where it melted. */}
         <g transform={`translate(${stage.w / 2} ${g0})`}>
+          <Ground look={scene.ground} big={big} k={hillsK} />
           <g mask={`url(#${mid}-ground)`}>
-            <rect x={vb.x - stage.w / 2} y={-6} width={vb.w} height={8} fill={SNOW} />
-            <image href={art.coats.groundSnow} x={vb.x - stage.w / 2} y={0} width={vb.w} height={Math.max(60, vb.y + vb.h - g0)} preserveAspectRatio="xMidYMin slice" />
+            <Ground look="snow" big={big} k={hillsK} />
           </g>
-          <line x1={-big} y1={0} x2={big} y2={0} stroke="#4A3B57" strokeWidth={5} />
           <g data-k="flowers" />
         </g>
         {/* The snowy owl on its rock (summer). */}
         {summer && (
           <g data-k="owl-root" transform={`translate(${stage.owl.x} ${stage.owl.y}) scale(${stage.owl.s})`} style={{ ['--ci' as string]: 'rgb(74,59,87)' }}>
-            <path d="M -110 30 Q -100 -20 -40 -20 L 50 -22 Q 110 -16 112 30 Z" fill="#9C93A8" stroke="#4A3B57" strokeWidth={5 / stage.owl.s} strokeLinejoin="round" />
-            <AnimalEl id="owl" sh={SHAPES.owl} s={stage.owl.s} />
+            <Rock />
+            <AnimalEl id="owl" sh={SHAPES.owl} mid={mid} s={stage.owl.s} />
           </g>
         )}
         {/* The polar bear (hide and seek): white all year, behind the animals. */}
         {section === 'hide' && (
           <>
             <g data-k="bear-root" opacity={0} style={{ ['--ci' as string]: 'rgb(74,59,87)' }}>
-              <AnimalEl id="bear" sh={SHAPES.bear} s={stage.bear.s} />
+              <AnimalEl id="bear" sh={SHAPES.bear} mid={mid} s={stage.bear.s} />
             </g>
             <text data-k="bear-q" opacity={0} fontSize={110} fontWeight={700} textAnchor="middle" fill="#4A3B57" stroke="#fff" strokeWidth={8} paintOrder="stroke" style={{ fontFamily: 'Fredoka, sans-serif' }}>
               ?
@@ -1295,8 +1322,10 @@ export function SnowCoats({ onDone }: ActivityProps) {
         {ids.map((id) => (
           <CoatEl key={id} id={id} mid={mid} base={summer ? 'white' : 'black'} />
         ))}
+        {/* Night falls on the land too (the white coats stay hidden: only their eyes and noses show). */}
+        {section === 'hide' && <rect data-k="night" x={-big} y={-big} width={big * 2} height={big * 2} fill="#2C3170" opacity={0} pointerEvents="none" />}
         {/* Falling snow, pokes, the hint. */}
-        <g fill="#fff" stroke="#A8BCD9" strokeWidth={2} pointerEvents="none">
+        <g fill="#fff" stroke="#B7C8E6" strokeWidth={2} pointerEvents="none">
           {Array.from({ length: FLAKES }, (_, i) => (
             <circle key={i} data-k="flake" r={4 + (i % 4) * 2.2} opacity={0} />
           ))}
@@ -1320,26 +1349,12 @@ export function SnowCoats({ onDone }: ActivityProps) {
   )
 }
 
-type Season = 'late' | 'winter' | 'summer'
-/** The flat sky color of each painted backdrop (sampled from its top), which carries on above the picture. */
-const SKY: Record<Season, string> = { late: '#C6C0D7', winter: '#BAE1FD', summer: '#92D3FD' }
-const HILLS: Record<Season, string> = { late: art.coats.skyLate, winter: art.coats.skyWinter, summer: art.coats.skySummer }
-/** Each part's painted scene: the season she starts in (`from`), the winter one over it that comes and goes with the
- *  snow (`to`), and the tundra under the snow she rubs on and off. */
-const SCENES: Record<CoatsSection, { from: Season; to?: Season; ground: string }> = {
-  fox: { from: 'late', to: 'winter', ground: art.coats.groundLate },
-  hide: { from: 'winter', ground: art.coats.groundLate },
-  summer: { from: 'summer', to: 'winter', ground: art.coats.groundSummer },
-}
-
-/** A painted sky and far hills, standing on the ground line, with its flat sky color carrying on above it. */
-function Backdrop({ scene, vb, g0, h, big }: { scene: Season; vb: { x: number; y: number; w: number; h: number }; g0: number; h: number; big: number }) {
-  return (
-    <>
-      <rect x={-big} y={-big} width={big * 2} height={big + g0} fill={SKY[scene]} />
-      <image href={HILLS[scene]} x={vb.x} y={g0 - h} width={vb.w} height={h + 4} preserveAspectRatio="none" />
-    </>
-  )
+/** Each part's scene: the season she starts in (`from`), the winter one over it that comes and goes with the snow
+ *  (`to`), and the tundra under the snow she rubs on and off. */
+const SCENES: Record<CoatsSection, { from: Season; to?: Season; ground: GroundLook }> = {
+  fox: { from: 'late', to: 'winter', ground: 'late' },
+  hide: { from: 'winter', ground: 'late' },
+  summer: { from: 'summer', to: 'winter', ground: 'summer' },
 }
 
 const CSS = `
