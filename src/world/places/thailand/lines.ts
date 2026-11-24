@@ -1461,34 +1461,38 @@ export const L = {
       monkeys: 'In Lopburi, monkeys live all over town!',
     },
 
-    // Muay Thai (games/boxing/).
+    // Muay Thai (games/boxing/): a bout with Dad.
     boxing: {
-      // The opening, the wai kru: the coach, then Sparkle.
+      // The opening, the bow before a bout: the coach, then Sparkle.
       hello: by('coach')(`Sawasdee krap! First we say thank you.`),
       bow: onDevice('Tap your gloves to bow!', 'Click your gloves to bow!'),
-      // The coach: after the three bows, after rounds 1 and 2, with the gold belt.
-      dance: by('coach')('Now dance with me!'),
+      // The coach: the bell (the referee's "fight!"), the count over a knocked-down Dad, after a round, the gold belt.
+      chok: by('coach')('Chok!'),
+      count: [by('coach')('Nueng!'), by('coach')('Song!'), by('coach')('Saam!')],
       again: by('coach')('Yes! Again!'),
       champion: by('coach')(`Champion!`),
-      // Sparkle: something new (the drum, round 2's gold ring, Dad's pad, the kick).
-      drum: 'Punch to the drum!',
-      gold: "Punch when it's gold!",
-      pad: "Follow Dad's pad!",
+      // Sparkle: something new (how to punch, her gold gloves, Dad's big mitt going up, the kick).
+      punch: onDevice('Tap Dad to punch!', 'Click Dad to punch!'),
+      super: 'Super punch!',
+      glove: 'Punch his big glove!',
       kick: 'Big kick!',
-      // Dad, now and then: a hook or a big POW, the pad going low, into the ropes, up with the pad again.
+      // Dad, now and then: a big hit, her gloves gone gold, his mitt landing on her, popped and dizzy, his guard going
+      // up and down, into the ropes, up again.
       strong: nick('Ooh, strong!'),
       oof: nick(`Oof! Good one!`),
+      uhOh: nick('Uh oh!'),
+      gotcha: nick('Gotcha!'),
+      dizzy: nick("Whoa, I'm dizzy!"),
       upDown: nick('Up high! Down low!'),
       ropes: nick('Whoa-oa-oa!'),
-      hit: nick('Hit the pad!'),
+      more: nick('One more round!'),
       // Sparkle, when the finger shows after a while with nothing touched.
       hint: {
         gloves: onDevice('Tap your gloves!', 'Click your gloves!'),
-        bag: 'Punch the bag!',
-        pad: "Punch Dad's pad!",
+        dad: 'Punch Dad!',
       },
       // The facts: the first time she pokes the coach, and the star board.
-      waiKru: by('coach')('The wai kru dance says thank you to your teacher!'),
+      waiKru: by('coach')('A boxer bows to thank the teacher!'),
       sport: "Muay Thai is Thailand's own sport!",
     },
 

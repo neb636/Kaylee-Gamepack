@@ -21,7 +21,7 @@ export const PX = 1.8
 /** The dress's center front-to-back (body-local z). */
 export const ZC = 0.045
 /** Her arm's angle out from straight down, and how far along it the hoof is. */
-const ARM = 0.818
+export const ARM = 0.818
 export const HOOF = 0.184
 const SMOCK = '#C9B5F7'
 type Parts = BufferGeometry[]
