@@ -1,0 +1,18 @@
+{
+  "title": "Egypt: Miu and Jamal, redrawn",
+  "checkIn": "fix",
+  "kaylee": "Miu the kitten and Jamal the camel are redrawn in the new Nile look: bold line, round shapes, big simple eyes. They move and talk exactly as before.",
+  "questions": ["Miu's whiskers: keep them, or drop them like the hippo's clean face?"],
+  "pictures": [
+    { "title": "Miu", "before": "pics/miu-before.png", "after": "pics/miu-after.png", "caption": "Same kitten, same collar; the hippo's line and eyes" },
+    { "title": "Jamal", "before": "pics/jamal-before.png", "after": "pics/jamal-after.png", "caption": "Chunkier legs, a rounder head, wide friendly eyes (his heavy lids still come down when he chews)" },
+    { "title": "On the felucca", "before": "pics/boat-before.png", "after": "pics/boat-after.png", "caption": "Miu in her boat on the Nile" },
+    { "title": "Their stickers", "after": "pics/stickers-after.png", "caption": "The map's stickers and the show's guests are stills of the new drawings" }
+  ],
+  "reels": [{ "name": "miu-jamal", "moments": ["#/world/egypt/pyramid/row-2~5", "#/world/egypt/market/koshari~6", "nile-steer", "passage-walk"] }],
+  "links": [
+    { "label": "Play Egypt", "hash": "#/world/egypt" },
+    { "label": "Miu in the puppet lab", "hash": "#/world/puppets/miu" },
+    { "label": "Jamal in the puppet lab", "hash": "#/world/puppets/jamal" }
+  ]
+}
