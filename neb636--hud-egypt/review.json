@@ -1,0 +1,16 @@
+{
+  "title": "One set of controls: Egypt",
+  "checkIn": "fix",
+  "kaylee": "Egypt had no buttons of its own to change. The lotus flowers she's scooped now show top right, like the scarabs in the passage, so the bottom right corner stays for the way on.",
+  "questions": [
+    "Keep the lotus and scarab pictures as their own counters, or fold them into the star pill at the top left?"
+  ],
+  "pictures": [
+    { "title": "The Nile: lotus flowers", "before": "pics/before-nile.jpg", "after": "pics/after-nile.jpg", "caption": "Bottom right → top right" },
+    { "title": "The passage: scarabs (unchanged)", "after": "pics/passage.jpg", "caption": "Already top right" }
+  ],
+  "links": [
+    { "label": "The Nile: first sail", "hash": "#/world/egypt/nile/sail-1" },
+    { "label": "The passage: two scarabs", "hash": "#/world/egypt/passage/maze-2" }
+  ]
+}
