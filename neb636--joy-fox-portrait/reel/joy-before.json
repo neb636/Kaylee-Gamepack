@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "joy-before",
+  "title": "Joy before",
+  "video": "joy-before.mp4",
+  "gif": "joy-before.gif",
+  "seconds": 10,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Characters joy",
+      "where": "#/world/characters/joy?spin=1&secs=9",
+      "seconds": 8,
+      "fps": 12,
+      "status": "ok"
+    }
+  ]
+}
