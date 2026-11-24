@@ -33,7 +33,6 @@ import cast from '../cast.json'
 import { L } from '../lines'
 import { ATTENDANT } from '../trip/legs/plane'
 import { OFFICER } from '../trip/legs/airport'
-import type { DadCandidate } from '../characters/dad-candidates'
 
 export type Country = 'thailand' | 'poles' | 'canada'
 /** The country switcher's choices (`all`: everyone, the way the list always was). */
@@ -88,8 +87,6 @@ export interface CastEntry {
   color: string
   /** Entries that are variations of each other share this. */
   set?: string
-  /** Dad 5’s skinned model and Blender wave. */
-  candidate?: DadCandidate
 }
 
 const family: CastEntry[] = [
@@ -100,9 +97,8 @@ const family: CastEntry[] = [
     m.id === 'ji'
       ? { id: m.id, name: m.name, who: 'Your mom, a cream unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'member', voice: 'ji', src: 'characters/mom-model.ts', color: '#FACCA2' }
 
-      : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur, set: m.id === 'nick' ? 'dads' : undefined },
+      : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur },
   ),
-  { id: 'dad-5', name: 'New Dad 5', who: 'Mint unicorn with a Blender wave', group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-candidates.ts', color: '#A9EBD6', set: 'dads', candidate: 'dad-5' },
 ]
 
 const toy = (id: string, name: string, who: string, group: CastGroup, src: string, color: string, voice?: string, set?: string): CastEntry => ({ id, name, who, group, kind: 'critter', toy: id as ToyId, voice, src, color, set })
