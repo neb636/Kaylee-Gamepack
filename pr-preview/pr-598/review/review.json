@@ -1,8 +1,0 @@
-{
-  "title": "Stamp count goes last in the top bar",
-  "checkIn": "fix",
-  "kaylee": "On every country's map, the passport count now sits after the puzzle and video buttons, not wedged between them.",
-  "questions": [],
-  "pictures": [{ "title": "Italy's top bar", "before": "pics/before.png", "after": "pics/after.png", "caption": "The 1/6 pill moves to the end of the row" }],
-  "links": [{ "label": "See it in Italy", "hash": "#/world/italy" }]
-}
