@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Italy: a pizza with a slice coming out</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9de"/><stop offset="1" stop-color="#ffc3a8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <!-- the slice: a wedge to the lower right -->
+    <clipPath id="slice"><path d="M60 61L105.5 71.5A46.5 46.5 0 0 1 81 103Z"/></clipPath>
+    <path id="leaf" d="M0 0C3-6 11-7.5 16-3.5C12 2 4 3.5 0 0Z"/>
+    <!-- the whole pizza: golden crust, red sauce, mozzarella, basil -->
+    <g id="pie">
+      <circle cx="60" cy="62.5" r="41" fill="#d9954a"/>
+      <circle cx="60" cy="60.5" r="41" fill="#f2b765"/>
+      <path d="M24 50C28 37 38 27 51 23" fill="none" stroke="#ffd99a" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="60" cy="61.5" r="33" fill="#e04e5a"/>
+      <circle cx="60" cy="60.5" r="33" fill="#ff6b6b"/>
+      <g fill="#efdccd">
+        <ellipse cx="45" cy="45.5" rx="9" ry="7"/><ellipse cx="72" cy="42.5" rx="8" ry="6.5"/><ellipse cx="40" cy="70.5" rx="8" ry="7"/>
+        <ellipse cx="62" cy="62.5" rx="8.5" ry="7"/><ellipse cx="82" cy="60.5" rx="7" ry="6.5"/><ellipse cx="60" cy="84.5" rx="8" ry="6"/><ellipse cx="77" cy="80" rx="6.5" ry="5.5"/>
+      </g>
+      <g fill="#fff7f0">
+        <ellipse cx="44.5" cy="44.5" rx="9" ry="7"/><ellipse cx="71.5" cy="41.5" rx="8" ry="6.5"/><ellipse cx="39.5" cy="69.5" rx="8" ry="7"/>
+        <ellipse cx="61.5" cy="61.5" rx="8.5" ry="7"/><ellipse cx="81.5" cy="59.5" rx="7" ry="6.5"/><ellipse cx="59.5" cy="83.5" rx="8" ry="6"/><ellipse cx="76.5" cy="79" rx="6.5" ry="5.5"/>
+      </g>
+      <use href="#leaf" transform="translate(52 34) rotate(-20)" fill="#48a96c"/>
+      <use href="#leaf" transform="translate(30 58) rotate(-70)" fill="#73cf86"/>
+      <use href="#leaf" transform="translate(48 78) rotate(15)" fill="#48a96c"/>
+      <use href="#leaf" transform="translate(70 70) rotate(40)" fill="#73cf86"/>
+      <use href="#leaf" transform="translate(74 52) rotate(-35)" fill="#48a96c"/>
+    </g>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+
+  <!-- everything on the board, a little smaller than the picture so the pulled slice stays inside the pin's circle -->
+  <g transform="translate(3 2) scale(0.88)">
+    <!-- the round wooden board -->
+    <circle cx="60" cy="66" r="50" fill="#c99266"/>
+    <circle cx="60" cy="63.5" r="50" fill="#e5b78f"/>
+    <path d="M17 50C22 35 33 23 47 17" fill="none" stroke="#f3d3b2" stroke-width="3" stroke-linecap="round"/>
+
+    <use href="#pie"/>
+    <!-- the gap the slice left, strings of cheese across it, and the slice pulled out -->
+    <path d="M60 61L105.5 71.5A46.5 46.5 0 0 1 81 103Z" fill="#e5b78f" stroke="#e5b78f" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M60 61L105.5 71.5A46.5 46.5 0 0 1 81 103Z" fill="#c99266" opacity="0.35"/>
+    <path d="M79 66L90 77M68 78L78 90M88 69L98 80" fill="none" stroke="#fff7f0" stroke-width="3" stroke-linecap="round"/>
+    <g transform="translate(11 12)"><g clip-path="url(#slice)"><use href="#pie"/></g></g>
+  </g>
+
+  <!-- steam -->
+  <path d="M38 14q4 4 0 8t0 8M54 8q4 4 0 8t0 8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

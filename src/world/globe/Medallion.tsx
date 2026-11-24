@@ -1,24 +1,30 @@
-// A country's pin on the home globe: a round window onto the place (a circle cut from its shelf banner, so a place
-// has one picture everywhere), a ring with one piece per stamp that turns gold as she earns them, its flag, and a
-// gold cup once every stamp is hers.
+// A country's pin on the home globe: a round picture of the one thing she knows the place by (its animal, a pizza,
+// the pyramid), a ring with one piece per stamp that turns gold as she earns them, its flag, and a gold cup once
+// every stamp is hers.
 import { banner } from '../cards'
 import { Flag } from '../kit/Flag'
 import type { PlaceMeta } from '../types'
 
+// The pins' own pictures (pins/<place>.svg, drawn like the shelf's icons: shelf/STYLE.md), and the shelf's icons.
+// Their URLs, never inlined (like cards.ts): they load with the globe and the offline cache keeps them.
+const pins = import.meta.glob<string>('./pins/*.svg', { eager: true, import: 'default', query: '?no-inline' })
+const icons = import.meta.glob<string>('../shelf/icons/*/*.svg', { eager: true, import: 'default', query: '?no-inline' })
+
 /**
- * The part of each place's banner its window shows: the circle's center and radius in the banner's own units
- * (shelf/banners/<banner>.svg, 1200 x 450). Thailand's row on the shelf is split into trips, so it borrows Krabi's.
- * A place with no line here shows the middle of its own banner.
+ * What each place's pin shows: one thing a five-year-old knows at a glance, big (an animal, a pizza, the pyramid).
+ * A circle of a picture: its center and radius in the picture's own units. The picture is the pin's own drawing
+ * (`pin`, 120 wide), one of the shelf's game icons (`icon`, 120 wide) or the place's shelf banner (1200 x 450).
+ * A place with no line here shows the middle of its banner.
  */
-const WINDOWS: Record<string, { banner?: string; x: number; y: number; r: number }> = {
-  australia: { x: 850, y: 240, r: 170 },
-  canada: { x: 540, y: 240, r: 190 },
-  china: { x: 560, y: 240, r: 170 },
-  egypt: { x: 560, y: 215, r: 185 },
-  italy: { x: 590, y: 230, r: 190 },
-  peru: { x: 985, y: 235, r: 185 },
-  poles: { x: 540, y: 235, r: 175 },
-  thailand: { banner: 'krabi', x: 350, y: 252, r: 172 },
+const WINDOWS: Record<string, { pin?: string; icon?: string; x: number; y: number; r: number }> = {
+  australia: { x: 872, y: 244, r: 138 }, // the kangaroo hopping past Uluru
+  canada: { pin: 'canada', x: 60, y: 60, r: 55 }, // a moose in a red scarf (the user's pick for Canada, 2026-11-20)
+  china: { icon: 'china/bamboo', x: 58, y: 61, r: 51 }, // the panda with its bamboo
+  egypt: { x: 560, y: 215, r: 185 }, // the pyramid over the Nile
+  italy: { pin: 'italy', x: 60, y: 60, r: 54 }, // a pizza, a slice coming out
+  peru: { pin: 'peru', x: 57, y: 51, r: 53 }, // Luna the alpaca in the Andes
+  poles: { icon: 'poles/floe', x: 61, y: 57, r: 48 }, // the polar bear cub waving from its ice floe
+  thailand: { pin: 'thailand', x: 60, y: 60, r: 56 }, // an elephant on the beach in Krabi, reaching for bananas
 }
 const MIDDLE = { x: 600, y: 225, r: 200 }
 
@@ -28,14 +34,16 @@ const RING = { r: 45.5, w: 9 }
 const AROUND = 2 * Math.PI * RING.r
 
 export function Medallion({ meta, stamps, sparkly }: { meta: PlaceMeta; stamps: number; sparkly?: boolean }) {
-  const win = WINDOWS[meta.id] ?? MIDDLE
-  const art = banner(win.banner ?? meta.id)
+  const win: (typeof WINDOWS)[string] = WINDOWS[meta.id] ?? MIDDLE
+  const art = win.pin ? pins[`./pins/${win.pin}.svg`] : win.icon ? icons[`../shelf/icons/${win.icon}.svg`] : banner(meta.id)
+  /** How wide the whole picture is, in its own units. */
+  const wide = win.pin || win.icon ? 120 : 1200
   const total = meta.activities.length
   const done = total > 0 && stamps >= total
   // One piece of the ring per stamp, with a sliver of white between them.
   const gap = total > 1 ? 4 : 0
   const piece = AROUND / Math.max(1, total) - gap
-  const zoom = 1200 / (2 * win.r)
+  const zoom = wide / (2 * win.r)
   return (
     <span className={`globe-medal${sparkly ? ' world-glow' : ''}`}>
       <span className="globe-medal-face">

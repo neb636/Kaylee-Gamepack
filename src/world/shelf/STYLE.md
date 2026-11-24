@@ -103,6 +103,19 @@ Start from this template:
 </svg>
 ```
 
+## Pins (one per country, on the home globe)
+
+A country's pin is a round picture of the one thing a five-year-old knows it by, big: its animal (a moose, a panda, an
+elephant), a pizza, the pyramid. A building or a wide view is too quiet at 90 px (user feedback, 2026-11-24).
+`WINDOWS` in `src/world/globe/Medallion.tsx` says what each pin shows: a circle of the pin's own drawing
+(`src/world/globe/pins/<place>.svg`), of one of the icons above, or of the place's banner.
+
+- A pin's own drawing follows the icon rules (`viewBox="0 0 120 120"`, one hero subject), with a little of the place
+  behind it instead of a tile tint (the sea and the rocks of Krabi, the Andes, pines and snowy mountains).
+- The pin is a circle and wears a ring, so the corners are gone: everything that matters stays inside a circle of
+  radius 50 around the centre (the moose's antlers fan up along that edge).
+- Look at it on the globe (`#/world?view=map`), on an iPad and on an iPhone, where the pin is 64 px.
+
 ## Banners (one per place)
 
 `viewBox="0 0 1200 450"` with `preserveAspectRatio="xMidYMid slice"`. The shelf shows it as wide as 4:1 (phones on
@@ -117,7 +130,4 @@ is sky, below is foreground ground or water, and both may be cut.
   boat, an animal, flowers, sparkles).
 - **One landmark or idea** per place, known at a glance (the karst islands and a longtail boat for Krabi), plus two or
   three supporting things. Leave calm areas: it sits behind a title and a row of icons.
-- **A country's banner is also its pin on the home globe**: a circle cut from it (`WINDOWS` in
-  `src/world/globe/Medallion.tsx`: the circle's center and radius in the banner's units). Give a new country its line
-  there, around its landmark and its friend, and look at it on the globe (`#/world?view=map`).
 - Skies: day `#9fd4fa` to `#e4f4ff`; the app's dreamy sky `#a9b4f7` to `#f7d6ee`; dusk `#b7a6f2` to `#ffc9b8`.
