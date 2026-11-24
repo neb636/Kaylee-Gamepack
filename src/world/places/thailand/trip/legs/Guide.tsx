@@ -103,7 +103,7 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
   const who = line ? WHO[lineVoice(line.l)] : undefined
   const narrow = window.innerWidth < 600
   return (
-    <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: hidden ? 'none' : 'flex', alignItems: 'flex-end', gap: 6, zIndex: 33, pointerEvents: 'none', maxWidth: corner && !narrow ? `calc(100% - ${corner.width} - 24px)` : 'calc(100% - 140px - var(--roam-left, 0px) - var(--roam-right, 0px))' }}>
+    <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: hidden ? 'none' : 'flex', alignItems: 'flex-end', gap: 6, zIndex: 33, pointerEvents: 'none', maxWidth: corner && !narrow ? `calc(100% - ${corner.width} - 24px)` : 'calc(100% - 140px - var(--roam-left, 0px))' }}>
       <button
         aria-label="Sparkle"
         onClick={() => {

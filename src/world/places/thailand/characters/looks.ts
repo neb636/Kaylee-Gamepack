@@ -1,7 +1,7 @@
 // How each of Kaylee's family looks as a toy animal: Dad's picks from the lineup (2026-10-17: column A, so kids share
 // their parent's animal); later Dad made Jum a chubby pink elephant and gave the big cousins (Gan, Ken, BB) phones they
 // never look up from. Kaylee and Mom are modelled vinyl toys instead (model.ts, mom-model.ts): Kaylee's entry here is
-// only the size her worn things are made for (buildWorn), and Mom has none. The concepts are in planning/around-the-world/thailand/lineup.webp;
+// only the size her worn things are made for (buildWorn), and Mom has none. The concept lineup is in git history;
 // engine3d/characters/animal.ts builds them in 3D. The vet's patients at HarborLand (a puppy, a pony, a baby elephant) are toy
 // animals too (PATIENT_LOOKS). Pure data (no three.js).
 import type { Look, Wearable } from '../../../engine3d/characters/look'
@@ -47,10 +47,11 @@ export const LOOKS: Record<string, Look> = {
   nick: { species: 'unicorn', height: 1.7, fur: '#A9EBD6', light: '#E2FAF1', dark: '#9C86DA', ear: '#FFB3C7', mane: ['#8EC9F5', '#B9A6F5'], hair: 'short', outfit: { kind: 'polo', color: '#FBE78A' }, open: true },
   agong: { species: 'panda', height: 1.45, fur: '#FFF6EE', light: '#FFFDF8', dark: '#4A3F4F', ear: '#FFB3C7', outfit: { kind: 'shirt', color: '#FFF0DA' }, extras: ['glasses', 'moustache', 'cane'] },
   jum: { species: 'elephant', height: 1.5, chub: 1.25, fur: '#FFB3CF', light: '#FFE3EE', dark: '#F28CB3', ear: '#FF94BC', outfit: { kind: 'blouse', color: '#A7EBD0' }, lashes: true },
-  // Joy and Bird look a little like themselves (Dad's photos, 2026-10-24): Joy's straight brown hair to her shoulders,
-  // parted in the middle, her big smile and her white blouse with a pink lace collar; Bird's short spiky black hair
-  // and his black shirt with orange and red flowers.
-  joy: { ...FOX, height: 1.5, outfit: { kind: 'blouse', color: '#FFF7F3', lace: '#FF9CC0' }, hairdo: { style: 'bob', color: '#7A4636' }, smile: 'teeth', cheeks: 0.8, lashes: true },
+  // Joy and Bird look a little like themselves (the family's photos, 2026-10-24; Joy again 2026-11-23): Joy's long
+  // straight brown hair parted in the middle, with lighter strands round her face, her big smile and her white
+  // pleated blouse with a collar of pink lace roses, on a fox sculpted in more detail (fox.ts); Bird's short spiky
+  // black hair and his black shirt with orange and red flowers.
+  joy: { ...FOX, sculpted: true, height: 1.5, outfit: { kind: 'blouse', color: '#FFF7F3', lace: '#FF9CC0' }, hairdo: { style: 'long', color: '#7A4A38' }, smile: 'teeth', lashes: true },
   gan: { ...FOX, height: 1.32, outfit: { kind: 'tee', color: '#8FC9F5', shorts: '#5D7BB0' }, extras: ['cap', 'phone'] },
   ken: { ...FOX, height: 1.25, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['round-glasses', 'phone'] },
   bird: { ...BUFFALO, height: 1.65, outfit: { kind: 'shirt', color: '#3A3346', print: ['#FF8A3D', '#FF5A6E', '#FFC845'] }, hairdo: { style: 'spiky', color: '#2F2A3A' } },

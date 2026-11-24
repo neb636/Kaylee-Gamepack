@@ -1,4 +1,4 @@
-// Carnival Snowballs (plan: planning/around-the-world/canada.md): a snowy park below Quebec City's castle hotel, at
+// Carnival Snowballs: a snowy park below Quebec City's castle hotel, at
 // the Winter Carnival. The carnival needs snowmen for its parade; Kaylee rolls snowballs that grow, stacks them
 // and dresses them (the first is Tuque, in his red tuque and the carnival's woven sash; the others each get their own
 // hat and scarf: blue, yellow, green, a top hat), and they march off in the parade.
@@ -37,7 +37,7 @@ import type { World3D } from '../../../../engine3d/View3D'
 import { meet } from '../../book/met'
 import { L } from '../../lines'
 import { Carriage, Fox, Geese, honk, Trumpet, whinny, yip } from './critters'
-import { BIG_R, BOX_HALF, CASTLE, CLIFF_Y, CLIMB_R, DRUM, HAT_BOX, HUGE_R, keepIn, lineX, MAPLE_START, MOOSE, PARADE_END_X, PARK, PATH_Z, SASH_BOX, SNOWMAN_RS, START, TREE_R } from './park'
+import { BIG_R, BOX_HALF, CASTLE, CLIFF_Y, CLIMB_R, DRUM, HAT_BOX, HUGE_R, keepIn, LINE_X0, lineX, MAPLE_START, MOOSE, PARADE_END_X, PARK, PATH_Z, SASH_BOX, SNOWMAN_RS, START, TREE_R } from './park'
 import { Maple } from './maple'
 import { Box, buildPark, Drum, LOOKS, makeHat, makeSash, makeScarf, Owl, Sled, SKY, snowShadow, Trail, type Park } from './props'
 import { snowSfx } from './sounds'
@@ -46,28 +46,30 @@ import type { BallSize, SnowmanSection } from './sections'
 import { damp } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/snowman/carnival.ts'
+/** Where she rolls snowballs: the sections these knobs tune. */
+const ROLLING = ['roll', 'stack', 'dress']
 /** Her finger pushing a ball. */
 const PUSH = knobs('snowPush', 'Pushing a snowball', FILE, {
-  follow: { value: 5, min: 1, max: 15, step: 0.25, label: 'Follows her finger', unit: '/s', note: 'how eagerly the ball rolls to her finger (its speed = this × the gap)' },
-  speed: { value: 6, min: 1, max: 12, step: 0.1, label: 'Top speed (little ball)', unit: 'm/s', note: 'the fastest a fresh little ball rolls' },
+  follow: { value: 5, min: 1, max: 15, step: 0.25, label: 'Follows her finger', unit: '/s', note: 'how eagerly the ball rolls to her finger (its speed = this × the gap)', main: true },
+  speed: { value: 6, min: 1, max: 12, step: 0.1, label: 'Top speed (little ball)', unit: 'm/s', note: 'the fastest a fresh little ball rolls', main: true },
   heavy: { value: 0.55, min: 0, max: 1.5, step: 0.05, label: 'Big balls are slower', note: '0 = every ball as fast; 1 = twice as big, half as fast' },
   grip: { value: 9, min: 1, max: 30, step: 0.5, label: 'Grip', unit: '/s', note: 'how quickly the ball takes up her finger’s speed (low = it lags behind and swings)' },
   coast: { value: 2.4, min: 0.3, max: 8, step: 0.1, label: 'Rolls on after letting go', unit: '/s', note: 'how fast a ball she let go of slows down (lower = rolls further)' },
-  grab: { value: 56, min: 0, max: 160, step: 2, label: 'Grab around the ball', unit: 'px', note: 'a finger this far outside the ball’s edge still grabs it' },
-})
+  grab: { value: 56, min: 0, max: 160, step: 2, label: 'Grab around the ball', unit: 'px', note: 'a finger this far outside the ball’s edge still grabs it', main: true },
+}, { sections: ROLLING })
 /** The ball growing as it rolls. */
 const GROW = knobs('snowGrow', 'Growing', FILE, {
-  rate: { value: 0.06, min: 0.005, max: 0.2, step: 0.005, label: 'Grows', unit: 'm per m', note: 'how much a little ball’s radius grows for every meter it rolls' },
+  rate: { value: 0.06, min: 0.005, max: 0.2, step: 0.005, label: 'Grows', unit: 'm per m', note: 'how much a little ball’s radius grows for every meter it rolls', main: true },
   slow: { value: 0.7, min: 0, max: 2, step: 0.05, label: 'Big ones grow slower', note: '0 = always the same; 1 = twice as big, half the growth' },
   fresh: { value: 0.3, min: 0.15, max: 0.6, step: 0.01, label: 'A new ball', unit: 'm', note: 'the radius of a ball she or Maple pats together' },
   max: { value: 1.75, min: 0.8, max: 3, step: 0.05, label: 'Biggest', unit: 'm', note: 'no ball grows past this radius' },
   squish: { value: 0.12, min: 0, max: 0.3, step: 0.01, label: 'Big ones squish', note: 'how much the biggest balls squash down' },
-})
+}, { sections: ROLLING })
 /** Rolling a ball into a box. */
 const AIM = knobs('snowAim', 'Into the box', FILE, {
-  reach: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'Help from', unit: 'm', note: 'a ball rolling toward a box this close is drawn in' },
-  pull: { value: 7, min: 0, max: 20, step: 0.5, label: 'Help', unit: 'm/s²', note: 'how hard it’s drawn toward the box' },
-})
+  reach: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'Help from', unit: 'm', note: 'a ball rolling toward a box this close is drawn in', main: true },
+  pull: { value: 7, min: 0, max: 20, step: 0.5, label: 'Help', unit: 'm/s²', note: 'how hard it’s drawn toward the box', main: true },
+}, { sections: ['dress'] })
 
 export interface SnowStart {
   section: SnowmanSection
@@ -1092,6 +1094,11 @@ export class CarnivalSnowballs implements World3D {
   // ---------------------------------------------------------------- dressing
 
   /** Does a snowman still need this? */
+  /** Everyone made is dressed and in the line, so the drum is next (the hint points at it, the camera shows it). */
+  private get drumTime() {
+    return this.paradeT < 0 && this.lines > 0 && this.drum.root.visible && !this.piles.some((p) => p.state === 'done' || p.state === 'walk' || p.state === 'hop')
+  }
+
   private needs(kind: 'hat' | 'sash') {
     return this.piles.some((p) => p.state === 'done' && p.wakeT < 0 && !(kind === 'hat' ? p.hat : p.sash) && !this.flights.some((f) => f.to === p && f.kind === kind))
   }
@@ -1632,6 +1639,13 @@ export class CarnivalSnowballs implements World3D {
       const mx = m.length ? m.reduce((a, p) => a + p.x, 0) / m.length : 0
       return { center: new Vector3(clamp(mx, -6, 6), 2.8, PATH_Z), half: tall ? new Vector3(4.8, 3.6, 3) : new Vector3(8, 3.2, 2.6), yaw: 0, pitch: 9 }
     }
+    if ((this.section === 'dress' || this.section === 'parade') && !this.grab && !this.flights.length && this.drumTime) {
+      // The drum's turn: it stands at the path's right end, out past the sash box, so bring it in with the front of the
+      // line (a tall phone is too narrow for both the hat box and the drum, so there it's the drum and the trumpet).
+      return tall
+        ? { center: new Vector3(DRUM.x - 3.2, 1.6, (DRUM.z + PATH_Z) / 2 + 1), half: new Vector3(4.2, 2.4, 3.2), yaw: 0, pitch: 34 }
+        : { center: new Vector3((DRUM.x + LINE_X0) / 2, 1.6, (DRUM.z + PATH_Z) / 2 + 1), half: new Vector3(7.8, 2.2, 3.2), yaw: 0, pitch: 32 }
+    }
     if (this.section === 'dress') {
       // Wide enough for the boxes, the snowman she's dressing and the line behind.
       const cx = f.x * 0.45
@@ -1906,7 +1920,7 @@ export class CarnivalSnowballs implements World3D {
       const loose = this.loose
       const ball = loose.reduce<Pile | null>((a, b) => (!a || b.balls[0].r < a.balls[0].r ? b : a), null)
       const box = this.needs('hat') ? this.hatBox : this.needs('sash') ? this.sashBox : null
-      if (this.lines && this.drum.root.visible && !box && !this.piles.some((p) => p.state === 'done' || p.state === 'walk')) {
+      if (this.drumTime && !box) {
         // Everyone's dressed: the drum.
         from = tmp.set(DRUM.x, 1.6, DRUM.z)
         press = true

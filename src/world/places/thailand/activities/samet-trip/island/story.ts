@@ -1,4 +1,4 @@
-// The Lost Fireflies on the island (samet-story.md; docs/films.md, how films work). This file owns what the story adds
+// The Lost Fireflies on the island (samet-story.md in git history; docs/films.md, how films work). This file owns what the story adds
 // to the island between the stops:
 //
 //   the way in (film `intro`, island?story=intro): the family steps off the speedboat at Na Dan pier; Tofu the beach

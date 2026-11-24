@@ -1,4 +1,4 @@
-// The fire show on Hat Sai Kaew at night (planning/around-the-world/thailand/samet-story.md: the story's payoff; the
+// The fire show on Hat Sai Kaew at night (samet-story.md in git history: the story's payoff; the
 // first plan: samet-trip.md (retired; in git history), step 9), on the island's real beach (island/layout.ts BAY) by the lanterns, after the
 // sunset at Ao Prao (sunset.ts).
 //
@@ -63,52 +63,54 @@ import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/finale/fireshow.ts'
 const S = LINES.samet.finale.fire
+/** The section its knobs show in (the feel lab). */
+const FIRE_SHOW = ['fireshow']
 const POI = knobs('firePoi', 'Twirling the glowing poi', FILE, {
-  follow: { value: 14, min: 2, max: 40, step: 0.5, label: 'The poi follow her finger', unit: '/s', note: 'higher = right under her finger, lower = it swings after it' },
+  follow: { value: 14, min: 2, max: 40, step: 0.5, label: 'The poi follow her finger', unit: '/s', note: 'higher = right under her finger, lower = it swings after it', main: true },
   lag: { value: 0.14, min: 0.02, max: 0.5, step: 0.01, label: 'The second poi chases at', unit: 's', note: 'how far behind the first one it follows the same path' },
   life: { value: 1.4, min: 0.3, max: 4, step: 0.05, label: 'Ribbons hang for', unit: 's' },
   width: { value: 0.14, min: 0.04, max: 0.4, step: 0.01, label: 'Ribbon width', unit: 'm' },
-  reachW: { value: 2.6, min: 1, max: 5, step: 0.1, label: 'She reaches out to the side', unit: 'm', note: 'how far left and right of her the poi can go' },
+  reachW: { value: 2.6, min: 1, max: 5, step: 0.1, label: 'She reaches out to the side', unit: 'm', note: 'how far left and right of her the poi can go', main: true },
   reachH: { value: 2.4, min: 1, max: 4, step: 0.1, label: '…and up', unit: 'm', note: 'above her drawing middle' },
   idle: { value: 4.5, min: 0, max: 12, step: 0.25, label: 'Finger up: they swing round at', unit: 'rad/s' },
-  loopR: { value: 0.3, min: 0.1, max: 1.2, step: 0.05, label: 'A loop counts from', unit: 'm', note: 'the smallest circle that counts as a loop (a whoosh, the dancers answer)' },
+  loopR: { value: 0.3, min: 0.1, max: 1.2, step: 0.05, label: 'A loop counts from', unit: 'm', note: 'the smallest circle that counts as a loop (a whoosh, the dancers answer)', main: true },
   hum: { value: 1.2, min: 0, max: 6, step: 0.1, label: 'Their whoosh-roar from', unit: 'm/s', note: 'the poi moving faster than this: the held whoosh (louder and higher the faster)' },
-})
+}, { sections: FIRE_SHOW })
 const COPY = knobs('fireCopy', 'The dancers copy her', FILE, {
   speed: { value: 1, min: 0.2, max: 2.5, step: 0.05, label: 'They spin at her speed ×' },
   min: { value: 4, min: 1, max: 10, step: 0.25, label: 'Slowest spin', unit: 'rad/s' },
   max: { value: 16, min: 6, max: 30, step: 0.5, label: 'Fastest spin', unit: 'rad/s' },
-  bigR: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: 'A ring of fire from', unit: 'm', note: 'a loop of hers this big: they swing one big ring of fire' },
+  bigR: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: 'A ring of fire from', unit: 'm', note: 'a loop of hers this big: they swing one big ring of fire', main: true },
   catchUp: { value: 3, min: 0.5, max: 10, step: 0.25, label: 'They catch up', unit: '/s' },
   bpm: { value: 104, min: 60, max: 160, step: 2, label: 'The drum', unit: 'bpm' },
-})
+}, { sections: FIRE_SHOW })
 const SHAPE = knobs('fireShape', 'Shapes in the sky', FILE, {
   fill: { value: 0.4, min: 0.15, max: 0.5, step: 0.01, label: 'Her shape on screen', note: 'half its width, × the screen’s narrow side: up in the sky above the family, as big as fits there' },
   gap: { value: 22, min: 0, max: 80, step: 2, label: '…clear of their heads by', unit: 'px' },
   size: { value: 1.1, min: 0.5, max: 2, step: 0.05, label: 'Her shape’s smallest size', unit: 'm', note: 'half the width of the dots she draws over, when the screen has little room' },
-  tol: { value: 0.3, min: 0.1, max: 0.8, step: 0.02, label: 'A dot lights within', unit: 'm', note: 'at the smallest size; it grows with the shape' },
+  tol: { value: 0.3, min: 0.1, max: 0.8, step: 0.02, label: 'A dot lights within', unit: 'm', note: 'at the smallest size; it grows with the shape', main: true },
   dot: { value: 1.3, min: 0.5, max: 3, step: 0.1, label: 'Dot size ×' },
   need: { value: 0.75, min: 0.3, max: 1, step: 0.05, label: 'Done when lit', note: 'of the dots' },
   stuck: { value: 7, min: 3, max: 20, step: 0.5, label: 'Stuck after', unit: 's', note: 'no new dot this long: the dots count from further away (+30%) and the finger draws it' },
   show: { value: 2.2, min: 0.8, max: 5, step: 0.1, label: 'The dancers draw it in', unit: 's' },
-})
+}, { sections: FIRE_SHOW })
 const BIG = knobs('fireBig', 'The big finish', FILE, {
   r: { value: 1.7, min: 1, max: 3, step: 0.05, label: 'The big ring', unit: 'm' },
-  need: { value: 0.55, min: 0.2, max: 1, step: 0.05, label: 'Her loop counts from', note: '× the big ring' },
+  need: { value: 0.55, min: 0.2, max: 1, step: 0.05, label: 'Her loop counts from', note: '× the big ring', main: true },
   flames: { value: 2.6, min: 0.8, max: 6, step: 0.1, label: 'The ring of fire lights in', unit: 's' },
   pop: { value: 0.75, min: 0.25, max: 3, step: 0.05, label: 'A firework every', unit: 's' },
-})
+}, { sections: FIRE_SHOW })
 const LOOK = knobs('fireLook', 'The night of the fire show', FILE, {
   dark: { value: 1, min: 0, max: 1, step: 0.05, label: 'How dark the beach is', note: '0 = the island’s usual night, 1 = dark for the fire (the ribbons and the flames glow)' },
   firelight: { value: 1, min: 0, max: 2, step: 0.05, label: 'Firelight on the sand ×' },
   flame: { value: 1, min: 0.5, max: 2, step: 0.05, label: 'Flame size ×' },
   chain: { value: 1, min: 0, max: 1, step: 1, label: 'Chains on the fire poi', note: '1 = on' },
-})
+}, { sections: FIRE_SHOW })
 const CAM = knobs('fireCam', 'The fire show camera', FILE, {
   pitch: { value: 11, min: 0, max: 40, step: 1, label: 'Looks down', unit: '°' },
   box: { value: 6.2, min: 3, max: 14, step: 0.1, label: 'Shows across', unit: 'm', note: 'half the width of beach across the screen' },
   tallBox: { value: 4.6, min: 2, max: 10, step: 0.1, label: '…on a tall screen', unit: 'm' },
-})
+}, { sections: FIRE_SHOW })
 
 /** The rounds she plays, and with the two films either side of them (sections.ts FIRE_ROUNDS): `story` is the way in,
  *  `thanks` the dancers' bow and the fireflies' heart after the fireworks. */

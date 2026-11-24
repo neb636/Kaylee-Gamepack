@@ -4,14 +4,14 @@
 // (trunk.ts), whose root rides under the face. Small tusks on Mali only; a tuft of hair on Khanom; Lamyai, in between
 // in size, has pinker ears. They can walk (a heavy, swaying bob: Lamyai wandering over) and Khanom can get a chocolate
 // moustache on the tip of his trunk. Faces +z, the family.
-import { Group, Vector3 } from 'three'
+import { Group, Vector3, type Object3D } from 'three'
 import { clamp } from '../../../../../../sdk'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import { CHANG_FEEL } from './feel'
 import { floorAt, type ElephantSpot } from './layout'
-import { drawTrunk, makeTrunk, stepTrunk, type Trunk } from './trunk'
+import { drawTrunk, makeTrunk, stepTrunk, type Floor, type Trunk } from './trunk'
 
 // A warm elephant grey (lavender only in the toon shadows), and the pink freckles Asian elephants get on the face,
 // the trunk's root and the ears' edges as they grow up (Mali has the most, Khanom hardly any yet).
@@ -59,9 +59,12 @@ export class Elephant {
   /** Where the ears are in their fan (advanced each frame, so a change of speed never jumps). */
   private earPhase = 0
 
+  /** `o.space`: solve the trunk in this object's space instead of the world's (the character lab puts it on a
+   *  turntable); `o.floor`: what the trunk rests on (the yard's rail and boulders). */
   constructor(
     bag: Bag,
     readonly spot: ElephantSpot,
+    private o: { space?: Object3D; floor?: Floor } = {},
   ) {
     this.id = spot.id
     const c = LOOK[spot.id]
@@ -250,7 +253,9 @@ export class Elephant {
     if (this.blink < -0.13) this.blink = 1.8 + Math.random() * 3.5
     this.eyes.scale.y = this.blink < 0 ? 0.12 : 1
     // The trunk, from under the face.
-    stepTrunk(this.trunk, this.trunkRoot(tmp), target, chase, dt, CHANG_FEEL.droop, floorAt)
+    const base = this.trunkRoot(tmp)
+    if (this.o.space) this.o.space.worldToLocal(base)
+    stepTrunk(this.trunk, base, target, chase, dt, CHANG_FEEL.droop, this.o.floor ?? floorAt)
     drawTrunk(this.trunk)
   }
 }

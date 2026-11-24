@@ -1,4 +1,4 @@
-// The Longest Night, the Poles' new ending (planning/around-the-world/poles-ending.md): the last chapter of Pebble's
+// The Longest Night, the Poles' new ending (poles-ending.md in git history): the last chapter of Pebble's
 // story, one chapter in three acts and a goodbye, with a film between each (story/nightFilms.ts, on the film stage):
 //   🎬 night-in       time to fly: Mama's goodbye, Nari can't come, Papa waits in the long night
 //   🎈 fly            Act 1, Hold to Fly (fly.ts): she flies the balloon down the world

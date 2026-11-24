@@ -23,6 +23,8 @@ export function acquireRenderer(): WebGLRenderer {
   renderer.outputColorSpace = SRGBColorSpace
   renderer.toneMapping = NoToneMapping
   renderer.debug.checkShaderErrors = import.meta.env.DEV
+  // (Materials with their own clippingPlanes, like the lake reflections in canada/activities/canoe, cut themselves off.)
+  renderer.localClippingEnabled = true
   canvas.style.cssText = 'display:block;width:100%;height:100%;touch-action:none;-webkit-tap-highlight-color:transparent;outline:none'
   shared = { renderer, users: 1 }
   return renderer

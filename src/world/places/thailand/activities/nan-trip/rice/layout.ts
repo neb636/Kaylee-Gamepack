@@ -1,4 +1,4 @@
-// Kaylee's little rice farm at Sapan (plan: planning/around-the-world/thailand/nan-rice.md), in meters: the four
+// Kaylee's little rice farm at Sapan (plan: nan-rice.md in git history), in meters: the four
 // paddies, their rice hills, the channel and its gates, the step up to the back pair, where everyone stands, the props,
 // and Stop Time Cafe's deck up on the hill behind. Pure data (no three.js): sections.ts reads it at startup.
 //

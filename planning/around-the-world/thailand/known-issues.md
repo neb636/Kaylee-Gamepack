@@ -22,11 +22,6 @@ Code paths are under `src/world/places/thailand/`.
   - Check: `#/world/thailand/boat-trip/cave`, tap Dad, then Mom.
   - Code: `activities/boat-trip/bay/cave.ts` (`lieDown`), `bay/poses.ts`.
   - Fix: ease into it (lean back, settle) like the hops do.
-- [x] **Some of Sparkle's album facts are long (4–5 s).** She's five: keep them under about 3 s. *(Step 5: shortened, now
-  2.5–3.5 s in her slow voice; they're on the stamp screen and the passport too. Listen on the iPad.)*
-  - Check: open the 📔 album at `#/world/thailand/boat-trip/nail?stops=village,cave&photos=village,hong&found=crab,eagle,needlefish`
-    and tap each sticker and photo.
-  - Code: `lines.ts` (the `L.bay` facts). Regenerate the clips after editing (`node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`).
 - [ ] **In the village, the cave's and the beach's glows sit under the village's own tap targets.** A tap on the glow
   can land on a house or the ball instead of setting the boat off (step 5's timing robot got stuck there). Driving with a
   finger still works, and the badges at the screen's edge work when the glow is off screen.
@@ -43,20 +38,11 @@ Code paths are under `src/world/places/thailand/`.
 
 ## The boat trip: the way there (step 4, PR #103)
 
-- [x] **The goodbye's name pills crowd each other.** With the whole family at the shutter, the house's name pills
-  overlapped. *(Step 5: the trip shows no name pills (the goodbye and coming home); the guide's bubble says who's
-  talking. The house itself keeps them.)*
-  - Check: `#/world/thailand/boat-trip/goodbye`.
-  - Code: `activities/boat-trip/BoatTrip.tsx` (`ANCHORS_OF.house`).
 - [ ] **In the cabin Kaylee sits toward the left edge.** Mom is the middle of the shot, and Dad has to stay in frame
   because tapping him is a toy.
   - Check: `#/world/thailand/boat-trip/fly` on the iPad held upright and sideways.
   - Code: `trip/legs/plane.ts` (`shot`, the cabin's camera in the aisle).
   - Ideas: aim the shot between Kaylee and Mom and let Dad's shoulder and face sit at the edge.
-- [x] **While Mom asks, only Mom and Kaylee react to taps.** *(Step 5: everyone else in her room hops, and things
-  wobble with their sound; Kaylee still stays put until she answers.)*
-  - Check: `#/world/thailand/boat-trip/invite`, tap Gan, the fan, the mattress.
-  - Code: `trip/legs/house-plugin.ts` (`tap`, the `invite` phase).
 - [ ] **On an iPhone held upright, Aunty Sri's van is cut off at the side** when it pulls up for the goodbye (step 5's
   layout QA). The iPad is fine.
   - Check: `#/world/thailand/boat-trip/van` at iPhone portrait size.
@@ -156,9 +142,6 @@ pictures move her), the night screen shooting before the fire dancers fade in (`
 ## Mom as the vinyl toy (2026-11-14)
 Swapped in everywhere and checked scene by scene with `scripts/qa-mom.mjs` (every section, plus the moments that need
 taps). Small things left:
-- [x] **Her size:** she stands as tall as Dad now (`MOM_SIZE` 1.85: her horn tip level with his; at 1.55 she was
-  barely taller than Kaylee). At a car's wheel her hooves go on the wheel (`Member.drive`), since her wide-hanging arms
-  went out through the driver's door at this size; the Pajero's cushion is gone.
 - [ ] On the Samet speedboat's wide shot, Kaylee's straw hat can hide her face for a moment.
 - [ ] **The Nan trip's ride home:** in the open-sided truck one hoof rests on the window edge.
   - Check: `#/world/thailand/samet-trip/speedboat`
@@ -171,7 +154,6 @@ taps). Small things left:
   "wai kru" heard as "Y crew", and "Phi Ta Khon" as "Fi ta'kan". Listen in the vet, the barber, the hall's staff, the
   Muay Thai warm-up and the Big Frame's mask.
 
-- [x] **The village kids’ player-name pronunciation issue was superseded** (2026-11-11): their lines are now "The ball!" and "Khob khun ka!", with no player name. The PR recording job supplies the replacement clips.
 - [ ] **Dad's "Pai!"** The transcription check heard it as Chinese (派). Listen for whether it sounds like the Thai word.
   - Check: `#/world/thailand/boat-trip/pier`, tie three ribbons and the garland, then drive off.
 - [ ] **Lip sync and sound in the bay overall.** The engine putt-putt to RRRAAAH, the echoes in the cave, the

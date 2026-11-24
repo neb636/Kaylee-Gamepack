@@ -5,8 +5,9 @@ import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
 // and Rosa's Rainy River. The balloon finale (route `party`) isn't built yet: it shows `BalloonSoon`.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
-import { BigButton, firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle, useTimers } from '../../../sdk'
+import { firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle, useTimers } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
+import { HudButton } from '../../kit/Hud'
 import { useStampFlow, type ActivityProps } from '../../kit/stampFlow'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
@@ -273,15 +274,13 @@ function BalloonSoon({ backToMap }: { backToMap: () => void }) {
     return () => clearTimeout(t)
   }, [])
   return (
-    <div style={{ position: 'absolute', inset: 0, background: `url(${art.bgAndes}) center / cover`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px calc(var(--safe-bottom) + 28px)' }}>
+    <div style={{ position: 'absolute', inset: 0, background: `url(${art.bgAndes}) center / cover`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px calc(var(--safe-bottom) + var(--target) + 32px)' }}>
       <div style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>🎈 {L.balloonSoon}</div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(20px, 3vw)' }}>
         <SparklePuppet ref={sparkle} height="min(300px, 34vh, 40vw)" lookToward={0.5} />
         <Alpaca ref={luna} kind="luna" height="min(300px, 34vh, 40vw)" onTap={() => void luna.current?.play('giggle')} label="Luna" />
       </div>
-      <BigButton onClick={backToMap} ariaLabel="Return to Peru">
-        🦙 ▶
-      </BigButton>
+      <HudButton role="go" icon="map" label="Return to Peru" slot="bottom-right" pulse delay={1} onClick={backToMap} />
     </div>
   )
 }

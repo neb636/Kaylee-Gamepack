@@ -27,6 +27,7 @@ One line each; the header comment at the top of every script says how to run it.
 | `qa-perf.mjs` | How hard each heavy 3D section works: draw calls, triangles, GPU bytes, late shader compiles |
 | `qa-sparkle.mjs` | Sparkle's Safari review and her reference pose exports (`--export-reference`) |
 | `qa-posthog.mjs` | The play-diary events, without sending anything to PostHog (CI) |
+| `qa-oddities.mjs` (+ `oddities/`) | Opt-in: Jev (TypeSafe) boxes 3D oddities in the screenshots (sunk into the ground, a pale water edge, detached props, ghost rings); `--eval` scores it on known bugs. Paid API, cents a run, $0.75 cap; only when asked |
 
 ## Review tools (the `ship`, `reel` and `table-read` skills)
 

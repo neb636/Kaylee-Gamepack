@@ -13,7 +13,7 @@ import { clamp } from '../../sdk'
 import type { Roam, Shot } from './camera'
 import type { Bag } from './dispose'
 import { merge, P, solid } from './geo'
-import { knobs } from '../kit/knobs'
+import { knobs, type KnobScope } from '../kit/knobs'
 
 /** The sky behind the board: soft blue up top, pink down low. */
 export function skyTexture(bag: Bag) {
@@ -89,8 +89,9 @@ export function boardShot(box: { center: Vector3; half: Vector3 }, yaw: number, 
   return { center: box.center.clone(), half: box.half.clone().multiplyScalar(zoom), yaw, pitch, objectFit: 'contain', roam: MAP_ROAM, ...more }
 }
 
-/** A map camera's entrance knobs (the feel lab, ?feel=1): each map tunes its own. */
-export function mapCamKnobs(id: string, label: string, file: string, at: { yaw?: number; pitch?: number; zoom?: number } = {}) {
+/** A map camera's entrance knobs (the feel lab, ?feel=1): each map tunes its own. They show in the map's section
+ *  (`map` unless the scope says otherwise). */
+export function mapCamKnobs(id: string, label: string, file: string, at: { yaw?: number; pitch?: number; zoom?: number } = {}, scope: KnobScope = { sections: ['map'] }) {
   return knobs(id, label, file, {
     yaw: { value: at.yaw ?? 8, min: -40, max: 40, step: 1, label: 'Turn', unit: '°', note: 'added to the board view, side to side (it does not animate)' },
     pitch: { value: at.pitch ?? -12, min: -30, max: 20, step: 1, label: 'Settle tilt', unit: '°', note: 'where the entrance ends: below 0 looks from lower down' },
@@ -99,7 +100,7 @@ export function mapCamKnobs(id: string, label: string, file: string, at: { yaw?:
     hold: { value: 0, min: 0, max: 1.5, step: 0.05, label: 'Entrance wait', unit: 's', note: 'a still beat before the camera starts moving' },
     cover: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Cover', unit: 's', note: 'how long the camera moves behind the loading screen (first frames hitch) before it fades' },
     fade: { value: 0.3, min: 0.05, max: 1.2, step: 0.05, label: 'Cover fade', unit: 's', note: 'how fast the loading screen fades into the moving map' },
-  })
+  }, scope)
 }
 export type MapCam = ReturnType<typeof mapCamKnobs>
 

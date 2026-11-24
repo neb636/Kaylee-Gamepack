@@ -1,4 +1,4 @@
-// Snorkeling at Ko Kudi (the trip's story: planning/around-the-world/thailand/samet-story.md), its own little world
+// Snorkeling at Ko Kudi (the trip's story: samet-story.md in git history), its own little world
 // out at the reef the snorkel boat goes to from Ao Wong Duan. Bubbles the blue firefly is here: last night's wind
 // dropped her in the sea, and she is in an air bubble down on the reef, the cuttlefish hugging it (story.ts).
 //
@@ -58,31 +58,33 @@ import { Bubbles, CUTTLE_SIZE, foundFilm, HOLD_M, introFilm, type Stage } from '
 import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/snorkel/snorkel.ts'
+/** The section its knobs show in (the feel lab). */
+const SNORKELING = ['snorkel']
 /** Her swimming. */
 const SWIM = knobs('snorkelSwim', 'Swimming (her finger leads her)', FILE, {
-  slow: { value: 1.3, min: 0.2, max: 3, step: 0.05, label: 'Paddles at', unit: 'm/s', note: 'her finger just ahead of her' },
-  fast: { value: 3.4, min: 0.8, max: 6, step: 0.05, label: 'Kicks fast at', unit: 'm/s', note: 'her finger far ahead' },
+  slow: { value: 1.3, min: 0.2, max: 3, step: 0.05, label: 'Paddles at', unit: 'm/s', note: 'her finger just ahead of her', main: true },
+  fast: { value: 3.4, min: 0.8, max: 6, step: 0.05, label: 'Kicks fast at', unit: 'm/s', note: 'her finger far ahead', main: true },
   near: { value: 0.6, min: 0, max: 3, step: 0.05, label: 'Finger this close: she floats', unit: 'm', note: 'a dead zone round her' },
   far: { value: 6, min: 1, max: 15, step: 0.1, label: 'Full speed from', unit: 'm', note: 'how far ahead her finger must point for the fast kick' },
   under: { value: 1, min: 0.2, max: 2.6, step: 0.05, label: 'Under the line, her finger points', unit: 'm deep', note: 'a finger in the underwater part points at this depth (where the fish swim): on a fish = swim to it' },
-  accel: { value: 2.6, min: 0.5, max: 10, step: 0.1, label: 'Gets going', unit: '/s', note: 'how quickly she reaches the speed her finger asks' },
+  accel: { value: 2.6, min: 0.5, max: 10, step: 0.1, label: 'Gets going', unit: '/s', note: 'how quickly she reaches the speed her finger asks', main: true },
   glide: { value: 0.9, min: 0.1, max: 5, step: 0.05, label: 'Glides to a stop', unit: '/s', note: 'the water slowing her when her finger lets go (lower = longer glide)' },
-  turn: { value: 5, min: 1, max: 15, step: 0.5, label: 'Turns', unit: '/s' },
+  turn: { value: 5, min: 1, max: 15, step: 0.5, label: 'Turns', unit: '/s', main: true },
   kick: { value: 1.5, min: 0.5, max: 3, step: 0.05, label: 'Kicks per speed', unit: '×', note: 'how fast her legs go for how fast she swims' },
   body: { value: 0.45, min: 0.2, max: 0.9, step: 0.01, label: 'Bumps from', unit: 'm', note: 'her size for bumping into the coral and the rocks' },
   reach: { value: 0.85, min: 0.3, max: 1.5, step: 0.01, label: 'Keeps off the boat by', unit: 'm', note: 'her arms and floaties reach out sideways: the hull stays this far from her middle' },
   boing: { value: 3.2, min: 1, max: 7, step: 0.1, label: 'An urchin boings her', unit: 'm/s' },
   bump: { value: 1.6, min: 1, max: 2.5, step: 0.05, label: 'Coral bounces her', unit: '×', note: '1 = she just stops, 2 = she bounces straight back' },
   float: { value: -0.12, min: -0.5, max: 0.1, step: 0.01, label: 'Floats at', unit: 'm', note: 'her middle, against the surface' },
-})
+}, { sections: SNORKELING })
 /** The fish. */
 const FISH = knobs('snorkelFish', 'The fish', FILE, {
-  part: { value: 1.5, min: 0.4, max: 3, step: 0.05, label: 'Damselfish part from her', unit: 'm' },
+  part: { value: 1.5, min: 0.4, max: 3, step: 0.05, label: 'Damselfish part from her', unit: 'm', main: true },
   push: { value: 3.2, min: 0.5, max: 8, step: 0.1, label: '…this fast', unit: 'm/s' },
   swirl: { value: 1.0, min: 0, max: 3, step: 0.05, label: 'The crowd swirls', unit: 'm/s' },
   size: { value: 1.8, min: 0.8, max: 5, step: 0.1, label: 'The crowd is', unit: 'm wide' },
   keep: { value: 1.3, min: 0.2, max: 4, step: 0.05, label: 'The crowd keeps up', unit: '/s', note: 'how closely the crowd follows her (low = it trails behind)' },
-  speed: { value: 2.6, min: 0.5, max: 4, step: 0.05, label: 'The parrotfish swims', unit: 'm/s' },
+  speed: { value: 2.6, min: 0.5, max: 4, step: 0.05, label: 'The parrotfish swims', unit: 'm/s', main: true },
   near: { value: 5, min: 1, max: 8, step: 0.1, label: '…on when she’s within', unit: 'm', note: 'closer than this and it swims on to its next spot; further and it waits' },
   waitFor: { value: 2.5, min: 1, max: 20, step: 0.5, label: '…comes back to fetch her after', unit: 's', note: 'waiting this long without her coming closer' },
   back: { value: 11, min: 5, max: 25, step: 0.5, label: '…comes back for her past', unit: 'm' },
@@ -92,7 +94,7 @@ const FISH = knobs('snorkelFish', 'The fish', FILE, {
   shy: { value: 0, min: 0, max: 2, step: 0.05, label: 'The last time it backs away at', unit: 'm/s', note: 'slower than her paddle, so she catches it' },
   glint: { value: 5, min: 4, max: 60, step: 1, label: 'Stuck: it glints after', unit: 's', note: 'a rainbow flash where it hides, and again every 5 s' },
   comes: { value: 9, min: 8, max: 90, step: 1, label: 'Stuck: it swims to her after', unit: 's' },
-})
+}, { sections: SNORKELING })
 /** The boat's hull for bumping: half its width, and half the length of its straight middle (reef.ts boat()). */
 const HULL = { r: 0.92, len: 2.7 }
 /** Where the cuttlefish hides first (the garden's middle), and the last (the found link starts there). After each
@@ -110,7 +112,7 @@ const PLAY = knobs('snorkelPlay', 'Rounds and the half-under camera', FILE, {
   tallPitch: { value: 6, min: -10, max: 30, step: 1, label: '…more on a tall screen', unit: '°' },
   ahead: { value: 1.6, min: -2, max: 6, step: 0.1, label: 'Looks ahead of her', unit: 'm' },
   fog: { value: 17, min: 6, max: 60, step: 1, label: 'See this far under water', unit: 'm' },
-})
+}, { sections: SNORKELING })
 
 /** The rounds she plays, and the two films round them (`story` before the first, `found` after the last). */
 export type SnorkelPlayRound = 'float' | 'follow' | 'cuttle'

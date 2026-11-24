@@ -73,7 +73,7 @@ export const L = {
     } as Record<string, Line>,
   },
 
-  // The game table in Kaylee's room (activities/hub/board-games/, plan: thailand/game-table.md). Sparkle says how to
+  // The game table in Kaylee's room (activities/hub/board-games/, plan: game-table.md in git history). Sparkle says how to
   // play the first time she opens each game in a visit (tap Sparkle to hear it again), and the rule of the 4 the first
   // time a unicorn naps. The cousin across the table talks in their own voice, now cheerful and playing (cast.json's
   // bbplay, ganplay, kenplay: the same voices, off their phones): sitting down, now and then before a roll, on a nap, a
@@ -166,7 +166,7 @@ export const L = {
   // Mom's and Dad's normal greetings refer to the room or going inside.
   familyPhoto: { ji: ji(`I love you!`), nick: nick('High five!') },
 
-  // Kaylee's wardrobe in her room (activities/hub/wardrobe/, plan: thailand/wardrobe.md). Sparkle says what to do the
+  // Kaylee's wardrobe in her room (activities/hub/wardrobe/, plan: wardrobe.md in git history). Sparkle says what to do the
   // first time and the name of each thing the first time she touches it; the family notice her new look in their own
   // voices (activities/hub/notice.ts).
   wardrobe: {
@@ -479,9 +479,9 @@ export const L = {
     again: 'Pack again, or go straight to the boat?',
   },
 
-  // The Nan road trip (planning/around-the-world/thailand/nan-trip.md). The stops fill in as each one gets its voices.
+  // The Nan road trip (nan-trip.md in git history). The stops fill in as each one gets its voices.
   nan: {
-    // The rice farm under Stop Time Cafe (activities/nan-trip/rice/, plan: thailand/nan-rice.md). Lung Kham, the farmer
+    // The rice farm under Stop Time Cafe (activities/nan-trip/rice/, plan: nan-rice.md in git history). Lung Kham, the farmer
     // (a monkey: "lung" is uncle), needs a helper: he says what each round is for, Sparkle then says what to do and, after
     // a while with nothing done, says it again; Lung and Dad (on the farm) and Mom (on the deck) react in their own
     // voices. Kaylee never talks: she giggles.
@@ -657,7 +657,7 @@ export const L = {
       foot: nick('Ow! A salty foot!'),
       salty: nick('Too salty? Ha ha!'),
       dad: [nick('Look at that steam!'), nick('Salt from a well!')],
-      // Pa Kluea's story (salt/story.ts, plan: thailand/nan-salt-story.md): the village dinner is tonight and nobody
+      // Pa Kluea's story (salt/story.ts, plan: nan-salt-story.md in git history): the village dinner is tonight and nobody
       // has any salt. The cooks: Lung Kwai the buffalo (noodle soup), Pa Kai the hen (salty eggs), Yai Nak the otter
       // grandma (grilled fish).
       story: {
@@ -691,7 +691,7 @@ export const L = {
         fact: 'Salt keeps eggs and fish yummy!',
       },
     },
-    // The Nan Mountain Cup (activities/nan-trip/cup/, plan: thailand/nan-cup.md): a kart race on three mountain tracks
+    // The Nan Mountain Cup (activities/nan-trip/cup/, plan: nan-cup.md in git history): a kart race on three mountain tracks
     // against three Nan locals (cast.json): Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear
     // honey seller. Sparkle says what's new and counts down in Thai; the rivals tease, bump and are good sports in their
     // own voices; Mom and Dad cheer from the grandstand. Kaylee never talks: she giggles.
@@ -784,7 +784,7 @@ export const L = {
   // tokay geckos, Tuk and Kae, each in their own voice in the films and the show). Kaylee never talks: she
   // giggles. The island is a hub: no idle hints spoken.
   //
-  // One story holds it together, "The Lost Fireflies" (`story`, plan: thailand/samet-story.md): last night's wind blew
+  // One story holds it together, "The Lost Fireflies" (`story`, plan: samet-story.md in git history): last night's wind blew
   // the fire show's four fireflies all over the island, and Tofu the beach puppy saw where each one went. Each stop
   // finds one (Zoom, Sandy, Bubbles, Peekaboo); with all four the fire show can start.
   samet: {
@@ -819,7 +819,7 @@ export const L = {
         fireflies: 'Fireflies glow to say hello to each other!',
       },
     },
-    // The story, "The Lost Fireflies" (story/, plan: thailand/samet-story.md), in play order: the way in at Na Dan
+    // The story, "The Lost Fireflies" (story/, plan: samet-story.md in git history), in play order: the way in at Na Dan
     // pier, the island between the stops, each stop's way in and its firefly found, all four, and the fire show.
     story: {
       // The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach

@@ -1,4 +1,4 @@
-// Kaylee's little rice farm at Sapan, under Stop Time Cafe (plan: planning/around-the-world/thailand/nan-rice.md),
+// Kaylee's little rice farm at Sapan, under Stop Time Cafe (plan: nan-rice.md in git history),
 // in shapes and sounds, with voices. Two places in one world: the farm on the valley floor (the camera looks
 // down on it from high in front) and the café's deck up on the hill behind, where the camera glides at the end.
 //

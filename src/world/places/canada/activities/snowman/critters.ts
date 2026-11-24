@@ -151,6 +151,10 @@ export class Carriage {
     this.dir = dir
     this.x = -dir * 34
     this.t = 0
+    // Where it starts, before it shows: otherwise its first frame is drawn wherever it was last (the first time, the
+    // middle of the park), a horse and carriage flashing up among the snowmen.
+    this.root.position.set(this.x, CLIFF_Y + 0.33, TERRACE_Z)
+    this.root.rotation.y = (dir * Math.PI) / 2
     this.root.visible = true
   }
   /** She tossed her head (a tap): the carriage stops a moment. */
@@ -349,6 +353,10 @@ export class Fox {
     this.exit = { ...from }
     this.to = { ...spot }
     this.stay = 12
+    // Where she starts, facing the way she trots, before she shows (not a frame back where she was last).
+    this.yaw = Math.atan2(spot.x - from.x, spot.z - from.z)
+    this.root.position.set(this.x, 0, this.z)
+    this.root.rotation.y = this.yaw
     this.root.visible = true
   }
   /** The pounce (a tap). Returns true if she went. */

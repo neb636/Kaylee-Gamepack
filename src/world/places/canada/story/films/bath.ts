@@ -1,4 +1,4 @@
-// Misty's Bubble Bath's two films (planning/around-the-world/canada-round-2.md): `bath-in` before the bath, `bath-out`
+// Misty's Bubble Bath's two films (canada-round-2.md in git history): `bath-in` before the bath, `bath-out`
 // after it (before the stamp). Lines: lines.ts `L.bath.filmIn` and `L.bath.filmOut`, in play order. The set is the
 // rainforest river (story/sets/bath.ts), the same place as the game: the falls face the camera, the pool at their foot
 // is where she has her bath, Maple's bank is on the left.
@@ -14,7 +14,7 @@ import { Vector3 } from 'three'
 import { cam, close } from '../../../../engine3d/shots'
 import { muddyMisty } from '../../characters/mistyLook'
 import { L } from '../../lines'
-import { makeStick } from '../props'
+import { makeStick, stickBlade, stickFit } from '../props'
 import { BATH, FALLS_Z, RIVER, riverSfx as fx, TALLEST, TOP } from '../sets/bath'
 import type { StoryFilm } from '../stage'
 
@@ -28,6 +28,14 @@ const LUMP: [number, number] = [2.15, -0.55]
 /** Misty's slap shot: how far back the stick goes (radians round her shoulder), and which way she faces at the whack
  *  (degrees: 90 is side-on, facing right). */
 const WIND = 2.7
+/** Her slide into the pool: off the bank at EDGE, into the water at ENTRY; the slide's seconds. */
+const EDGE: [number, number] = [1.25, -1.15]
+const ENTRY: [number, number] = [0.6, -1.6]
+/** Which way she faces as she slides (degrees): side-on to the camera, feet first. */
+const FACE = -75
+/** How far (of her height) to lower her while she sits back on the bank. */
+const SIT_DOWN = 0.19
+const SLIDE = { edge: 1.15, land: 1.5, up: 2.35 }
 const STRIKE_YAW = 58
 
 export const BATH_IN: StoryFilm = {
@@ -42,6 +50,8 @@ export const BATH_IN: StoryFilm = {
     misty.scarf(false)
     maple.root.add(set.leaf)
     const [lx, lz] = LUMP
+    let muddy = 0
+    const look = new Vector3()
     /** Her swat at the salmon: up (a slow wind-up), the fast swat down, the settle. `t` seconds in. */
     const swat = (t: number, at: number) => {
       const up = (t - (at - 0.55)) / 0.5
@@ -80,26 +90,93 @@ export const BATH_IN: StoryFilm = {
           misty.place(lx, 0, lz, -70)
         },
         tick: (_k, t) => {
-          swat(t, 0.78)
-          if (t > 0.9 && t < 1.7) misty.headTurn = Math.sin((t - 0.9) * 8) * 0.3
+          if (t < 1.55) {
+            swat(t, 0.78)
+            if (t > 0.9) misty.headTurn = Math.sin((t - 0.9) * 8) * 0.3
+          } else {
+            // Whoa, whoa: she teeters on the edge of the bank, arms windmilling, rocking further each time.
+            const w = t - 1.55
+            misty.armsUp = 0.55 + 0.45 * Math.sin(w * 22)
+            misty.lean = 0.35 + Math.sin(w * 9) * (0.25 + w * 0.5)
+            misty.headTurn = Math.sin(w * 13) * 0.25
+          }
         },
         cues: [
           [0.35, () => (set.leap(0, [lx - 0.75, 0, lz - 0.3], [lx - 0.95, TOP, FALLS_Z - 1.2], 1.15, 0.6), fx.leap(), s.splash(lx - 0.75, 0.05, lz - 0.3, 10), misty.pull('wow'))],
           [0.62, () => fx.swing()],
           [0.84, () => (set.bigSplash(lx - 0.8, lz - 0.2), fx.bigSplash(), s.splash(lx - 0.6, 0.1, lz - 0.1, 40), s.splash(lx - 1, 0.1, lz - 0.4, 24))],
-          [1.9, () => misty.pull('sad')],
+          [1.55, () => misty.pull('wow', true)],
         ],
       },
       {
-        // ...and she slides down the bank on her tummy, into the pool, splosh.
+        // ...and whoops: her feet go out from under her, she sits down hard on the muddy bank and whooshes down it on her
+        // bottom (feet first, arms up, mud flying), sails off the edge and goes right under: KER-SPLOSH. Bubbles... and
+        // up she pops, dripping. (Side-on to the camera, so her face and the whole ride show.)
         id: 'slide',
-        shot: cam([0.3, 1.1, 2.6], [1.0, 0.4, -1.3], { eye: [0.1, 1.0, 2.3], look: [0.5, 0.45, -1.5] }),
-        dur: 1.6,
+        shot: cam([0.0, 1.05, 2.75], () => look.set(lerp(misty.pos.x, ENTRY[0], 0.4), 0.5, lerp(misty.pos.z, ENTRY[1], 0.4)), { eye: [-0.15, 0.95, 2.55] }),
+        dur: 3.1,
         start: () => {
-          misty.armsUp = 0
-          misty.slideTo(BATH.x + 0.3, BATH.z + 0.1, 1.1, -20)
+          misty.place(lx, 0, lz, -70)
+          misty.pull('wow', true)
+          muddy = 0
         },
-        cues: [[0.2, () => s.sfx.whoosh()], [1.05, () => (fx.bigSplash(), s.splash(BATH.x + 0.3, 0.1, BATH.z + 0.3, 30), (misty.lean = 0))]],
+        tick: (_k, t, dt) => {
+          const p = misty.pos
+          if (t < SLIDE.edge) {
+            // Feet out, bump down on her bottom, then sliding: slow at first, faster and faster down the bank.
+            const sit = Math.min(1, t / 0.22)
+            misty.lean = lerp(0.3, -0.7, sit) + (t > 0.22 ? Math.sin(t * 24) * 0.04 : 0)
+            const k = Math.max(0, (t - 0.18) / (SLIDE.edge - 0.18))
+            const e = k * k
+            const bump = t < 0.3 ? -Math.sin((t / 0.3) * Math.PI) * 0.06 : 0
+            // (Leaning back, the rig lifts her off the ground: sit her down onto the mud.)
+            p.set(lerp(lx, EDGE[0], e), bump - sit * SIT_DOWN * misty.height, lerp(lz, EDGE[1], e))
+            misty.root.rotation.y = (FACE * Math.PI) / 180
+            misty.armsUp = 0.75 + Math.sin(t * 14) * 0.25
+            misty.headTurn = 0.35 + Math.sin(t * 6) * 0.1
+            // Mud and wet moss spray out from under her.
+            muddy += dt
+            if (k > 0.1 && muddy > 0.07) {
+              muddy = 0
+              s.puff(p.x, 0.06, p.z, 3)
+              s.splash(p.x, 0.06, p.z, 2)
+            }
+          } else if (t < SLIDE.land) {
+            // Off the edge: a little arc through the air, still sitting, arms flung up.
+            const k = (t - SLIDE.edge) / (SLIDE.land - SLIDE.edge)
+            p.set(lerp(EDGE[0], ENTRY[0], k), Math.sin(k * Math.PI) * 0.4 - k * 0.25 - SIT_DOWN * misty.height, lerp(EDGE[1], ENTRY[1], k))
+            misty.lean = lerp(-0.7, -0.95, k)
+            misty.armsUp = 1
+          } else if (t < SLIDE.up) {
+            // Under she goes (the pool is opaque): down fast, then a moment of bubbles.
+            const k = Math.min(1, (t - SLIDE.land) / 0.22)
+            p.set(ENTRY[0], lerp(-0.25, -misty.height * 1.2, k * k), ENTRY[1])
+            muddy += dt
+            if (t > SLIDE.land + 0.35 && muddy > 0.14) {
+              muddy = 0
+              s.splash(ENTRY[0] + (Math.random() - 0.5) * 0.5, 0.06, ENTRY[1] + (Math.random() - 0.5) * 0.4, 3)
+            }
+          } else {
+            // Up she pops, standing, with a bob (overshoot, then settle), dripping.
+            const k = Math.min(1, (t - SLIDE.up) / 0.45)
+            const back = 1 + 2.4 * (k - 1) ** 3 + 1.4 * (k - 1) ** 2
+            p.set(lerp(ENTRY[0], BATH.x + 0.3, k), lerp(-misty.height * 1.2, BATH.y, back), lerp(ENTRY[1], BATH.z + 0.1, k))
+            misty.lean = 0
+            misty.armsUp = lerp(1, 0.15, k)
+            misty.headTurn = 0
+            misty.root.rotation.y = (-10 * Math.PI) / 180
+          }
+          set.wade.x = p.x
+          set.wade.z = p.z
+          set.wade.k = t > SLIDE.land ? 1 : 0
+        },
+        cues: [
+          [0.15, () => (s.sfx.whoosh(), fx.mudslide())],
+          [SLIDE.land + 0.45, () => fx.bubbles()],
+          [SLIDE.edge, () => (fx.swing(), misty.pull('wow', true))],
+          [SLIDE.land, () => (set.bigSplash(ENTRY[0], ENTRY[1], 1.15), fx.bigSplash(), s.splash(ENTRY[0], 0.2, ENTRY[1], 40))],
+          [SLIDE.up, () => (fx.popup(), set.bigSplash(BATH.x + 0.3, BATH.z + 0.1, 0.45), s.splash(BATH.x + 0.3, 1.0, BATH.z + 0.1, 18), misty.pull('sad'))],
+        ],
       },
       {
         // Two eyes blink in all that mud: missed again!
@@ -252,7 +329,7 @@ export const BATH_OUT: StoryFilm = {
           swingA = 0
           swingPose()
           misty.root.updateWorldMatrix(true, true)
-          big.localToWorld(blade.set(0.09 * H, -0.455 * H, 0.32 * H))
+          big.localToWorld(stickBlade(stickFit(H), blade))
           big.visible = false
           misty.place(ME[0], 0, ME[1], -30)
           s.put(set.cone, blade.x, 0.1, blade.z)

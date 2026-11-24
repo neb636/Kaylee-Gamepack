@@ -1,4 +1,4 @@
-// The Canada map (planning/around-the-world/canada.md, "The map"): Canada as a chunky toy tray floating in the sky, the
+// The Canada map: Canada as a chunky toy tray floating in the sky, the
 // way the Thailand maps are. Seven places stand on it east to west, each a little diorama with its friend in it, big
 // and alive: tap a place (or its friend) and it hops, the camera closes in, and the chapter opens. Ottawa's rink is the
 // story's home: Maple and the Maple Cup, Gus's geese skating rings on the ice, and every friend she has brought home
@@ -9,7 +9,7 @@
 // bison who rolls in the dust, a beluga, Sparkle's balloon, the clouds, the ice floes, the Rockies, the snowy north,
 // Hudson Bay). She can swing the board round with a drag and pinch it closer (board.ts).
 //
-// Round two (planning/around-the-world/canada-round-2.md): a new friend arriving at the rink shows their move once
+// Round two (canada-round-2.md in git history): a new friend arriving at the rink shows their move once
 // their pop-in ends (moves.ts), and a tap on a friend already on the team plays it again; Gus, skating on the ice,
 // stops, turns to the newcomer and pulls a face while he says his line (the page says when). The team's skate hut
 // beside the canal (hut.ts) opens the Team Cabin.
@@ -89,7 +89,7 @@ export const MAP_ANCHORS: AnchorInfo[] = [
 ]
 
 /** The map camera's entrance, tuned in the feel lab (?feel=1). */
-export const MAP_CAM = mapCamKnobs('canada-map-cam', 'Canada map camera', 'src/world/places/canada/map/world.ts', { yaw: 0, pitch: -4, zoom: 0.9 })
+export const MAP_CAM = mapCamKnobs('canada-map-cam', 'Canada map camera', 'src/world/places/canada/map/world.ts', { yaw: 0, pitch: -12, zoom: 0.9 }, { activity: 'hub', sections: ['map'] })
 
 /** Particle colors: water, white, pink, butter, leaf, dust. */
 const DROP = 0
@@ -219,7 +219,7 @@ export class CanadaMapWorld implements World3D {
   private geese: Goose[] = []
   private pokes = new Map<PokeId, Poke>()
   private pins = new Map<PlaceId, Pin>()
-  /** The friends at home stand bigger on a tall screen, where the far (Pacific) end of the board is small. */
+  /** The friends at home stand bigger on a tall screen, where the board (or its far end) is small. */
   private homeK = 1
   private owl!: Owl
   private bisonToy!: Bison
@@ -478,14 +478,16 @@ export class CanadaMapWorld implements World3D {
     this.top = top
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
-    // A tall screen looks along the country from its south-east corner, so the long board fills it; a wide one looks
-    // from the south.
+    // A phone held upright keeps north up (turning the board sideways put the Pacific at the top): it looks from a
+    // little east of south and a little higher, so the board reads as a toy on a table. An iPad held upright looks
+    // along the country from its south-east corner, so the long board fills it; a wide screen looks from the south.
     const tall = h > w * 1.05
-    this.base.yaw = tall ? 90 : 0
-    this.base.pitch = tall ? 60 : 58
+    const phone = h > w * 1.6
+    this.base.yaw = phone ? 15 : tall ? 90 : 0
+    this.base.pitch = phone ? 66 : tall ? 60 : 58
     // Every place turns its front to the camera's side of the board (they're toys on a tray).
     for (const p of this.places.values()) p.root.rotation.y = (this.base.yaw * Math.PI) / 180
-    // On a tall screen the far (Pacific) end is small: the friends at home stand bigger, so each stays a big target.
+    // On a tall screen the board is small (or its far end is): the friends at home stand bigger, so each stays a big target.
     this.homeK = tall ? HOME_TALL : 1
     for (const m of this.mates.values()) if (!m.team) m.spot.scale.setScalar(this.homeK)
     this.frame()
@@ -607,7 +609,7 @@ export class CanadaMapWorld implements World3D {
   }
 
   roam(): RoamState | null {
-    return this.closing || this.onRink ? null : { walk: false, jump: false }
+    return this.closing || this.onRink ? null : { walk: false }
   }
 
   get calm() {
@@ -811,7 +813,7 @@ export class CanadaMapWorld implements World3D {
         break
       }
       case 'campfire': {
-        // Roxy peeks out round the tent, then ducks back.
+        // Roxy sidles out from beside the tent, then back.
         const out = clamp(Math.sin(t * 0.8) * 1.6, 0, 1)
         m.spot.position.lerpVectors(this.camp.peek.hide, this.camp.peek.out, out)
         m.actor.lean = out * 0.25
@@ -1012,6 +1014,10 @@ export class CanadaMapWorld implements World3D {
     if (this.closing) return
     // A tap during the arrival skips to the board (the move and Gus go on).
     if (this.onRink) this.leaveRink(0.5)
+    // A heart pin always wins: whatever stands in front of it or behind it (the balloon, the orca, a cloud, another
+    // place's box, a friend at the rink), her finger on a pin is for that pin. (Not a key press: it has no spot.)
+    const pin = x + y > 0 ? this.pinUnder(x, y) : null
+    if (pin) return this.pick(pin)
     if (id?.startsWith('go:')) {
       // A place's target is big: if her finger is really on a friend at the rink or a goose, they answer instead.
       const near = id === 'go:party' && x + y > 0 ? this.thingUnder(x, y) : null
@@ -1088,6 +1094,27 @@ export class CanadaMapWorld implements World3D {
   }
 
   /** A friend at the rink or a goose under her finger (it answers instead of the rink opening). */
+  /** The visible heart pin under her finger, if any: its badge (and the point under it), never smaller than a thumb. */
+  private pinUnder(x: number, y: number): PlaceId | null {
+    const min = Math.min(this.w, this.h) < 500 ? 64 : 88
+    let best: PlaceId | null = null
+    let bestD = Infinity
+    for (const [id, pin] of this.pins) {
+      if (!pin.root.visible) continue
+      const s = pin.root.scale.x
+      const badge = this.toScreen(tmp.set(0, 0.2 + PIN_R * 0.9, 0).multiplyScalar(s).applyQuaternion(pin.root.quaternion).add(pin.root.position))
+      const tip = this.toScreen(pin.root.position)
+      const r = Math.max(min / 2, this.ppu(pin.root.position) * PIN_R * s * 1.25)
+      // From the badge's middle down to its point.
+      const d = Math.min(Math.hypot(x - badge.x, y - badge.y), Math.hypot(x - tip.x, y - tip.y) + r * 0.4)
+      if (d < r && d < bestD) {
+        bestD = d
+        best = id
+      }
+    }
+    return best
+  }
+
   private thingUnder(x: number, y: number): string | null {
     let best: string | null = null
     let bestD = Infinity

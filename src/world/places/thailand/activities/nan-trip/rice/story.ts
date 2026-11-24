@@ -1,4 +1,4 @@
-// Lung Kham's story on the rice farm: "Jip and the hat mix-up" (planning/around-the-world/thailand/nan-rice.md, the
+// Lung Kham's story on the rice farm: "Jip and the hat mix-up" (nan-rice.md in git history, the
 // story; docs/films.md, how films work). It gives the farm a reason: last year a cheeky little bird called Jip took
 // Lung's hat, dropped the scarecrow's floppy one on his head while he napped, and the birds, thinking Lung was the
 // scarecrow, sat on him and ate all his rice. This year he needs a helper.

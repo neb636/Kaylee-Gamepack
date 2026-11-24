@@ -230,9 +230,10 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
             </div>
           </motion.div>
         </motion.div>
-        {/* Flowers she has scooped this trip. */}
+        {/* Flowers she has scooped this trip: top right, where the passage keeps its scarabs (docs/hud.md keeps the
+            bottom right for the way on). */}
         {sailing && (
-          <div style={{ position: 'absolute', right: 12, bottom: 'calc(var(--safe-bottom) + 12px)', display: 'flex', gap: 6, background: 'rgba(255,255,255,0.85)', borderRadius: 999, padding: '6px 12px', boxShadow: 'var(--shadow)', zIndex: 6 }}>
+          <div style={{ position: 'absolute', right: 8, top: 8, display: 'flex', gap: 6, background: 'rgba(255,255,255,0.85)', borderRadius: 999, padding: '6px 12px', boxShadow: 'var(--shadow)', zIndex: 6 }}>
             {Array.from({ length: LOTUS_PER_LEG }, (_, i) => (
               <img key={i} src={art.lotus} alt="" style={{ height: 'min(48px, 7vmin)', filter: i < caught ? 'none' : 'grayscale(1) opacity(0.35)' }} />
             ))}

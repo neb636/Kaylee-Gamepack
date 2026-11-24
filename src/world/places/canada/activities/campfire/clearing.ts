@@ -50,8 +50,6 @@ export const CLEARING = {
   ],
   /** Round the fire, after: Roxy, her kits, Monty. */
   roxyFire: [0.95, -0.6, -28] as Mark,
-  /** The marshmallow stick at rest: the end she grabs (with the marshmallow) and the end on the ground. */
-  stickRest: { tip: [1.05, 0.34, 0.95] as V3, end: [1.75, 0.02, 1.55] as V3 },
 }
 
 export const SNAG = { x: -2.35, z: -2.05, r: 0.3, h: 2.7 }

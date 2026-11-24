@@ -1,4 +1,4 @@
-// The friends' moves at the rink (planning/around-the-world/canada-round-2.md, "The new friend shows their move"): when
+// The friends' moves at the rink (canada-round-2.md in git history, "The new friend shows their move"): when
 // she lands back on the map with a new friend, the friend pops in at the rink, then shows what they're good at, about
 // 2 s, with no words: Tuque bounces a puck off his tummy; Monty stands so still that two geese take him for a statue
 // and perch on his antlers; Roxy whisks a puck from a goose onto her own head; Lulu sings notes that float up over the
@@ -24,7 +24,7 @@ import { Lulu } from '../characters/lulu'
 import { ToyActor, type Performer } from '../characters/toy'
 import { Tuque } from '../characters/tuque'
 import type { ChapterId } from '../story/chapters'
-import { makePuck } from '../story/props'
+import { makePuck, stickFit, stickParts } from '../story/props'
 import { moveSfx } from './sounds'
 
 const TAU = Math.PI * 2
@@ -192,17 +192,10 @@ function rock(bag: Bag) {
   return solid(merge([P.sphere(0.055, ROCK, { scale: [1, 0.78, 0.92] }, 12), P.sphere(0.02, '#CBC8D8', { at: [0.022, 0.022, 0.032] }, 6), P.sphere(0.012, '#8E8AA0', { at: [-0.025, -0.005, 0.038] }, 6)]), bag, 1.4)
 }
 
-/** Misty's stick on the map: the game's hockey stick (story/props.ts makeStick), but twice as thick, in a darker wood
- *  and with a bigger pink blade, so it reads from the board's high camera against the snow. */
+/** Misty's stick on the map: the game's hockey stick (story/props.ts), but twice as thick, in a darker wood and with
+ *  a bigger blade, so it reads from the board's high camera against the snow. */
 function mapStick(H: number, bag: Bag) {
-  return solid(
-    merge([
-      P.cyl(0.032 * H, 0.032 * H, 0.52 * H, '#C99A6E', { at: [0.09 * H, -0.25 * H, 0.1 * H], rot: [0.42, 0, 0] }, 8),
-      P.rbox(0.07 * H, 0.05 * H, 0.24 * H, 0.016 * H, CANADA_COLORS.scarf, { at: [0.09 * H, -0.46 * H, 0.28 * H] }),
-    ]),
-    bag,
-    2.2,
-  )
+  return solid(merge(stickParts({ ...stickFit(H, CANADA_COLORS.scarf, 2, '#C99A6E'), blade: 0.25 * H })), bag, 2.2)
 }
 
 /** A pinecone about 0.15 long, lying along z: a brown egg with three rings of scales and a stalk. */
@@ -446,8 +439,8 @@ export class MapMoves {
       const side = i ? 1 : -1
       const t0 = 0.6 + i * 0.2
       const from = new Vector3(side * 3.6 * R, hy + 2.8 * R, 0.4 * R)
-      // (On the inner half of the antler's palm, which tips up toward his head, clear of the tines along its rim.)
-      const perch = new Vector3(side * 0.84 * R, hy + 1.47 * R, -0.08 * R)
+      // On the rounded palm, just inside the first tine.
+      const perch = new Vector3(side * 1.12 * R, hy + 1.39 * R, -0.30 * R)
       const top = new Vector3(side * 0.3 * R, hy + 0.97 * R, 0.05 * R)
       const away = new Vector3(side * 3.4 * R, hy + 3.8 * R, -1.2 * R)
       const p = g.root.position

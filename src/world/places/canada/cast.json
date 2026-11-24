@@ -1,5 +1,5 @@
 {
-  "_about": "Canada's friends and their voices (Sparkle, the guide, comes from src/sdk/cast.json). The story is Maple's Team (planning/around-the-world/canada.md): Maple the beaver gathers a hockey team across Canada to play Gus's geese for the Maple Cup. Speaker ids are the animals (moose = Monty, raccoon = Roxy, snowman = Tuque, otter = Ollie, bear = Misty the spirit bear, loon = Lulu). Audition with: node scripts/voice-audition.mjs <speaker> <voice> [<voice>...]",
+  "_about": "Canada's friends and their voices (Sparkle, the guide, comes from src/sdk/cast.json). The story is Maple's Team: Maple the beaver gathers a hockey team across Canada to play Gus's geese for the Maple Cup. Speaker ids are the animals (moose = Monty, raccoon = Roxy, snowman = Tuque, otter = Ollie, bear = Misty the spirit bear, loon = Lulu). Audition with: node scripts/voice-audition.mjs <speaker> <voice> [<voice>...]",
   "speakers": {
     "maple": {
       "voice": "nova",

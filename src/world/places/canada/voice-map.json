@@ -1519,18 +1519,11 @@
     "file": "97b560ac23f9.mp3"
   },
   {
-    "text": "Hold the marshmallow near the fire.",
+    "text": "Put a marshmallow on the stick! Toast it like the picture.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2743,
-    "file": "8e135693d788.mp3"
-  },
-  {
-    "text": "Click and hold the marshmallow near the fire.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2808,
-    "file": "5e41510429a8.mp3"
+    "ms": 4536,
+    "file": "f2b50f03b6df.mp3"
   },
   {
     "text": "It's on fire! Tap it to blow it out!",
@@ -1547,11 +1540,11 @@
     "file": "73f9ff33d2be.mp3"
   },
   {
-    "text": "Give it to Maple or the raccoons.",
+    "text": "Who wants that one?",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3004,
-    "file": "ee0f223855b5.mp3"
+    "ms": 1464,
+    "file": "86bb1300cc1e.mp3"
   },
   {
     "text": "Golden! Yummy!",
@@ -1559,6 +1552,27 @@
     "sig": "cafd002559",
     "ms": 1416,
     "file": "6827436a1467.mp3"
+  },
+  {
+    "text": "Squishy! Yay!",
+    "voice": "raccoon",
+    "sig": "124402ef75",
+    "ms": 2184,
+    "file": "41733ce6d749.mp3"
+  },
+  {
+    "text": "Crunchy! My favorite!",
+    "voice": "raccoon",
+    "sig": "124402ef75",
+    "ms": 2208,
+    "file": "737bc14df0eb.mp3"
+  },
+  {
+    "text": "Mmm. Crunchy stick.",
+    "voice": "moose",
+    "sig": "d36b94299b",
+    "ms": 3168,
+    "file": "3a2db3ba19bb.mp3"
   },
   {
     "text": "Squishy! Yum anyway.",
@@ -1575,11 +1589,11 @@
     "file": "ec08bb418f39.mp3"
   },
   {
-    "text": "Crunchy! My favorite!",
+    "text": "Yum! Crunchier next time!",
     "voice": "raccoon",
     "sig": "124402ef75",
-    "ms": 2208,
-    "file": "737bc14df0eb.mp3"
+    "ms": 2856,
+    "file": "ae37b74b5383.mp3"
   },
   {
     "text": "Crunch, munch!",
@@ -1589,11 +1603,11 @@
     "file": "e0b0489833c6.mp3"
   },
   {
-    "text": "Mmm. Crunchy stick.",
-    "voice": "moose",
-    "sig": "d36b94299b",
-    "ms": 3168,
-    "file": "3a2db3ba19bb.mp3"
+    "text": "Best campfire ever!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 1776,
+    "file": "9c3f9813fb81.mp3"
   },
   {
     "text": "Now tap the flashlight to turn it off!",
@@ -1666,25 +1680,32 @@
     "file": "da6e53ef14f6.mp3"
   },
   {
-    "text": "That's Lulu the loon!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1896,
-    "file": "1e99e4f3c86d.mp3"
+    "text": "Baby? Where are you?",
+    "voice": "loon",
+    "sig": "668033dd1c",
+    "ms": 1918,
+    "file": "a39ef8c23540.mp3"
   },
   {
-    "text": "She lives by the glacier. Let's paddle!",
+    "text": "That's Lulu! Her baby swam away.",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2496,
-    "file": "ca09ead6c2d2.mp3"
+    "ms": 2998,
+    "file": "de35a1ac4d47.mp3"
   },
   {
-    "text": "Bonjour! Hop in, we go to find Lulu!",
+    "text": "No baby, no song! Let's go find it!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 3696,
-    "file": "f62543184f9d.mp3"
+    "ms": 2906,
+    "file": "eebe47838391.mp3"
+  },
+  {
+    "text": "Bonjour! Hop in, we go to find Lulu's baby!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 3836,
+    "file": "f41c02d7ef6f.mp3"
   },
   {
     "text": "Hold the water, and Maple paddles there!",
@@ -1715,18 +1736,18 @@
     "file": "92327cfb1edf.mp3"
   },
   {
-    "text": "Paddle to the milky water by the glacier stream!",
+    "text": "Listen! A little peep, by the milky water!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3479,
-    "file": "5158b7b11d75.mp3"
+    "ms": 3770,
+    "file": "cd5476894348.mp3"
   },
   {
-    "text": "Ooh! What is that milky water?",
+    "text": "Peep peep! Is that the baby?",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2664,
-    "file": "936a56c405ed.mp3"
+    "ms": 1899,
+    "file": "447332c4bb95.mp3"
   },
   {
     "text": "Follow the sparkles to the milky water.",
@@ -1736,6 +1757,13 @@
     "file": "6e0bf89a0a7a.mp3"
   },
   {
+    "text": "There you are! Hop on, little one!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 2546,
+    "file": "ad1257a4f163.mp3"
+  },
+  {
     "text": "Rock flour from the glacier makes the lake so blue!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1743,18 +1771,11 @@
     "file": "c43d47ad947b.mp3"
   },
   {
-    "text": "We found the blue!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1200,
-    "file": "1ae38e993500.mp3"
-  },
-  {
-    "text": "Bubbles! Follow them to find Lulu.",
+    "text": "Bubbles! Take the baby to Lulu.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3696,
-    "file": "0e6917860113.mp3"
+    "ms": 3020,
+    "file": "3bf2d5a2b786.mp3"
   },
   {
     "text": "Paddle to the bubbles!",
@@ -1764,39 +1785,60 @@
     "file": "b9c20afa7117.mp3"
   },
   {
-    "text": "There she is!",
+    "text": "Lulu! Over here!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 1128,
-    "file": "cadcf6b5a963.mp3"
+    "ms": 1332,
+    "file": "fae962c89fc3.mp3"
   },
   {
-    "text": "Found you, Lulu!",
+    "text": "Lulu! We have your baby!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 1608,
-    "file": "99013509ca5f.mp3"
+    "ms": 2193,
+    "file": "508c9865feb6.mp3"
   },
   {
-    "text": "Peekaboo, Lulu!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1464,
-    "file": "77a6d103908b.mp3"
+    "text": "My baby! Thank you!",
+    "voice": "loon",
+    "sig": "668033dd1c",
+    "ms": 1955,
+    "file": "842de6ca4d43.mp3"
   },
   {
-    "text": "Look! A baby loon on her back!",
+    "text": "A big hug! Hee hee!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2736,
-    "file": "bd31be4ca721.mp3"
+    "ms": 2142,
+    "file": "d1d70e813468.mp3"
   },
   {
-    "text": "Lulu and her baby! We found them!",
+    "text": "Tap Lulu, and she sings!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2694,
+    "file": "c25cd18b7d24.mp3"
+  },
+  {
+    "text": "Click Lulu, and she sings!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2512,
+    "file": "c3ca9a8905d4.mp3"
+  },
+  {
+    "text": "Listen! The glacier sings back!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2256,
-    "file": "4ef2aaa32c8e.mp3"
+    "ms": 2467,
+    "file": "229eadfda12d.mp3"
+  },
+  {
+    "text": "What a song! Bravo, Lulu!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 2553,
+    "file": "d66f4170452c.mp3"
   },
   {
     "text": "A glacier is a river of ice. It moves very slowly.",
@@ -2100,13 +2142,6 @@
     "file": "52f07ef207e2.mp3"
   },
   {
-    "text": "Yum, a clam!",
-    "voice": "otter",
-    "sig": "6c3e96c659",
-    "ms": 2232,
-    "file": "e0f4e823c8a0.mp3"
-  },
-  {
     "text": "Ollie! Come and play hockey with us!",
     "voice": "maple",
     "sig": "cafd002559",
@@ -2217,6 +2252,13 @@
     "sig": "ed7dbdac3d",
     "ms": 4776,
     "file": "ab6a977b2790.mp3"
+  },
+  {
+    "text": "Look! White fur under all that mud!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3552,
+    "file": "ef8c2ce85339.mp3"
   },
   {
     "text": "I'm white again!",

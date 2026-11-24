@@ -39,20 +39,22 @@ import type { FloeSection } from './sections'
 import { DEG } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/activities/floe/floe.ts'
+/** Where she flings Pola: the sections these knobs tune. */
+const HOPPING = ['steady', 'drift', 'melt']
 /** The fling: how her pull turns into a leap (live in the feel lab: ?feel=1 on any of the activity's links). */
 const FLING = knobs('fling', 'Fling Pola', FILE, {
-  pull: { value: 170, min: 60, max: 400, step: 5, label: 'Full pull', unit: 'px', note: 'how far back her finger goes for the longest fling (never more than 30% of a small screen)' },
+  pull: { value: 170, min: 60, max: 400, step: 5, label: 'Full pull', unit: 'px', note: 'how far back her finger goes for the longest fling (never more than 30% of a small screen)', main: true },
   dead: { value: 22, min: 0, max: 80, step: 1, label: 'Dead zone', unit: 'px', note: 'a pull shorter than this is only a tap (he giggles)' },
-  reach: { value: 6.5, min: 2, max: 14, step: 0.1, label: 'Power (reach)', unit: 'm', note: 'how far a full pull flings him' },
+  reach: { value: 6.5, min: 2, max: 14, step: 0.1, label: 'Power (reach)', unit: 'm', note: 'how far a full pull flings him', main: true },
   curve: { value: 1.3, min: 0.5, max: 3, step: 0.05, label: 'Power curve', note: '1 = even; higher = small pulls make small hops and the long ones come at the end' },
   arc: { value: 0.4, min: 0.1, max: 1.2, step: 0.02, label: 'Arc height', unit: '× dist', note: 'how high he flies, as a share of how far' },
   minArc: { value: 0.8, min: 0.1, max: 3, step: 0.05, label: 'Lowest arc', unit: 'm', note: 'even a short hop goes at least this high' },
   hang: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: 'Hang time', unit: 's', note: 'seconds in the air for a full-reach fling (shorter ones are quicker)' },
-  magnet: { value: 0.8, min: 0, max: 2.5, step: 0.05, label: 'Landing help', unit: 'm', note: 'a landing this close to a floe gets pulled onto it (0 = none)' },
+  magnet: { value: 0.8, min: 0, max: 2.5, step: 0.05, label: 'Landing help', unit: 'm', note: 'a landing this close to a floe gets pulled onto it (0 = none)', main: true },
   crouch: { value: 1, min: 0, max: 2, step: 0.05, label: 'Crouch', unit: '×', note: 'how much he squashes down as she pulls' },
-  grab: { value: 85, min: 44, max: 160, step: 1, label: 'Grab size', unit: 'px', note: "the smallest reach of the finger target round Pola on an iPad, while she can be grabbed (an iPhone gets 70% of it); she's never smaller than she looks × Grab look" },
+  grab: { value: 85, min: 44, max: 160, step: 1, label: 'Grab size', unit: 'px', note: "the smallest reach of the finger target round Pola on an iPad, while she can be grabbed (an iPhone gets 70% of it); she's never smaller than she looks × Grab look", main: true },
   grabLook: { value: 2.4, min: 1, max: 4, step: 0.05, label: 'Grab look', unit: '× height', note: 'the finger target round Pola, as a share of how tall she looks on screen' },
-})
+}, { sections: HOPPING })
 /** The floes and the sea. */
 const FLOES = knobs('floes', 'Floes and water', FILE, {
   dip: { value: 0.12, min: 0, max: 0.4, step: 0.01, label: 'Dip', unit: 'm', note: 'how far a big floe sinks with Pola on it (little floes sink more)' },
@@ -60,11 +62,11 @@ const FLOES = knobs('floes', 'Floes and water', FILE, {
   tip: { value: 8, min: 0, max: 25, step: 0.5, label: 'Tip', unit: '°', note: 'how far a floe leans with Pola at its edge' },
   bob: { value: 1.2, min: 0.4, max: 4, step: 0.05, label: 'Bob speed', unit: 'Hz', note: 'how quickly a floe bobs up and down' },
   damp: { value: 0.16, min: 0.02, max: 1, step: 0.01, label: 'Bob damping', note: 'how soon the bobbing dies away (1 = no bounce)' },
-  tippy: { value: 0.55, min: 0.2, max: 1.2, step: 0.01, label: 'Tippy edge', note: 'on a little floe, landing further out than this share of its size slides him off (above 1: never)' },
+  tippy: { value: 0.55, min: 0.2, max: 1.2, step: 0.01, label: 'Tippy edge', note: 'on a little floe, landing further out than this share of its size slides him off (above 1: never)', main: true },
   drift: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Drift', unit: '×', note: 'how far and fast the drifting floes go' },
   swim: { value: 1.8, min: 0.5, max: 4, step: 0.1, label: 'Swim speed', unit: 'm/s', note: 'how fast he paddles to a floe' },
-  push: { value: 5, min: 1, max: 15, step: 0.5, label: 'Push grip', unit: '/s', note: 'how closely a floe she pushes follows her finger' },
-})
+  push: { value: 5, min: 1, max: 15, step: 0.5, label: 'Push grip', unit: '/s', note: 'how closely a floe she pushes follows her finger', main: true },
+}, { sections: HOPPING })
 
 export interface FloeStart {
   section: FloeSection

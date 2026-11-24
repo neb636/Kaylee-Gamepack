@@ -80,18 +80,19 @@ New sounds: `sounds.pickup()`, `sounds.place()`, `sounds.snap()`.
 
 A mechanic that works can still feel wrong, and a robot finger can't tell. Declare the numbers that decide the feel
 as knobs, read them every frame, and watch the input against the result. Then the user tunes them on their own devices in
-the feel lab (`?feel=1` on the section link) and sends back a "Copy for agent" note:
+the feel lab (`?feel=1` on the section link) and sends back a "Copy for agent" note. Only the knobs that scene uses
+show, `main` ones first (the rules: `docs/thailand-3d.md`, the feel lab):
 
 ```ts
 import { knobs, watch } from '../../../../kit/knobs'
 
-const STEER = knobs('steer', 'Steering', 'src/world/.../mountain.ts', {
-  slide: { value: 5.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides it' },
+const STEER = knobs('driveSteer', 'Steering', 'src/world/.../mountain.ts', {
+  slide: { value: 5.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides it', main: true },
   ease: { value: 0.15, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: '0 = none' },
-})
+}, { sections: ['drive'] })
 // every frame: this.k += (push - this.k) * (1 - Math.exp(-dt / STEER.ease))
 // in the world's constructor (and call the result in dispose()):
-this.unwatch = watch('steer', () => ({ 'her push': [this.push, 1], 'the car (m)': [this.lat, 8] }))
+this.unwatch = watch('driveSteer', () => ({ 'her push': [this.push, 1], 'the car (m)': [this.lat, 8] }))
 ```
 
 Steering we learned the hard way on the Nan mountain road (2026-10-26):

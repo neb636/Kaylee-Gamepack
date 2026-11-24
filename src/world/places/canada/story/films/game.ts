@@ -1,4 +1,4 @@
-// The big game's two films (planning/around-the-world/canada.md), played by the finale (activities/party/): `game-in`
+// The big game's two films, played by the finale (activities/party/): `game-in`
 // before the hockey and `game-win` after the last goal, on the canal in the evening (sets/rink.ts RINK_EVENING: the
 // lamps lit, a little snow). Lines: lines.ts `L.story.gameIn` and `L.story.gameWin`, in play order.
 //

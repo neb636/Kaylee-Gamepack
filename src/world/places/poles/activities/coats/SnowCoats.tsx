@@ -1,4 +1,4 @@
-// Snow Coats (plan: planning/around-the-world/poles.md): Arctic animals change coats with the seasons.
+// Snow Coats: Arctic animals change coats with the seasons.
 // One verb, rub with her finger, that gets richer three times:
 //   fox    one Arctic fox, brown in late summer. Snow starts to fall; where her finger goes the coat turns white (and
 //          fluffier at the edges). The ground slowly goes white by itself, and she can rub snow onto it too.
@@ -17,10 +17,10 @@
 // pokes an animal. The summer all brown: the stamp. The brush and the coats are knobs (?feel=1). 2D only: SVG written
 // to every frame, no three.js.
 import { getStroke } from 'perfect-freehand'
-import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, burst, firstTime, sounds, useAlive, useElementSize, type Line, useTimers, Timers } from '../../../../../sdk'
+import { burst, firstTime, sounds, useAlive, useElementSize, type Line, useTimers, Timers } from '../../../../../sdk'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
+import { HudButton } from '../../../../kit/Hud'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
@@ -37,15 +37,15 @@ const FILE = 'src/world/places/poles/activities/coats/SnowCoats.tsx'
 /** Her finger's brush (live in the feel lab: ?feel=1). Sizes are stage units: the wide stage is 1600 x 1000, the tall
  *  one 1000 x 1500 (on an iPad a stage unit is about 0.65 px). */
 const BRUSH = knobs('coatsBrush', 'Rub the coat', FILE, {
-  size: { value: 84, min: 20, max: 240, step: 2, label: 'Brush size', unit: 'u', note: 'how wide her finger paints (the stage is 1600 wide)' },
+  size: { value: 84, min: 20, max: 240, step: 2, label: 'Brush size', unit: 'u', note: 'how wide her finger paints (the stage is 1600 wide)', main: true },
   smoothing: { value: 0.6, min: 0, max: 1, step: 0.05, label: 'Smoothing', note: "how soft and round the stroke's edge is" },
   streamline: { value: 0.4, min: 0, max: 0.95, step: 0.05, label: 'Streamline', note: 'how much the stroke lags behind to even out a wobbly finger' },
   thinning: { value: 0.15, min: 0, max: 0.9, step: 0.05, label: 'Thinning', note: 'how much a fast rub gets thinner (0 = always the full size)' },
   spacing: { value: 4, min: 1, max: 30, step: 1, label: 'Point spacing', unit: 'u', note: 'how far her finger moves before the stroke takes a new point' },
-  reach: { value: 0.9, min: 0.4, max: 1.3, step: 0.05, label: 'Counts as painted', note: "share of the brush's width that counts toward how done a coat is" },
+  reach: { value: 0.9, min: 0.4, max: 1.3, step: 0.05, label: 'Counts as painted', note: "share of the brush's width that counts toward how done a coat is", main: true },
 })
 const COAT = knobs('coats', 'Coats and hiding', FILE, {
-  finish: { value: 0.78, min: 0.3, max: 1, step: 0.02, label: 'Finishes itself at', note: 'once this share of a coat is done, the rest puffs on by itself' },
+  finish: { value: 0.78, min: 0.3, max: 1, step: 0.02, label: 'Finishes itself at', note: 'once this share of a coat is done, the rest puffs on by itself', main: true },
   fluff: { value: 14, min: 0, max: 30, step: 1, label: 'Fluff', unit: 'u', note: 'how big the fluffy tufts grow on a white coat' },
   settle: { value: 35, min: 5, max: 120, step: 1, label: 'Snow settles', unit: 's', note: 'how long the ground takes to go white by itself while she paints the fox' },
   bearWait: { value: 4, min: 1, max: 15, step: 0.5, label: 'Bear comes after', unit: 's', note: 'seconds without rubbing (every animal at least half white) before the polar bear comes looking' },
@@ -1088,7 +1088,7 @@ export function SnowCoats({ onDone }: ActivityProps) {
   const guide = useRef<GuideHandle>(null)
   const alive = useAlive()
   const talk = useRef({ ran: -99, owl: -99 })
-  /** The summer payoff's stamp, waiting for the cheer; 🔁 cancels it. */
+  /** The summer payoff's stamp, waiting for the cheer; again cancels it. */
   const stampTimer = useRef<number>(undefined)
   const box = useRef<HTMLDivElement>(null)
   const svg = useRef<SVGSVGElement>(null)
@@ -1308,22 +1308,13 @@ export function SnowCoats({ onDone }: ActivityProps) {
           </text>
         </g>
       </svg>
-      <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
-        {phase === 'dusk' && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={CORNER}>
-            <BigButton onClick={toSummer} ariaLabel="Bring the summer back">
-              ☀️ ▶
-            </BigButton>
-          </motion.div>
-        )}
-        {phase === 'end' && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={CORNER}>
-            <BigButton onClick={again} ariaLabel="Again">
-              🔁 ❄️
-            </BigButton>
-          </motion.div>
-        )}
-      </div>
+      {/* The way on and again, bottom right like every game's (docs/hud.md). A sun, not a ▶: it brings the summer. */}
+      {phase === 'dusk' && (
+        <HudButton role="go" label="Bring the summer back" slot="bottom-right" pulse delay={2.5} onClick={toSummer}>
+          ☀️
+        </HudButton>
+      )}
+      {phase === 'end' && <HudButton role="again" icon="again" label="Again" slot="bottom-right" delay={2.5} onClick={again} />}
       <Guide ref={guide} hint={phase === 'play' ? HINT[section] : phase === 'dusk' ? L.coats.hide.dusk : null} quiet={phase === 'bear' || phase === 'end'} />
     </div>
   )
@@ -1360,5 +1351,3 @@ const CSS = `
 @keyframes coats-hint { 0%,100% { transform: scale(1) } 50% { transform: scale(1.15) } }
 `
 
-/** The ☀️ and 🔁 buttons wait in the sky's corner, clear of the animals on the snow. */
-const CORNER = { position: 'fixed' as const, right: 'calc(var(--safe-right, 0px) + 20px)', top: 'calc(var(--top-clear) + 12px)', pointerEvents: 'auto' as const }

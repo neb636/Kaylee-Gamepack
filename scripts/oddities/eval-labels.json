@@ -1,0 +1,396 @@
+{
+ "_about": "Answer key for node scripts/qa-oddities.mjs --eval: before/after pictures from past Canada fix PRs (#495-#518), labelled by an agent that had not seen Jev's answers (2026-11-22). Each key is <review-pages folder>/pics/<file>; scripts/oddities/eval-set.mjs fetches them. Add new bugs here as they are found, with the frame the bug was seen in.",
+ "frames": {
+  "neb636--bath-polish/pics/clean-after.jpg": {
+   "oddities": [],
+   "scene": "Misty's Bubble Bath close-up: clean cream spirit bear Misty waist-deep in the pool before a curling shader waterfall with foam; the folded pink towel under her paw; Maple at the left edge; prompt 'Now the towel!'"
+  },
+  "neb636--bath-polish/pics/clean-before.jpg": {
+   "oddities": [],
+   "scene": "Bath close-up (old look): clean cream Misty with a sun-bear chest crescent in front of a flat pale waterfall of white bars; a pill-shaped lavender towel under her paw; Maple at the left edge."
+  },
+  "neb636--bath-polish/pics/mirror-after.jpg": {
+   "oddities": [],
+   "scene": "Mirror close-up: Misty with a dyed lilac curly hairdo, pink flower and gold crown beams at the camera, waterfall behind; letterboxed with the 'Is that me?' line."
+  },
+  "neb636--bath-polish/pics/suds-after.jpg": {
+   "oddities": [],
+   "scene": "Bath wide play view (new look): mud-splattered Misty standing in the pool with soft foam on her chest and rainbow soap bubbles at her face; Maple on the bank, pink unicorn rubber duck, soap on a rock, raven on a branch, smiling rain cloud, pink sponge tool at the bottom."
+  },
+  "neb636--bath-polish/pics/suds-before.jpg": {
+   "oddities": [],
+   "scene": "Bath play view (old look): smudgy muddy Misty holding the pink sponge with black-outlined ball bubbles; Maple on a rock, box-shaped pool, flat waterfall of white bars, rain cloud, raven."
+  },
+  "neb636--bath-polish/pics/tall-after.jpg": {
+   "oddities": [],
+   "scene": "Bath in portrait: muddy Misty and Maple standing in the pool before the curling waterfall, rubber duck floating, sponge tool at the bottom, rain cloud and raven above."
+  },
+  "neb636--bath-polish/pics/wash-after.jpg": {
+   "oddities": [],
+   "scene": "Bath play view (new look): mud-splattered Misty in the rounded pool with ripple rings at her legs, Maple on the bank, unicorn duck, soap on a rock, sponge tool, curling waterfall."
+  },
+  "neb636--bath-polish/pics/wash-before.jpg": {
+   "oddities": [],
+   "scene": "Bath play view (old look): smudgy muddy Misty in a box-shaped pool, Maple on the bank, soap on a rock, sponge tool, flat white-bar waterfall."
+  },
+  "neb636--bath-polish/pics/wide-after.jpg": {
+   "oddities": [],
+   "scene": "Wide bath view (new look): dressed-up lilac Misty in the waterfall pool, Maple and the duck nearby, meandering river with pebble banks, berry bushes, tall forest; hint finger on the mirror pool."
+  },
+  "neb636--bath-polish/pics/wide-before.jpg": {
+   "oddities": [],
+   "scene": "Wide bath view (old look): muddy Misty in a rectangular blue pool under a boxy pale waterfall, Maple on a rock, mossy boulders, cone-ish trunks, sponge tool, rain.",
+   "unsure": "The old waterfall is a hard-edged, pale, see-through box (0.36-0.67 x, 0.4-0.62 y); reads as the flat art style the fix replaced rather than a transparency bug."
+  },
+  "neb636--bath-rainforest-fixes/pics/berries-after.jpg": {
+   "oddities": [],
+   "scene": "Crop of the bath's front edge: raspberry, blueberry and blackberry bushes on the bank, Maple and lather-covered Misty in the pool, unicorn duck."
+  },
+  "neb636--bath-rainforest-fixes/pics/berries-before.jpg": {
+   "oddities": [],
+   "scene": "Crop of the bath's front edge (old berries): three bushes of plain dot berries, Maple and pink-foamed Misty in the pool, duck; an iPad dock is visible below the game."
+  },
+  "neb636--bath-rainforest-fixes/pics/forest-after.jpg": {
+   "oddities": [],
+   "scene": "Bath film in the new Great Bear Rainforest: mossy cedars in green haze, waterfall and pebbled river; Maple holding a big leaf umbrella on the left bank, muddy Misty on the right bank; subtitle and skip button."
+  },
+  "neb636--bath-rainforest-fixes/pics/forest-before.jpg": {
+   "oddities": [
+    {
+     "type": "detached_prop",
+     "box": {
+      "left": 0.38,
+      "top": 0.6,
+      "right": 0.49,
+      "bottom": 0.82
+     },
+     "note": "Maple's hockey stick: the pink blade floats beside the top of the shaft instead of joining it"
+    }
+   ],
+   "scene": "Bath film outro in the old plain forest: Maple waving her hockey stick, blue-dyed Misty in a team sweater with a paw print, berry bushes and waterfall at right."
+  },
+  "neb636--bath-rainforest-fixes/pics/splash-after.jpg": {
+   "oddities": [],
+   "scene": "Bath film: Misty's KER-SPLOSH into the pool, a crown of see-through water with a jet, flying drops and rings, waterfall behind; letterboxed with skip button."
+  },
+  "neb636--bath-rainforest-fixes/pics/splash-before.jpg": {
+   "oddities": [],
+   "scene": "Bath film (old splash): muddy Misty tipping off the bank into the pool beside a tall column of opaque white blob shapes, waterfall at left, berry bushes at right.",
+   "unsure": "The old splash is a solid white blob column that Misty overlaps (0.33-0.6 x, 0-1 y); it reads as crude art more than a transparency or clipping bug."
+  },
+  "neb636--bath-rainforest-fixes/pics/stick-after.jpg": {
+   "oddities": [],
+   "scene": "Close-up: Maple holding a hockey stick whose taped pink blade joins the shaft, cream Misty at right, raspberry on the bush behind."
+  },
+  "neb636--bath-rainforest-fixes/pics/stick-before.jpg": {
+   "oddities": [
+    {
+     "type": "detached_prop",
+     "box": {
+      "left": 0.5,
+      "top": 0.33,
+      "right": 0.85,
+      "bottom": 0.75
+     },
+     "note": "Maple's hockey stick blade (pink, with purple knob) floats off the end of the shaft"
+    }
+   ],
+   "scene": "Close-up (old stick): Maple holding a hockey stick shaft with its pink blade hovering apart from it, blue-dyed Misty in a sweater at right."
+  },
+  "neb636--canada-canal-skaters/pics/canal-after.jpg": {
+   "oddities": [],
+   "scene": "Small crop of the Rideau Canal rink: six skaters in tuques, scarves and coats mid-stride on the ice behind a hockey goal."
+  },
+  "neb636--canada-canal-skaters/pics/canal-before.jpg": {
+   "oddities": [],
+   "scene": "Small crop of the Rideau Canal rink (old crowd): faceless capsule-shaped skaters standing on the ice behind a hockey goal."
+  },
+  "neb636--canada-pool-ground/pics/after-found.jpg": {
+   "oddities": [],
+   "scene": "Bike film at the waterfall pool: Monty the moose standing in the shallow water, Maple in her pink scarf on the dirt bank, her pink bike parked at right; subtitle 'Monty! Will you be our goalie?'."
+  },
+  "neb636--canada-pool-ground/pics/after-good.jpg": {
+   "oddities": [],
+   "scene": "Bike film at the waterfall pool, closer: Monty standing in the water with his whole body visible, Maple on the bank at right; subtitle 'Mmm. I am very good at standing.'"
+  },
+  "neb636--canada-pool-ground/pics/before-found.jpg": {
+   "oddities": [
+    {
+     "type": "clipping",
+     "box": {
+      "left": 0.27,
+      "top": 0.4,
+      "right": 0.47,
+      "bottom": 0.7
+     },
+     "note": "Monty is sunk to his chest in the dirt bank; the ground cuts straight through his body"
+    },
+    {
+     "type": "clipping",
+     "box": {
+      "left": 0.62,
+      "top": 0.56,
+      "right": 0.73,
+      "bottom": 0.78
+     },
+     "note": "Maple's legs sink into the dirt"
+    },
+    {
+     "type": "clipping",
+     "box": {
+      "left": 0.83,
+      "top": 0.55,
+      "right": 1,
+      "bottom": 0.8
+     },
+     "note": "the parked bike's wheels sink into the dirt"
+    }
+   ],
+   "scene": "Bike film at the waterfall pool (before): Monty the moose, Maple in her pink scarf and her pink bike by the pool; subtitle 'Monty! Will you be our goalie?'."
+  },
+  "neb636--canada-pool-ground/pics/before-good.jpg": {
+   "oddities": [
+    {
+     "type": "clipping",
+     "box": {
+      "left": 0.24,
+      "top": 0.55,
+      "right": 0.48,
+      "bottom": 0.76
+     },
+     "note": "Monty buried to his chest in the dirt ribbon over the pool edge"
+    },
+    {
+     "type": "clipping",
+     "box": {
+      "left": 0.68,
+      "top": 0.62,
+      "right": 0.84,
+      "bottom": 0.88
+     },
+     "note": "Maple's legs cut off by the ground"
+    }
+   ],
+   "scene": "Bike film at the waterfall pool, closer (before): Monty and Maple talking on the bank; subtitle 'Mmm. I am very good at standing.'"
+  },
+  "neb636--canada-round-two-build/pics/cabin.jpg": {
+   "oddities": [],
+   "scene": "Two stacked frames of the Team Cabin (iPad landscape): the team (penguin-like bird, snowman, Misty, Maple, Monty, raccoon, goose-like friend) dressed in hats, scarves and jerseys on a bench; wardrobe tray of jerseys, hats and stamps below; window, trophy shelf, lantern and mirror on the log wall."
+  },
+  "neb636--canada-round-two-build/pics/mud.jpg": {
+   "oddities": [],
+   "scene": "Side-by-side comparison labelled BEFORE/AFTER of muddy Misty's face and chest close-up in the bath, holding the pink sponge; mud pattern differs (blotchy smudge on the right)."
+  },
+  "neb636--canada-round-two-build/pics/statues.jpg": {
+   "oddities": [],
+   "scene": "Contact sheet of Flashlight Statues: Roxy the raccoon frozen in statue poses (holding carrots, crouched, singing, in a pink tutu) lit by the pink flashlight cursor in front of a big brown bear; plus two wide night campfire views with glowing-eyed animals, a tent and Maple by the fire.",
+   "unsure": "In the portrait tutu panel a raccoon kit's head fills the lower-left foreground very close to the camera; could be a deliberate foreground or a camera-too-close framing."
+  },
+  "neb636--canada-round-two-build/pics/whale-after.jpg": {
+   "oddities": [],
+   "scene": "Whale Peek-a-Boo with debug tap rings: a grey whale with barnacles surfaces beside Maple's pink inflatable boat, Ollie the otter towed on a rope, sea lion on a rock, kelp at right, harbour behind."
+  },
+  "neb636--canada-round-two-build/pics/whale-before.jpg": {
+   "oddities": [],
+   "scene": "Whale Peek-a-Boo with debug tap rings (earlier whale model): a lumpy grey whale beside Maple's pink boat, Ollie towed on a rope, sea lion on a rock, kelp, harbour houses behind."
+  },
+  "neb636--canada-team/pics/map-after.png": {
+   "oddities": [],
+   "scene": "New Canada map: a toy tray floating in the sky with the friends standing where they live (Misty, Monty, Maple, Tuque, Roxy, otters, orca), the rink, the château, mountains, a canoe on the lake and Sparkle's balloon."
+  },
+  "neb636--canada-team/pics/map-before.png": {
+   "oddities": [],
+   "scene": "Old Canada map: a flat 3D landmass with tiny trees and a railway, eight round activity bubbles (Whale Watch, Red Canoe, Sugar Snow, Mountain Bike, Pond Hockey, Salmon Leap, Animal Bridge, Carnival Snowballs, Campfire Night) on leader lines.",
+   "unsure": "Over the Rockies there are pale lavender see-through vertical streaks behind the lilac mountain blobs (0.14-0.27 x, 0.47-0.7 y), and a pale ellipse in the sea at the bottom; could be a mist effect drawn as hard bands or just the old art."
+  },
+  "neb636--canada-team/pics/world-pin.png": {
+   "oddities": [],
+   "scene": "2D world map: Sparkle in her hot-air balloon over the Atlantic, the moose pin on Canada, other country pins (pizza, camel, panda, elephant, llama) and cute animals on the continents."
+  },
+  "neb636--canada-whales-shore/pics/after-film-in-9000.jpg": {
+   "oddities": [],
+   "scene": "Whale Watch film-in: Maple in her pink inflatable boat by the wooden dock, fishing boats with wheelhouses moored behind, painted cottages with porches and fences on shore; subtitle about the kelp."
+  },
+  "neb636--canada-whales-shore/pics/after-otters-3000.jpg": {
+   "oddities": [],
+   "scene": "Whale Watch from above: Maple's boat heading to sleeping Ollie (Zzz, ripple rings), otters in a bed of bull kelp, sea lions on a rock, a paddleboarder by the island."
+  },
+  "neb636--canada-whales-shore/pics/after-story-2500.jpg": {
+   "oddities": [],
+   "scene": "Whale Watch start: Maple in a life ring at the wheel of her pink boat by the dock, two lofted fishing boats with pennants, clapboard cottages behind; 'Bonjour! Off we go to find Ollie!'"
+  },
+  "neb636--canada-whales-shore/pics/before-film-in-9000.jpg": {
+   "oddities": [],
+   "scene": "Whale Watch film-in (old harbour): Maple in her pink boat by the dock, boxy moored boats with flat white decks, plain box houses behind."
+  },
+  "neb636--canada-whales-shore/pics/before-otters-3000.jpg": {
+   "oddities": [],
+   "scene": "Whale Watch from above (old kelp): Maple's boat heading to sleeping Ollie, otters among propeller-like three-stick kelp floats, sea lions on a rock, paddleboarder."
+  },
+  "neb636--canada-whales-shore/pics/before-story-2500.jpg": {
+   "oddities": [],
+   "scene": "Whale Watch start (old harbour): Maple at the wheel of her pink boat by the dock, boxy fishing boats with white decks, plain box houses.",
+   "unsure": "Red streaks show through the left moored boat's white deck (0.07-0.4 x, 0.4-0.47 y): z-fighting, which isn't one of the listed types."
+  },
+  "neb636--canoe-lake-edge/pics/glide-after.jpg": {
+   "oddities": [],
+   "scene": "Red Canoe: Maple paddling the red canoe across the lake toward the glacier; trees, dock, beaver lodge and mountains reflect right up to the shoreline; Monty in the shallows, ducklings, log pile, hint finger."
+  },
+  "neb636--canoe-lake-edge/pics/glide-before.jpg": {
+   "oddities": [
+    {
+     "type": "transparency",
+     "box": {
+      "left": 0,
+      "top": 0.18,
+      "right": 0.5,
+      "bottom": 0.55
+     },
+     "note": "pale see-through band along the left/far shore; reflections start a few metres out with a hard edge"
+    },
+    {
+     "type": "transparency",
+     "box": {
+      "left": 0.6,
+      "top": 0.2,
+      "right": 1,
+      "bottom": 0.75
+     },
+     "note": "same pale lip along the right shore past Monty and the logs"
+    }
+   ],
+   "scene": "Red Canoe: Maple paddling the red canoe toward the glacier, dock at right, beaver lodge, Monty in the shallows, ducklings, log pile, hint finger."
+  },
+  "neb636--canoe-lake-edge/pics/stream-after.jpg": {
+   "oddities": [],
+   "scene": "Red Canoe near the glacier creek: Maple paddling toward the milky water where the creek's waterfall meets the lake; reflections reach the pebbly shore."
+  },
+  "neb636--canoe-lake-edge/pics/stream-before.jpg": {
+   "oddities": [
+    {
+     "type": "transparency",
+     "box": {
+      "left": 0,
+      "top": 0.24,
+      "right": 0.72,
+      "bottom": 0.55
+     },
+     "note": "pale band between the shore and the reflections, ending in a hard edge across the lake"
+    }
+   ],
+   "scene": "Red Canoe near the glacier creek: Maple paddling toward the milky water at the creek mouth, glacier at top right."
+  },
+  "neb636--canoe-lake-edge/pics/west-after.jpg": {
+   "oddities": [],
+   "scene": "Red Canoe at the west shore: Maple paddling toward a small jetty and log pile, spruce forest and boulders reflected up to the shoreline, mother duck and ducklings."
+  },
+  "neb636--canoe-lake-edge/pics/west-before.jpg": {
+   "oddities": [
+    {
+     "type": "transparency",
+     "box": {
+      "left": 0,
+      "top": 0.26,
+      "right": 1,
+      "bottom": 0.5
+     },
+     "note": "pale see-through band all along the west shore; the forest reflection starts well out from the bank"
+    }
+   ],
+   "scene": "Red Canoe at the west shore: Maple paddling toward a small jetty and log pile, spruce forest and boulders, ducks."
+  },
+  "neb636--canoe-look/pics/canoe-glacier-after.jpg": {
+   "oddities": [
+    {
+     "type": "transparency",
+     "box": {
+      "left": 0,
+      "top": 0.35,
+      "right": 1,
+      "bottom": 0.57
+     },
+     "note": "pale band across the lake below the glacier; the reflection begins with a hard edge mid-lake (fixed later in canoe-lake-edge)"
+    }
+   ],
+   "scene": "Red Canoe at the glacier (new look): Maple in the red canoe beside Lulu the loon with her baby, glacier with icefall and blue ice cliff, mossy boulders; pink replay button."
+  },
+  "neb636--canoe-look/pics/canoe-glacier-before.jpg": {
+   "oddities": [
+    {
+     "type": "transparency",
+     "box": {
+      "left": 0,
+      "top": 0.33,
+      "right": 1,
+      "bottom": 0.57
+     },
+     "note": "pale band across the lake near the glacier shore, reflection cut off with a hard edge"
+    }
+   ],
+   "scene": "Red Canoe at the glacier (old look): Maple in the red canoe beside Lulu the loon and her baby, a white ramp-like glacier, cone trees; pink replay button."
+  },
+  "neb636--canoe-look/pics/canoe-glide-after.jpg": {
+   "oddities": [
+    {
+     "type": "transparency",
+     "box": {
+      "left": 0,
+      "top": 0.18,
+      "right": 1,
+      "bottom": 0.75
+     },
+     "note": "pale lip ringing the lake shore; reflections start a few metres out (fixed later in canoe-lake-edge)"
+    }
+   ],
+   "scene": "Red Canoe glide (new look): Maple paddling toward the glacier and creek waterfall, layered spruces and aspens, beaver lodge, Monty in the shallows, dock and log pile, hint finger."
+  },
+  "neb636--canoe-look/pics/canoe-glide-before.jpg": {
+   "oddities": [
+    {
+     "type": "transparency",
+     "box": {
+      "left": 0,
+      "top": 0.18,
+      "right": 1,
+      "bottom": 0.75
+     },
+     "note": "pale see-through band around the lake edge between shore and reflections"
+    }
+   ],
+   "scene": "Red Canoe glide (old look): Maple paddling toward a boxy white glacier, cone trees and ball rocks, beaver lodge, Monty in the shallows, dock and log pile."
+  },
+  "neb636--whales-fixes/pics/lion-after.jpg": {
+   "oddities": [],
+   "scene": "Whale Peek-a-Boo close: the new sitting sea lion with whiskers on the flat rock, rock pool beside it, Maple's pink boat in front with Ollie towed alongside."
+  },
+  "neb636--whales-fixes/pics/lion-before.jpg": {
+   "oddities": [],
+   "scene": "Crop of the old lumpy sea lion on the flat rock, a white spout puff on the rock at left.",
+   "unsure": "The white spout puff at the left (0.03-0.11 x, 0.37-0.8 y) sits on the rock surface; may be an orca blowing from inside the rock (see orca-before) or just a spout in front of it."
+  },
+  "neb636--whales-fixes/pics/maple-after.jpg": {
+   "oddities": [],
+   "scene": "Soaked close-up: Maple in her pink boat with wet spiky fur keeps her own happy face, hexagon water drops flying, kelp and harbour cottages and lighthouse behind; 'Achoo! I am all wet!'"
+  },
+  "neb636--whales-fixes/pics/orca-after.jpg": {
+   "oddities": [],
+   "scene": "Orca family: one orca swims past the sea lions' rock (not through it), the baby orca spyhops with the lucky rock on its nose, grandma orca rises; Maple steers her pink boat with Ollie towed; 'New friend! Orca' card.",
+   "unsure": "Ollie on his rope overlaps the rock pool's rim at the left (0.13-0.21 x, 0.6-0.7 y); probably in front of it in the water, but could be touching the rock."
+  },
+  "neb636--whales-fixes/pics/orca-before.jpg": {
+   "oddities": [
+    {
+     "type": "clipping",
+     "box": {
+      "left": 0.16,
+      "top": 0.3,
+      "right": 0.27,
+      "bottom": 0.44
+     },
+     "note": "an orca swims straight into the sea lions' rock; its front half is inside the rock"
+    }
+   ],
+   "scene": "Orca section: Maple in her pink boat with Ollie on his rope, the sea lion on its rock, one orca passing through the rock at left and another orca with a spout at right, a bubble ring with a hint finger."
+  }
+ }
+}

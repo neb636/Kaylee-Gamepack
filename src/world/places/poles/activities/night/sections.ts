@@ -1,4 +1,4 @@
-// The Longest Night, the Poles' new ending (planning/around-the-world/poles-ending.md): one chapter in three acts and a
+// The Longest Night, the Poles' new ending (poles-ending.md in git history): one chapter in three acts and a
 // goodbye, with films between them (their own links: #/world/poles/story/night-in, night-lost, night-colony,
 // night-sunrise, night-goodbye, the-end). #/world/poles/night/<section>?leg=warm&part=churn
 // A section link opens straight into that act (no film before it), as if she had played to there, and the chapter goes

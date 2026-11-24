@@ -1,4 +1,4 @@
-// What she made that stays (planning/around-the-world/canada-round-2.md, "Looks that stay"): the look she gave Misty
+// What she made that stays (canada-round-2.md in git history, "Looks that stay"): the look she gave Misty
 // in her bubble bath (fur colors, fluff, hairdo, decorations, the paw print on her team sweater) and what she put on
 // each friend in the Team Cabin. Saved on this iPad and read by everyone who shows the team: the film cast
 // (story/cast.ts), the map (map/world.ts), the rink and the big game (activities/party/), through

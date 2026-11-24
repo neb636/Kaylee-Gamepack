@@ -10,12 +10,12 @@
 // characters/face.ts). She waves, cheers, rings the bell, comes out of a leaf pile covered in leaves, shakes off the
 // creek and wobbles after a bonk: every pose eases in and settles, never a jump. The world (ride.ts) moves, turns and
 // leans the whole thing and hands her the pose each frame.
-import { Euler, Group, Mesh, Quaternion, Vector3, type BufferGeometry } from 'three'
+import { Euler, Group, Matrix4, Mesh, Quaternion, SphereGeometry, TorusGeometry, Vector3, type BufferGeometry } from 'three'
 import { bell, clamp, span } from '../../../../../sdk'
 import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
 import { FaceLife } from '../../../../engine3d/characters/face'
 import type { Bag } from '../../../../engine3d/dispose'
-import { merge, P, solid, solidMix, type V3 } from '../../../../engine3d/geo'
+import { bake, merge, P, solid, solidMix, type V3 } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { CANADA_COLORS, CANADA_LOOKS } from '../../characters/looks'
 
@@ -28,6 +28,8 @@ const WHITE = '#FFFFFF'
 const TIRE = '#3E3646'
 const SILVER = '#D6D2E2'
 const BLACK = '#3A3242'
+/** The helmet's vent slots and strap. */
+const VENT = '#5A4878'
 const WHEEL_R = 0.31
 const REAR_Z = -0.5
 const BB: V3 = [0, 0.29, -0.03]
@@ -88,28 +90,77 @@ function tuckLegs(rig: Rig, cut: number) {
   })
 }
 
-/** Her pink helmet, made for the rig's head (head-local): a dome with white vents, a visor, the strap under her chin, and
- *  two little fur ears on top (her own ears are under it). */
+/** Her pink bike helmet, made for the rig's head (head-local). A shell a little bigger than her head, tipped back so its
+ *  rim sits above her brows in front and low over the back of her head, closed by a white rim. A white stripe runs
+ *  front to back over the top with two dark vent slots on each side of it, a hot-pink peak sticks out over her eyes, a
+ *  pink heart sits on each side, and a strap comes down past her cheeks to the buckle under her chin. Two little fur
+ *  ears poke out of the top (her own ears are under it). */
 function helmet(rig: Rig, bag: Bag) {
   const { R, headY } = rig.face
+  /** The ball the shell is a slice of: its middle, its radius, how far it tips back, and how far down its rim reaches. */
+  const mid = new Vector3(0, headY + 0.06 * R, -0.04 * R)
+  const r = 1.17 * R
+  const tip = -0.23
+  const rimA = 1.35
+  const tilt = new Matrix4().makeRotationX(tip)
+  /** A point on the shell `out` past its surface, along a helmet-local direction (+y its top, +z its front). */
+  const onShell = (dir: Vector3, out = 0) => dir.clone().normalize().applyMatrix4(tilt).multiplyScalar(r + out).add(mid)
+  const normal = (dir: Vector3) => dir.clone().normalize().applyMatrix4(tilt)
+  /** A strip along a circle over the top of the shell, from front to back, swung `side` rad toward her left or right. */
+  const arc = (rad: number, tube: number, c: string, side: number, from: number, to: number) => {
+    const t0 = Math.asin(Math.min(1, Math.cos(rimA) / Math.cos(side)))
+    const a = t0 + from
+    const b = Math.PI - t0 - to
+    const place = (g: BufferGeometry) => g.rotateY(-Math.PI / 2).rotateZ(side).applyMatrix4(tilt).translate(mid.x, mid.y, mid.z)
+    // (Round ends: a ball at each end of the strip.)
+    const end = (t: number) => bake(place(new SphereGeometry(tube, 10, 8).translate(rad * Math.cos(t), rad * Math.sin(t), 0)), c, {}, true)
+    return [bake(place(new TorusGeometry(rad, tube, 8, 40, b - a).rotateZ(a)), c, {}, true), end(a), end(b)]
+  }
+  const shell = new SphereGeometry(r, 32, 18, 0, Math.PI * 2, 0, rimA).applyMatrix4(tilt).translate(mid.x, mid.y, mid.z)
+  const peak = onShell(new Vector3(0, Math.cos(rimA - 0.06), Math.sin(rimA - 0.06)))
   const lined: BufferGeometry[] = [
-    P.sphere(1.08 * R, PAL.pink, { at: [0, headY + 0.42 * R, -0.14 * R], scale: [1.04, 0.76, 1.06] }, 26),
-    // The visor above her eyes.
-    P.sphere(0.6 * R, PAL.hotpink, { at: [0, headY + 0.62 * R, 0.74 * R], rot: [0.45, 0, 0], scale: [1.25, 0.16, 0.7] }, 20),
-    // Her ears poke out of the top, like a kid's helmet with ears.
-    ...[-1, 1].map((s) => P.sphere(0.2 * R, C.beaverFur, { at: [s * 0.6 * R, headY + 1.08 * R, -0.16 * R], scale: [1, 1, 0.7] })),
+    bake(shell, PAL.pink, {}, true),
+    // The rim round its edge.
+    P.torus(r * Math.sin(rimA), 0.05 * R, WHITE, { at: onShell(new Vector3(0, 1, 0), r * Math.cos(rimA) - r).toArray() as V3, rot: [Math.PI / 2 + tip, 0, 0] }),
+    // The peak over her eyes, tipped up a little.
+    P.sphere(0.46 * R, PAL.hotpink, { at: [peak.x, peak.y + 0.01 * R, peak.z + 0.02 * R], rot: [0.18, 0, 0], scale: [1.15, 0.14, 0.55] }, 24),
+    // The fur ears out of the top.
+    ...[-1, 1].map((s) => P.sphere(0.2 * R, C.beaverFur, { at: onShell(new Vector3(s * 0.55, 0.8, -0.12), -0.02 * R).toArray() as V3, rot: [0, 0, -s * 0.3], scale: [1, 1.07, 0.65] }, 20)),
   ]
   const plain: BufferGeometry[] = [
-    // The vents: three white stripes front to back.
-    ...[-0.3, 0, 0.3].map((x) => P.capsule(0.06 * R, 0.85 * R, WHITE, { at: [x * R, headY + 1.22 * R - Math.abs(x) * 0.2 * R, -0.16 * R], rot: [Math.PI / 2, 0, x * 0.5], scale: [1, 1, 0.5] })),
-    ...[-1, 1].map((s) => P.sphere(0.11 * R, C.beaverEar, { at: [s * 0.6 * R, headY + 1.08 * R, -0.06 * R], scale: [1, 1, 0.4] })),
-    // The chin strap down each side, and its buckle.
-    ...[-1, 1].map((s) => P.capsule(0.025 * R, 0.62 * R, BLACK, { at: [s * 0.86 * R, headY - 0.32 * R, 0.18 * R], rot: [0.25, 0, s * 0.3] })),
-    P.sphere(0.06 * R, BLACK, { at: [0, headY - 0.92 * R, 0.45 * R], scale: [1.2, 0.7, 0.8] }),
+    // The white stripe front to back, and the vent slots either side of it.
+    ...arc(r + 0.004 * R, 0.09 * R, WHITE, 0, 0.1, 0.1),
+    ...[-0.42, 0.42, -0.84, 0.84].flatMap((side) => arc(r - 0.03 * R, 0.07 * R, VENT, side, 0.3, 0.5)),
+    ...[-1, 1].map((s) => P.sphere(0.11 * R, C.beaverEar, { at: onShell(new Vector3(s * 0.55, 0.8, -0.05), 0.0).toArray() as V3, rot: [0, 0, -s * 0.3], scale: [1, 1.06, 0.36] }, 16)),
   ]
+  // A heart on each side.
+  for (const s of [-1, 1]) {
+    const dir = new Vector3(s * 0.9, 0.36, -0.08)
+    const at = onShell(dir, 0.005 * R)
+    lined.push(P.prism(HEART.map(([x, y]) => [x * 0.2 * R, y * 0.2 * R]), 0.03 * R, PAL.hotpink, { at: at.toArray() as V3, rot: facing(normal(dir)) }))
+  }
+  // The chin strap down past each cheek to the buckle.
+  const buckle: V3 = [0, headY - 0.9 * R, 0.58 * R]
+  for (const s of [-1, 1]) {
+    const pts: V3[] = [[s * 1.1 * R, headY + 0.25 * R, -0.04 * R], [s * 1.12 * R, headY - 0.3 * R, 0.12 * R], [s * 0.7 * R, headY - 0.8 * R, 0.45 * R], buckle]
+    for (let i = 0; i + 1 < pts.length; i++) plain.push(tube(pts[i], pts[i + 1], 0.035 * R, VENT, 8))
+  }
+  plain.push(P.rbox(0.16 * R, 0.09 * R, 0.1 * R, 0.03 * R, PAL.hotpink, { at: buckle }))
   const g = solidMix(lined, plain, bag, 2.5)
   rig.head.add(g)
   return g
+}
+
+/** A heart's outline, about 2 across, its point at the bottom. */
+const HEART: [number, number][] = Array.from({ length: 28 }, (_, i) => {
+  const t = (i / 28) * Math.PI * 2
+  return [Math.sin(t) ** 3, (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) / 16] as [number, number]
+})
+
+/** Turns +z to point along `n` (a flat thing lying on a surface). */
+function facing(n: Vector3): V3 {
+  const e = new Euler().setFromQuaternion(new Quaternion().setFromUnitVectors(new Vector3(0, 0, 1), n))
+  return [e.x, e.y, e.z]
 }
 
 export interface RiderPose {

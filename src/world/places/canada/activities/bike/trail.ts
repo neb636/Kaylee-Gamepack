@@ -209,15 +209,40 @@ export class Trail {
       // Off the end: the nearer end.
       best = z > this.z[0] ? 0 : this.n - 1
     }
-    // Onto the segment either side of the nearest sample.
-    const i = Math.min(this.n - 2, best)
-    const a = phi(FROM + i * STEP)
-    const tx = Math.sin(a)
-    const tz = -Math.cos(a)
-    const dx = x - this.x[i]
-    const dz = z - this.z[i]
-    const along = dx * tx + dz * tz
-    return { s: FROM + i * STEP + along, lat: dx * Math.cos(a) + dz * Math.sin(a) }
+    // The exact inverse of spot(): the s whose square-across line passes through the point. Measured from the nearest
+    // sample's own heading alone, s and lat jumped each time the nearest sample changed, by about lat × the bend
+    // between samples: nothing on the middle line, but out on a bend's shoulder the ground under her stepped every
+    // half meter, which threw her into one-frame hops and made her shiver along the trail's edge.
+    // (A few Newton steps from the nearest sample: along(s) = (p - middle(s)) · forward(s) is 0 there.)
+    // (Kept within a sample of the nearest one: far off the trail, inside a bend, more than one s fits.)
+    const lo = FROM + Math.max(0, best - 1) * STEP
+    const hi = FROM + Math.min(this.n - 1, best + 1) * STEP
+    let s = FROM + best * STEP
+    const m = { x: 0, z: 0 }
+    const across = (s: number) => {
+      this.spot(s, 0, m)
+      const a = phi(s)
+      const dx = x - m.x
+      const dz = z - m.z
+      return { along: dx * Math.sin(a) - dz * Math.cos(a), lat: dx * Math.cos(a) + dz * Math.sin(a) }
+    }
+    for (let it = 0; it < 4; it++) {
+      const { along, lat } = across(s)
+      // (How fast `along` shrinks with s: 1 on the middle line, less on the outside of a bend, more on the inside.)
+      const bend = (phi(s + 0.25) - phi(s - 0.25)) / 0.5
+      const next = Math.min(hi, Math.max(lo, s + along / Math.max(0.3, 1 - lat * bend)))
+      if (Math.abs(next - s) < 1e-4) break
+      s = next
+    }
+    if ((best === 0 && s <= lo) || (best === this.n - 1 && s >= hi)) {
+      // Off an end: straight on along the end's heading, as before.
+      const i = best
+      const a = phi(FROM + i * STEP)
+      const dx = x - this.x[i]
+      const dz = z - this.z[i]
+      return { s: FROM + i * STEP + dx * Math.sin(a) - dz * Math.cos(a), lat: dx * Math.cos(a) + dz * Math.sin(a) }
+    }
+    return { s, lat: across(s).lat }
   }
 }
 

@@ -10,6 +10,7 @@ import { Group, Vector3, type Object3D } from 'three'
 import type { Silly } from '../../../engine3d/characters/face'
 import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../engine3d/geo'
+import { stickParts } from '../story/props'
 import { CANADA_COLORS } from './looks'
 import { ToyActor, type ToyPose } from './toy'
 import type { ToySpots } from './worn'
@@ -76,7 +77,7 @@ export class Goose extends ToyActor {
     }
     if (o.stick) {
       const c = CANADA_COLORS.geese
-      this.wingR.add(solid(merge([P.cyl(0.018 * H, 0.018 * H, 0.62 * H, c, { at: [0.07 * H, -0.12 * H, 0.14 * H], rot: [0.5, 0, 0] }, 6), P.rbox(0.05 * H, 0.03 * H, 0.2 * H, 0.01 * H, c, { at: [0.07 * H, -0.37 * H, 0.36 * H] })]), bag, 1.6))
+      this.wingR.add(solid(merge(stickParts({ hand: [0.07 * H, -0.12 * H, 0.14 * H], heel: [0.07 * H, -0.39 * H, 0.3 * H], len: 0.6 * H, w: 0.034 * H, blade: 0.2 * H, shaft: c, color: c })), bag, 1.6))
     }
     // The long neck and the head, on a pivot at the front of the body.
     this.neck.position.set(0, 0.42 * H, 0.13 * H)

@@ -670,26 +670,6 @@ export class Avatar implements Character {
     return !!this.stick
   }
 
-  /** The jump button: a hop on the spot, or carried `reach` meters the way the stick pushes when there's room to land.
-   *  False when she can't jump now (mid-hop, sitting). */
-  jump(height: number, dur: number, reach: number, free?: (x: number, z: number) => boolean) {
-    if (this.tweens.length || this.pose !== 'stand') return false
-    const p = this.root.position
-    const to = p.clone()
-    const st = this.stick
-    if (st && reach > 0) {
-      const d = reach * Math.min(1, st.k)
-      const x = p.x + st.x * d
-      const z = p.z + st.z * d
-      if ((free ?? st.free)(x, z)) {
-        to.x = x
-        to.z = z
-      }
-    }
-    this.hopTo(to, dur, height)
-    return true
-  }
-
   /** A little jump to `to` (onto a stool, the mattress, the next stair). */
   hopTo(to: Vector3, dur: number, arc: number, done?: () => void) {
     this.tweens.push({ from: new Vector3(), to: to.clone(), dur, arc, t: -1, done })

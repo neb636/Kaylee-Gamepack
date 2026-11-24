@@ -100,7 +100,7 @@ export class Moose extends Critter {
     if (this.t < 0 || this.up < 0.5) this.t = 0.1
   }
   update(dt: number, t: number) {
-    const { body, head, armL, armR, mouth } = this.rig
+    const { body, head, armL, armR } = this.rig
     this.life.update(dt)
     this.nextLift -= dt
     if (this.nextLift < 0 && this.t < 0) {
@@ -116,9 +116,6 @@ export class Moose extends Critter {
     body.rotation.x = 0.62 * down + Math.sin(t * 0.9) * 0.02
     head.rotation.x = 0.75 * down - 0.08 * this.lean + Math.sin(t * 6) * 0.03 * down
     head.rotation.y += ((this.lean > 0.5 ? this.look : 0) - head.rotation.y) * Math.min(1, dt * 3)
-    // Chewing all the time: the jaw (the mouth) goes up and down.
-    const chew = Math.sin(t * 7.5)
-    mouth.scale.set(1 + 0.08 * chew, 1 + 0.25 * Math.max(0, chew), 1)
     head.position.x = Math.sin(t * 3.75) * 0.01
     // Breathing, his front legs (the rig's arms) reaching down into the water as he leans.
     const br = 1 + Math.sin(t * 1.6 + this.phase) * 0.015
