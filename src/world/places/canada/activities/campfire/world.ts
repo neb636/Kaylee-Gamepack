@@ -13,7 +13,7 @@
 //             and wiggles.
 //   statues   Roxy sneaks toward the marshmallow bag whenever the light is off her, and freezes whenever it's on her,
 //             in a new ridiculous pose each time, with its props (characters/statues.ts: leafy twigs held up for the
-//             tree, a boulder on her back for the rock, music notes for the whistle, a tutu for the stretch). The first
+//             tree, music notes for the whistle, a tutu for the stretch). The first
 //             time, the camera goes close on her silly face and her whole pose (`statueShot`). Hold the light on her and she wobbles, then falls over laughing;
 //             three of those and she gives up. Left alone she reaches the bag ("Yoink!") and scampers back to try
 //             again, a little slower each time.
@@ -173,9 +173,9 @@ const ROAST_SEATS: Record<string, [number, number, number]> = {
 /** The kits a little bigger than in the films: they peek out from far across the clearing. */
 const KIT_SCALE = 1.5
 /** Her statue lines, by pose. */
-const STATUE_LINE: Record<StatueId, Line> = { tree: T.statues[0], rock: T.statues[1], whistling: T.statues[2], ballerina: T.statues[3], flamingo: T.statues[3] }
+const STATUE_LINE: Record<StatueId, Line> = { tree: T.statues[0], whistling: T.statues[1], ballerina: T.statues[2], flamingo: T.statues[2] }
 /** Roxy's poses: the four she has lines for (the kits do the flamingo too). */
-const ROXY_POSES: StatueId[] = ['tree', 'rock', 'whistling', 'ballerina']
+const ROXY_POSES: StatueId[] = ['tree', 'whistling', 'ballerina']
 /** Which way a statue faces (radians): to us, a little to our right, where the close-up's camera stands. */
 const STATUE_YAW = 0.28
 
@@ -865,7 +865,7 @@ export class FlashlightStatues implements World3D {
     this.poseKit(k)
     k.a.lean = 0
     // Caught! A freeze, a pose, a giggle...
-    this.strike(k.a, nextStatue(null, ['tree', 'flamingo', 'ballerina', 'rock']))
+    this.strike(k.a, nextStatue(null, ['tree', 'flamingo', 'ballerina']))
     camp.freeze()
     this.burst(k.a.at(0.7, tmp), 10)
     this.lastCatch = this.time
@@ -2020,7 +2020,7 @@ export class FlashlightStatues implements World3D {
 // ---------------------------------------------------------------- little things
 
 /** How each statue is framed in its close-up (in her heights): the middle of what to show and half its height. */
-const STATUE_FRAME: Record<StatueId, [mid: number, half: number]> = { tree: [0.74, 0.8], flamingo: [0.66, 0.7], ballerina: [0.6, 0.7], whistling: [0.62, 0.64], rock: [0.4, 0.52] }
+const STATUE_FRAME: Record<StatueId, [mid: number, half: number]> = { tree: [0.74, 0.8], flamingo: [0.66, 0.7], ballerina: [0.6, 0.7], whistling: [0.62, 0.64] }
 const STATUE_FOV = 30
 const statueTmp = new Vector3()
 /** The statue close-up's camera: from the clearing's side (where her flashlight is), a little to our right and above,

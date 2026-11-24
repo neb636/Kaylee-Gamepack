@@ -42,7 +42,7 @@ const WIND_HOLD = 2.5
 /** The last statue a robbed goose struck (the next is a different one). */
 let lastStatue: StatueId | null = null
 /** A goose has no arms to pose: its wings go up for the statues that lift them (a tree's branches, a ballerina). */
-const STATUE_WINGS: Record<StatueId, number> = { tree: 1, ballerina: 0.85, flamingo: 0.65, rock: 0, whistling: 0 }
+const STATUE_WINGS: Record<StatueId, number> = { tree: 1, ballerina: 0.85, flamingo: 0.65, whistling: 0 }
 
 const SPIN_S = 0.8
 const FLOP_S = 1.3

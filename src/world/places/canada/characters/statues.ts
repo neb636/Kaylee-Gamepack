@@ -1,5 +1,5 @@
 // Statues (canada-round-2.md in git history, Flashlight Statues): Roxy the raccoon, caught in the
-// flashlight's beam, freezes in a ridiculous pose with a silly face ("I'm a tree." "I'm a rock." "Nobody here!"). A
+// flashlight's beam, freezes in a ridiculous pose with a silly face ("I'm a tree." "Nobody here!" "Just stretching!"). A
 // small library of poses for any rig actor (engine3d/characters/actor.ts FilmActor): the campfire game uses it, her
 // kits strike one when they're caught, and the big game reuses it (a goose Roxy robs freezes like a statue).
 //
@@ -8,7 +8,7 @@
 //   releaseStatue(roxy)               back to herself (her own face, her own breathing)
 //   nextStatue(last)                  a pose to strike next, never the one just struck
 //   strikeStatue(roxy, 'tree', { props: bag })   ...with the pose's props (opt in: a rig actor only): two leafy twigs
-//                                     held up and leaves on her head for the tree, a grey boulder shell for the rock,
+//                                     held up and leaves on her head for the tree,
 //                                     music notes for the whistle, a pink tutu for the ballerina
 //
 // How: the actor still runs its own update (blinks, breathing, a walk), and the pose is laid over its bones straight
@@ -23,8 +23,8 @@ import { P, solidMix } from '../../../engine3d/geo'
 import type { Silly } from '../../../engine3d/characters/face'
 import type { ToyActor } from './toy'
 
-export type StatueId = 'tree' | 'rock' | 'flamingo' | 'whistling' | 'ballerina'
-export const STATUES: readonly StatueId[] = ['tree', 'rock', 'flamingo', 'whistling', 'ballerina']
+export type StatueId = 'tree' | 'flamingo' | 'whistling' | 'ballerina'
+export const STATUES: readonly StatueId[] = ['tree', 'flamingo', 'whistling', 'ballerina']
 
 type Rot = [x: number, y: number, z: number]
 /** A pose: rotations (radians) for each bone, the body's stretch and lift (of their height), and the silly face. */
@@ -48,8 +48,6 @@ const POSES: Record<StatueId, Pose> = {
   // "I'm a tree.": both arms up and out like branches (a Y: straight up, a chibi's little arms hide behind its big
   // head), tall on tiptoe, swaying a little, eyes huge.
   tree: { body: [0, 0, 0.06], stretch: 1.1, lift: 0.02, armL: [-0.15, 0, -2.2], armR: [-0.15, 0, 2.3], head: [-0.12, 0, 0.12], face: 'dazzled' },
-  // "I'm a rock.": curled up small, arms hugging her knees, head tucked, peeking cross-eyed.
-  rock: { body: [0.32, 0, 0], stretch: 0.72, lift: -0.02, armL: [-1.25, 0, 0.42], armR: [-1.25, 0, -0.42], head: [0.12, 0, 0.1], face: 'crossed' },
   // Standing on one leg like a flamingo: tipped to one side, arms out like wings to keep her balance.
   flamingo: { body: [0, 0.15, 0.24], stretch: 1.04, lift: 0.04, armL: [-0.15, 0, -1.55], armR: [-0.1, 0, 1.25], head: [-0.05, 0, -0.32], face: 'dizzy' },
   // "Nobody here!": paws behind her back, looking away up at the sky, whistling.
@@ -210,28 +208,6 @@ function buildProps(who: FilmActor, bag: Bag): Props {
     )
   const sprout = solidMix([leaf(-0.14 * R, headY + 0.98 * R, 0.05 * R, 0.55, '#6FBF5A', 0.9), leaf(0.14 * R, headY + 1.0 * R, 0.05 * R, -0.5, '#8ACB62', 0.9)], [], bag, 1.6)
   out.tree = { parts: [put(r.armL, twig(-1)), put(r.armR, twig(1)), put(r.head, sprout)] }
-  // The rock: a big sandy-grey boulder on her back like a shell, mossy on top with a little pink flower, two pebbles at
-  // her sides (her face peeps out the front).
-  const stone = '#9C9484'
-  const rock = solidMix(
-    [P.sphere(0.36 * H, stone, { at: [0, 0.36 * H, -0.4 * H], scale: [1.6, 1.15, 0.85] }, 18), P.sphere(0.13 * H, '#B4AA98', { at: [0.42 * H, 0.08 * H, 0], scale: [1, 0.75, 1] }, 12), P.sphere(0.11 * H, '#80786A', { at: [-0.42 * H, 0.07 * H, 0.02 * H], scale: [1, 0.75, 1] }, 12)],
-    [
-      // Darker blotches and a crack on the boulder's sides and top, so it reads as stone, not more fur.
-      ...[
-        [-0.5, 0.42, -0.26, 0.08],
-        [0.52, 0.34, -0.26, 0.07],
-        [-0.3, 0.68, -0.32, 0.06],
-        [0.3, 0.7, -0.3, 0.05],
-      ].map(([x, y, z, r]) => P.sphere(r * H, '#6E6658', { at: [x * H, y * H, z * H], scale: [1, 0.8, 0.5] }, 8)),
-      P.box(0.014 * H, 0.18 * H, 0.014 * H, '#5A5348', { at: [0.4 * H, 0.52 * H, -0.22 * H], rot: [0, 0, -0.5] }),
-      P.sphere(0.17 * H, '#5E8C4E', { at: [0.06 * H, 0.76 * H, -0.42 * H], scale: [1.6, 0.35, 1.1] }, 12),
-      P.sphere(0.04 * H, '#FF8FB8', { at: [0.14 * H, 0.81 * H, -0.32 * H], scale: [1, 0.6, 1] }, 8),
-      P.sphere(0.019 * H, '#FFE27A', { at: [0.14 * H, 0.835 * H, -0.32 * H] }, 6),
-    ],
-    bag,
-    2,
-  )
-  out.rock = { parts: [put(r.body, rock)] }
   // The whistle: two music notes floating up from her little round mouth, to the side.
   const note = (x: number, y: number, s: number) => [
     P.sphere(0.1 * R * s, NOTE, { at: [x, y, 0], rot: [0, 0, 0.45], scale: [1.3, 0.95, 0.5] }, 10),
