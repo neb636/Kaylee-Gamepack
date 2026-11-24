@@ -1,0 +1,549 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "whales",
+  "title": "Canada › Whales",
+  "intro": "",
+  "page": "canada-whales.html",
+  "audio": null,
+  "lines": 35,
+  "seconds": 78,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "whales.tapWhale.touch",
+      "text": "Tap the whale and see what it does!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "whales.sneeze",
+      "text": "Hey, you splashed me!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Achoo! I am all wet!"
+    },
+    {
+      "key": "whales.hold.mouse",
+      "text": "Click and hold the whale, then let go!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "whales.peek.mouse",
+      "text": "Peek-a-boo! Click the baby orca!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "whales.filmOut.wet",
+      "text": "What's hockey?",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hockey? Is it wet?"
+    },
+    {
+      "key": "whales.filmOut.ice",
+      "text": "It's like soccer, but with ice skating!",
+      "flags": [
+        "changed"
+      ],
+      "was": "It's ice! You slide on it!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "ollie"
+      ],
+      "text": "Ollie the sea otter spins faster than anybody!",
+      "voice": "maple",
+      "key": "whales.filmIn.ollie",
+      "part": "whales › filmIn",
+      "when": "Whale Peek-a-Boo (activities/whales/; canada-round-2.md in git history, section 3): a whale's spout blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out. The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.",
+      "ms": 2520,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "lucky"
+      ],
+      "text": "Look! My lucky rock!",
+      "voice": "otter",
+      "key": "whales.filmIn.lucky",
+      "part": "whales › filmIn",
+      "when": "Whale Peek-a-Boo (activities/whales/; canada-round-2.md in git history, section 3): a whale's spout blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out. The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.",
+      "ms": 2304,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "took"
+      ],
+      "text": "My rock! The whale took it!",
+      "voice": "otter",
+      "key": "whales.filmIn.took",
+      "part": "whales › filmIn",
+      "when": "Higher, higher... a whale comes up under it. The spout shoots the rock into the sky and away. (Also Ollie's one line when the game opens from a link or a replay.)",
+      "ms": 2688,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "hop"
+      ],
+      "text": "Hop on! We'll get it back!",
+      "voice": "maple",
+      "key": "whales.filmIn.hop",
+      "part": "whales › filmIn",
+      "when": "Whale Peek-a-Boo (activities/whales/; canada-round-2.md in git history, section 3): a whale's spout blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out. The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.",
+      "ms": 2040,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "bubbles",
+        "touch"
+      ],
+      "text": "Bubbles! Tap them!",
+      "voice": "sparkle",
+      "key": "whales.bubbles.touch",
+      "part": "whales › bubbles",
+      "when": "The game opens (Sparkle): bubbles by the boat. Stuck about 8 s with the bubbles up: the hint.",
+      "ms": 2160,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "bubbles",
+        "mouse"
+      ],
+      "text": "Bubbles! Click them!",
+      "voice": "sparkle",
+      "key": "whales.bubbles.mouse",
+      "part": "whales › bubbles",
+      "when": "",
+      "ms": 2088,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "bubblesHint"
+      ],
+      "text": "Look for the bubbles!",
+      "voice": "sparkle",
+      "key": "whales.bubblesHint",
+      "part": "whales",
+      "when": "",
+      "ms": 1608,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "whaleUp"
+      ],
+      "text": "A whale! A real whale!",
+      "voice": "maple",
+      "key": "whales.whaleUp",
+      "part": "whales",
+      "when": "The grey whale peeks out (Maple), then Sparkle, once (and again as the hint when she's stuck).",
+      "ms": 2352,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "tapWhale",
+        "touch"
+      ],
+      "text": "Tap the whale and see what it does!",
+      "voice": "sparkle",
+      "key": "whales.tapWhale.touch",
+      "part": "whales › tapWhale",
+      "when": "",
+      "ms": 3744,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "whales",
+        "tapWhale",
+        "mouse"
+      ],
+      "text": "Click the whale and see what it does!",
+      "voice": "sparkle",
+      "key": "whales.tapWhale.mouse",
+      "part": "whales › tapWhale",
+      "when": "",
+      "ms": 2856,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "whaleBlow"
+      ],
+      "text": "It breathes out of its head!",
+      "voice": "maple",
+      "key": "whales.whaleBlow",
+      "part": "whales",
+      "when": "The blowhole: the spout comes down on the boat (the second time, Maple's soaked face in close-up).",
+      "ms": 1824,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "sneeze"
+      ],
+      "text": "Hey, you splashed me!",
+      "voice": "maple",
+      "key": "whales.sneeze",
+      "part": "whales",
+      "when": "",
+      "ms": 1704,
+      "flags": [
+        "changed"
+      ],
+      "was": "Achoo! I am all wet!"
+    },
+    {
+      "path": [
+        "whales",
+        "seenRock"
+      ],
+      "text": "Have you seen my rock?",
+      "voice": "otter",
+      "key": "whales.seenRock",
+      "part": "whales",
+      "when": "The tail (a slap, or held: a push for the boat); after a while Ollie asks, and the tail shows a sea star.",
+      "ms": 1752,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "whaleTail"
+      ],
+      "text": "Look at its tail!",
+      "voice": "maple",
+      "key": "whales.whaleTail",
+      "part": "whales",
+      "when": "",
+      "ms": 1224,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "seaStar"
+      ],
+      "text": "That's a sea star, silly!",
+      "voice": "otter",
+      "key": "whales.seaStar",
+      "part": "whales",
+      "when": "",
+      "ms": 2568,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "hold",
+        "touch"
+      ],
+      "text": "Hold the whale down, then let go!",
+      "voice": "sparkle",
+      "key": "whales.hold.touch",
+      "part": "whales › hold",
+      "when": "The humpback is up (Sparkle; and the hint).",
+      "ms": 2928,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "hold",
+        "mouse"
+      ],
+      "text": "Click and hold the whale, then let go!",
+      "voice": "sparkle",
+      "key": "whales.hold.mouse",
+      "part": "whales › hold",
+      "when": "",
+      "ms": 3336,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "whales",
+        "breach"
+      ],
+      "text": "Wow! It jumped right out!",
+      "voice": "maple",
+      "key": "whales.breach",
+      "part": "whales",
+      "when": "Its first jump, its second.",
+      "ms": 2208,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "humpback"
+      ],
+      "text": "Look at its long flippers!",
+      "voice": "maple",
+      "key": "whales.humpback",
+      "part": "whales",
+      "when": "",
+      "ms": 2184,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "ride"
+      ],
+      "text": "We're riding a whale!",
+      "voice": "maple",
+      "key": "whales.ride",
+      "part": "whales",
+      "when": "The biggest jump lands the boat on its back.",
+      "ms": 1560,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "song"
+      ],
+      "text": "The humpback is singing!",
+      "voice": "maple",
+      "key": "whales.song",
+      "part": "whales",
+      "when": "The yellow microphone: the humpback sings into it.",
+      "ms": 1608,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "orcaHello"
+      ],
+      "text": "Orcas! A whole family!",
+      "voice": "maple",
+      "key": "whales.orcaHello",
+      "part": "whales",
+      "when": "The orcas come; the baby pops up with the rock on its nose; Sparkle (and the hint on the last pop).",
+      "ms": 2352,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "babyHas"
+      ],
+      "text": "My rock! The baby has it!",
+      "voice": "otter",
+      "key": "whales.babyHas",
+      "part": "whales",
+      "when": "",
+      "ms": 2496,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "peek",
+        "touch"
+      ],
+      "text": "Peek-a-boo! Tap the baby orca!",
+      "voice": "sparkle",
+      "key": "whales.peek.touch",
+      "part": "whales › peek",
+      "when": "",
+      "ms": 2232,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "peek",
+        "mouse"
+      ],
+      "text": "Peek-a-boo! Click the baby orca!",
+      "voice": "sparkle",
+      "key": "whales.peek.mouse",
+      "part": "whales › peek",
+      "when": "",
+      "ms": 3216,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "whales",
+        "grandma"
+      ],
+      "text": "The grandma leads the family!",
+      "voice": "maple",
+      "key": "whales.grandma",
+      "part": "whales",
+      "when": "Grandma comes up; the baby flicks the rock to Ollie; everybody jumps.",
+      "ms": 1776,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "gotIt"
+      ],
+      "text": "Got it! Thank you, whales!",
+      "voice": "otter",
+      "key": "whales.gotIt",
+      "part": "whales",
+      "when": "",
+      "ms": 2352,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "finale"
+      ],
+      "text": "They all jumped together! Merci!",
+      "voice": "maple",
+      "key": "whales.finale",
+      "part": "whales",
+      "when": "",
+      "ms": 2976,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "toot"
+      ],
+      "text": "Toot toot!",
+      "voice": "maple",
+      "key": "whales.toot",
+      "part": "whales",
+      "when": "Pokes: Maple's boat (its horn), Ollie in the bow.",
+      "ms": 792,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "otterHi"
+      ],
+      "text": "Hi hi!",
+      "voice": "otter",
+      "key": "whales.otterHi",
+      "part": "whales",
+      "when": "",
+      "ms": 912,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "filmOut",
+        "ask"
+      ],
+      "text": "Ollie! Come and play hockey with us!",
+      "voice": "maple",
+      "key": "whales.filmOut.ask",
+      "part": "whales › filmOut",
+      "when": "The film out: Ollie on her back in the kelp, juggling her rock while they talk.",
+      "ms": 2736,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "filmOut",
+        "wet"
+      ],
+      "text": "What's hockey?",
+      "voice": "otter",
+      "key": "whales.filmOut.wet",
+      "part": "whales › filmOut",
+      "when": "The film out: Ollie on her back in the kelp, juggling her rock while they talk.",
+      "ms": 1272,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hockey? Is it wet?"
+    },
+    {
+      "path": [
+        "whales",
+        "filmOut",
+        "ice"
+      ],
+      "text": "It's like soccer, but with ice skating!",
+      "voice": "maple",
+      "key": "whales.filmOut.ice",
+      "part": "whales › filmOut",
+      "when": "The film out: Ollie on her back in the kelp, juggling her rock while they talk.",
+      "ms": 1992,
+      "flags": [
+        "changed"
+      ],
+      "was": "It's ice! You slide on it!"
+    },
+    {
+      "path": [
+        "whales",
+        "filmOut",
+        "spin"
+      ],
+      "text": "Wheee! I love to slide!",
+      "voice": "otter",
+      "key": "whales.filmOut.spin",
+      "part": "whales › filmOut",
+      "when": "She spins on her back like a top.",
+      "ms": 2928,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "filmOut",
+        "team"
+      ],
+      "text": "Splash! You're on the team!",
+      "voice": "maple",
+      "key": "whales.filmOut.team",
+      "part": "whales › filmOut",
+      "when": "A whale spouts right behind them: everybody is soaked.",
+      "ms": 2352,
+      "flags": []
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "facts",
+  "title": "Canada › Facts",
+  "intro": "The passport's tap-to-hear facts.",
+  "page": "canada-facts.html",
+  "audio": null,
+  "lines": 9,
+  "seconds": 43,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "facts.flag",
+      "text": "Canada's flag is red and white, with a red maple leaf in the middle.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.bonjour",
+      "text": "People in Canada speak English and French. In Quebec, hello is Bonjour!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.huge",
+      "text": "Canada is the second biggest country in the world.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.winter",
+      "text": "Canada has long, snowy winters, and red and orange leaves in the fall.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.beaver",
+      "text": "The beaver is a Canadian animal. Its teeth are orange and never stop growing.",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "The beaver is Canada's animal. Its teeth are orange and never stop growing."
+    },
+    {
+      "key": "facts.syrup",
+      "text": "Most of the world's maple syrup comes from Quebec.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.castle",
+      "text": "In Quebec City there's a hotel that looks like a castle.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.hockey",
+      "text": "Hockey is Canada's favorite winter sport.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.bridges",
+      "text": "In Banff, animals cross the highway on their own bridges.",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "facts",
+        "flag"
+      ],
+      "text": "Canada's flag is red and white, with a red maple leaf in the middle.",
+      "voice": "sparkle",
+      "key": "facts.flag",
+      "part": "facts",
+      "when": "",
+      "ms": 4329,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "bonjour"
+      ],
+      "text": "People in Canada speak English and French. In Quebec, hello is Bonjour!",
+      "voice": "sparkle",
+      "key": "facts.bonjour",
+      "part": "facts",
+      "when": "",
+      "ms": 7223,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "huge"
+      ],
+      "text": "Canada is the second biggest country in the world.",
+      "voice": "sparkle",
+      "key": "facts.huge",
+      "part": "facts",
+      "when": "",
+      "ms": 4326,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "winter"
+      ],
+      "text": "Canada has long, snowy winters, and red and orange leaves in the fall.",
+      "voice": "sparkle",
+      "key": "facts.winter",
+      "part": "facts",
+      "when": "",
+      "ms": 4932,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "beaver"
+      ],
+      "text": "The beaver is a Canadian animal. Its teeth are orange and never stop growing.",
+      "voice": "sparkle",
+      "key": "facts.beaver",
+      "part": "facts",
+      "when": "",
+      "ms": 5808,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "The beaver is Canada's animal. Its teeth are orange and never stop growing."
+    },
+    {
+      "path": [
+        "facts",
+        "syrup"
+      ],
+      "text": "Most of the world's maple syrup comes from Quebec.",
+      "voice": "sparkle",
+      "key": "facts.syrup",
+      "part": "facts",
+      "when": "",
+      "ms": 3557,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "castle"
+      ],
+      "text": "In Quebec City there's a hotel that looks like a castle.",
+      "voice": "sparkle",
+      "key": "facts.castle",
+      "part": "facts",
+      "when": "",
+      "ms": 3780,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "hockey"
+      ],
+      "text": "Hockey is Canada's favorite winter sport.",
+      "voice": "sparkle",
+      "key": "facts.hockey",
+      "part": "facts",
+      "when": "",
+      "ms": 3165,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "bridges"
+      ],
+      "text": "In Banff, animals cross the highway on their own bridges.",
+      "voice": "sparkle",
+      "key": "facts.bridges",
+      "part": "facts",
+      "when": "",
+      "ms": 5522,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}
