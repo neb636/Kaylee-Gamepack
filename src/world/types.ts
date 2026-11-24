@@ -47,8 +47,9 @@ export interface PlaceMeta {
   name: string
   emoji: string
   flag: FlagId
-  /** Pin position on the world map, in % of the map picture. */
-  mapPos: { x: number; y: number }
+  /** Where its pin stands on the home screen's globe, in degrees (south and west are negative). It's a toy's globe:
+   *  near enough is right, and neighbours may be nudged apart so their pins don't touch. */
+  globe: { lon: number; lat: number }
   /** The friend Sparkle meets there. */
   friend: { name: string; img: string }
   /** Engraved on the plaque on the trophy she gets for collecting every stamp. */

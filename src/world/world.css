@@ -72,43 +72,6 @@
   animation: world-glow 1.2s ease-in-out infinite;
 }
 
-.world .world-side {
-  flex-direction: row;
-}
-@media (orientation: landscape) {
-  .world .world-side {
-    flex-direction: column;
-  }
-}
-@media (max-height: 560px) {
-  .world .world-side-mascot {
-    display: none;
-  }
-}
-/* Phones on their side: four tiles don't fit in one column under the map/list toggle, so they go two by two below it. */
-@media (max-height: 560px) and (orientation: landscape) {
-  .world .world-side {
-    display: grid !important;
-    grid-template-columns: repeat(2, auto);
-    align-content: center;
-    gap: 14px !important;
-    padding-top: calc(var(--bar-clear) + 14px);
-  }
-}
-/* Phones held upright: Sparkle and three buttons don't fit in one row, so Sparkle waves from her own row above them. */
-@media (orientation: portrait) and (max-width: 600px) {
-  .world .world-side {
-    flex-wrap: wrap;
-    align-content: center;
-    row-gap: 4px;
-  }
-  .world .world-side-mascot {
-    flex-basis: 100%;
-    display: flex;
-    justify-content: center;
-  }
-}
-
 .world .party-panel {
   width: min(100%, 720px);
   height: min(30vh, 280px);
@@ -314,13 +277,251 @@
     --dock-w: calc(2 * var(--dock-tile) + 36px);
   }
 }
-/* The world map leaves room for the same floating dock: below it when tall, beside it when wide. */
+/* The globe's screen leaves room for the same floating dock: below it when tall, beside it when wide (there the
+   globe takes the full height: the map/list toggle sits clear of it, over the dock's corner). */
 .world .world-map.screen {
   padding: var(--top-clear) 16px calc(var(--safe-bottom) + var(--dock-h) + 24px);
 }
 @media (orientation: landscape) {
   .world .world-map.screen {
-    padding: var(--top-clear) calc(var(--dock-w) + 28px) calc(var(--safe-bottom) + 12px) 16px;
+    padding: calc(var(--safe-top) + 12px) calc(var(--dock-w) + 28px + env(safe-area-inset-right, 0px)) calc(var(--safe-bottom) + 12px) max(16px, env(safe-area-inset-left, 0px));
+  }
+}
+
+/* ---- The home globe (globe/): a canvas ball, the pins riding on it, Sparkle's balloon, the flight. ---- */
+.world .globe-sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.world .globe-stage {
+  position: relative;
+  flex: 1;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+}
+/* The whole box turns the globe, so a drag that starts on a pin or the sky beside it still spins it. Its ball and pins
+   stack among themselves (isolation), under the toggle, the dock and the flight. */
+.world .globe {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  touch-action: none;
+  cursor: grab;
+  animation: globe-arrive 0.7s cubic-bezier(0.2, 1.25, 0.4, 1) both;
+}
+.world .globe:active {
+  cursor: grabbing;
+}
+@keyframes globe-arrive {
+  from {
+    transform: scale(0.82);
+    opacity: 0;
+  }
+}
+.world .globe-ball {
+  position: absolute;
+  z-index: 100; /* the pins are above it (the nearer, the higher) */
+  pointer-events: none;
+}
+.world .globe-land {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 110;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+/* A pin: the button keeps its full size for her finger (Globe.tsx places it); what's drawn inside gets smaller toward
+   the globe's edge (--depth). */
+.world .globe-pin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--pin);
+  height: var(--pin);
+  border-radius: 50%;
+  will-change: transform;
+}
+.world .globe-pin-body {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scale(var(--depth, 1));
+}
+.world .globe-pin:active .globe-pin-body {
+  transform: scale(calc(var(--depth, 1) * 0.88));
+}
+.world .globe-medal {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 5px 0 rgba(43, 35, 48, 0.16);
+  animation: globe-bob 3.6s ease-in-out infinite;
+}
+.world .globe-medal.world-glow {
+  animation: globe-bob 3.6s ease-in-out infinite, world-glow 1.2s ease-in-out infinite;
+}
+.world .globe-pin:nth-of-type(3n) .globe-medal {
+  animation-delay: -1.2s;
+}
+.world .globe-pin:nth-of-type(3n + 1) .globe-medal {
+  animation-delay: -2.4s;
+}
+/* A flick sends it past the middle: one little hop, then back to bobbing. */
+.world .globe-pin-pass .globe-medal {
+  animation: globe-pass 0.36s ease-out, globe-bob 3.6s ease-in-out 0.36s infinite;
+}
+@keyframes globe-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4%);
+  }
+}
+@keyframes globe-pass {
+  35% {
+    transform: translateY(-16%) scale(1.12);
+  }
+}
+.world .globe-medal-face {
+  position: absolute;
+  inset: 8%;
+  overflow: hidden;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #a9b4f7, #f7d6ee);
+}
+.world .globe-medal-face > img {
+  position: absolute;
+  max-width: none;
+  height: auto;
+}
+.world .globe-medal-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.world .globe-medal-cup {
+  position: absolute;
+  right: -8%;
+  top: -8%;
+  width: 38%;
+  height: 38%;
+  border-radius: 50%;
+  box-shadow: 0 3px 0 rgba(235, 161, 35, 0.5);
+}
+/* Sparkle's balloon (GlobeHome.tsx sizes and moves it). Only the balloon itself takes a tap, not its whole box. It
+   flies over everything, the opening screen of the flight too. */
+.world .globe-balloon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 61;
+  pointer-events: none;
+  will-change: transform;
+}
+.world .globe-balloon-hop {
+  position: absolute;
+  inset: 0;
+}
+.world .globe-balloon-hit {
+  position: absolute;
+  left: 2%;
+  top: 0;
+  width: 96%;
+  height: 66%;
+  min-width: 64px;
+  min-height: 64px;
+  border-radius: 50%;
+  pointer-events: auto;
+}
+.world .globe-guests {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  z-index: 2;
+}
+/* A continent's name, over the spot she tapped. */
+.world .globe-label {
+  position: absolute;
+  z-index: 3;
+  translate: -50% calc(-100% - 22px);
+  padding: 8px 20px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  color: var(--hotpink);
+  font-size: clamp(17px, 2.6vmin, 30px);
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+/* A ring on the water where she tapped the sea. */
+.world .globe-plop {
+  position: absolute;
+  z-index: 2;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: globe-plop 0.6s ease-out both;
+}
+@keyframes globe-plop {
+  from {
+    transform: scale(0.25);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+/* The flight: the whole screen is one "skip" button; the country's sky opens from its pin; its name for the grown-ups. */
+.world .globe-flight {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+}
+.world .globe-flight-open {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#ffd6e7, #d9ccff);
+}
+.world .globe-flight-name {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--safe-bottom) + var(--dock-h) + 40px);
+  translate: -50% 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.3em 0.8em;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  color: var(--hotpink);
+  font-size: clamp(26px, 5vmin, 52px);
+  font-weight: 700;
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .world .globe,
+  .world .globe-medal,
+  .world .globe-pin-pass .globe-medal {
+    animation: none;
   }
 }
 .world .shelf-scroll {

@@ -33,13 +33,24 @@ async function raceTo(page, until, taps = 0, after = 0) {
 }
 
 const CENTRAL = [
-  { name: 'world-map', hash: '#/world' },
+  // The home globe (it turns into place as it arrives, so wait for it), a continent's name, and the flight to a country.
+  { name: 'world-map', hash: '#/world', wait: 2200 },
   {
     name: 'world-map-continent',
     hash: '#/world',
+    wait: 2200,
     act: async (p) => {
       await p.getByRole('button', { name: 'africa' }).click({ force: true })
       await p.waitForTimeout(600)
+    },
+  },
+  {
+    name: 'world-map-flight',
+    hash: '#/world',
+    wait: 2200,
+    act: async (p) => {
+      await p.getByRole('button', { name: 'Italy', exact: true }).click({ force: true })
+      await p.waitForTimeout(1000)
     },
   },
   // The game shelf (the world map's list view) and a game's own page.

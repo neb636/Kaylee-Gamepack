@@ -23,11 +23,11 @@ import { L } from './lines'
 const meta: PlaceMeta = {
   id: 'canada',
   name: 'Canada',
-  // A moose on its world-map pin (the user asked for it instead of the maple leaf, 2026-11-20).
+  // A moose (the user asked for it instead of the maple leaf, 2026-11-20): on the section index, the labs and the trophy.
   emoji: '🫎',
   flag: 'canada',
-  // East of the bear on the world map, toward Quebec.
-  mapPos: { x: 27, y: 25 },
+  // The prairies: clear of the pin on top of the world.
+  globe: { lon: -106, lat: 56 },
   friend: { name: 'Maple the beaver', img: maple },
   trophyTitle: 'Canada Champion',
   // The chapters, east to west across the map (story/chapters.ts; `pos` is unused: the hub is the 3D map).

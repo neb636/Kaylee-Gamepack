@@ -81,7 +81,7 @@ Fredoka. Animations: `motion` (`import { motion, AnimatePresence } from 'motion/
 
 ```
 src/world/places/<id>/
-  meta.ts          # PlaceMeta: name, emoji, flag, mapPos (% on the world map), friend, activities[], inTheWorks[], facts[], coloringPages[]
+  meta.ts          # PlaceMeta: name, emoji, flag, globe (where its pin stands on the home globe), friend, activities[], inTheWorks[], facts[], coloringPages[]
   Place.tsx        # default export: the country's hub + its activities + the finale (gets PlaceProps)
   lines.ts         # EVERY phrase that can be spoken, tagged by speaker; voice-lines.json is generated from it
   cast.json        # the friends' voices (Sparkle comes from src/sdk/cast.json)
@@ -100,7 +100,8 @@ so the friend talks), `StampEarned`, `sfx` (boing, thump, splash, pop, fwip), `C
 offers one, skippable, right after that activity's stamp); a country with videos gets a Theater button in its top bar,
 and the world map's Theater shows every country's videos.
 
-Adding a country: make the folder, add its pin in `meta.ts`,
+Adding a country: make the folder, put its pin on the home globe (`globe` in `meta.ts`, and its picture: `WINDOWS` in
+`src/world/globe/Medallion.tsx`, see Pins in `src/world/shelf/STYLE.md`),
 write its plan in `planning/around-the-world/`, draw its shelf banner and an icon per activity (`src/world/shelf/STYLE.md`),
 generate backgrounds, props and character reference pictures with Codex
 (`codex exec -m gpt-6.1-sol -c model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`; tell Codex never
