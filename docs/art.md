@@ -7,6 +7,13 @@ screens, stickers and character references.
 - **The Poles' stickers are drawn by hand too** (user feedback, 2026-11-24: the generated ones looked cheesy): round SVG
   badges in the shelf's look, `src/world/places/poles/assets/sticker-*.svg`. They are the pictures on the globe's trail,
   the stamp screen and the passport. Check them with `node scripts/shelf-sheet.mjs icons <files>`.
+- **The Poles' Snow Coats is drawn by hand too** (user feedback, 2026-11-24: the generated tundra looked bad and the
+  animals looked lame). The sky, the mountains, the hills, the ground with its bushes and stones, the sun and the owl's
+  rock are drawn in code in three seasons and a night (`activities/coats/Tundra.tsx`: flat tones, no outlines; every
+  season draws the same things in the same places, so snow settles on them). The fox, the hare, the ptarmigan, the
+  lemming, the bear and the owl are hand-drawn paths (`activities/coats/animals.ts`): one ink line round the whole
+  animal, a base, a light and a dark tone, the face turned to her (two plain dark eyes with highlights, blush, a small
+  mouth), and a soft shade inside the white coat. The fox wears the 3D fox's colors (`characters/looks.ts`).
 - **Egypt's Nile is drawn by hand too** (user feedback, 2026-11-24: the generated felucca, lotus, hippo and palms looked
   tacky): its river layers, boat, flowers and water wheel are SVG in `src/world/places/egypt/activities/nile/`, the
   lotus is `egypt/Lotus.tsx`, and the hippo is a puppet (`puppets/Hippo.tsx`; her sticker `assets/hippo.svg` is a still
