@@ -1,7 +1,0 @@
-{
-  "title": "A closer look at Joy",
-  "checkIn": "Fix",
-  "kaylee": "Joy greets you with her broad smile, side-parted hair and pink lace blouse.",
-  "pictures": [{"title": "Joy in the character lab", "before": "pics/before.jpg", "after": "pics/after.jpg", "caption": "Compare her eyes, smile and the sweep of her hair."}],
-  "links": [{"label": "Turn Joy around", "hash": "#/world/characters/joy"}]
-}
