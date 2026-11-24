@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "penguins-before",
+  "title": "Penguins before",
+  "video": "penguins-before.mp4",
+  "gif": "penguins-before.gif",
+  "seconds": 22,
+  "browser": "chromium",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "penguin-launch",
+      "where": "penguin-launch",
+      "seconds": 8,
+      "fps": 8.7,
+      "status": "ok"
+    },
+    {
+      "name": "penguin-fish",
+      "where": "penguin-fish",
+      "seconds": 5,
+      "fps": 8.1,
+      "status": "ok"
+    },
+    {
+      "name": "penguin-chick-swim",
+      "where": "penguin-chick-swim",
+      "seconds": 4.5,
+      "fps": 9.6,
+      "status": "ok"
+    }
+  ]
+}
