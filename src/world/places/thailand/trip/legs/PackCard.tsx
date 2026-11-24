@@ -1,6 +1,7 @@
 // While she packs, the screen shows what to do without words: a suitcase card (top right) with a round slot for each
 // thing in it, three empty slots waiting at first, each filling with a pop as something goes in; and once three are in,
-// a big ✅ suitcase button (bottom right) that closes it, the same as tapping the suitcase.
+// a big mint tick (bottom right) that closes it, the same as tapping the suitcase.
+import { HudButton } from '../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { ITEMS } from '../packing'
 
@@ -51,24 +52,7 @@ export function PackCard({ open, packed, sitting, onClose }: Props) {
         </motion.div>
       )}
       {open && ready && (
-        <motion.button
-          key="pack-close"
-          aria-label="Close the suitcase"
-          initial={{ scale: 0 }}
-          animate={{ scale: [1, 1.1, 1] }}
-          // The exit gets its own transition: the pulse's `repeat: Infinity` would otherwise shrink it forever and the
-          // button would never leave.
-          exit={{ scale: 0, transition: { duration: 0.2 } }}
-          transition={{ repeat: Infinity, duration: 1.2, ease: 'easeInOut' }}
-          whileTap={{ scale: 0.85 }}
-          onClick={onClose}
-          style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 16px)', bottom: 'calc(var(--safe-bottom) + 16px)', width: 110, height: 110, borderRadius: '50%', border: '5px solid #fff', background: 'var(--hotpink)', boxShadow: 'var(--shadow)', zIndex: 46, display: 'grid', placeItems: 'center', padding: 0 }}
-        >
-          <span aria-hidden style={{ position: 'relative', fontSize: 54, lineHeight: 1 }}>
-            🧳
-            <span style={{ position: 'absolute', right: -16, bottom: -10, fontSize: 34 }}>✅</span>
-          </span>
-        </motion.button>
+        <HudButton key="pack-close" role="done" icon="check" size="lg" slot="bottom-right" pulse label="Close the suitcase" pop={false} exit={{ scale: 0, transition: { duration: 0.2 } }} onClick={onClose} style={{ zIndex: 46 }} />
       )}
     </AnimatePresence>
   )

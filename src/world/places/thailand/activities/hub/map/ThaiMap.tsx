@@ -10,6 +10,7 @@
 // buffalo, the hornbill, the tuk-tuk, the dolphins, the longtail boat, the coconut palm, Sparkle's balloon). Sparkle
 // says something true the first time she meets each (lines.ts L.map), welcomes her once a session and glows the pins
 // after ~8 s with nothing touched.
+import { HudButton } from '../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { sounds, useTimers } from '../../../../../../sdk'
@@ -196,19 +197,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
       )}
 
       {allStamps && (
-        <motion.button
-          aria-label="Party"
-          whileTap={{ scale: 0.88 }}
-          animate={{ rotate: [-4, 4, -4] }}
-          transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
-          onClick={() => {
-            sounds.pop()
-            openActivity('party')
-          }}
-          style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 14px)', bottom: 'calc(var(--safe-bottom) + 14px)', width: 88, height: 88, borderRadius: '50%', border: '4px solid #fff', background: 'var(--butter)', fontSize: 44, boxShadow: 'var(--shadow)', zIndex: 20 }}
-        >
-          🎉
-        </motion.button>
+        <HudButton role="open" icon="party" slot="bottom-right" pulse label="Party" onClick={() => openActivity('party')} />
       )}
       <TripGuide ref={guide} />
     </div>

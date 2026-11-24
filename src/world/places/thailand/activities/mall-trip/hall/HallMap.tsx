@@ -4,6 +4,7 @@
 // the ones she's played wear a gold star, the rest wiggle, and a 🦄 shows where she is. Tap one and she goes there and
 // in (hall.ts `travel`). When she's stuck and every new game is off the screen, the button bounces with a finger
 // (`nudge`). Sparkle asks "Where shall we play?" as it opens (lines.ts `L.mall.hall.map`).
+import { HudButton } from '../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { sounds, useLandscape, useTimers } from '../../../../../../sdk'
@@ -58,21 +59,17 @@ export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick
     <>
       <AnimatePresence>
         {!hidden && !open && (
-          <motion.button
+          <HudButton
             key="map-button"
-            aria-label="HarborLand map"
-            initial={{ scale: 0 }}
+            role="open"
+            icon="map"
+            slot="bottom-right"
+            label="HarborLand map"
             animate={nudge ? { scale: [1, 1.18, 1], rotate: [0, -8, 8, 0] } : { scale: 1, rotate: 0 }}
-            exit={{ scale: 0 }}
             transition={nudge ? { repeat: Infinity, duration: 0.9 } : { type: 'spring' }}
-            whileTap={{ scale: 0.86 }}
-            onClick={() => {
-              sounds.pop()
-              onOpen(true)
-            }}
-            style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 14px)', bottom: 'calc(var(--safe-bottom, 0px) + 14px)', width: 'clamp(88px, 13vmin, 112px)', height: 'clamp(88px, 13vmin, 112px)', borderRadius: '50%', border: '5px solid #fff', background: 'var(--butter)', boxShadow: nudge ? '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' : 'var(--shadow)', fontSize: 'clamp(44px, 7vmin, 58px)', padding: 0, zIndex: 45 }}
+            onClick={() => onOpen(true)}
+            style={nudge ? { boxShadow: '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' } : undefined}
           >
-            🗺️
             {badge && (
               <span aria-hidden style={{ position: 'absolute', right: -8, top: -8, width: 'clamp(40px, 6vmin, 50px)', height: 'clamp(40px, 6vmin, 50px)', borderRadius: '50%', background: badge.color, border: '3px solid #fff', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
                 <AnimatePresence mode="popLayout">
@@ -87,7 +84,7 @@ export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick
                 👇
               </motion.span>
             )}
-          </motion.button>
+          </HudButton>
         )}
       </AnimatePresence>
       <AnimatePresence>

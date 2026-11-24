@@ -10,7 +10,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, useTimers } from '../../../../../../sdk'
+import { HudGlyph, BigButton, burst, useTimers } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
@@ -162,8 +162,8 @@ export function JetSkiScreen({ round: first, flags, onRound, onIsland }: Props) 
             {over === 'won' && zoomFound ? (
               <>
                 <div className="jet-badge">🏆 🔔</div>
-                <BigButton onClick={() => { setOver(null); worldRef.current?.raceAgain() }} ariaLabel="Race again">
-                  🔁 🏁
+                <BigButton color="lavender" onClick={() => { setOver(null); worldRef.current?.raceAgain() }} ariaLabel="Race again">
+                  <HudGlyph icon="again" /> 🏁
                 </BigButton>
                 {onIsland && (
                   <BigButton color="mint" onClick={() => worldRef.current?.toIsland()} ariaLabel="Back to the island">
@@ -175,7 +175,7 @@ export function JetSkiScreen({ round: first, flags, onRound, onIsland }: Props) 
               // (Zoom is on her way down: no buttons, the found film is next.)
               <div className="jet-badge">🏆 🔔</div>
             ) : (
-              <div className="jet-badge">{zoomFound ? 'So close! 🔁' : 'So close!'}</div>
+              <div className="jet-badge">So close!{zoomFound && <HudGlyph icon="again" style={{ marginLeft: '0.3em' }} />}</div>
             )}
           </motion.div>
         )}
