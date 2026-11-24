@@ -1,0 +1,75 @@
+{
+  "title": "Pepa's Penguin Cliff: drawn by hand",
+  "checkIn": "fix",
+  "kaylee": "Pepa's cliff, the bay and everyone on it are drawn by hand now: the generated pictures are gone, and the penguins, the chicks and Lobo have a softer look with no black outlines.",
+  "questions": [
+    "Luna's Fluffy Day is Peru's last level with generated pictures (and Peru's map is one too). Redraw them next?"
+  ],
+  "reels": [
+    {
+      "name": "penguins-after",
+      "moments": [
+        "penguin-launch",
+        "penguin-fish",
+        "penguin-chick-swim"
+      ]
+    },
+    {
+      "name": "penguins-before",
+      "moments": [
+        "penguin-launch",
+        "penguin-fish",
+        "penguin-chick-swim"
+      ]
+    }
+  ],
+  "pictures": [
+    {
+      "title": "The whole bay",
+      "after": "pics/wide-after.jpg",
+      "caption": "The sky, the dunes, the Candelabra's hill, the cliff, Lobo's rock and everyone on the bay: all drawn in code now"
+    },
+    {
+      "title": "The cliff",
+      "before": "pics/coast-before.jpg",
+      "after": "pics/coast-after.jpg",
+      "caption": "Sandstone with Pepa's burrow and nest; sea stars and sea grass on its steps under the water"
+    },
+    {
+      "title": "Fishing",
+      "before": "pics/fish-before.jpg",
+      "after": "pics/fish-after.jpg",
+      "caption": "Silver anchovies and softer order spots"
+    },
+    {
+      "title": "The friends",
+      "before": "pics/friends-before.jpg",
+      "after": "pics/friends-after.jpg",
+      "caption": "Pepa, a diver, a chick and Lobo: the same puppets and moves, redrawn without black outlines"
+    },
+    {
+      "title": "The opening",
+      "after": "pics/opening.jpg",
+      "caption": "A drawn picture behind Pepa's first line, instead of the washed-out painting"
+    },
+    {
+      "title": "Upright",
+      "after": "pics/upright.jpg",
+      "caption": "On an upright iPad the cliff's foot goes down to the sea floor"
+    }
+  ],
+  "links": [
+    {
+      "label": "Play it",
+      "hash": "#/world/peru/penguins/story?chicks=2&fed=0,0,0&order=0&filled=0"
+    },
+    {
+      "label": "The pelican's part",
+      "hash": "#/world/peru/penguins/twist"
+    },
+    {
+      "label": "The puppets",
+      "hash": "#/world/puppets/pepa"
+    }
+  ]
+}
