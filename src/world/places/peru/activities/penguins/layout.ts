@@ -1,12 +1,10 @@
 // Pepa's Penguin Cliff lays out on a logical stage that scales to fit (AGENTS.md "Screens"): one for wide screens and
 // one for tall ones (tall shows more of the sea under the surface, so the deep fish are deeper). Everything is in stage
-// units. The cliff picture's features (its flat top, the burrow, the burrow's front lip) are measured shares of the
-// trimmed cliff-hd.webp, so the penguins stand exactly on the painted rock.
+// units. The cliff is drawn in code from these numbers (Coast.tsx), so the penguins stand exactly on its rock: its
+// features (the flat top, the burrow, the burrow's front lip) are shares of the cliff's box.
 
-/** Shares of the trimmed cliff picture (688 x 1024). */
-const CLIFF = { aspect: 688 / 1024, ledge: 0.012, caveL: 0.24, caveR: 0.74, caveTop: 0.16, floor: 0.395, lipX: 0.8, topRight: 0.93 }
-/** Where the sea starts in each background painting (share of its height), and its size. */
-const BG = { wide: { horizon: 587, w: 1536, h: 1024 }, tall: { horizon: 675, w: 1024, h: 1536 } }
+/** Shares of the cliff's box (688 x 1024). */
+const CLIFF = { aspect: 688 / 1024, ledge: 0.012, caveL: 0.24, caveR: 0.74, caveTop: 0.16, floor: 0.395, lipX: 0.8 }
 
 export interface Box {
   x: number
@@ -20,7 +18,6 @@ export interface PenguinStage {
   h: number
   /** The sea surface. */
   sea: number
-  bg: { x: number; y: number; w: number; h: number }
   cliff: { x: number; y: number; w: number; h: number }
   /** The top of the cliff, where the penguins queue. */
   ledge: number
@@ -55,10 +52,7 @@ export interface PenguinStage {
   sun: { x: number; y: number; r: number }
 }
 
-function make(tall: boolean, w: number, h: number, sea: number, cliffTop: number, cliffH: number, cliffX: number, rest: Omit<PenguinStage, 'tall' | 'w' | 'h' | 'sea' | 'bg' | 'cliff' | 'ledge' | 'burrow' | 'pepa' | 'chicks' | 'egg' | 'shore'>): PenguinStage {
-  const b = tall ? BG.tall : BG.wide
-  const k = Math.max(w / b.w, sea / b.horizon)
-  const bgW = b.w * k
+function make(tall: boolean, w: number, h: number, sea: number, cliffTop: number, cliffH: number, cliffX: number, rest: Omit<PenguinStage, 'tall' | 'w' | 'h' | 'sea' | 'cliff' | 'ledge' | 'burrow' | 'pepa' | 'chicks' | 'egg' | 'shore'>): PenguinStage {
   const cw = cliffH * CLIFF.aspect
   const at = (fx: number) => cliffX + fx * cw
   const floor = cliffTop + CLIFF.floor * cliffH
@@ -71,7 +65,6 @@ function make(tall: boolean, w: number, h: number, sea: number, cliffTop: number
     w,
     h,
     sea,
-    bg: { x: (w - bgW) / 2, y: sea - b.horizon * k, w: bgW, h: b.h * k },
     cliff: { x: cliffX, y: cliffTop, w: cw, h: cliffH },
     ledge: cliffTop + CLIFF.ledge * cliffH + 4,
     burrow: {
@@ -109,9 +102,9 @@ const WIDE = make(false, 1600, 1000, 650, 280, 820, -62, {
     { x: 1540, y: 1010, w: 110 },
   ],
   crab: { x: 1150, w: 100 },
-  jelly: { x: 1460, y: 820, w: 90 },
+  jelly: { x: 1440, y: 870, w: 90 },
   boat: { x: [620, 1000], w: 150 },
-  candelabra: { x: 1295, y: 520, r: 90 },
+  candelabra: { x: 900, y: 500, r: 85 },
   sun: { x: 1361, y: 172, r: 70 },
 })
 
@@ -135,16 +128,15 @@ const TALL = make(true, 1000, 1400, 665, 325, 740, -52, {
   crab: { x: 760, w: 96 },
   jelly: { x: 880, y: 940, w: 84 },
   boat: { x: [470, 650], w: 130 },
-  candelabra: { x: 760, y: 517, r: 70 },
+  candelabra: { x: 548, y: 536, r: 62 },
   sun: { x: 870, y: 141, r: 64 },
 })
 
-// The rock in the bay sits low in the water; the anchor sits on the ledge.
+// The rock in the bay sits low in the water (its flat top a little above the sea); the anchor sits on the ledge.
 for (const S of [WIDE, TALL]) {
   S.anchor.y = S.ledge
-  const rh = S.rock.w * (164 / 512)
-  S.rock.y = S.sea + rh * 0.42 - rh
-  S.rock.top = S.rock.y + rh * 0.2
+  S.rock.top = S.sea - S.rock.w * 0.122
+  S.rock.y = S.rock.top
 }
 
 export const pickLayout = (W: number, H: number) => (W >= H ? WIDE : TALL)

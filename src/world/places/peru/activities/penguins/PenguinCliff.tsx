@@ -21,15 +21,15 @@ import { useEffect, useRef, useState, type MutableRefObject, type PointerEvent a
 import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
-import { art } from '../../art'
 import { L } from '../../lines'
 import type { ActivityProps } from '../../Place'
-import { INK } from '../../puppets/Alpaca'
 import { Chick, CHICK_VIEW, Egg } from '../../puppets/Chick'
 import { Lobo, LOBO_VIEW } from '../../puppets/Lobo'
 import { FishShape, Penguin, PENGUIN_VIEW, penguinLive, type PenguinKind, type PenguinLive } from '../../puppets/Penguin'
+import { backdrop, Cliff, CoastOpening, FarShore, SeaRock } from './Coast'
+import { PelicanFloatArt, PelicanFlyArt } from './Critters'
 import { pickLayout, type PenguinStage } from './layout'
-import { Boat, Candelabra, Crab, Jelly, Kelp, Sun, Surface, Tern, Underwater, WATER } from './Scene'
+import { Boat, Candelabra, Crab, Jelly, Kelp, Sun, Surface, Tern, Underwater } from './Scene'
 import { psfx } from './sfx'
 import { Splash, type SplashHandle } from './Splash'
 import { clamp } from '../../../../../sdk/math'
@@ -46,7 +46,6 @@ const SPLASHES = 4
 /** Fish that make a chick perfectly round. */
 const ROUND = 3
 const DIVERS: PenguinKind[] = ['chubby', 'tiny', 'tuft']
-const SKY = '#A6DCFB'
 const GOLD = '#FFC83D'
 /** Fixed physics step for a flight: the loop and the aim preview step it the same way, so the preview is exact. */
 const STEP = 1 / 120
@@ -200,15 +199,6 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const [flash, setFlash] = useState(0)
   const [hint, setHint] = useState<null | 'front' | 'chicks'>(null)
   const [frontId, setFrontId] = useState(-1)
-  const [artReady, setArtReady] = useState(false)
-  useEffect(() => {
-    const srcs = [art.cliff, art.seaRock, art.bgCoast, art.bgCoastTall]
-    void Promise.all(srcs.map((src) => {
-      const img = new Image()
-      img.src = src
-      return img.decode().catch(() => {})
-    })).then(() => alive() && setArtReady(true))
-  }, [])
   const [launched, setLaunched] = useState(false)
 
   const sparkle = useRef<PuppetHandle>(null)
@@ -223,7 +213,9 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const guideDots = useRef<(SVGCircleElement | null)[]>([])
   const band = useRef<(SVGPathElement | null)[]>([null, null])
   const pelicanEl = useRef<HTMLDivElement>(null)
-  const pelicanImg = useRef<HTMLImageElement>(null)
+  const pelicanArt = useRef<HTMLDivElement>(null)
+  const pelicanFly = useRef<HTMLDivElement>(null)
+  const pelicanFloat = useRef<HTMLDivElement>(null)
 
   useEffect(() => setProgress(Math.min(stars, TOTAL), TOTAL), [stars])
   const star = (n: number) => setStars((s) => Math.max(s, n))
@@ -304,8 +296,9 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const oy = S ? (size.H - S.h * scale) / 2 : 0
   /** The sea floor sits at the bottom of the screen (tall phones show more sea under the stage). */
   const floor = S ? S.h + oy / scale : 0
-  // The far painting covers any side bands too, keeping its horizon on the sea.
-  const bgF = S ? Math.max(1, (S.w + (2 * ox) / scale + 8) / S.bg.w) : 1
+  /** How far the screen goes on past the stage (stage units): the far shore, the cliff and the sea fill it. */
+  const padX = ox / scale + 8
+  const padY = oy / scale + 8
   const SR = useRef<PenguinStage | null>(null)
   const prevS = useRef<PenguinStage | null>(null)
   SR.current = S
@@ -1040,7 +1033,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     psfx.gulp()
     pel.on = 'leave'
     pel.t = 0
-    pelicanImg.current?.animate([{ transform: 'scale(1,1)' }, { transform: 'scale(1.2,0.85)' }, { transform: 'scale(0.9,1.15)' }, { transform: 'scale(1,1)' }], { duration: 500 })
+    pelicanArt.current?.animate([{ transform: 'scale(1,1)' }, { transform: 'scale(1.2,0.85)' }, { transform: 'scale(0.9,1.15)' }, { transform: 'scale(1,1)' }], { duration: 500 })
     if (pel.school && pel.school.away > 0.3) pel.school.away = 0.3
     g.current.lastProgress = performance.now()
   }
@@ -1364,8 +1357,10 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       pelicanEl.current.style.display = pel.on === 'off' ? 'none' : ''
       pelicanEl.current.style.pointerEvents = pel.on === 'float' ? 'auto' : 'none'
       pelicanEl.current.style.width = `${w}px`
-      pelicanEl.current.style.transform = `translate(${(pel.x - w / 2).toFixed(1)}px, ${(pel.y - (fl ? w * 0.4 : w * 0.7)).toFixed(1)}px) scale(${pel.on === 'fly' ? -1 : 1}, 1) rotate(${pel.on === 'fly' ? -35 : 0}deg)`
-      if (pelicanImg.current) pelicanImg.current.src = fl ? art.pelicanFly : art.pelicanFloat
+      // He is drawn flying to the right: diving in from the right he is mirrored, nose down; leaving, nose up.
+      pelicanEl.current.style.transform = `translate(${(pel.x - w / 2).toFixed(1)}px, ${(pel.y - (fl ? w * 0.4 : w * 0.7)).toFixed(1)}px) scale(${pel.on === 'fly' ? -1 : 1}, 1) rotate(${pel.on === 'fly' ? 28 : pel.on === 'leave' ? -24 : 0}deg)`
+      if (pelicanFly.current) pelicanFly.current.style.display = fl ? '' : 'none'
+      if (pelicanFloat.current) pelicanFloat.current.style.display = fl ? 'none' : ''
     }
 
     // Hungry chicks keep begging while fish are waiting for them.
@@ -1453,7 +1448,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const canPull = phase === 'splash' || phase === 'fish' || phase === 'swim'
 
   return (
-    <div ref={root} style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: S ? `linear-gradient(${SKY} 0, ${SKY} ${oy + S.sea * scale}px, ${WATER} ${oy + S.sea * scale}px)` : SKY, touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}>
+    <div ref={root} style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: S ? backdrop(oy + S.sea * scale) : '#8fcdf8', touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}>
       {S && (
         <div
           ref={stageEl}
@@ -1461,41 +1456,25 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
           onPointerMove={onMove}
           onPointerUp={onUp}
           onPointerCancel={onUp}
-          style={{ position: 'absolute', left: ox, top: oy, width: S.w, height: S.h, transform: `scale(${scale})`, transformOrigin: '0 0', opacity: artReady ? 1 : 0, transition: 'opacity .3s' }}
+          style={{ position: 'absolute', left: ox, top: oy, width: S.w, height: S.h, transform: `scale(${scale})`, transformOrigin: '0 0' }}
         >
-          {/* Far: the desert sky, the sun, the hills with the Candelabra, the bay. */}
-          <img src={S.tall ? art.bgCoastTall : art.bgCoast} alt="" draggable={false} style={{ position: 'absolute', left: S.w / 2 - (S.bg.w * bgF) / 2, top: S.sea - (S.sea - S.bg.y) * bgF, width: S.bg.w * bgF, height: S.bg.h * bgF, pointerEvents: 'none' }} />
+          {/* Far: the sun, the clouds, the dunes and the hill with the Candelabra across the bay. */}
+          <FarShore S={S} padX={padX} padY={padY} />
           <Sun {...S.sun} />
           <Candelabra {...S.candelabra} />
           <Boat S={S} />
 
-          {/* The cliff: the launch rock on top, Pepa's burrow in its face. */}
-          {S.cliff.y + S.cliff.h < floor && (
-            // Tall screens: the cliff goes on under the sea down to the sea floor. Its rocky lower part is tiled,
-            // mirrored every other time, so every join is seamless (and the burrow never repeats).
-            <div aria-hidden style={{ position: 'absolute', left: S.cliff.x, top: S.cliff.y + S.cliff.h - 14, width: S.cliff.w, height: floor - S.cliff.y - S.cliff.h + 14, overflow: 'hidden', zIndex: 3, pointerEvents: 'none' }}>
-              {Array.from({ length: Math.ceil((floor - S.cliff.y - S.cliff.h + 14) / (S.cliff.h * 0.55 - 14)) }, (_, k) => {
-                const seg = S.cliff.h * 0.55 - 14
-                return (
-                  <div key={k} style={{ position: 'absolute', left: 0, top: k * seg, width: S.cliff.w, height: seg + 1, overflow: 'hidden' }}>
-                    <img src={art.cliff} alt="" draggable={false} style={{ position: 'absolute', left: 0, top: k % 2 ? -S.cliff.h * 0.45 : -14, width: S.cliff.w, height: S.cliff.h, transform: k % 2 ? undefined : 'scaleY(-1)' }} />
-                  </div>
-                )
-              })}
-            </div>
-          )}
-          <div aria-hidden style={{ position: 'absolute', left: S.cliff.x, top: S.cliff.y, width: S.cliff.w, height: S.cliff.y + S.cliff.h < floor ? S.cliff.h - 14 : S.cliff.h, overflow: 'hidden', pointerEvents: 'none', zIndex: 4 }}>
-            <img src={art.cliff} alt="" draggable={false} style={{ width: S.cliff.w, height: S.cliff.h, display: 'block' }} />
-          </div>
+          {/* The cliff: the launch rock on top, Pepa's burrow in its face, its foot under the sea. */}
+          <Cliff S={S} floor={floor} padX={padX} />
           <Tern x={S.tern.x} y={S.ledge + 4} h={S.tern.h} />
 
           {/* Pepa's order: one fish-shaped spot per fish. */}
           {order &&
             S.burrow.fish.slice(0, order.need).map((f, i) => (
               <motion.div key={`${i}-${order.need}`} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.15, type: 'spring' }} style={{ position: 'absolute', left: f.x - 50, top: f.y - 33, width: 100, height: 66, zIndex: 5, pointerEvents: 'none' }}>
-                <div className={feeding ? 'peru-hint-ring' : undefined} style={{ position: 'absolute', inset: 0, borderRadius: 30, background: 'rgba(255,247,240,.85)', border: `4px ${i < order.filled ? 'solid' : 'dashed'} ${INK}` }} />
+                <div className={feeding ? 'peru-hint-ring' : undefined} style={{ position: 'absolute', inset: 0, borderRadius: 33, background: i < order.filled ? '#fff' : 'rgba(255,255,255,.72)', border: i < order.filled ? '5px solid #ff8fb8' : '4px dashed #b9a6f5' }} />
                 <svg viewBox="-48 -20 96 40" style={{ position: 'absolute', inset: 6, width: 88, height: 54, overflow: 'visible' }}>
-                  {i < order.filled ? <FishShape /> : <g opacity="0.3"><FishShape color="#B9A6F5" back="#B9A6F5" /></g>}
+                  {i < order.filled ? <FishShape /> : <g opacity="0.45"><FishShape ghost /></g>}
                 </svg>
               </motion.div>
             ))}
@@ -1560,7 +1539,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
           })}
 
           {/* The rock in the bay: Lobo lounging, Sparkle watching. */}
-          <img src={art.seaRock} alt="" draggable={false} style={{ position: 'absolute', left: S.rock.x, top: S.rock.y, width: S.rock.w, pointerEvents: 'none', zIndex: 5 }} />
+          <SeaRock S={S} />
           <motion.button
             aria-label="Lobo"
             onClick={() => {
@@ -1589,7 +1568,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
 
           {/* Under the sea. */}
           {S.kelp.map((k, i) => (
-            <Kelp key={i} {...k} y={floor + 10} delay={i * 1.3} />
+            <Kelp key={i} {...k} y={floor + 6} />
           ))}
           <Crab x={S.crab.x} y={floor - 18} w={S.crab.w} />
           <Jelly {...S.jelly} />
@@ -1629,7 +1608,14 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
 
           {/* The pelican (in the twist). */}
           <div ref={pelicanEl} data-pelican aria-label="pelican" style={{ position: 'absolute', left: 0, top: 0, display: 'none', zIndex: 11, pointerEvents: 'none', touchAction: 'none' }}>
-            <img ref={pelicanImg} src={art.pelicanFly} alt="" draggable={false} style={{ width: '100%', display: 'block' }} />
+            <div ref={pelicanArt}>
+              <div ref={pelicanFly}>
+                <PelicanFlyArt />
+              </div>
+              <div ref={pelicanFloat} style={{ display: 'none' }}>
+                <PelicanFloatArt />
+              </div>
+            </div>
           </div>
 
           {/* The divers (and later the chicks), moved by the loop. */}
@@ -1668,7 +1654,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
           {/* After a miss: the gold landing circle (bobbing, with an arrow down to it). */}
           <div ref={guideEl} aria-hidden style={{ position: 'absolute', left: 0, top: 0, height: 180, display: 'none', pointerEvents: 'none', zIndex: 8 }}>
             <motion.svg viewBox="-30 -30 60 50" animate={{ y: [0, 16, 0] }} transition={{ repeat: Infinity, duration: 0.9 }} style={{ position: 'absolute', left: '50%', top: 0, width: 64, marginLeft: -32, overflow: 'visible' }}>
-              <path d="M-14 -24H14V0H26L0 22L-26 0H-14Z" fill={GOLD} stroke={INK} strokeWidth="5" strokeLinejoin="round" />
+              <path d="M-14 -24H14V0H26L0 22L-26 0H-14Z" fill={GOLD} stroke="#fff" strokeWidth="5" strokeLinejoin="round" />
             </motion.svg>
             <div className="peru-hint-ring" style={{ position: 'absolute', left: 0, right: 0, top: 150 - 26, height: 52, borderRadius: '50%', border: `8px solid ${GOLD}`, background: 'rgba(255,200,61,.3)', boxShadow: '0 0 0 4px rgba(255,255,255,.7)' }} />
           </div>
@@ -1677,14 +1663,14 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
           <svg aria-hidden viewBox={`0 0 ${S.w} ${S.h}`} style={{ position: 'absolute', inset: 0, width: S.w, height: S.h, pointerEvents: 'none', zIndex: 13, overflow: 'visible' }}>
             {/* The guide's faint arc: a jump that lands in the gold circle. */}
             {Array.from({ length: 9 }, (_, i) => (
-              <circle key={`g${i}`} ref={(el) => void (guideDots.current[i] = el)} r={6 + i * 0.4} fill={GOLD} fillOpacity="0.55" stroke={INK} strokeOpacity="0.4" strokeWidth="2.5" style={{ display: 'none' }} />
+              <circle key={`g${i}`} ref={(el) => void (guideDots.current[i] = el)} r={6 + i * 0.4} fill={GOLD} fillOpacity="0.7" stroke="#fff" strokeOpacity="0.8" strokeWidth="2.5" style={{ display: 'none' }} />
             ))}
             {Array.from({ length: 13 }, (_, i) => (
-              <circle key={i} ref={(el) => void (dots.current[i] = el)} r={7 + i * 0.4} fill="#FFF7F0" stroke={INK} strokeWidth="3" style={{ display: 'none' }} />
+              <circle key={i} ref={(el) => void (dots.current[i] = el)} r={7 + i * 0.4} fill="#fff" stroke="#ff8fb8" strokeWidth="3.5" style={{ display: 'none' }} />
             ))}
             {/* The rubbery kelp band of the slingshot (shown while she pulls). */}
-            <path ref={(el) => void (band.current[0] = el)} fill="none" stroke={INK} strokeWidth="15" strokeLinecap="round" style={{ display: 'none' }} />
-            <path ref={(el) => void (band.current[1] = el)} fill="none" stroke="#7CC79A" strokeWidth="8" strokeLinecap="round" style={{ display: 'none' }} />
+            <path ref={(el) => void (band.current[0] = el)} fill="none" stroke="#2b7a5f" strokeWidth="15" strokeLinecap="round" style={{ display: 'none' }} />
+            <path ref={(el) => void (band.current[1] = el)} fill="none" stroke="#73cf86" strokeWidth="7" strokeLinecap="round" style={{ display: 'none' }} />
             <ellipse ref={ring} cy={S.sea} rx="54" ry="16" fill="none" stroke="#FF4F9A" strokeWidth="7" strokeDasharray="14 10" style={{ display: 'none' }} />
             {/* A fish over the ring: this jump will catch one. */}
             <g ref={ringFish} style={{ display: 'none' }}>
@@ -1725,7 +1711,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
 
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.9 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 26 }} />}</AnimatePresence>
 
-      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={P.story} bg={art.bgCoast} friend={<Penguin kind="pepa" height="100%" />} onDone={startPlay} />}
+      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={P.story} scene={<CoastOpening />} friend={<Penguin kind="pepa" height="100%" />} onDone={startPlay} />}
     </div>
   )
 }
@@ -1741,8 +1727,8 @@ function GhostFinger() {
       style={{ position: 'absolute', left: '50%', top: '45%', width: 70, height: 70, marginLeft: -35, marginTop: -35, pointerEvents: 'none', zIndex: 2 }}
     >
       <svg viewBox="-40 -40 80 80" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-        <circle r="30" fill="rgba(255,247,240,.75)" stroke={INK} strokeWidth="5" />
-        <circle r="14" fill="#FF8FB8" stroke={INK} strokeWidth="4" />
+        <circle r="30" fill="rgba(255,255,255,.8)" stroke="#b9a6f5" strokeWidth="5" />
+        <circle r="14" fill="#FF8FB8" />
       </svg>
     </motion.div>
   )

@@ -239,17 +239,9 @@
     "hash": "681ae819ad93",
     "note": "white feathers"
   },
-  "src/world/places/egypt/assets/jamal.webp": {
-    "hash": "96c9d5d1e2d8",
-    "note": "eye highlights"
-  },
   "src/world/places/egypt/assets/koshari-bowl.webp": {
     "hash": "49acc20c9de6",
     "note": "bowl inside"
-  },
-  "src/world/places/egypt/assets/miu.webp": {
-    "hash": "0fcc78906b51",
-    "note": "eyes and white tail tip"
   },
   "src/world/places/egypt/assets/pasta.webp": {
     "hash": "9d43b8a6b1d6",
@@ -375,29 +367,25 @@
     "hash": "f62e34a12063",
     "note": "white stripes"
   },
-  "src/world/places/peru/assets/inca-tern.webp": {
-    "hash": "efe39d135d66",
-    "note": "eye highlight"
+  "src/world/places/peru/assets/capybara-baby.webp": {
+    "hash": "e2cac35a96ab",
+    "note": "eye white"
   },
-  "src/world/places/peru/assets/jellyfish.webp": {
-    "hash": "19d839ebed0a",
-    "note": "eye highlights"
+  "src/world/places/peru/assets/fish.webp": {
+    "hash": "0f36183321ef",
+    "note": "eye white"
   },
-  "src/world/places/peru/assets/pelican-float.webp": {
-    "hash": "df6f2cfc188d",
-    "note": "eye highlight"
+  "src/world/places/peru/assets/frog.webp": {
+    "hash": "9b5e78eb512e",
+    "note": "eye whites"
   },
-  "src/world/places/peru/assets/pelican-fly.webp": {
-    "hash": "7b98fb3e2108",
-    "note": "cream wing-tip feathers and crest (real colors), eye highlight"
+  "src/world/places/peru/assets/monkey.webp": {
+    "hash": "219a375d9c62",
+    "note": "cream face mask and eye white"
   },
-  "src/world/places/peru/assets/pepa.webp": {
-    "hash": "f38d4b4887e8",
-    "note": "cream belly and face (real colors)"
-  },
-  "src/world/places/peru/assets/seaweed-sock.webp": {
-    "hash": "cc54b8dddeed",
-    "note": "eye highlights"
+  "src/world/places/peru/assets/toucan.webp": {
+    "hash": "95bc4b48b221",
+    "note": "eye white"
   },
   "src/world/places/poles/assets/friend-pola.webp": {
     "hash": "2d1c030c22a0",
