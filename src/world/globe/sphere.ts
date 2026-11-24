@@ -370,9 +370,9 @@ export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, t
   g.arc(0, 0, R * 1.2, 0, full)
   g.fill()
 
-  // The sea: light where the sun is (top left), deeper away from it.
+  // The sea: a little lighter where the sun is (top left), deeper away from it. Gentle: a painted ball, not a glass one.
   const sea = g.createRadialGradient(-R * 0.42, -R * 0.48, R * 0.08, -R * 0.1, -R * 0.1, R * 1.25)
-  sea.addColorStop(0, '#b9f0fa')
+  sea.addColorStop(0, '#98def7')
   sea.addColorStop(0.5, '#7fd3f5')
   sea.addColorStop(1, '#58aeee')
   g.fillStyle = sea
@@ -396,7 +396,7 @@ export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, t
     const [x2, y2, z2] = project(lon + stretch, lat, t)
     const z = Math.min(z0, z1, z2)
     if (z < 0.12) continue
-    g.globalAlpha = Math.min(0.55, (z - 0.12) * 1.2)
+    g.globalAlpha = Math.min(0.38, (z - 0.12) * 1.2)
     g.beginPath()
     g.moveTo(x0 * R, -y0 * R)
     g.quadraticCurveTo(x1 * R * 2 - (x0 + x2) * R * 0.5, -(y1 * R * 2 - (y0 + y2) * R * 0.5), x2 * R, -y2 * R)
@@ -444,9 +444,10 @@ export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, t
     cloud(g, x * R * 1.04, -y * R * 1.04, w)
   }
 
-  // The ball's own light and shade: a soft falloff, one clean crescent of shade, one small shine.
+  // The ball's own light and shade: a soft falloff and one clean crescent of shade. Matte: no shine spot (the user
+  // found it too shiny, 2026-11-24).
   const round = g.createRadialGradient(-R * 0.38, -R * 0.44, R * 0.05, 0, 0, R)
-  round.addColorStop(0, 'rgba(255, 255, 255, 0.3)')
+  round.addColorStop(0, 'rgba(255, 255, 255, 0.1)')
   round.addColorStop(0.4, 'rgba(255, 255, 255, 0)')
   round.addColorStop(0.72, `rgba(${SHADE}, 0)`)
   round.addColorStop(1, `rgba(${SHADE}, 0.3)`)
@@ -457,14 +458,10 @@ export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, t
   g.arc(0, 0, R, 0, full)
   g.arc(-R * 0.17, -R * 0.2, R * 1.03, 0, full, true)
   g.fill('evenodd')
-  g.fillStyle = 'rgba(255, 255, 255, 0.34)'
-  g.beginPath()
-  g.ellipse(-R * 0.5, -R * 0.62, R * 0.2, R * 0.075, -0.68, 0, full)
-  g.fill()
   g.restore()
 
-  // A bright rim.
-  g.strokeStyle = 'rgba(255, 255, 255, 0.7)'
+  // A soft rim.
+  g.strokeStyle = 'rgba(255, 255, 255, 0.35)'
   g.lineWidth = Math.max(2, R * 0.012)
   g.beginPath()
   g.arc(0, 0, R - g.lineWidth / 2, 0, full)
