@@ -11,6 +11,10 @@ screens, stickers and character references.
   tacky): its river layers, boat, flowers and water wheel are SVG in `src/world/places/egypt/activities/nile/`, the
   lotus is `egypt/Lotus.tsx`, and the hippo is a puppet (`puppets/Hippo.tsx`; her sticker `assets/hippo.svg` is a still
   of it). Scenery has soft flat tones and no outlines; what she plays with has the puppets' ink line.
+  Miu and Jamal are redrawn in that same look (user feedback, 2026-11-24: next to the new Nile they looked dated): the
+  hippo's 6-unit ink line (`inkStyle(INK, 6, 0.75)`), round shapes, a base, a shade and a cream tone, plain dark eyes
+  with two highlights, no lashes, brows or fussy fur lines. Their stickers (`assets/miu.svg`, `assets/jamal.svg`) are
+  stills of the puppets too. A new Egypt character follows them.
 - **Peru's Machu Picchu level is drawn by hand as well** (user feedback, 2026-11-24: the generated pictures looked
   cheesy and the drawn llama looked bad). The view behind (`bg-machu-picchu*.svg`), the critters, the crops and Tika's
   sticker are SVG files in the shelf's look (no dark outlines; a base, a shade and a light tone); the walls, the
