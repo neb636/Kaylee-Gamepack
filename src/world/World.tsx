@@ -92,7 +92,7 @@ export function World({ place, activity, section, params = {} }: { place?: strin
     >
       {tab && (
         <Suspense fallback={null}>
-          <LabBar active={tab} place={place} activity={activity} section={section} params={params} />
+          <LabBar active={tab} place={place} activity={activity} section={section} />
         </Suspense>
       )}
       <div

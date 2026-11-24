@@ -74,12 +74,18 @@ function remember(patch: Memory) {
 const gameState = (params: Record<string, string>) =>
   Object.fromEntries(Object.entries(params).filter(([k]) => k !== 'cam' && !k.startsWith('cam.') && !isFeelParam(k)))
 
-/** The scene on screen right now (its live section, not just the link's), if a game is open. */
+/** The scene on screen right now (its live section, not just the link's), if a game is open. A bare country link
+ *  (#/world/canada) is its Home base. */
 function sceneNow(place?: string, activity?: string): Scene | undefined {
-  if (!place || !activity) return undefined
+  if (!place) return undefined
   const here = sceneHere(place)
-  return { place, activity: here.activity ?? activity, section: here.section }
+  const a = here.activity ?? activity
+  return a ? { place, activity: a, section: here.section } : undefined
 }
+
+/** The game's state as the address bar has it now: a game writes its sections' state there as she plays
+ *  (replaceState), so the route's params can be the link it was opened from. */
+const liveParams = () => Object.fromEntries(new URLSearchParams(location.hash.split('?')[1] ?? ''))
 
 /** A guess at a game's block in lines.ts: `mall-trip` / `barber` → `mall.barber` (the dialogue lab falls back to `mall`,
  *  then to the country's first game). */
@@ -88,20 +94,11 @@ const groupFor = (s: Scene) => {
   return s.section ? `${base}.${s.section}` : base
 }
 
-export function labLink(
-  tab: LabTab,
-  here: {
-    place?: string
-    activity?: string
-    section?: string
-    params: Record<string, string>
-  },
-  active?: LabTab,
-): string {
+export function labLink(tab: LabTab, here: { place?: string; activity?: string }, active?: LabTab): string {
   const mem = recall()
   const onGame = active === 'camera' || active === 'feel'
   const scene = onGame ? sceneNow(here.place, here.activity) : undefined
-  const state = onGame ? gameState(here.params) : {}
+  const state = onGame ? gameState(liveParams()) : {}
   const sceneLink = (s: Scene, params: Record<string, string>) => worldLink(s.place, s.activity, s.section, params)
   switch (tab) {
     case 'characters':
@@ -129,19 +126,7 @@ export function labLink(
   }
 }
 
-export function LabBar({
-  active,
-  place,
-  activity,
-  section,
-  params,
-}: {
-  active: LabTab
-  place?: string
-  activity?: string
-  section?: string
-  params: Record<string, string>
-}) {
+export function LabBar({ active, place, activity, section }: { active: LabTab; place?: string; activity?: string; section?: string }) {
   // Keep where you are, so the other tabs (and #/world/lab next time) come back to it.
   useEffect(() => {
     if (active === 'characters') remember({ tab: active, ...(activity ? { character: activity } : {}) })
@@ -156,7 +141,7 @@ export function LabBar({
     }
   }, [active, place, activity, section])
 
-  const here = { place, activity, section, params }
+  const here = { place, activity }
   return (
     <header className="lab-bar">
       <button className="lab-home" aria-label="Back to the world map" title="Back to the world map" onClick={() => go.world()}>
@@ -191,7 +176,7 @@ export function LabBar({
 export function LabStart() {
   useEffect(() => {
     const tab = recall().tab ?? 'characters'
-    location.replace(labLink(tab, { params: {} }))
+    location.replace(labLink(tab, {}))
   }, [])
   return null
 }
