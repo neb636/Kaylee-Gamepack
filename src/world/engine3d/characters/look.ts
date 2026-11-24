@@ -57,6 +57,9 @@ export interface Look {
   /** A fox sculpted in more detail (Joy: fox.ts): cupped pointed ears, a white snout, brows, blush, brown paws and
    *  a big bushy tail. Without it, the plain fox. */
   sculpted?: boolean
+  /** A sculpted fox's puffy cheeks, low mounds beside the snout: white with blush on them, or pink. Without it, only
+   *  blush on the fur. */
+  cheeks?: 'white' | 'pink'
   extras?: Extra[]
   /** Lashes on the eyes. */
   lashes?: boolean

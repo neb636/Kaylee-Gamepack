@@ -14,6 +14,8 @@ const HEAD: V3 = [1.1, 1, 1]
 export const FOX_SOCK = '#6A4234'
 const NOSE = '#3A2A33'
 const BLUSH = '#FF9DB8'
+/** Pink puffy cheeks: a softer pink than the blush, so they read as fur. */
+const CHEEK_PINK = '#FFB5C8'
 
 /** A sculpted ball painted before it's placed: `tint` gives point `i` of the shaped ball another color (or null).
  *  (`shape` meets the points in the same order, so it can note things down for `tint`.) */
@@ -51,7 +53,17 @@ export function foxHead(look: Look, f: Frame, brow: string) {
     // A soft arched brow over each eye, and blush on the cheek.
     const bx = s * (eyeX + 0.02 * R)
     plain.push(P.torus(0.2 * R, 0.02 * R, brow, { at: on(bx, eyeY + 0.18 * R, 0.004 * R), rot: [0, turnTo(bx)[1], Math.PI / 2 - 0.45 + s * 0.06], scale: [1, 1, 0.5] }, 0.9))
-    plain.push(patch(f, BLUSH, s, 0.63, -0.34, egg(0.13, 0.075, 0.2), 0.016, HEAD))
+    if (!look.cheeks) plain.push(patch(f, BLUSH, s, 0.63, -0.34, egg(0.13, 0.075, 0.2), 0.016, HEAD))
+    else {
+      // A puffy cheek: a low soft mound lying on the face beside the snout (turned to face out where it sits), much
+      // flatter than the plain fox's cheek balls. White ones carry the blush; pink ones are the blush.
+      const n: V3 = [s * 0.465, -0.429, 0.774]
+      const c: V3 = [s * 0.56, -0.43, 0.71]
+      const r = 0.25
+      const turn: V3 = [0.52, s * 0.54, 0]
+      outlined.push(P.sphere(r * R, look.cheeks === 'pink' ? CHEEK_PINK : look.light, { at: at(c[0] - n[0] * 0.2 * r, c[1] - n[1] * 0.2 * r, c[2] - n[2] * 0.2 * r), rot: turn, scale: [1.15, 0.95, 0.42] }, 32))
+      if (look.cheeks === 'white') plain.push(P.sphere(0.1 * R, BLUSH, { at: at(c[0] + s * 0.04 + n[0] * 0.035, c[1] + 0.02 + n[1] * 0.035, c[2] + n[2] * 0.035), rot: turn, scale: [1.25, 0.7, 0.3] }, 16))
+    }
   }
   // The snout: it narrows toward the nose and tips up a little at the end.
   outlined.push(sculpt(look.light, 32, (p) => {

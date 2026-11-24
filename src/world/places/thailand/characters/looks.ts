@@ -51,7 +51,7 @@ export const LOOKS: Record<string, Look> = {
   // straight brown hair parted in the middle, with lighter strands round her face, her big smile and her white
   // pleated blouse with a collar of pink lace roses, on a fox sculpted in more detail (fox.ts); Bird's short spiky
   // black hair and his black shirt with orange and red flowers.
-  joy: { ...FOX, sculpted: true, height: 1.5, outfit: { kind: 'blouse', color: '#FFF7F3', lace: '#FF9CC0' }, hairdo: { style: 'long', color: '#7A4A38' }, smile: 'teeth', lashes: true },
+  joy: { ...FOX, sculpted: true, cheeks: 'white', height: 1.5, outfit: { kind: 'blouse', color: '#FFF7F3', lace: '#FF9CC0' }, hairdo: { style: 'long', color: '#7A4A38' }, smile: 'teeth', lashes: true },
   gan: { ...FOX, height: 1.32, outfit: { kind: 'tee', color: '#8FC9F5', shorts: '#5D7BB0' }, extras: ['cap', 'phone'] },
   ken: { ...FOX, height: 1.25, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['round-glasses', 'phone'] },
   bird: { ...BUFFALO, height: 1.65, outfit: { kind: 'shirt', color: '#3A3346', print: ['#FF8A3D', '#FF5A6E', '#FFC845'] }, hairdo: { style: 'spiky', color: '#2F2A3A' } },
