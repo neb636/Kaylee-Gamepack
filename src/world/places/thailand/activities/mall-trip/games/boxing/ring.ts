@@ -493,7 +493,8 @@ export class MuayThai extends Stage {
     const d = this.dad
     if (this.phase !== 'bout' || d.mode === 'fly' || d.mode === 'sit' || d.mode === 'up') return
     if (p.zone === 'mitt') return d.mode === 'windup' ? this.popMitt(p) : void sfx.pap()
-    const blocked = (d.guard === 'high' && p.zone === 'head') || (d.guard === 'low' && p.zone === 'body')
+    // (His mitts only block while he's holding his guard: not dizzy, not winding up.)
+    const blocked = d.mode === 'guard' && !this.ready && ((d.guard === 'high' && p.zone === 'head') || (d.guard === 'low' && p.zone === 'body'))
     const dizzy = d.mode === 'dizzy'
     this.combo = this.time - this.lastHit <= FEEL.combo ? this.combo + 1 : 1
     this.best = Math.max(this.best, this.combo)
