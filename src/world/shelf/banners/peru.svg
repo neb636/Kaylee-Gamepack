@@ -168,18 +168,18 @@
   <g fill="#ff8fb8"><circle cx="930" cy="364" r="4"/><circle cx="1140" cy="352" r="4"/><circle cx="1166" cy="368" r="3.5"/></g>
   <g fill="#ffc83d"><circle cx="958" cy="376" r="3.5"/><circle cx="1116" cy="366" r="3.5"/></g>
 
-  <!-- a white llama in a striped blanket, looking at the ruins -->
+  <!-- Tika the llama (caramel wool, a striped blanket), looking at the ruins -->
   <g transform="translate(1066 338)">
     <ellipse cx="2" cy="1" rx="46" ry="5" fill="#4b3a8c" opacity="0.15"/>
-    <ellipse cx="40" cy="-66" rx="7" ry="9" fill="#e4ddf6"/>
-    <rect x="-22" y="-42" width="10" height="42" rx="5" fill="#e4ddf6"/>
-    <rect x="20" y="-42" width="10" height="42" rx="5" fill="#e4ddf6"/>
+    <ellipse cx="40" cy="-66" rx="7" ry="9" fill="#d08d4f"/>
+    <rect x="-22" y="-42" width="10" height="42" rx="5" fill="#d08d4f"/>
+    <rect x="20" y="-42" width="10" height="42" rx="5" fill="#d08d4f"/>
     <g clip-path="url(#llama)">
-      <rect x="-40" y="-84" width="84" height="52" fill="#e4ddf6"/>
-      <path d="M-34 -55C-36 -72 -22 -82 0 -82C22 -82 34 -74 34 -60C34 -48 22 -42 0 -42C-24 -42 -34 -45 -34 -55Z" fill="#fff"/>
+      <rect x="-40" y="-84" width="84" height="52" fill="#d08d4f"/>
+      <path d="M-34 -55C-36 -72 -22 -82 0 -82C22 -82 34 -74 34 -60C34 -48 22 -42 0 -42C-24 -42 -34 -45 -34 -55Z" fill="#e9ac6c"/>
     </g>
-    <rect x="-31" y="-42" width="11" height="42" rx="5.5" fill="#fff"/>
-    <rect x="10" y="-42" width="11" height="42" rx="5.5" fill="#fff"/>
+    <rect x="-31" y="-42" width="11" height="42" rx="5.5" fill="#e9ac6c"/>
+    <rect x="10" y="-42" width="11" height="42" rx="5.5" fill="#e9ac6c"/>
     <g clip-path="url(#blanket)">
       <rect x="-26" y="-86" width="58" height="40" fill="#ff8fb8"/>
       <rect x="-26" y="-73" width="58" height="5" fill="#ffc83d"/>
@@ -188,17 +188,17 @@
       <path d="M16 -86H32V-46H16C20 -60 20 -72 16 -86Z" fill="#d8367f" opacity="0.25"/>
     </g>
     <g fill="#ff4f9a"><circle cx="-19" cy="-50" r="3"/><circle cx="2" cy="-47.5" r="3"/><circle cx="24" cy="-50" r="3"/></g>
-    <path d="M-36 -52C-40 -74 -42 -100 -40 -116L-18 -116C-18 -100 -16 -76 -10 -58Z" fill="#fff"/>
-    <path d="M-18 -116C-18 -100 -16 -76 -10 -58L-17 -56C-21 -74 -23 -98 -23 -116Z" fill="#e4ddf6"/>
-    <path d="M-25 -134C-25 -144 -21 -151 -15 -153C-14 -146 -17 -139 -20 -132Z" fill="#e4ddf6"/>
-    <path d="M-40 -133C-46 -141 -45 -151 -39 -156C-35 -150 -33 -142 -33 -134Z" fill="#fff"/>
-    <path d="M-38.5 -137C-41 -143 -40.5 -148 -38.5 -151C-36.5 -147 -35.5 -142 -35.5 -137Z" fill="#ffc4da"/>
-    <ellipse cx="-31" cy="-123" rx="16" ry="14" fill="#fff"/>
-    <path d="M-16 -128a16 14 0 0 1 -7 17" fill="none" stroke="#e4ddf6" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="-35" cy="-137" r="5.5" fill="#fff"/><circle cx="-27" cy="-138" r="5" fill="#fff"/><circle cx="-21" cy="-135" r="4" fill="#e4ddf6"/>
-    <ellipse cx="-47" cy="-116" rx="11" ry="8.5" fill="#ffe2d4"/>
+    <path d="M-36 -52C-40 -74 -42 -100 -40 -116L-18 -116C-18 -100 -16 -76 -10 -58Z" fill="#e9ac6c"/>
+    <path d="M-18 -116C-18 -100 -16 -76 -10 -58L-17 -56C-21 -74 -23 -98 -23 -116Z" fill="#d08d4f"/>
+    <path d="M-25 -134C-25 -144 -21 -151 -15 -153C-14 -146 -17 -139 -20 -132Z" fill="#d08d4f"/>
+    <path d="M-40 -133C-46 -141 -45 -151 -39 -156C-35 -150 -33 -142 -33 -134Z" fill="#e9ac6c"/>
+    <path d="M-38.5 -137C-41 -143 -40.5 -148 -38.5 -151C-36.5 -147 -35.5 -142 -35.5 -137Z" fill="#ff9dbf"/>
+    <ellipse cx="-31" cy="-123" rx="16" ry="14" fill="#e9ac6c"/>
+    <path d="M-16 -128a16 14 0 0 1 -7 17" fill="none" stroke="#d08d4f" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="-35" cy="-137" r="5.5" fill="#e9ac6c"/><circle cx="-27" cy="-138" r="5" fill="#e9ac6c"/><circle cx="-21" cy="-135" r="4" fill="#d08d4f"/>
+    <ellipse cx="-47" cy="-116" rx="11" ry="8.5" fill="#fff5e6"/>
     <circle cx="-39" cy="-157" r="4" fill="#ff4f9a"/>
-    <circle cx="-14.5" cy="-154" r="4" fill="#ffc83d"/>
+    <circle cx="-14.5" cy="-154" r="4" fill="#d8367f"/>
     <ellipse cx="-36" cy="-125" rx="3" ry="4" fill="#2b2330"/>
     <circle cx="-35" cy="-126.5" r="1" fill="#fff"/>
     <path d="M-39 -128.5l-3.5 -2.5M-37 -129.5l-2 -3.5" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>

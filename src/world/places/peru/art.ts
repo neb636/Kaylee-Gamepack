@@ -5,15 +5,14 @@ import brush from './assets/brush.svg'
 import burr from './assets/burr.svg'
 import cactus from './assets/cactus.svg'
 import clippers from './assets/clippers.svg'
-import cover from './assets/cover.webp'
 import dandelion from './assets/dandelion.svg'
 import lizard from './assets/lizard.svg'
 import luna from './assets/sticker-luna.svg'
-import mpPin from './assets/machu-picchu-pin.webp'
+import mpPin from './assets/pin-machu-picchu.svg'
 import pond from './assets/pond.svg'
 import stickerRosa from './assets/sticker-rosa.svg'
 import post from './assets/post.svg'
-import map from './assets/scene-peru-map.webp'
+import map from './assets/scene-peru-map.svg'
 import twig from './assets/twig.svg'
 
 import bear from './assets/bear.svg'
@@ -32,5 +31,5 @@ import viscacha from './assets/viscacha.svg'
 import stickerPepa from './assets/sticker-pepa.svg'
 
 export const art = {
-  basket, bear, beetle, bgMp, bgMpTall, bird, brush, burr, bush, cactus, clippers, cockRock, colibri, corn, cover, dandelion, doorway, kantuta, lizard, luna, map, mpPin, pond, post, potatoPlant, stickerPepa, stickerRosa, tika, twig, viscacha,
+  basket, bear, beetle, bgMp, bgMpTall, bird, brush, burr, bush, cactus, clippers, cockRock, colibri, corn, dandelion, doorway, kantuta, lizard, luna, map, mpPin, pond, post, potatoPlant, stickerPepa, stickerRosa, tika, twig, viscacha,
 }

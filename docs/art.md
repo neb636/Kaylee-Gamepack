@@ -34,6 +34,16 @@ screens, stickers and character references.
   Pepa's sticker `assets/sticker-pepa.svg` is a still of her puppet. What stands under the water is drawn in its own
   cool tones and the sea's tint goes over it; what should stay bright there (sea stars, the anemone) is drawn in
   front of the tint.
+- **Peru's hub is drawn by hand too, so all of Peru is** (user feedback, 2026-11-24: do the map, the pins and
+  whatever else was left). Luna's map is `assets/scene-peru-map.svg`, written by `scripts/peru-map.mjs`: the outline,
+  the neighbours, the rivers and Lake Titicaca are the real ones (Natural Earth), and the three worlds, the peaks, the
+  trees, the dunes, the whale and the compass are drawn in that script in the shelf's look. The same run writes
+  `mapLand.ts` (the pins' spots, the worlds' shapes for her taps, where the surprises happen), so change the script
+  and run it again rather than editing either file. The pins are round pictures in a white ring (the friends'
+  stickers and `assets/pin-machu-picchu.svg`), gold with a drawn tick once stamped; the side card, the journal and
+  the balloon (`BalloonPicture`, the home screen's balloon with nobody in it) have no ink outlines and no emoji.
+  The globe's pin and the shelf's pictures show Luna and Tika in their puppets' colors. Peru has no generated
+  picture left: keep it that way.
 - Save to `art/source/world/<id>/<name>.png`, run `npm run art -- world`, then
   `node scripts/contact-sheet.mjs src/world/places/<id>/assets` and **look at** `/tmp/contact-sheet.png`.
   Regenerate anything that cut out badly.

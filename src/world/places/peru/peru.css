@@ -6,41 +6,57 @@
 .world .peru-panel-luna {
   left: 4%;
   right: 4%;
-  top: 2%;
-  height: 40%;
+  top: 2.5%;
+  height: 41%;
 }
 .world .peru-panel .peru-journal {
   left: 4%;
   right: 4%;
-  top: 44%;
-  height: 34%;
+  top: 46%;
+  height: 33%;
 }
 .world .peru-panel-balloon {
   left: 18%;
   right: 18%;
-  top: 81%;
-  bottom: 3%;
+  top: 82.5%;
+  bottom: 3.5%;
 }
 @media (orientation: portrait) {
   .world .peru-panel-luna {
-    left: 1%;
+    left: 1.5%;
     right: auto;
-    width: 30%;
-    top: 4%;
-    height: 92%;
+    width: 28%;
+    top: 5%;
+    height: 90%;
   }
   .world .peru-panel .peru-journal {
     left: 31%;
     right: 22%;
     top: 6%;
-    height: 88%;
+    height: 85%;
   }
   .world .peru-panel-balloon {
     left: auto;
     right: 3%;
     width: 17%;
     top: 14%;
-    bottom: 14%;
+    bottom: 16%;
+  }
+}
+/* The map's two clouds drift out to sea and back. */
+.peru-map-cloud {
+  animation: peru-map-cloud 26s ease-in-out infinite alternate;
+}
+.peru-map-cloud-b {
+  animation-duration: 34s;
+  animation-direction: alternate-reverse;
+}
+@keyframes peru-map-cloud {
+  from {
+    transform: translateX(-8%);
+  }
+  to {
+    transform: translateX(30%);
   }
 }
 .peru-tool-glow img {

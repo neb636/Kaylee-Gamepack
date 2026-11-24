@@ -1,6 +1,10 @@
 import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
+import { PINS } from './mapLand'
+
+/** A pin's spot on Luna's map, in % of the picture (mapLand.ts, written with the map). */
+const pin = (id: keyof typeof PINS) => ({ x: PINS[id][0], y: PINS[id][1] })
 
 // Peru is built one activity at a time (plan: planning/around-the-world/peru.md (retired; in git history)). Luna's Fluffy Day, Pepa's Penguin
 // Cliff, Tika's Mountain Terraces and Swim with Rosa are all built; the balloon finale comes next. (Coco's Canyon Glide
@@ -14,10 +18,10 @@ const meta: PlaceMeta = {
   friend: { name: 'Luna the alpaca', img: art.luna },
   trophyTitle: 'Peru Explorer',
   activities: [
-    { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', pos: { x: 70, y: 74 }, sticker: { name: 'Alpaca', img: art.luna, fact: L.sticker } },
-    { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', pos: { x: 51.5, y: 60 }, sticker: { name: 'Llama', img: art.tika, fact: L.terracesSticker } },
-    { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', pos: { x: 38.75, y: 75 }, sticker: { name: 'Humboldt penguin', img: art.stickerPepa, fact: L.penguinSticker } },
-    { id: 'river', name: 'Swim with Rosa', icon: '🐬', pos: { x: 61, y: 28 }, sticker: { name: 'Pink dolphin', img: art.stickerRosa, fact: L.river.sticker } },
+    { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', pos: pin('alpaca'), sticker: { name: 'Alpaca', img: art.luna, fact: L.sticker } },
+    { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', pos: pin('machu-picchu'), sticker: { name: 'Llama', img: art.tika, fact: L.terracesSticker } },
+    { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', pos: pin('penguins'), sticker: { name: 'Humboldt penguin', img: art.stickerPepa, fact: L.penguinSticker } },
+    { id: 'river', name: 'Swim with Rosa', icon: '🐬', pos: pin('river'), sticker: { name: 'Pink dolphin', img: art.stickerRosa, fact: L.river.sticker } },
   ],
   facts: [
     { icon: '🌎', label: 'South America', say: L.facts.location },
