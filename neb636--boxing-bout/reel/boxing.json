@@ -1,0 +1,40 @@
+{
+  "kind": "reel",
+  "name": "boxing",
+  "title": "Boxing",
+  "video": "boxing.mp4",
+  "gif": "boxing.gif",
+  "seconds": 73,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "boxing-punch",
+      "where": "boxing-punch",
+      "seconds": 16,
+      "fps": 49.6,
+      "status": "ok"
+    },
+    {
+      "name": "boxing-mitt",
+      "where": "boxing-mitt",
+      "seconds": 16,
+      "fps": 48.6,
+      "status": "ok"
+    },
+    {
+      "name": "boxing-bop",
+      "where": "boxing-bop",
+      "seconds": 9,
+      "fps": 49,
+      "status": "ok"
+    },
+    {
+      "name": "boxing-kick",
+      "where": "boxing-kick",
+      "seconds": 26,
+      "fps": 46.3,
+      "status": "ok"
+    }
+  ]
+}

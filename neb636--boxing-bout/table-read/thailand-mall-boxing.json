@@ -1,0 +1,533 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "mall.boxing",
+  "title": "Thailand › Mall › Boxing",
+  "intro": "Muay Thai (games/boxing/): a bout with Dad.",
+  "page": "thailand-mall-boxing.html",
+  "audio": "thailand-mall-boxing.mp3",
+  "lines": 27,
+  "seconds": 45,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "mall.boxing.hello",
+      "text": "Sawasdee krap! First we say thank you.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "mall.boxing.sport",
+      "text": "Muay Thai is Thailand's own sport!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "hello"
+      ],
+      "text": "Sawasdee krap! First we say thank you.",
+      "voice": "coach",
+      "key": "mall.boxing.hello",
+      "part": "mall › boxing",
+      "when": "The opening, the bow before a bout: the coach, then Sparkle.",
+      "ms": 4128,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        0,
+        4.07
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "bow",
+        "touch"
+      ],
+      "text": "Tap your gloves to bow!",
+      "voice": "sparkle",
+      "key": "mall.boxing.bow.touch",
+      "part": "mall › boxing › bow",
+      "when": "",
+      "ms": 2214,
+      "flags": [],
+      "span": [
+        5.69,
+        7.91
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "bow",
+        "mouse"
+      ],
+      "text": "Click your gloves to bow!",
+      "voice": "sparkle",
+      "key": "mall.boxing.bow.mouse",
+      "part": "mall › boxing › bow",
+      "when": "",
+      "ms": 1800,
+      "flags": [],
+      "span": [
+        8.26,
+        10
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "chok"
+      ],
+      "text": "Chok!",
+      "voice": "coach",
+      "key": "mall.boxing.chok",
+      "part": "mall › boxing",
+      "when": "The coach: the bell (the referee's \"fight!\"), the count over a knocked-down Dad, after a round, the gold belt.",
+      "ms": 552,
+      "flags": [],
+      "span": [
+        11.62,
+        12.12
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "count",
+        "0"
+      ],
+      "text": "Nueng!",
+      "voice": "coach",
+      "key": "mall.boxing.count.0",
+      "part": "mall › boxing › count",
+      "when": "",
+      "ms": 672,
+      "flags": [],
+      "span": [
+        13.74,
+        14.35
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "count",
+        "1"
+      ],
+      "text": "Song!",
+      "voice": "coach",
+      "key": "mall.boxing.count.1",
+      "part": "mall › boxing › count",
+      "when": "",
+      "ms": 696,
+      "flags": [],
+      "span": [
+        14.7,
+        15.34
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "count",
+        "2"
+      ],
+      "text": "Saam!",
+      "voice": "coach",
+      "key": "mall.boxing.count.2",
+      "part": "mall › boxing › count",
+      "when": "",
+      "ms": 768,
+      "flags": [],
+      "span": [
+        15.69,
+        16.4
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "again"
+      ],
+      "text": "Yes! Again!",
+      "voice": "coach",
+      "key": "mall.boxing.again",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 1685,
+      "flags": [],
+      "span": [
+        18.02,
+        19.71
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "champion"
+      ],
+      "text": "Champion!",
+      "voice": "coach",
+      "key": "mall.boxing.champion",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 960,
+      "flags": [],
+      "span": [
+        20.06,
+        20.95
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "punch",
+        "touch"
+      ],
+      "text": "Tap Dad to punch!",
+      "voice": "sparkle",
+      "key": "mall.boxing.punch.touch",
+      "part": "mall › boxing › punch",
+      "when": "Sparkle: something new (how to punch, her gold gloves, Dad's big mitt going up, the kick).",
+      "ms": 1752,
+      "flags": [],
+      "span": [
+        22.57,
+        24.26
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "punch",
+        "mouse"
+      ],
+      "text": "Click Dad to punch!",
+      "voice": "sparkle",
+      "key": "mall.boxing.punch.mouse",
+      "part": "mall › boxing › punch",
+      "when": "",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        24.61,
+        26.73
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "super"
+      ],
+      "text": "Super punch!",
+      "voice": "sparkle",
+      "key": "mall.boxing.super",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 1368,
+      "flags": [],
+      "span": [
+        28.35,
+        29.67
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "glove"
+      ],
+      "text": "Punch his big glove!",
+      "voice": "sparkle",
+      "key": "mall.boxing.glove",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 1632,
+      "flags": [],
+      "span": [
+        30.02,
+        31.58
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "kick"
+      ],
+      "text": "Big kick!",
+      "voice": "sparkle",
+      "key": "mall.boxing.kick",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 904,
+      "flags": [],
+      "span": [
+        31.93,
+        32.84
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "strong"
+      ],
+      "text": "Ooh, strong!",
+      "voice": "nick",
+      "key": "mall.boxing.strong",
+      "part": "mall › boxing",
+      "when": "Dad, now and then: a big hit, her gloves gone gold, his mitt landing on her, popped and dizzy, his guard going up and down, into the ropes, up again.",
+      "ms": 1922,
+      "flags": [],
+      "span": [
+        33.19,
+        35.11
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "oof"
+      ],
+      "text": "Oof! Good one!",
+      "voice": "nick",
+      "key": "mall.boxing.oof",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 2064,
+      "flags": [],
+      "span": [
+        35.46,
+        37.46
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "uhOh"
+      ],
+      "text": "Uh oh!",
+      "voice": "nick",
+      "key": "mall.boxing.uhOh",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 720,
+      "flags": [],
+      "span": [
+        37.81,
+        38.47
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "gotcha"
+      ],
+      "text": "Gotcha!",
+      "voice": "nick",
+      "key": "mall.boxing.gotcha",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 648,
+      "flags": [],
+      "span": [
+        38.82,
+        39.4
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "dizzy"
+      ],
+      "text": "Whoa, I'm dizzy!",
+      "voice": "nick",
+      "key": "mall.boxing.dizzy",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 2520,
+      "flags": [],
+      "span": [
+        39.75,
+        42.21
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "upDown"
+      ],
+      "text": "Up high! Down low!",
+      "voice": "nick",
+      "key": "mall.boxing.upDown",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 1768,
+      "flags": [],
+      "span": [
+        42.56,
+        44.33
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "ropes"
+      ],
+      "text": "Whoa-oa-oa!",
+      "voice": "nick",
+      "key": "mall.boxing.ropes",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 1994,
+      "flags": [],
+      "span": [
+        44.68,
+        46.67
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "more"
+      ],
+      "text": "One more round!",
+      "voice": "nick",
+      "key": "mall.boxing.more",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 1104,
+      "flags": [],
+      "span": [
+        47.02,
+        48.05
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "hint",
+        "gloves",
+        "touch"
+      ],
+      "text": "Tap your gloves!",
+      "voice": "sparkle",
+      "key": "mall.boxing.hint.gloves.touch",
+      "part": "mall › boxing › hint › gloves",
+      "when": "Sparkle, when the finger shows after a while with nothing touched.",
+      "ms": 1445,
+      "flags": [],
+      "span": [
+        49.67,
+        51.12
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "hint",
+        "gloves",
+        "mouse"
+      ],
+      "text": "Click your gloves!",
+      "voice": "sparkle",
+      "key": "mall.boxing.hint.gloves.mouse",
+      "part": "mall › boxing › hint › gloves",
+      "when": "",
+      "ms": 1704,
+      "flags": [],
+      "span": [
+        51.47,
+        53.12
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "hint",
+        "dad"
+      ],
+      "text": "Punch Dad!",
+      "voice": "sparkle",
+      "key": "mall.boxing.hint.dad",
+      "part": "mall › boxing › hint",
+      "when": "Sparkle, when the finger shows after a while with nothing touched.",
+      "ms": 1200,
+      "flags": [],
+      "span": [
+        54.74,
+        55.88
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "waiKru"
+      ],
+      "text": "A boxer bows to thank the teacher!",
+      "voice": "coach",
+      "key": "mall.boxing.waiKru",
+      "part": "mall › boxing",
+      "when": "The facts: the first time she pokes the coach, and the star board.",
+      "ms": 2784,
+      "flags": [],
+      "span": [
+        57.5,
+        60.23
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "boxing",
+        "sport"
+      ],
+      "text": "Muay Thai is Thailand's own sport!",
+      "voice": "sparkle",
+      "key": "mall.boxing.sport",
+      "part": "mall › boxing",
+      "when": "",
+      "ms": 3674,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        60.58,
+        64.25
+      ]
+    }
+  ]
+}
