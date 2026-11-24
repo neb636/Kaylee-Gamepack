@@ -57,6 +57,8 @@ export interface Look {
   /** A fox sculpted in more detail (every fox in the game: fox.ts): cupped pointed ears, a white snout, puffy pink cheeks, brows, brown paws and
    *  a big bushy tail. Without it, the plain fox. */
   sculpted?: boolean
+  /** Bird's adult buffalo face, with swept horns and a compact muzzle. */
+  buffaloFace?: 'bull'
   /** A sculpted fox's puffy cheeks in its light fur instead of pink (Gan and Ken). */
   cheeks?: 'white'
   /** A sculpted fox's paws in another color than its brown socks (the Arctic fox's, its own fur). */

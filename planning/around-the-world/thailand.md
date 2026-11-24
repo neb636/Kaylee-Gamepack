@@ -18,7 +18,7 @@ The user decides the family: who each person is, which animal, who comes on a tr
 | Agong (อากง) | Grandpa | yes | panda with round gold glasses, a moustache, a cream shirt and a cane |
 | Jum | aunt | yes | chubby pink elephant, mint blouse |
 | Joy | aunt | yes | fox with straight brown hair to the shoulders, parted in the middle, a big toothy smile, a white blouse with a pink lace collar |
-| Bird | uncle | yes | water buffalo with curved horns, short spiky black hair, a black party shirt with orange and red flowers |
+| Bird | uncle | yes | water buffalo with tapered ivory horns that curl inward, a compact pale muzzle, short spiky black hair, a black party shirt with orange and red flowers |
 | Gan, Ken | Joy's sons, older | yes | fox cubs: Gan in a backwards cap and shorts, Ken in green round glasses; both glued to their phones |
 | BB | Bird's daughter, older | yes | buffalo calf with pigtails and pink bows, pink dress; glued to her phone |
 | Ja | aunt | no | penguin with a pink scarf |

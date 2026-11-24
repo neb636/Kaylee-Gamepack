@@ -12,7 +12,8 @@
 // body rounder (Mom, and Jum the elephant).
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'
-import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
+import { blobShadow, P, sculpt, solidMix, type PartOpts, type V3 } from '../geo'
+import { crescentHorn } from './buffalo'
 import { mooseAntler } from './moose'
 import { bellyPatch, beaverTail } from './beaver'
 import { raccoonHead, raccoonTail, raccoonTummy } from './raccoon'
@@ -550,7 +551,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     if (look.extras?.includes('eye-ring')) headPlain.push(P.sphere(eyeSize * 1.55, WHITE, { at: on(x, eyeY, lift - 0.06 * R), rot: turnTo(x), scale: [0.9, 1.05, 0.3] }, 16))
     if (look.lashes) for (const k of [0, 1]) eyesPlain.push(P.capsule(0.012 * R, 0.07 * R, INK, { at: on(x + s * (0.16 + k * 0.05) * R, eyeY + (0.17 - k * 0.07) * R, lift + 0.01 * R), rot: [0, 0, s * (-0.9 - k * 0.5)] }))
     const blushY = look.species === 'unicorn' || look.species === 'pony' ? -0.08 * R : -0.2 * R
-    if (!seaOtter && look.species !== 'raccoon' && !look.sculpted) headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
+    const blushLift = look.buffaloFace === 'bull' ? 0.025 * R : lift * 0.6 - 0.02 * R
+    if (!seaOtter && look.species !== 'raccoon' && !look.sculpted) headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, blushLift), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
   }
   const mouthPoint = (y: number, z?: number): V3 => (z === undefined ? on(0, y, 0.005 * R) : [0, headY + y, z])
   /** The resting mouth, built around the origin (its group sits at `mouthAt`). */
@@ -738,22 +740,38 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       break
     }
     case 'buffalo': {
-      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.1, 0.98, 1] }, 26))
-      head.push(P.sphere(0.56 * R, look.light, { at: [0, headY - 0.36 * R, 0.56 * R], scale: [1.25, 0.75, 0.76] }))
-      headPlain.push(...[-1, 1].map((s) => P.sphere(0.05 * R, INK, { at: [s * 0.2 * R, headY - 0.28 * R, 0.94 * R], scale: [1.3, 0.8, 0.6] })))
-      mouth(mouthPoint(-0.5 * R, 0.9 * R))
+      const bull = look.buffaloFace === 'bull'
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.1, 0.98, 1] }, bull ? 40 : 26))
+      if (bull) {
+        head.push(P.sphere(R, look.light, { at: [0, headY - 0.34 * R, 0.76 * R], scale: [0.52, 0.27, 0.31] }, 36))
+        for (const side of [-1, 1]) {
+          headPlain.push(P.sphere(0.065 * R, look.dark, {
+            at: [side * 0.23 * R, headY - 0.29 * R, 1.032 * R],
+            rot: [-0.22, side * 0.30, -side * 0.25], scale: [0.86, 0.62, 0.24],
+          }, 20))
+        }
+        mouth(mouthPoint(-0.47 * R, 1.035 * R))
+      } else {
+        head.push(P.sphere(0.56 * R, look.light, { at: [0, headY - 0.36 * R, 0.56 * R], scale: [1.25, 0.75, 0.76] }))
+        headPlain.push(...[-1, 1].map((s) => P.sphere(0.05 * R, INK, { at: [s * 0.2 * R, headY - 0.28 * R, 0.94 * R], scale: [1.3, 0.8, 0.6] })))
+        mouth(mouthPoint(-0.5 * R, 0.9 * R))
+      }
       for (const s of [-1, 1]) {
         head.push(P.sphere(0.22 * R, look.fur, { at: [s * 1.02 * R, headY + 0.18 * R, -0.05 * R], rot: [0, 0, -s * 0.35], scale: [1.6, 0.62, 0.42] }))
         headPlain.push(P.sphere(0.13 * R, look.ear ?? BLUSH, { at: [s * 1.05 * R, headY + 0.17 * R, 0.01 * R], rot: [0, 0, -s * 0.35], scale: [1.5, 0.55, 0.3] }))
-        // Big curved horns: a quarter circle out from the side of the head and up, with a pointed tip.
-        const horn = '#FFF3DC'
-        const hr = 0.4 * R
-        const hx = s * 0.78 * R
-        const hy = headY + 0.42 * R
-        const start = s > 0 ? -Math.PI / 2 : Math.PI / 2 + 0.55
-        head.push(P.torus(hr, 0.17 * R, horn, { at: [hx, hy + hr, -0.05 * R], rot: [0, 0, start] }, 2.05))
-        const end = s > 0 ? -Math.PI / 2 + 2.05 : Math.PI / 2 + 0.55
-        head.push(P.cone(0.16 * R, 0.34 * R, horn, { at: [hx + Math.cos(end) * hr, hy + hr + Math.sin(end) * hr + 0.08 * R, -0.05 * R], rot: [0, 0, s > 0 ? 0.45 : -0.45] }))
+        if (bull) {
+          head.push(crescentHorn(s, R, headY))
+        } else {
+          // Big curved horns: a quarter circle out from the side of the head and up, with a pointed tip.
+          const horn = '#FFF3DC'
+          const hr = 0.4 * R
+          const hx = s * 0.78 * R
+          const hy = headY + 0.42 * R
+          const start = s > 0 ? -Math.PI / 2 : Math.PI / 2 + 0.55
+          head.push(P.torus(hr, 0.17 * R, horn, { at: [hx, hy + hr, -0.05 * R], rot: [0, 0, start] }, 2.05))
+          const end = s > 0 ? -Math.PI / 2 + 2.05 : Math.PI / 2 + 0.55
+          head.push(P.cone(0.16 * R, 0.34 * R, horn, { at: [hx + Math.cos(end) * hr, hy + hr + Math.sin(end) * hr + 0.08 * R, -0.05 * R], rot: [0, 0, s > 0 ? 0.45 : -0.45] }))
+        }
       }
       if (!look.hairdo) head.push(...[-0.15, 0.12].map((x) => P.sphere(0.25 * R, '#7A86B0', { at: [x * R, headY + 0.82 * R, 0.3 * R], scale: [1.2, 0.7, 1] })))
       if (look.extras?.includes('pigtails')) {
@@ -1156,6 +1174,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   talk.visible = false
   // Lay both mouth poses along the slope below the moose's nostrils.
   if (look.species === 'moose') mouthGroup.rotation.x = talk.rotation.x = 0.36
+  if (look.buffaloFace === 'bull') mouthGroup.rotation.x = talk.rotation.x = 0.65
   headPivot.add(eyeGroup, mouthGroup, talk)
   let expression: Rig['expression']
   if (beaverBrows.length) {
@@ -1238,23 +1257,22 @@ function hairdo(h: NonNullable<Look['hairdo']>, f: Frame, head: Parts) {
   if (h.style === 'long') head.push(longHair(c, f))
   else {
     // Short thick hair sticking up in spikes on top (between the horns), short at the sides, a little fringe in front.
-    head.push(P.sphere(0.92 * R, c, { at: [0, headY + 0.36 * R, -0.08 * R], scale: [1.05, 0.68, 1.06] }, 24))
-    const spikes: [number, number, number, number][] = [
-      // x, z, lean out (sideways), lean forward
-      [0, 0.25, 0, 0.35],
-      [-0.3, 0.3, -0.35, 0.45],
-      [0.3, 0.3, 0.35, 0.45],
-      [-0.16, -0.1, -0.15, 0.05],
-      [0.16, -0.1, 0.15, 0.05],
-      [-0.42, -0.25, -0.55, -0.2],
-      [0.42, -0.25, 0.55, -0.2],
-      [0, -0.45, 0, -0.45],
-      [-0.12, 0.55, -0.2, 0.9],
-      [0.14, 0.56, 0.25, 0.95],
+    head.push(P.sphere(0.92 * R, c, { at: [0, headY + 0.36 * R, -0.08 * R], scale: [1.05, 0.68, 1.06] }, 48))
+    // Overlapping locks with a fuller base and a swept tip. The front row leans over the hairline.
+    const locks = [
+      // x, z, height, sideways sweep, forward sweep (in head radii)
+      [-0.38, -0.12, 0.30, -0.13, -0.03], [0.05, -0.30, 0.31, 0.11, -0.06],
+      [0.37, -0.07, 0.32, 0.13, 0.03], [-0.13, 0.09, 0.38, 0.14, 0.04],
+      [-0.33, 0.28, 0.26, -0.07, 0.15], [0.17, 0.29, 0.30, 0.13, 0.14],
+      [-0.09, 0.48, 0.23, 0.10, 0.22],
     ]
-    for (const [x, z, out, fwd] of spikes) {
-      const y = Math.sqrt(Math.max(0, 1 - x * x - (z + 0.08) ** 2)) * 0.68 + 0.36
-      head.push(P.cone(0.17 * R, 0.42 * R, c, { at: [x * R, headY + (y + 0.06) * R, z * R], rot: [fwd, 0, -out] }))
+    for (const [x, z, height, sweep, forward] of locks) {
+      const y = 0.36 + 0.68 * Math.sqrt(1 - x * x - (z + 0.08) ** 2)
+      head.push(sculpt(c, 20, (p) => {
+        const t = (p.y + 1) / 2
+        const width = 0.27 * (1 - 0.88 * t)
+        p.set(p.x * width + sweep * t * t, height * t, p.z * width + forward * t * t)
+      }, { at: [x * R, headY + (y - 0.10) * R, z * R], scale: [R, R, R] }))
     }
   }
 }
