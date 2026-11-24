@@ -1,16 +1,15 @@
 // The home globe's geometry and its picture: the shared land outlines (land.ts) as shapes on a ball, which way the
-// ball is turned, what is under her finger, and the painting itself (a 2D canvas: flat pastel land with a lip of
-// shade, streaks on the sea, drifting clouds, one soft shade on the far side). No three.js: this loads at startup.
-import { clamp, DEG, TO_DEG, wrapAngle } from '../../sdk/math'
+// ball is turned, what is under her finger, and the painting itself (a 2D canvas: puffy pastel land like rolled-out
+// clay, with a rim of light and a thick lip of shade, streaks on the sea, one soft shade on the far side, and the toys
+// that stand on it all: toys.ts). No three.js: this loads at startup.
+import { DEG, TO_DEG, wrapAngle } from '../../sdk/math'
+import { paintBehind, paintFront, paintShadows, placeToys, SHADE } from './toys'
+import { project, turnOf, type Turn, type View } from './turn'
+
+export { project, turnOf, unproject, type Turn, type View } from './turn'
 import { AFRICA, antarcticaCoast, ARABIA, AUSTRALIA, EURASIA, EUROPE_BOX, GREENLAND, ISLANDS, LAND_COLORS, NORTH_AMERICA, SOUTH_AMERICA, type LandColor, type Pt } from './land'
 
 export type Continent = 'northAmerica' | 'southAmerica' | 'europe' | 'africa' | 'asia' | 'australia' | 'antarctica'
-
-/** Which point of the Earth faces her, in degrees. */
-export interface View {
-  lon: number
-  lat: number
-}
 
 /** How far she can tip the globe: enough to peek at Antarctica or look down on the North Pole, never upside down. */
 export const TILT = { min: -30, max: 38, home: 16 }
@@ -133,7 +132,9 @@ const SHAPES: Shape[] = [
 ]
 const MOST = Math.max(...SHAPES.map((s) => s.ring.length))
 
-/** The lip under each color: the same hue, a little deeper and cooler (shelf/STYLE.md's shades). */
+/** The rim of light along each color's top-left edge, and the lip under it: the same hue, a little deeper and cooler
+ *  (shelf/STYLE.md's lights and shades). */
+const LAND_LIGHT: Record<LandColor, string> = { north: '#c7f3e4', south: '#ffe2d4', europe: '#e6dcff', asia: '#ffc9df', africa: '#fff6cc', australia: '#ffd9b8', ice: '#ffffff' }
 const LAND_SHADE: Record<LandColor, string> = { north: '#5cc6a6', south: '#f09d80', europe: '#a48fe6', asia: '#e7699c', africa: '#ecc95c', australia: '#e89a62', ice: '#d9d3ef' }
 
 function inside({ ring, box }: Shape, lon: number, lat: number) {
@@ -159,37 +160,6 @@ export function continentAt(lon: number, lat: number): Continent | undefined {
 
 /** Is there any land here (for keeping the sea's streaks off the coasts)? */
 const isLand = (lon: number, lat: number) => lat < antarcticaCoast(wrapLon(lon)) + 3 || lat > 74 || SHAPES.some((s) => !s.polar && inside(s, wrapLon(lon), lat))
-
-// ---- Turning the ball ----
-
-/** The view's sines and cosines, worked out once per frame. */
-export interface Turn {
-  sl: number
-  cl: number
-  sp: number
-  cp: number
-}
-export const turnOf = (v: View): Turn => ({ sl: Math.sin(v.lon * DEG), cl: Math.cos(v.lon * DEG), sp: Math.sin(v.lat * DEG), cp: Math.cos(v.lat * DEG) })
-
-/** A spot on the Earth, as she sees it: x right, y up, z toward her (behind the globe when negative), each -1..1. */
-export function project(lon: number, lat: number, t: Turn): [number, number, number] {
-  const c = Math.cos(lat * DEG)
-  const a = c * Math.sin(lon * DEG)
-  const b = Math.sin(lat * DEG)
-  const d = c * Math.cos(lon * DEG)
-  const z1 = a * t.sl + d * t.cl
-  return [a * t.cl - d * t.sl, b * t.cp - z1 * t.sp, b * t.sp + z1 * t.cp]
-}
-
-/** The spot on the Earth under a point of the disc (x right, y up, -1..1), or null off the globe. */
-export function unproject(x: number, y: number, t: Turn): Pt | null {
-  const r2 = x * x + y * y
-  if (r2 >= 1) return null
-  const z = Math.sqrt(1 - r2)
-  const z1 = z * t.cp - y * t.sp
-  const b = clamp(y * t.cp + z * t.sp, -1, 1)
-  return [Math.atan2(x * t.cl + z1 * t.sl, -x * t.sl + z1 * t.cl) * TO_DEG, Math.asin(b) * TO_DEG]
-}
 
 // ---- The picture ----
 
@@ -296,31 +266,6 @@ const STREAKS: [number, number, number][] = (() => {
   return out
 })()
 
-/** Clouds over the globe: [lon, lat, size (of the radius), drift (degrees a second)]. */
-const CLOUDS: [number, number, number, number][] = [
-  [-150, 34, 0.26, 1.1],
-  [-38, 40, 0.2, 0.8],
-  [-18, -26, 0.24, 1.3],
-  [72, -24, 0.22, 0.9],
-  [158, 18, 0.25, 1.2],
-  [-112, -34, 0.19, 0.7],
-  [20, 60, 0.17, 1],
-]
-
-/** A flat-bottomed cloud of round puffs, `w` wide, centered on x, y (the shell's Cloud, drawn on a canvas). */
-function cloud(g: CanvasRenderingContext2D, x: number, y: number, w: number) {
-  const u = w / 220
-  g.beginPath()
-  g.ellipse(x, y + 26 * u, 100 * u, 22 * u, 0, 0, Math.PI * 2)
-  g.moveTo(x - 20 * u, y + 12 * u)
-  g.arc(x - 52 * u, y + 12 * u, 32 * u, 0, Math.PI * 2)
-  g.moveTo(x + 42 * u, y - 6 * u)
-  g.arc(x - 2 * u, y - 6 * u, 44 * u, 0, Math.PI * 2)
-  g.moveTo(x + 84 * u, y + 10 * u)
-  g.arc(x + 50 * u, y + 10 * u, 34 * u, 0, Math.PI * 2)
-  g.fill()
-}
-
 /** A pin's stalk: from its spot on the ground (sx, sy) to the pin (mx, my), all in the globe's pixels from its center. */
 export interface Stalk {
   sx: number
@@ -334,8 +279,6 @@ export interface Stalk {
   /** 0..1: growing in as the pin comes up over the edge. */
   show: number
 }
-
-const SHADE = '75, 58, 140' // the app's cool shadow (#4b3a8c)
 
 function stalks(g: CanvasRenderingContext2D, list: Stalk[], R: number) {
   g.lineCap = 'round'
@@ -354,12 +297,15 @@ function stalks(g: CanvasRenderingContext2D, list: Stalk[], R: number) {
 }
 
 /**
- * Paints the globe with its center at the origin of `g` (translate first) and radius R: a glow, the sea, the land,
- * clouds, the shade on the far side, and the pins' stalks and ground shadows. `time` is seconds, for the clouds.
+ * Paints the globe with its center at the origin of `g` (translate first) and radius R: a glow, whatever peeks over
+ * the edge from behind, the sea, the land, the shade on the far side, then the toys, the clouds and the moon in front,
+ * and the pins' stalks and ground shadows. `time` is seconds (the loop's clock); `sway` is how hard the toys lean from
+ * a spin (-1..1).
  */
-export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, time: number, pins: Stalk[]) {
+export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, time: number, pins: Stalk[], sway = 0) {
   const t = turnOf(view)
   const full = Math.PI * 2
+  placeToys(R, t, time)
 
   // A soft glow, so it sits in the sky instead of on it.
   const glow = g.createRadialGradient(0, 0, R * 0.92, 0, 0, R * 1.2)
@@ -369,6 +315,8 @@ export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, t
   g.beginPath()
   g.arc(0, 0, R * 1.2, 0, full)
   g.fill()
+
+  paintBehind(g, R, time)
 
   // The sea: a little lighter where the sun is (top left), deeper away from it. Gentle: a painted ball, not a glass one.
   const sea = g.createRadialGradient(-R * 0.42, -R * 0.48, R * 0.08, -R * 0.1, -R * 0.1, R * 1.25)
@@ -404,22 +352,23 @@ export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, t
   }
   g.globalAlpha = 1
 
-  // The land: each shape's lip of shade first (down and right, away from the light), then every shape's color.
+  // The land, puffy like rolled-out clay: a rim of light peeking out up and left, a thick lip of shade down and right
+  // (away from the light), then every shape's color on top.
   const antipode: Pt = [wrapLon(view.lon + 180), -view.lat]
   const paths = SHAPES.map((s) => landPath(s, t, R, !s.polar && inside(s, antipode[0], antipode[1])))
-  const lip = Math.max(2, R * 0.014)
-  g.translate(lip * 0.7, lip)
-  SHAPES.forEach((s, i) => {
-    if (!paths[i]) return
-    g.fillStyle = LAND_SHADE[s.color]
-    g.fill(paths[i])
-  })
-  g.translate(-lip * 0.7, -lip)
-  SHAPES.forEach((s, i) => {
-    if (!paths[i]) return
-    g.fillStyle = LAND_COLORS[s.color]
-    g.fill(paths[i])
-  })
+  const lip = Math.max(3, R * 0.022)
+  const layer = (dx: number, dy: number, colors: Record<LandColor, string>) => {
+    g.translate(dx, dy)
+    SHAPES.forEach((s, i) => {
+      if (!paths[i]) return
+      g.fillStyle = colors[s.color]
+      g.fill(paths[i])
+    })
+    g.translate(-dx, -dy)
+  }
+  layer(lip * 0.7, lip, LAND_SHADE)
+  layer(-lip * 0.3, -lip * 0.42, LAND_LIGHT)
+  layer(0, 0, LAND_COLORS)
 
   // Where each pin floats, a soft shadow on the ground under it.
   for (const s of pins) {
@@ -430,19 +379,7 @@ export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, t
     g.fill()
   }
 
-  // Clouds, each with its shadow on the world below.
-  for (const [lon, lat, size, drift] of CLOUDS) {
-    const [x, y, z] = project(lon + time * drift, lat, t)
-    if (z < 0.1) continue
-    const w = R * size * (0.55 + 0.45 * z)
-    const fade = Math.min(1, (z - 0.1) * 3)
-    g.fillStyle = `rgba(${SHADE}, ${0.14 * fade})`
-    cloud(g, x * R + w * 0.07, -y * R + w * 0.16, w)
-    g.fillStyle = `rgba(232, 221, 255, ${fade})`
-    cloud(g, x * R * 1.04, -y * R * 1.04 + w * 0.04, w)
-    g.fillStyle = `rgba(255, 255, 255, ${fade})`
-    cloud(g, x * R * 1.04, -y * R * 1.04, w)
-  }
+  paintShadows(g, R)
 
   // The ball's own light and shade: a soft falloff and one clean crescent of shade. Matte: no shine spot (the user
   // found it too shiny, 2026-11-24).
@@ -467,5 +404,6 @@ export function paintGlobe(g: CanvasRenderingContext2D, R: number, view: View, t
   g.arc(0, 0, R - g.lineWidth / 2, 0, full)
   g.stroke()
 
+  paintFront(g, R, t, time, sway)
   stalks(g, pins, R)
 }
