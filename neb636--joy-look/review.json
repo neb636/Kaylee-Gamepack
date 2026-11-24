@@ -1,0 +1,59 @@
+{
+  "title": "Joy: a fox that looks like Joy",
+  "checkIn": "fix",
+  "kaylee": "Aunt Joy at Agong's house is a proper fox now, with Joy's long hair, big smile and lace blouse.",
+  "questions": [
+    "Does she look like Joy to you?",
+    "Her paws and ear tips are brown now, like the reference foxes. Keep them, or back to cream?"
+  ],
+  "pictures": [
+    {
+      "title": "All the way round",
+      "after": "pics/joy-turn.gif",
+      "caption": "The new Joy, turning in the character lab"
+    },
+    {
+      "title": "From the front",
+      "before": "pics/joy-front-before.jpg",
+      "after": "pics/joy-front-after.jpg",
+      "caption": "Tall dark-tipped ears, cheek fluff, a snout, long parted hair with lighter strands, a collar of lace roses"
+    },
+    {
+      "title": "Her face",
+      "before": "pics/joy-face-before.jpg",
+      "after": "pics/joy-face-after.jpg",
+      "caption": "Soft brows, blush on white cheeks, the same big smile"
+    },
+    {
+      "title": "Three-quarter",
+      "before": "pics/joy-q-before.jpg",
+      "after": "pics/joy-q-after.jpg",
+      "caption": "A big bushy tail with a white tip, out to one side so it shows from the front"
+    },
+    {
+      "title": "From behind",
+      "before": "pics/joy-back-before.jpg",
+      "after": "pics/joy-back-after.jpg",
+      "caption": "Her hair falls past her shoulders"
+    },
+    {
+      "title": "In the house",
+      "after": "pics/joy-house.jpg",
+      "caption": "Downstairs at Agong's, where she lives in the game"
+    }
+  ],
+  "links": [
+    {
+      "label": "Turn her round in the character lab",
+      "hash": "#/world/characters/joy"
+    },
+    {
+      "label": "Joy beside her boys and Jum",
+      "hash": "#/world/characters/joy?lineup=joy,gan,ken,jum"
+    },
+    {
+      "label": "Downstairs at Agong's house",
+      "hash": "#/world/thailand/hub/downstairs"
+    }
+  ]
+}
