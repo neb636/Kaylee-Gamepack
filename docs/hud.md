@@ -57,7 +57,8 @@ own.
 |---|---|
 | The Poles | done: the three "again" buttons and "bring the summer back" are `HudButton`s, bottom right |
 | Peru | done: Terraces' done is a mint `HudButton` bottom right (her photo pile sits just above it, and Sparkle stands bottom left for the photo); the balloon-soon screen's way back to the map is a pink `HudButton` bottom right |
-| Italy, Egypt, Australia, China | next: a few emoji glyphs in pills (`✓`, `✅`) |
+| Australia | done: the postcard's Send is a pink `HudButton` (the way on), still at the end of the crayons where the colouring page keeps it a space |
+| Italy, Egypt, China | next: a few emoji glyphs in pills (`✓`, `✅`) |
 | Canada | next, with the progress pill's `parts` (the campfire roast's second star row moves into the shell's pill) and the `PlaceFrame` fix for stars going missing when the country's code is already loaded |
 | Thailand | last and biggest: one back button (`useTopLeft` as a stack, so the game table hands it back to the house), the mall games' way on bottom right, end cards for Nan, the farm stops, the boat race and the board games |
 | Shared screens | their own PR: the stamp screen, story beat, videos, trophy, film skip, colouring undo, puzzle book, `SayButton` |

@@ -62,7 +62,7 @@ const PAD = 8 // inside the palette tray
 const SPLIT = 14 // between the picture and the palette
 const FRAME = 6 // white border around the picture
 const CRAYON_H = 0.7
-const ACTION_H = 0.8 // the action row (e.g. Send), relative to `t`
+const ACTION_H = 1.4 // the action row (the postcard's Send, a round way-on button), relative to `t`
 
 type Layout = { side: boolean; cols: number; t: number; w: number; h: number }
 
