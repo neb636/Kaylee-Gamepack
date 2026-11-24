@@ -288,7 +288,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       {arriving && (
         <HudButton role="skip" icon="skip" slot="bottom-right" label="Skip" onClick={() => houseRef.current?.skipArrival()} />
       )}
-      {allStamps && !playing && (
+      {allStamps && !playing && !arriving && (
         <HudButton role="open" icon="party" slot="bottom-right" pulse label="Party" onClick={() => openActivity('party')} style={{ opacity: meta.activities.length ? 1 : 0.85 }} />
       )}
       {/* A trip photo from the wall, close up. Tap anywhere to put it back. */}
