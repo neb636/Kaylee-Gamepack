@@ -41,7 +41,7 @@
     },
     {
       "key": "facts.beaver",
-      "text": "The beaver is a Canadian animal. Its teeth are orange and never stop growing.",
+      "text": "There are lots of beavers in Canada. Their teeth are orange and never stop growing.",
       "flags": [
         "long",
         "changed"
@@ -143,12 +143,12 @@
         "facts",
         "beaver"
       ],
-      "text": "The beaver is a Canadian animal. Its teeth are orange and never stop growing.",
+      "text": "There are lots of beavers in Canada. Their teeth are orange and never stop growing.",
       "voice": "sparkle",
       "key": "facts.beaver",
       "part": "facts",
       "when": "",
-      "ms": 5808,
+      "ms": 6168,
       "flags": [
         "long",
         "changed"

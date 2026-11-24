@@ -7,7 +7,7 @@
   "page": "canada-whales.html",
   "audio": null,
   "lines": 35,
-  "seconds": 78,
+  "seconds": 79,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -50,7 +50,7 @@
     },
     {
       "key": "whales.filmOut.ice",
-      "text": "It's like soccer, but with ice skating!",
+      "text": "It's like soccer, but on ice!",
       "flags": [
         "changed"
       ],
@@ -506,12 +506,12 @@
         "filmOut",
         "ice"
       ],
-      "text": "It's like soccer, but with ice skating!",
+      "text": "It's like soccer, but on ice!",
       "voice": "maple",
       "key": "whales.filmOut.ice",
       "part": "whales › filmOut",
       "when": "The film out: Ollie on her back in the kelp, juggling her rock while they talk.",
-      "ms": 1992,
+      "ms": 2856,
       "flags": [
         "changed"
       ],

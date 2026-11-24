@@ -6,8 +6,8 @@
   "intro": "",
   "page": "canada-campfire.html",
   "audio": null,
-  "lines": 44,
-  "seconds": 109,
+  "lines": 43,
+  "seconds": 108,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -354,7 +354,7 @@
       "voice": "raccoon",
       "key": "campfire.statues.0",
       "part": "campfire › statues",
-      "when": "Her statues (one each time she's caught in the beam): the tree, the rock, the whistle, the stretch.",
+      "when": "Her statues (one each time she's caught in the beam): the tree, the whistle, the stretch.",
       "ms": 1440,
       "flags": []
     },
@@ -364,23 +364,9 @@
         "statues",
         "1"
       ],
-      "text": "I'm a rock.",
-      "voice": "raccoon",
-      "key": "campfire.statues.1",
-      "part": "campfire › statues",
-      "when": "",
-      "ms": 1440,
-      "flags": []
-    },
-    {
-      "path": [
-        "campfire",
-        "statues",
-        "2"
-      ],
       "text": "Nobody here!",
       "voice": "raccoon",
-      "key": "campfire.statues.2",
+      "key": "campfire.statues.1",
       "part": "campfire › statues",
       "when": "",
       "ms": 1176,
@@ -390,11 +376,11 @@
       "path": [
         "campfire",
         "statues",
-        "3"
+        "2"
       ],
       "text": "Just stretching!",
       "voice": "raccoon",
-      "key": "campfire.statues.3",
+      "key": "campfire.statues.2",
       "part": "campfire › statues",
       "when": "",
       "ms": 1560,
