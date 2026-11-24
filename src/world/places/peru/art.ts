@@ -35,20 +35,8 @@ import potatoPlant from './assets/potato-plant.svg'
 import tika from './assets/sticker-tika.svg'
 import viscacha from './assets/viscacha.svg'
 
-import bgCoast from './assets/bg-coast.webp'
-import bgCoastTall from './assets/bg-coast-tall.webp'
-import boat from './assets/boat.webp'
-import cliff from './assets/cliff-hd.webp'
-import crab from './assets/crab.webp'
-import tern from './assets/inca-tern.webp'
-import jellyfish from './assets/jellyfish.webp'
-import kelp from './assets/kelp.webp'
-import pelicanFloat from './assets/pelican-float.webp'
-import pelicanFly from './assets/pelican-fly.webp'
-import pepa from './assets/pepa.webp'
-import seaRock from './assets/sea-rock.webp'
-import sock from './assets/seaweed-sock.webp'
+import stickerPepa from './assets/sticker-pepa.svg'
 
 export const art = {
-  abuela, basket, bear, beetle, bgAndes, bgAndesTall, bgCoast, bgCoastTall, bgMp, bgMpTall, bird, boat, brush, burr, bush, cactus, cliff, clippers, cockRock, colibri, corn, cover, crab, dandelion, doorway, hummingbird, jellyfish, kantuta, kelp, lizard, luna, map, mpPin, paco, pelicanFloat, pelicanFly, pepa, pond, post, potatoPlant, seaRock, sock, stickerRosa, stoneWall, tern, tika, twig, viscacha,
+  abuela, basket, bear, beetle, bgAndes, bgAndesTall, bgMp, bgMpTall, bird, brush, burr, bush, cactus, clippers, cockRock, colibri, corn, cover, dandelion, doorway, hummingbird, kantuta, lizard, luna, map, mpPin, paco, pond, post, potatoPlant, stickerPepa, stickerRosa, stoneWall, tika, twig, viscacha,
 }

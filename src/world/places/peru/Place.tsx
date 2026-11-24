@@ -53,7 +53,7 @@ export default function Place(props: PlaceProps) {
 }
 
 /** Pins that show their friend instead of an emoji. */
-const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.mpPin, river: art.stickerRosa }
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.stickerPepa, 'machu-picchu': art.mpPin, river: art.stickerRosa }
 
 // Luna says hello once per visit to the app.
 let introSeen = false
@@ -213,7 +213,7 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
               </div>
             ) : done && spot.id === 'penguins' ? (
               // Pepa and her three round chicks, porpoising home.
-              <img src={art.pepa} alt="" style={{ height: '88%', maxWidth: '90%', objectFit: 'contain' }} />
+              <img src={art.stickerPepa} alt="" style={{ height: '88%', maxWidth: '90%', objectFit: 'contain' }} />
             ) : done && spot.id === 'river' ? (
               // Rosa leaping at the rainbow she raced to.
               <img src={art.stickerRosa} alt="" style={{ height: '92%', maxWidth: '94%', objectFit: 'contain' }} />
