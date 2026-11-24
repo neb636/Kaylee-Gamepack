@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "campfire-statues-after",
+  "title": "Campfire statues after",
+  "video": "campfire-statues-after.mp4",
+  "gif": "campfire-statues-after.gif",
+  "seconds": 47,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-campfire-statues",
+      "where": "canada-campfire-statues",
+      "seconds": 45,
+      "fps": 59.9,
+      "status": "ok"
+    }
+  ]
+}
