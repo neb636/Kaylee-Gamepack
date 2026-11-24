@@ -7,7 +7,7 @@
   "page": "peru-river-swim.html",
   "audio": null,
   "lines": 2,
-  "seconds": 6,
+  "seconds": 5,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -20,9 +20,8 @@
     },
     {
       "key": "river.swim.mouse",
-      "text": "Click and hold Rosa, then swim!",
+      "text": "Click and hold Rosa to swim!",
       "flags": [
-        "long",
         "new"
       ]
     }
@@ -50,14 +49,13 @@
         "swim",
         "mouse"
       ],
-      "text": "Click and hold Rosa, then swim!",
+      "text": "Click and hold Rosa to swim!",
       "voice": "sparkle",
       "key": "river.swim.mouse",
       "part": "river › swim",
       "when": "",
-      "ms": 3480,
+      "ms": 2256,
       "flags": [
-        "long",
         "new"
       ]
     }

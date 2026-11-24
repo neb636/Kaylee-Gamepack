@@ -7,15 +7,14 @@
   "page": "peru-river.html",
   "audio": null,
   "lines": 35,
-  "seconds": 81,
+  "seconds": 79,
   "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "river.story.0",
-      "text": "The river is in the treetops! Swim with me!",
+      "text": "The river is in the treetops!",
       "flags": [
-        "long",
         "changed"
       ],
       "was": "Hola! I want to visit my forest friends!"
@@ -29,9 +28,8 @@
     },
     {
       "key": "river.swim.mouse",
-      "text": "Click and hold Rosa, then swim!",
+      "text": "Click and hold Rosa to swim!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -51,7 +49,7 @@
     },
     {
       "key": "river.leap",
-      "text": "Swim up fast, and Rosa leaps!",
+      "text": "Swim up fast to leap!",
       "flags": [
         "long",
         "new"
@@ -186,7 +184,7 @@
     },
     {
       "key": "river.idle.swim.touch",
-      "text": "Hold the water, and Rosa swims to you!",
+      "text": "Hold the water! Rosa comes!",
       "flags": [
         "long",
         "new"
@@ -194,7 +192,7 @@
     },
     {
       "key": "river.idle.swim.mouse",
-      "text": "Click and hold the water, and Rosa swims to you!",
+      "text": "Click and hold the water! Rosa comes!",
       "flags": [
         "long",
         "new"
@@ -236,14 +234,13 @@
         "story",
         "0"
       ],
-      "text": "The river is in the treetops! Swim with me!",
+      "text": "The river is in the treetops!",
       "voice": "rosa",
       "key": "river.story.0",
       "part": "river › story",
       "when": "The story: one line from Rosa, then her hands are busy.",
-      "ms": 3048,
+      "ms": 2208,
       "flags": [
-        "long",
         "changed"
       ],
       "was": "Hola! I want to visit my forest friends!"
@@ -270,14 +267,13 @@
         "swim",
         "mouse"
       ],
-      "text": "Click and hold Rosa, then swim!",
+      "text": "Click and hold Rosa to swim!",
       "voice": "sparkle",
       "key": "river.swim.mouse",
       "part": "river › swim",
       "when": "",
-      "ms": 3480,
+      "ms": 2256,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -318,12 +314,12 @@
         "river",
         "leap"
       ],
-      "text": "Swim up fast, and Rosa leaps!",
+      "text": "Swim up fast to leap!",
       "voice": "sparkle",
       "key": "river.leap",
       "part": "river",
       "when": "Under the sleeping sloth. Sparkle, once.",
-      "ms": 3408,
+      "ms": 3024,
       "flags": [
         "long",
         "new"
@@ -685,12 +681,12 @@
         "swim",
         "touch"
       ],
-      "text": "Hold the water, and Rosa swims to you!",
+      "text": "Hold the water! Rosa comes!",
       "voice": "sparkle",
       "key": "river.idle.swim.touch",
       "part": "river › idle › swim",
       "when": "Sparkle, when nothing has happened for a while.",
-      "ms": 3984,
+      "ms": 4032,
       "flags": [
         "long",
         "new"
@@ -703,12 +699,12 @@
         "swim",
         "mouse"
       ],
-      "text": "Click and hold the water, and Rosa swims to you!",
+      "text": "Click and hold the water! Rosa comes!",
       "voice": "sparkle",
       "key": "river.idle.swim.mouse",
       "part": "river › idle › swim",
       "when": "",
-      "ms": 4464,
+      "ms": 4632,
       "flags": [
         "long",
         "new"

@@ -7,15 +7,14 @@
   "page": "peru-river-story.html",
   "audio": null,
   "lines": 1,
-  "seconds": 3,
+  "seconds": 2,
   "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "river.story.0",
-      "text": "The river is in the treetops! Swim with me!",
+      "text": "The river is in the treetops!",
       "flags": [
-        "long",
         "changed"
       ],
       "was": "Hola! I want to visit my forest friends!"
@@ -28,14 +27,13 @@
         "story",
         "0"
       ],
-      "text": "The river is in the treetops! Swim with me!",
+      "text": "The river is in the treetops!",
       "voice": "rosa",
       "key": "river.story.0",
       "part": "river › story",
       "when": "The story: one line from Rosa, then her hands are busy.",
-      "ms": 3048,
+      "ms": 2208,
       "flags": [
-        "long",
         "changed"
       ],
       "was": "Hola! I want to visit my forest friends!"
