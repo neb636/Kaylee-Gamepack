@@ -54,7 +54,9 @@ export interface Look {
   hairdo?: { style: 'long' | 'spiky'; color: string }
   /** A big smile showing the top teeth (Joy): it stretches when they talk. */
   smile?: 'teeth'
-  /** A fox sculpted in more detail (every fox in the game: fox.ts): cupped pointed ears, a white snout, puffy pink cheeks, brows, brown paws and
+  /** A unicorn sculpted in more detail (Dad: unicorn.ts), to stand beside the modelled Kaylee and Mom: a round face
+   *  with no muzzle, cupped ears, a smooth mane, a twisted horn, a hooked tail, hoof socks.
+   *  A fox sculpted in more detail (every fox in the game: fox.ts): cupped pointed ears, a white snout, puffy pink cheeks, brows, brown paws and
    *  a big bushy tail. Without it, the plain fox. */
   sculpted?: boolean
   /** A sculpted fox's puffy cheeks in its light fur instead of pink (Gan and Ken). */

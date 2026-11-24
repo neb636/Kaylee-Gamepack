@@ -17,7 +17,7 @@ const CHEEK = '#FFB5C8'
 
 /** A sculpted ball painted before it's placed: `tint` gives point `i` of the shaped ball another color (or null).
  *  (`shape` meets the points in the same order, so it can note things down for `tint`.) */
-function painted(color: string, seg: number, shape: (p: Vector3) => void, tint: (p: Vector3, i: number) => string | null, o: PartOpts) {
+export function painted(color: string, seg: number, shape: (p: Vector3) => void, tint: (p: Vector3, i: number) => string | null, o: PartOpts) {
   const g = sculpt(color, seg, shape)
   const pos = g.attributes.position
   const rgb = g.attributes.color

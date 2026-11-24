@@ -413,7 +413,7 @@ export class JetSki implements World3D {
     const f = this.nick.rig.face
     this.cap = new Group()
     this.cap.add(capMesh(bag, f.R))
-    this.cap.position.set(0, f.headY + f.R * 0.72, -f.R * 0.05)
+    this.cap.position.set(0, f.headY + f.R * 0.86, -f.R * 0.05)
     this.nick.rig.head.add(this.cap)
 
     // Mom on the sand at the water's edge, the jet ski man by his hut (or on his own jet ski in the race).
@@ -2236,5 +2236,5 @@ function inside(L: Loop) {
 }
 
 function capMesh(bag: Bag, R: number) {
-  return solid(merge([P.sphere(R * 0.62, PAL.hotpink, { scale: [1, 0.55, 1] }, 14), P.cyl(R * 0.5, R * 0.5, R * 0.06, PAL.hotpink, { at: [0, -R * 0.08, R * 0.5], scale: [1, 1, 0.9] }, 14)]), bag, 2)
+  return solid(merge([P.sphere(R * 0.74, PAL.hotpink, { scale: [1, 0.55, 1] }, 14), P.cyl(R * 0.56, R * 0.56, R * 0.06, PAL.hotpink, { at: [0, -R * 0.08, R * 0.6], scale: [1, 1, 0.9] }, 14)]), bag, 2)
 }

@@ -17,6 +17,7 @@ import { mooseAntler } from './moose'
 import { bellyPatch, beaverTail } from './beaver'
 import { raccoonHead, raccoonTail, raccoonTummy } from './raccoon'
 import { FOX_SOCK, foxHead, foxTail } from './fox'
+import { unicornHead, unicornTail } from './unicorn'
 import { longHair } from './hair'
 import { seaOtterBody, seaOtterHead, seaOtterTail } from './seaOtter'
 import { WEARABLES, type Look, type PaintColor, type PaintPart, type Wearable } from './look'
@@ -363,6 +364,9 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const polar = look.species === 'polarbear'
   /** Paws and hooves in the dark color (a polar bear's are furry and light, like its fur). */
   const darkPaws = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' || look.species === 'moose' || look.species === 'raccoon' || look.species === 'beaver'
+  /** The sculpted fox (fox.ts) and the sculpted unicorn (unicorn.ts: Dad, drawn to stand beside the modelled Kaylee and Mom). */
+  const foxSculpt = look.sculpted && look.species === 'fox'
+  const uniSculpt = look.sculpted && look.species === 'unicorn'
 
   const torso: Parts = []
   const torsoPlain: Parts = []
@@ -423,10 +427,17 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     torso.push(...seaOtterBody(look, round))
   } else {
     const legColor = look.species === 'panda' ? look.dark : look.fur
-    const feetColor = look.sculpted ? (look.paws ?? FOX_SOCK) : darkPaws ? look.dark : look.light
+    const feetColor = foxSculpt ? (look.paws ?? FOX_SOCK) : darkPaws ? look.dark : look.light
     const legX = 0.085 * H * (1 + (c - 1) * 0.7)
     const legR = 0.07 * H * (1 + (c - 1) * 0.6)
     for (const s of [-1, 1]) {
+      if (uniSculpt) {
+        // Straight legs that end in a hoof the same width (a colored sock, like Kaylee's and Mom's), round underneath.
+        torso.push(P.cyl(legR * 0.97, legR, 0.15 * H, legColor, { at: [s * legX, 0.14 * H, 0] }, 20))
+        torso.push(P.cyl(legR * 1.05, legR * 1.06, 0.05 * H, feetColor, { at: [s * legX, 0.046 * H, 0] }, 20))
+        torso.push(P.sphere(legR * 1.06, feetColor, { at: [s * legX, 0.022 * H, 0], scale: [1, 0.3, 1] }, 20))
+        continue
+      }
       torso.push(P.capsule(legR, 0.06 * H, legColor, { at: [s * legX, 0.1 * H, 0] }))
       torso.push(P.sphere(0.075 * H * (1 + (c - 1) * 0.6), feetColor, { at: [s * legX, 0.035 * H, 0.02 * H], scale: [1, 0.6, 1.3] }))
     }
@@ -471,6 +482,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       torso.push(P.capsule(0.163 * H, (long ? 0.1 : 0.06) * H, o.color, { at: [0, (long ? 0.35 : 0.37) * H, 0], scale: round }))
       if (o.kind === 'dress') torso.push(frustum(0.15 * H, 0.235 * H, 0.17 * H, o.color, { at: [0, 0.235 * H, 0], scale: round }))
       if (o.shorts) torso.push(frustum(0.16 * H, 0.168 * H, 0.09 * H, o.shorts, { at: [0, 0.205 * H, 0], scale: round }))
+      // (The sculpted unicorn's shirt comes down to the hips, with a little flare at the hem.)
+      if (uniSculpt && !o.shorts && o.kind !== 'dress') torso.push(frustum(0.164 * H, 0.172 * H, 0.1 * H, o.color, { at: [0, 0.275 * H, 0], scale: round }))
       if (o.kind === 'polo') {
         for (const s of [-1, 1]) torso.push(P.box(0.08 * H, 0.012 * H, 0.06 * H, o.color, { at: [s * 0.045 * H, 0.535 * H, 0.1 * H], rot: [0.5, 0, s * -0.4] }))
         torsoPlain.push(...[0.47, 0.42].map((y) => P.sphere(0.009 * H, WHITE, { at: [0, y * H, 0.162 * H * round[2]] })))
@@ -525,10 +538,21 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       if (o) parts.push(P.sphere(0.06 * H, o.color, { at: [0, -0.01 * H, 0] }))
     } else {
       const armColor = look.species === 'panda' ? look.dark : look.fur
-      const hand = look.sculpted ? (look.paws ?? FOX_SOCK) : (darkPaws || seaOtter) ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' || look.species === 'otter' || polar ? look.light : look.fur
-      parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * 0.025 * H, -0.075 * H, 0], rot: [0, 0, s * 0.35] }))
-      parts.push(P.sphere(0.054 * H, hand, { at: [s * 0.05 * H, -0.14 * H, 0.005 * H], scale: seaOtter ? [0.84, 1.2, 0.67] : undefined }))
-      if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))
+      const hand = foxSculpt ? (look.paws ?? FOX_SOCK) : (darkPaws || seaOtter) ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' || look.species === 'otter' || polar ? look.light : look.fur
+      if (uniSculpt) {
+        // A smooth arm with the hoof as a sock on its end (not a ball), and a short sleeve with an open hem.
+        const along = (d: number): V3 => [s * (0.025 + 0.342 * d) * H, (-0.075 - 0.94 * d) * H, 0]
+        parts.push(P.capsule(0.05 * H, 0.13 * H, armColor, { at: along(0.015), rot: [0, 0, s * 0.35] }))
+        parts.push(P.capsule(0.054 * H, 0.02 * H, hand, { at: along(0.1), rot: [0, 0, s * 0.35] }))
+        if (o) {
+          parts.push(P.sphere(0.066 * H, o.color, { at: [s * 0.004 * H, -0.012 * H, 0] }, 24))
+          parts.push(P.cyl(0.066 * H, 0.07 * H, 0.045 * H, o.color, { at: along(-0.03), rot: [0, 0, s * 0.35] }, 24))
+        }
+      } else {
+        parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * 0.025 * H, -0.075 * H, 0], rot: [0, 0, s * 0.35] }))
+        parts.push(P.sphere(0.054 * H, hand, { at: [s * 0.05 * H, -0.14 * H, 0.005 * H], scale: seaOtter ? [0.84, 1.2, 0.67] : undefined }))
+        if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))
+      }
       // (The lace blouse's short sleeves have a pink edge.)
       if (o?.lace) parts.push(P.torus(0.054 * H, 0.01 * H, o.lace, { at: [s * 0.021 * H, -0.062 * H, 0], rot: [Math.PI / 2, s * 0.35, 0] }))
       if (o?.print) flower(parts, [s * 0.035 * H, -0.01 * H, 0.058 * H], [0, s * 0.55, 0], 0.024 * H, o.print[side === 'L' ? 1 : 0], 0)
@@ -550,7 +574,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     if (look.extras?.includes('eye-ring')) headPlain.push(P.sphere(eyeSize * 1.55, WHITE, { at: on(x, eyeY, lift - 0.06 * R), rot: turnTo(x), scale: [0.9, 1.05, 0.3] }, 16))
     if (look.lashes) for (const k of [0, 1]) eyesPlain.push(P.capsule(0.012 * R, 0.07 * R, INK, { at: on(x + s * (0.16 + k * 0.05) * R, eyeY + (0.17 - k * 0.07) * R, lift + 0.01 * R), rot: [0, 0, s * (-0.9 - k * 0.5)] }))
     const blushY = look.species === 'unicorn' || look.species === 'pony' ? -0.08 * R : -0.2 * R
-    if (!seaOtter && look.species !== 'raccoon' && !look.sculpted) headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
+    if (!seaOtter && look.species !== 'raccoon' && !foxSculpt) headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
   }
   const mouthPoint = (y: number, z?: number): V3 => (z === undefined ? on(0, y, 0.005 * R) : [0, headY + y, z])
   /** The resting mouth, built around the origin (its group sits at `mouthAt`). */
@@ -571,6 +595,15 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   // ---- What makes each animal itself ----
   switch (look.species) {
     case 'unicorn': {
+      if (uniSculpt) {
+        const face = unicornHead(look, f)
+        head.push(...face.outlined)
+        headPlain.push(...face.plain)
+        locks.push(...face.locks)
+        mouth(face.mouth)
+        tail.push(unicornTail(look, [0, 0.29 * H, -0.15 * H * round[2]]))
+        break
+      }
       const mane = look.mane ?? [look.fur]
       const m = (i: number) => mane[i % mane.length]
       head.push(P.sphere(R, look.fur, { at: [0, headY, 0] }, 26))

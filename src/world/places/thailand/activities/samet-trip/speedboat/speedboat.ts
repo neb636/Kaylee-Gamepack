@@ -349,8 +349,8 @@ export class SametSpeedboat implements World3D {
     // Dad's cap (blows off when she pokes him): his face's top.
     const nf = this.nick.rig.face
     this.nickCap = new Group()
-    this.nickCap.add(solid(merge([P.sphere(nf.R * 0.98, '#3F6FB8', { scale: [1, 0.55, 1] }, 14), P.box(nf.R * 1.1, 0.03, nf.R * 0.9, '#3F6FB8', { at: [0, -nf.R * 0.2, nf.R * 0.85] })]), bag, 2))
-    this.nickCap.position.set(0, nf.headY + nf.R * 0.55, 0)
+    this.nickCap.add(solid(merge([P.sphere(nf.R * 1.04, '#3F6FB8', { scale: [1, 0.58, 1] }, 14), P.box(nf.R * 1.1, 0.03, nf.R * 0.9, '#3F6FB8', { at: [0, -nf.R * 0.2, nf.R * 0.88] })]), bag, 2))
+    this.nickCap.position.set(0, nf.headY + nf.R * 0.6, 0)
     this.nick.rig.head.add(this.nickCap)
 
     // ---- The others on the water: they meet her on the way.
@@ -764,7 +764,7 @@ export class SametSpeedboat implements World3D {
     if (this.nickCap && this.capT >= 0) {
       this.capT += dt
       const k = this.capT / 1.1
-      this.nickCap.position.y = this.nick.rig.face.headY + this.nick.rig.face.R * 0.55 + Math.sin(Math.PI * clamp(k, 0, 1)) * 0.9
+      this.nickCap.position.y = this.nick.rig.face.headY + this.nick.rig.face.R * 0.6 + Math.sin(Math.PI * clamp(k, 0, 1)) * 0.9
       this.nickCap.rotation.x = k * 9
       this.nick.rig.armR.rotation.set(-2.4 * Math.sin(Math.PI * clamp(k, 0, 1)), 0, -0.3)
       if (this.capT > 1.1) {

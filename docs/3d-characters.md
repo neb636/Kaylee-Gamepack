@@ -233,6 +233,13 @@ every pose, voice and wearable working untouched:
   the user had them removed.) Every fox in the game uses it since 2026-11-23: `cheeks: 'white'`
   for the boys and the Arctic fox (Joy and the girls keep pink), `ears: 'short'` and `paws` for the Arctic fox. Give a new
   fox `sculpted: true` too; without it, it's the old plain fox.
+- On a unicorn, `Look.sculpted` picks the detailed unicorn (`engine3d/characters/unicorn.ts`, Dad since 2026-11-24), so
+  he stands beside the modelled Kaylee and Mom as one family: a round face with full cheeks and no muzzle (the user
+  had the white patch round his mouth removed), a little pink nose, cupped ears with a soft tip like theirs, one smooth
+  mane shell with a painted streak and a swept fringe, a twisted horn (`unicornHorn`, which the barber's snippable horn
+  reuses), a hooked tail, straight legs and arms that end in hoof socks, and a shirt down to the hips. He keeps the
+  rig's eyes and open smile. The mane is a little fuller on top than the old ball cap: a hat placed on his head sits at
+  about `headY + 0.6R` (the speedboat cap) or higher; check with `node scripts/qa-mom.mjs --who=nick`.
 - `hairdo: { style: 'long' }` is one smooth sheet wrapped round the head (`engine3d/characters/hair.ts`), not balls: a
   middle parting, curtains off the forehead, lighter strands painted into its vertex colors, an inside you see behind
   the neck. Its constants (`OPEN`, `PART`, `SIZE`, the `length`) are the knobs for another person's long hair.

@@ -24,6 +24,7 @@ import type { Member } from '../../../../characters/member'
 import type { AnchorInfo } from '../../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../../engine3d/camera'
 import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { unicornHorn } from '../../../../../../engine3d/characters/unicorn'
 import { PAL } from '../../../../../../engine3d/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../../trip/legs/stage'
 import { Racer } from '../race/racer'
@@ -162,7 +163,7 @@ export class Salon extends Stage {
     nr.body.add(this.cape)
     // His horn, on its own (a snip makes it boing): a copy sitting just over the toy's own.
     const R = nr.face.R
-    const horn = solid(P.cone(0.155 * R, 0.8 * R, '#FFC83D', { at: [0, 0.4 * R, 0] }), bag, 2.5)
+    const horn = solid(unicornHorn(R), bag, 2.5)
     horn.position.set(0, nr.face.headY + 0.72 * R, 0.14 * R)
     horn.rotation.x = 0.28
     nr.head.add(horn)
