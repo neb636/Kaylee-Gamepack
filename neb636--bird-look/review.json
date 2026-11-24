@@ -1,0 +1,12 @@
+{
+  "title": "Bird: cleaner horns and muzzle",
+  "checkIn": "fix",
+  "kaylee": "Uncle Bird looks tidier: smooth curved horns like your bull picture, a smaller rounded snout with nostrils, rounder ears and a smooth hairline.",
+  "questions": ["The other buffaloes (BB, Lung Kwai, the mushroom farmer, the bay fisherman) got the same horns and snout. Keep it for all?"],
+  "links": [{ "label": "Bird in the character lab", "hash": "#/world/characters/bird" }, { "label": "All the buffaloes", "hash": "#/world/characters/bird?lineup=bird,bb,kwai,mushroom-farmer" }],
+  "pictures": [
+    { "title": "Face", "before": "pics/face-before.png", "after": "pics/face-after.png", "caption": "Horns are one smooth curve each; the snout is narrower and rounder" },
+    { "title": "Three-quarter", "before": "pics/side-before.png", "after": "pics/side-after.png", "caption": "No more broken horn tips; smooth hairline" },
+    { "title": "Every buffalo", "after": "pics/buffaloes.png", "caption": "Bird, BB, Lung Kwai and the mushroom farmer share the new head" }
+  ]
+}
