@@ -149,13 +149,13 @@ export const L = {
   // ---- 3. Swim with Rosa (the flooded forest: swim her, leap for the fruit, race the otters) ----
   river: {
     // The story: one line from Rosa, then her hands are busy.
-    story: [rosa('The river is in the treetops! Swim with me!')],
+    story: [rosa('The river is in the treetops!')],
     // Sparkle, as the forest appears.
-    swim: onDevice('Hold Rosa and swim!', 'Click and hold Rosa, then swim!'),
+    swim: onDevice('Hold Rosa and swim!', 'Click and hold Rosa to swim!'),
     // Rosa reaches the capybaras; the baby climbs on her back for a ride.
     capy: [rosa('Hola, capybaras!'), capy('Ahh... a swim!')],
     // Under the sleeping sloth. Sparkle, once.
-    leap: 'Swim up fast, and Rosa leaps!',
+    leap: 'Swim up fast to leap!',
     // The splash wakes the sloth.
     sloth: [sloth('Ooh... a shower...'), rosa('Hola, sloth!')],
     // The monkeys, when Rosa swims under their fruit.
@@ -185,7 +185,7 @@ export const L = {
     facts: { rosa: 'This dolphin lives in a river!', forest: 'Half of Peru is rainforest!', flood: 'The river grows into the forest!' },
     // Sparkle, when nothing has happened for a while.
     idle: {
-      swim: onDevice('Hold the water, and Rosa swims to you!', 'Click and hold the water, and Rosa swims to you!'),
+      swim: onDevice('Hold the water! Rosa comes!', 'Click and hold the water! Rosa comes!'),
       sloth: 'Splash the sleepy sloth!',
       fruit: 'Leap up to the fruit!',
       race: 'Swim to the rainbow!',

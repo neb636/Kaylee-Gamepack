@@ -40,7 +40,7 @@ falls in; a splash near anyone soaks them.
 ahead, and one stops to float on his back. A loss is "So close! Again?" with an again button and the way on; after a
 loss they are slower still. The stamp comes after the race either way.
 
-**Story frame:** Rosa: "The river is in the treetops! Swim with me!" / Sparkle: "Hold Rosa and swim!"
+**Story frame:** Rosa: "The river is in the treetops!" / Sparkle: "Hold Rosa and swim!"
 Sparkle talks when: the forest appears (how to swim), under the sloth (how to leap), the first fruit the fish eat (the
 fact), and after about 8 s stuck.
 
