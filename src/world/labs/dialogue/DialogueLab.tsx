@@ -91,7 +91,10 @@ export default function DialogueLab({ place = 'thailand', group }: { place?: str
     const [page, query = ''] = location.hash.split('?')
     const q = new URLSearchParams(query)
     q.set('device', d)
-    location.hash = `${page}?${q}`
+    // device.ts reads a ?device= before the # first, so drop that one or the switch would do nothing.
+    const search = new URLSearchParams(location.search)
+    search.delete('device')
+    history.replaceState(null, '', `${location.pathname}${search.size ? `?${search}` : ''}${page}?${q}`)
     location.reload()
   }
 
