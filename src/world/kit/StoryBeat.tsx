@@ -7,8 +7,10 @@ import { Buddy, lineText, lineVoice, say, SparklePuppet, stopSpeaking, useAlive,
  * Tapping anywhere skips straight to the play (she never has to sit through talking).
  * Sparkle is a live puppet whose mouth moves on her lines. Pass `friend` (a puppet, e.g. `<Pip />`) so the friend's
  * mouth moves on theirs; a flat `img` becomes a Buddy that bounces along with the friend's voice.
+ * `scene` is a drawn backdrop that fills the screen (instead of the washed-out `bg` picture): the friends then stand
+ * at the bottom, on the scene's ground, with the line just above them.
  */
-export function StoryBeat({ lines, img, friend, onDone, bg }: { lines: Line[]; img?: string; friend?: ReactNode; onDone: () => void; bg?: string }) {
+export function StoryBeat({ lines, img, friend, onDone, bg, scene }: { lines: Line[]; img?: string; friend?: ReactNode; onDone: () => void; bg?: string; scene?: ReactNode }) {
   const timers = useTimers()
   const [index, setIndex] = useState(0)
   const alive = useAlive()
@@ -55,12 +57,17 @@ export function StoryBeat({ lines, img, friend, onDone, bg }: { lines: Line[]; i
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: scene ? 'flex-end' : 'center',
         gap: 'min(20px, 3vh)',
         padding: 'var(--top-clear) 20px calc(var(--safe-bottom) + 20px)',
-        background: bg ? `linear-gradient(rgba(255,247,240,0.35), rgba(255,247,240,0.35)), url(${bg}) center / cover` : 'rgba(217, 204, 255, 0.85)',
+        background: scene ? 'none' : bg ? `linear-gradient(rgba(255,247,240,0.35), rgba(255,247,240,0.35)), url(${bg}) center / cover` : 'rgba(217, 204, 255, 0.85)',
       }}
     >
+      {scene && (
+        <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: -1, pointerEvents: 'none' }}>
+          {scene}
+        </div>
+      )}
       <motion.div
         key={index}
         initial={{ scale: 0.7, y: 20, opacity: 0 }}
@@ -70,9 +77,9 @@ export function StoryBeat({ lines, img, friend, onDone, bg }: { lines: Line[]; i
         {lineText(lines[index])}
       </motion.div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(16px, 2vw)', maxWidth: '100%' }}>
-        <SparklePuppet ref={sparkle} height={img || friend ? 'min(290px, 30vh, 40vw)' : 'min(380px, 34vh, 62vw)'} lookToward={img || friend ? 0.6 : 0} />
+        <SparklePuppet ref={sparkle} height={scene ? 'min(320px, 30vh, 44vw)' : img || friend ? 'min(290px, 30vh, 40vw)' : 'min(380px, 34vh, 62vw)'} lookToward={img || friend ? 0.6 : 0} />
         {(friend || img) && (
-          <motion.div initial={{ x: 120, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', bounce: 0.4 }} style={{ maxWidth: '44vw', height: friend ? 'min(290px, 34vh, 42vw)' : undefined, display: 'flex', alignItems: 'flex-end' }}>
+          <motion.div initial={{ x: 120, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', bounce: 0.4 }} style={{ maxWidth: scene ? '48vw' : '44vw', height: friend ? (scene ? 'min(330px, 33vh, 50vw)' : 'min(290px, 34vh, 42vw)') : undefined, display: 'flex', alignItems: 'flex-end' }}>
             {friend ?? <Buddy img={img!} voice={friendVoice} height="min(290px, 34vh, 42vw)" />}
           </motion.div>
         )}

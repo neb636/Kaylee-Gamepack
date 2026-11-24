@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 250" width="220" height="250">
+  <title>A viscacha</title>
+  <defs><clipPath id="body"><ellipse cx="124" cy="170" rx="60" ry="66"/></clipPath></defs>
+  <ellipse cx="116" cy="243" rx="78" ry="6" fill="#2b2330" opacity="0.14"/>
+  <!-- the big curly tail -->
+  <circle cx="56" cy="176" r="48" fill="#a99f96"/>
+  <path d="M30 150C40 132 72 128 86 150C96 168 84 192 62 192C48 192 40 180 44 170C48 160 62 158 68 168" fill="none" stroke="#c9c0b6" stroke-width="12" stroke-linecap="round"/>
+  <!-- back foot -->
+  <ellipse cx="128" cy="232" rx="44" ry="13" fill="#a99f96"/>
+  <!-- body, pale tummy -->
+  <ellipse cx="124" cy="170" rx="60" ry="66" fill="#bdb3a8"/>
+  <g clip-path="url(#body)"><ellipse cx="150" cy="186" rx="36" ry="46" fill="#efe7dc"/><path d="M60 200Q120 250 190 210V250H60Z" fill="#a99f96" opacity="0.6"/></g>
+  <!-- long ears -->
+  <path d="M110 76C96 46 100 14 114 8C128 14 132 46 130 76Z" fill="#a99f96"/>
+  <path d="M146 72C140 42 150 12 164 10C176 18 174 50 166 76Z" fill="#bdb3a8"/>
+  <path d="M152 68C148 46 154 26 162 24C168 32 166 52 162 70Z" fill="#ffc4da"/>
+  <!-- head -->
+  <ellipse cx="144" cy="100" rx="50" ry="42" fill="#bdb3a8"/>
+  <ellipse cx="170" cy="112" rx="26" ry="20" fill="#efe7dc"/>
+  <circle cx="152" cy="92" r="10" fill="#2b2330"/><circle cx="149" cy="88.5" r="4" fill="#fff"/>
+  <ellipse cx="190" cy="104" rx="7" ry="5" fill="#ff8fb8"/>
+  <path d="M188 112Q180 122 170 118" fill="none" stroke="#2b2330" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M178 108L212 98M180 114L214 116M178 119L208 132" fill="none" stroke="#2b2330" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+  <ellipse cx="136" cy="116" rx="11" ry="7" fill="#ff8fb8" opacity="0.6"/>
+  <!-- little front paws -->
+  <ellipse cx="168" cy="168" rx="15" ry="10" fill="#a99f96"/><ellipse cx="160" cy="184" rx="14" ry="9" fill="#a99f96"/>
+</svg>

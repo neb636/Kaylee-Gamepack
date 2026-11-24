@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 250" width="230" height="250">
+  <title>An Andean cock-of-the-rock</title>
+  <defs><clipPath id="body"><ellipse cx="112" cy="150" rx="60" ry="72" transform="rotate(-14 112 150)"/></clipPath></defs>
+  <ellipse cx="122" cy="243" rx="62" ry="6" fill="#2b2330" opacity="0.15"/>
+  <!-- tail -->
+  <path d="M72 172L30 214Q24 226 38 226L96 210Z" fill="#2b2330"/>
+  <path d="M72 172L30 214Q26 222 32 225L84 194Z" fill="#4b4257"/>
+  <!-- legs -->
+  <path d="M104 210V236M132 208V236M90 240H114M118 240H144" fill="none" stroke="#eba123" stroke-width="8" stroke-linecap="round"/>
+  <!-- body: bright orange, shaded underneath -->
+  <ellipse cx="112" cy="150" rx="60" ry="72" transform="rotate(-14 112 150)" fill="#ff7438"/>
+  <g clip-path="url(#body)"><path d="M40 190Q120 250 190 170V240H40Z" fill="#e5522b"/><ellipse cx="92" cy="104" rx="34" ry="16" transform="rotate(-30 92 104)" fill="#ff9c57"/></g>
+  <!-- black wing with a pale grey panel -->
+  <path d="M52 138C56 110 88 104 112 122C132 138 136 172 112 196C92 214 62 208 52 186C46 172 48 152 52 138Z" fill="#2b2330"/>
+  <path d="M66 146C74 128 96 128 108 142C116 154 112 172 98 180C84 186 68 176 64 164C62 158 63 152 66 146Z" fill="#dedaf0"/>
+  <path d="M72 158Q88 150 106 158M70 168Q86 164 100 172" fill="none" stroke="#bcb6d6" stroke-width="4" stroke-linecap="round"/>
+  <!-- head with the big round crest that hides the beak -->
+  <circle cx="148" cy="84" r="46" fill="#ff7438"/>
+  <path d="M128 50C150 22 196 30 208 66C214 88 204 104 192 108C196 80 170 54 128 50Z" fill="#ff9c57"/>
+  <path d="M192 108C204 104 214 88 208 66C216 84 212 108 196 116Z" fill="#e5522b"/>
+  <path d="M184 104l22 6l-20 8Z" fill="#ffc83d"/>
+  <circle cx="158" cy="88" r="13" fill="#fff"/><circle cx="160" cy="88" r="8" fill="#2b2330"/><circle cx="157.5" cy="85" r="3" fill="#fff"/>
+  <ellipse cx="136" cy="108" rx="11" ry="7" fill="#ff8fb8" opacity="0.7"/>
+</svg>

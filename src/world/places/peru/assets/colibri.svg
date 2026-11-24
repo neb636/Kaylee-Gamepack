@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 240" width="260" height="240">
+  <title>A hummingbird</title>
+  <defs><clipPath id="body"><ellipse cx="120" cy="140" rx="64" ry="38" transform="rotate(28 120 140)"/></clipPath></defs>
+  <!-- the far wing -->
+  <path d="M112 118C80 86 40 54 10 50C16 84 52 124 100 140Z" fill="#8fe3c8"/>
+  <!-- tail -->
+  <path d="M74 158L22 218Q34 226 50 214L96 176Z" fill="#2b7a5f"/><path d="M80 164L46 232Q60 232 70 220L100 180Z" fill="#3e9e78"/>
+  <!-- body -->
+  <ellipse cx="120" cy="140" rx="64" ry="38" transform="rotate(28 120 140)" fill="#3ec98e"/>
+  <g clip-path="url(#body)"><path d="M70 150Q130 210 200 150V220H70Z" fill="#c7f3e4"/><ellipse cx="96" cy="112" rx="34" ry="12" transform="rotate(28 96 112)" fill="#7fe0b0"/></g>
+  <!-- head, pink throat, long beak -->
+  <circle cx="172" cy="96" r="36" fill="#3ec98e"/>
+  <path d="M146 120C160 134 188 132 200 112C186 122 164 122 146 120Z" fill="#ff4f9a"/>
+  <path d="M150 122C160 150 186 150 198 118C186 130 164 130 150 122Z" fill="#ff8fc0"/>
+  <path d="M204 90L256 82L206 100Z" fill="#2b2330"/>
+  <circle cx="182" cy="90" r="11" fill="#fff"/><circle cx="184" cy="90" r="7.5" fill="#2b2330"/><circle cx="182" cy="87.5" r="3" fill="#fff"/>
+  <ellipse cx="160" cy="76" rx="16" ry="7" transform="rotate(-24 160 76)" fill="#7fe0b0"/>
+  <!-- the near wing, up and beating -->
+  <path d="M120 126C108 78 112 30 134 4C158 34 162 86 146 132Z" fill="#aef0dc"/>
+  <path d="M128 112C122 80 124 50 134 28M140 116C142 84 142 60 138 40" fill="none" stroke="#5cc6a6" stroke-width="4" stroke-linecap="round"/>
+</svg>

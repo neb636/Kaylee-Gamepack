@@ -46,7 +46,8 @@ export const WALLS: WallPlan[] = [
 ]
 export const ROWS = 2
 
-const STONE_COLORS = ['#D3C6B8', '#C6B9AC', '#DCCFC2', '#C9BDCB', '#D7C9B2', '#BFB3A9']
+// Pale Inca granite: cream, sand and lavender-grey, so the walls sit in the level's pastel palette.
+const STONE_COLORS = ['#EDE6D8', '#DDD7EE', '#F1E3CF', '#D9DCEC', '#EBDCD6', '#E4DECF']
 
 /** A tiny seeded random, so one wall keeps its shape across re-renders and rotations. */
 function rng(seed: number) {
@@ -225,4 +226,12 @@ export function lighten(hex: string, amount: number) {
   const n = parseInt(hex.slice(1), 16)
   const ch = (v: number) => Math.round(v + (255 - v) * amount)
   return `#${[(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => ch(v).toString(16).padStart(2, '0')).join('')}`
+}
+
+/** Two colors mixed: `t` = 0 gives `a`, 1 gives `b`. */
+export function mix(a: string, b: string, t: number) {
+  const pa = parseInt(a.slice(1), 16)
+  const pb = parseInt(b.slice(1), 16)
+  const ch = (shift: number) => Math.round(((pa >> shift) & 255) * (1 - t) + ((pb >> shift) & 255) * t)
+  return `#${[16, 8, 0].map((sh) => ch(sh).toString(16).padStart(2, '0')).join('')}`
 }

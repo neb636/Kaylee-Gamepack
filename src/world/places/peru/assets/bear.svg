@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="200" height="300">
+  <title>A spectacled bear</title>
+  <!-- body -->
+  <ellipse cx="100" cy="232" rx="80" ry="78" fill="#4a3528"/>
+  <path d="M100 154C150 154 180 196 180 240C180 270 166 296 140 306C150 270 146 200 100 154Z" fill="#3b2a20"/>
+  <ellipse cx="100" cy="196" rx="34" ry="22" fill="#fbe6b8"/>
+  <!-- ears -->
+  <circle cx="44" cy="46" r="30" fill="#4a3528"/><circle cx="156" cy="46" r="30" fill="#3b2a20"/>
+  <circle cx="46" cy="48" r="15" fill="#8a5b3d"/><circle cx="154" cy="48" r="15" fill="#8a5b3d"/>
+  <!-- head -->
+  <ellipse cx="100" cy="102" rx="84" ry="74" fill="#4a3528"/>
+  <path d="M100 28C150 28 184 62 184 102C184 142 150 176 100 176C140 150 148 70 100 28Z" fill="#3b2a20" opacity="0.7"/>
+  <!-- the cream "spectacles" round the eyes, joined to the muzzle -->
+  <path d="M100 76C88 58 50 58 42 86C36 108 52 126 72 124C70 150 86 164 100 164C114 164 130 150 128 124C148 126 164 108 158 86C150 58 112 58 100 76Z" fill="#fbe6b8"/>
+  <ellipse cx="68" cy="94" rx="20" ry="22" fill="#4a3528"/><ellipse cx="132" cy="94" rx="20" ry="22" fill="#4a3528"/>
+  <circle cx="70" cy="94" r="11" fill="#2b2330"/><circle cx="66.5" cy="90" r="4" fill="#fff"/><circle cx="130" cy="94" r="11" fill="#2b2330"/><circle cx="126.5" cy="90" r="4" fill="#fff"/>
+  <ellipse cx="100" cy="126" rx="13" ry="9" fill="#2b2330"/>
+  <path d="M100 135V143M100 143Q90 153 80 146M100 143Q110 153 120 146" fill="none" stroke="#2b2330" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="48" cy="126" rx="13" ry="8" fill="#ff8fb8" opacity="0.6"/><ellipse cx="152" cy="126" rx="13" ry="8" fill="#ff8fb8" opacity="0.6"/>
+  <!-- paws up, as if peeking over something -->
+  <ellipse cx="42" cy="196" rx="26" ry="20" fill="#5d4433"/><ellipse cx="158" cy="196" rx="26" ry="20" fill="#5d4433"/>
+  <g fill="#3b2a20"><circle cx="30" cy="192" r="4"/><circle cx="42" cy="188" r="4"/><circle cx="54" cy="192" r="4"/><circle cx="146" cy="192" r="4"/><circle cx="158" cy="188" r="4"/><circle cx="170" cy="192" r="4"/></g>
+</svg>

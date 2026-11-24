@@ -7,7 +7,7 @@ import { Chick as PenguinChick, CHICK_ACTIONS as PENGUIN_CHICK_ACTIONS } from '.
 import { Lobo, LOBO_ACTIONS } from './Lobo'
 import { Penguin, PENGUIN_ACTIONS } from './Penguin'
 import { Rosa, ROSA_ACTIONS } from './Rosa'
-import { Tika, TIKA_ACTIONS } from './Tika'
+import { Llama, LLAMA_COATS, Tika, TIKA_ACTIONS } from './Tika'
 
 const F = L.fluffy
 const R = L.river
@@ -25,6 +25,9 @@ export const PUPPETS: PuppetEntry[] = [
   { id: 'tika', name: 'Tika the llama', render: (ref, height) => createElement(Tika, { ref, height }), actions: Object.keys(TIKA_ACTIONS), lines: [...T.story, ...T.wallDone, ...T.bomb, T.dance, T.innocent] },
   { id: 'tika-grin', name: 'Tika (photobomb grin)', render: (ref, height) => createElement(Tika, { ref, height, pose: 'grin' }), actions: Object.keys(TIKA_ACTIONS) },
   { id: 'tika-tongue', name: 'Tika (photobomb tongue)', render: (ref, height) => createElement(Tika, { ref, height, pose: 'tongue' }), actions: Object.keys(TIKA_ACTIONS) },
+  { id: 'llama-brown', name: "Tika's friend (brown)", render: (ref, height) => createElement(Llama, { ref, height, coat: LLAMA_COATS.brown }), actions: Object.keys(TIKA_ACTIONS) },
+  { id: 'llama-grey', name: "Tika's friend (grey)", render: (ref, height) => createElement(Llama, { ref, height, coat: LLAMA_COATS.grey }), actions: Object.keys(TIKA_ACTIONS) },
+  { id: 'llama-cria', name: "Tika's friend (the baby)", render: (ref, height) => createElement(Llama, { ref, height, coat: LLAMA_COATS.cria }), actions: Object.keys(TIKA_ACTIONS) },
   { id: 'pepa', name: 'Pepa the penguin', render: (ref, height) => createElement(Penguin, { ref, height, kind: 'pepa' }), actions: Object.keys(PENGUIN_ACTIONS), lines: [...P.story, ...P.orders, P.feed, ...P.yum, P.hatch, P.firstSwim, P.thanks, ...P.pepaTap] },
   { id: 'diver-chubby', name: 'Diver (chubby)', render: (ref, height) => createElement(Penguin, { ref, height, kind: 'chubby' }), actions: Object.keys(PENGUIN_ACTIONS), lines: [...P.wheee, P.whoa, P.blip, P.sock] },
   { id: 'diver-tiny', name: 'Diver (tiny)', render: (ref, height) => createElement(Penguin, { ref, height, kind: 'tiny' }), actions: Object.keys(PENGUIN_ACTIONS) },
