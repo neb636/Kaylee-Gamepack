@@ -1,0 +1,46 @@
+{
+  "title": "One set of controls: Canada",
+  "checkIn": "fix",
+  "kaylee": "At the campfire there's one row of stars, not two: the marshmallow orders fill the top bar's stars, and pink dashes under them show how far through the campfire she is. The five \"again\" buttons are lavender with the drawn again picture, the animal book closes with the same white button as everywhere else, and the stars in every country are drawn now instead of the iPad's emoji. Stars also stop going missing when she reopens a game she's already played.",
+  "questions": [],
+  "pictures": [
+    {
+      "title": "Campfire: one row of stars",
+      "before": "pics/b-roast.jpg",
+      "after": "pics/a-roast.jpg",
+      "caption": "Two star rows → the orders in the top pill, the campfire's parts as dashes under them"
+    },
+    {
+      "title": "Bath: another bath",
+      "before": "pics/b-bath.jpg",
+      "after": "pics/a-bath.jpg",
+      "caption": "Pink pill with 🔁 → lavender (again) with the drawn again"
+    },
+    {
+      "title": "Maple's animal book: close",
+      "before": "pics/b-book.jpg",
+      "after": "pics/a-book.jpg",
+      "caption": "Pink circle with ✖️ → the family's white button with the drawn close"
+    },
+    {
+      "title": "Every country: the star pill",
+      "before": "pics/b-outback.jpg",
+      "after": "pics/a-outback.jpg",
+      "caption": "Emoji ⭐ → drawn stars, the same on every device"
+    }
+  ],
+  "links": [
+    {
+      "label": "Campfire: marshmallow orders",
+      "hash": "#/world/canada/campfire/roast?order=2"
+    },
+    {
+      "label": "Bath: the mirror pool (play to the end for the again button)",
+      "hash": "#/world/canada/bath/mirror"
+    },
+    {
+      "label": "Maple's animal book",
+      "hash": "#/world/canada/hub/book"
+    }
+  ]
+}
