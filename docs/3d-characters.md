@@ -236,6 +236,10 @@ every pose, voice and wearable working untouched:
 - `hairdo: { style: 'long' }` is one smooth sheet wrapped round the head (`engine3d/characters/hair.ts`), not balls: a
   middle parting, curtains off the forehead, lighter strands painted into its vertex colors, an inside you see behind
   the neck. Its constants (`OPEN`, `PART`, `SIZE`, the `length`) are the knobs for another person's long hair.
+- The water buffalo (Bird, BB and every buffalo, 2026-11-24) has its own sculpted head in
+  `engine3d/characters/buffalo.ts`: each horn is one ball bent along an arc (out, then up and in) and tapering to a
+  rounded tip, painted cream to pale; a smaller rounded muzzle with nostrils set into it; leaf ears under the horns.
+  A torus cut short with a cone on its end showed its open ends and broke the outline.
 - What made her read as less primitive: 36+ segments on anything round, markings flush on the surface instead of
   stuck-on balls, and color changes that follow a row of the mesh (a slanted paint edge comes out as a sawtooth).
 - Check it like a model: the lab from the front, three-quarter, side and back, every pose, the lineup beside the

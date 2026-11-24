@@ -16,6 +16,7 @@ import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
 import { mooseAntler } from './moose'
 import { bellyPatch, beaverTail } from './beaver'
 import { raccoonHead, raccoonTail, raccoonTummy } from './raccoon'
+import { buffaloHead } from './buffalo'
 import { FOX_SOCK, foxHead, foxTail } from './fox'
 import { longHair } from './hair'
 import { seaOtterBody, seaOtterHead, seaOtterTail } from './seaOtter'
@@ -738,23 +739,10 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       break
     }
     case 'buffalo': {
-      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.1, 0.98, 1] }, 26))
-      head.push(P.sphere(0.56 * R, look.light, { at: [0, headY - 0.36 * R, 0.56 * R], scale: [1.25, 0.75, 0.76] }))
-      headPlain.push(...[-1, 1].map((s) => P.sphere(0.05 * R, INK, { at: [s * 0.2 * R, headY - 0.28 * R, 0.94 * R], scale: [1.3, 0.8, 0.6] })))
-      mouth(mouthPoint(-0.5 * R, 0.9 * R))
-      for (const s of [-1, 1]) {
-        head.push(P.sphere(0.22 * R, look.fur, { at: [s * 1.02 * R, headY + 0.18 * R, -0.05 * R], rot: [0, 0, -s * 0.35], scale: [1.6, 0.62, 0.42] }))
-        headPlain.push(P.sphere(0.13 * R, look.ear ?? BLUSH, { at: [s * 1.05 * R, headY + 0.17 * R, 0.01 * R], rot: [0, 0, -s * 0.35], scale: [1.5, 0.55, 0.3] }))
-        // Big curved horns: a quarter circle out from the side of the head and up, with a pointed tip.
-        const horn = '#FFF3DC'
-        const hr = 0.4 * R
-        const hx = s * 0.78 * R
-        const hy = headY + 0.42 * R
-        const start = s > 0 ? -Math.PI / 2 : Math.PI / 2 + 0.55
-        head.push(P.torus(hr, 0.17 * R, horn, { at: [hx, hy + hr, -0.05 * R], rot: [0, 0, start] }, 2.05))
-        const end = s > 0 ? -Math.PI / 2 + 2.05 : Math.PI / 2 + 0.55
-        head.push(P.cone(0.16 * R, 0.34 * R, horn, { at: [hx + Math.cos(end) * hr, hy + hr + Math.sin(end) * hr + 0.08 * R, -0.05 * R], rot: [0, 0, s > 0 ? 0.45 : -0.45] }))
-      }
+      const face = buffaloHead(look, f)
+      head.push(...face.outlined)
+      headPlain.push(...face.plain)
+      mouth(face.mouth)
       if (!look.hairdo) head.push(...[-0.15, 0.12].map((x) => P.sphere(0.25 * R, '#7A86B0', { at: [x * R, headY + 0.82 * R, 0.3 * R], scale: [1.2, 0.7, 1] })))
       if (look.extras?.includes('pigtails')) {
         for (const s of [-1, 1]) {
@@ -1238,7 +1226,7 @@ function hairdo(h: NonNullable<Look['hairdo']>, f: Frame, head: Parts) {
   if (h.style === 'long') head.push(longHair(c, f))
   else {
     // Short thick hair sticking up in spikes on top (between the horns), short at the sides, a little fringe in front.
-    head.push(P.sphere(0.92 * R, c, { at: [0, headY + 0.36 * R, -0.08 * R], scale: [1.05, 0.68, 1.06] }, 24))
+    head.push(P.sphere(0.92 * R, c, { at: [0, headY + 0.36 * R, -0.08 * R], scale: [1.05, 0.68, 1.06] }, 48))
     const spikes: [number, number, number, number][] = [
       // x, z, lean out (sideways), lean forward
       [0, 0.25, 0, 0.35],
