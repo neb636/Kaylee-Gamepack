@@ -13,6 +13,7 @@
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
+import { portraitFox } from './portraitFox'
 import { mooseAntler } from './moose'
 import { bellyPatch, beaverTail } from './beaver'
 import { raccoonHead, raccoonTail, raccoonTummy } from './raccoon'
@@ -354,13 +355,14 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const f = frameOf(look)
   const { H, R, headY, shoulder, eyeX, eyeY, eyeSize, lift, on, turnTo } = f
   const seaOtter = look.species === 'sea-otter'
-  const px = seaOtter ? 1.5 : H >= 1 ? 3 : 2.5
+  const foxHair = look.species === 'fox' ? look.portraitHair : undefined
+  const px = seaOtter || foxHair ? 1.5 : H >= 1 ? 3 : 2.5
   const penguin = look.species === 'penguin'
   const bird = look.species === 'hornbill' || look.species === 'tern' || look.species === 'pelican' || look.species === 'hen'
   const tern = look.species === 'tern'
   const polar = look.species === 'polarbear'
   /** Paws and hooves in the dark color (a polar bear's are furry and light, like its fur). */
-  const darkPaws = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' || look.species === 'moose' || look.species === 'raccoon' || look.species === 'beaver'
+  const darkPaws = !!foxHair || look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' || look.species === 'moose' || look.species === 'raccoon' || look.species === 'beaver'
 
   const torso: Parts = []
   const torsoPlain: Parts = []
@@ -474,10 +476,16 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         torsoPlain.push(...[0.47, 0.42].map((y) => P.sphere(0.009 * H, WHITE, { at: [0, y * H, 0.162 * H * round[2]] })))
       }
       if (o.kind === 'blouse' && o.lace) {
+        torsoPlain.push(frustum(0.157 * H, 0.181 * H, 0.13 * H, o.color, { at: [0, 0.293 * H, 0], scale: round }))
         // A lace collar lying on the chest (a row of round scallops under the chin), and fine pleats down the front.
         for (let i = 0; i < 9; i++) {
           const a = -1.25 + (i / 8) * 2.5
-          torso.push(P.sphere(0.032 * H, o.lace, { at: [Math.sin(a) * 0.15 * H * round[0], (0.478 + Math.abs(a) * 0.022) * H, Math.cos(a) * 0.15 * H * round[2]], rot: [-0.5, a, 0], scale: [1, 0.85, 0.4] }))
+          const at: V3 = [Math.sin(a) * 0.15 * H * round[0], (0.478 + Math.abs(a) * 0.022) * H, Math.cos(a) * 0.15 * H * round[2]]
+          const rot: V3 = [-0.5, a, 0]
+          torsoPlain.push(P.sphere(0.027 * H, o.lace, { at, rot, scale: [1, 0.69, 0.36] }))
+          torsoPlain.push(P.torus(0.01 * H, 0.0028 * H, '#FFDFE8', {
+            at: [at[0] + Math.sin(a) * 0.01 * H, at[1] + 0.004 * H, at[2] + Math.cos(a) * 0.01 * H], rot,
+          }))
         }
         torsoPlain.push(...[-0.06, -0.03, 0, 0.03, 0.06].map((x) => P.capsule(0.0035 * H, 0.1 * H, '#EADDE6', { at: [x * H, 0.41 * H, Math.sqrt(0.164 ** 2 - x * x) * H * round[2]], rot: [0, Math.asin(x / 0.164), 0] })))
       } else if (o.kind === 'blouse') {
@@ -526,7 +534,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   }
 
   // ---- The face: big shiny eyes, blush, a smile (or a big open happy mouth) ----
-  for (const s of [-1, 1]) {
+  if (!foxHair) for (const s of [-1, 1]) {
     const x = s * eyeX
     eyes.push(P.sphere(eyeSize, INK, { at: on(x, eyeY, lift - 0.03 * R), rot: turnTo(x), scale: [0.78, 1, 0.42] }))
     eyesPlain.push(P.sphere(eyeSize * 0.3, WHITE, { at: on(x + s * 0.05 * R, eyeY + 0.08 * R, lift + 0.035 * R) }))
@@ -546,13 +554,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   /** The resting mouth, built around the origin (its group sits at `mouthAt`). */
   const mouth = (at: V3) => {
     mouthAt = at
-    if (look.smile === 'teeth') {
-      // A wide smile with a row of top teeth: round shapes sunk into the muzzle, so only their fronts show and the
-      // smile hugs the face from every side.
-      rest.push(P.sphere(0.2 * R, MOUTH, { at: [0, -0.02 * R, -0.1 * R], scale: [1.2, 0.6, 0.7] }, 20))
-      rest.push(P.sphere(0.17 * R, WHITE, { at: [0, 0.035 * R, -0.07 * R], scale: [1.2, 0.3, 0.7] }, 20))
-      rest.push(P.sphere(0.08 * R, TONGUE, { at: [0, -0.08 * R, -0.03 * R], scale: [1.6, 0.5, 0.8] }))
-    } else if (look.open) {
+    if (look.open) {
       rest.push(P.sphere(0.2 * R, MOUTH, { scale: [1.15, 0.72, 0.35] }))
       rest.push(P.sphere(0.1 * R, TONGUE, { at: [0, -0.07 * R, 0.03 * R], scale: [1.3, 0.6, 0.5] }))
     } else rest.push(P.torus(0.075 * R, 0.017 * R, MOUTH, { rot: [0, 0, Math.PI] }, Math.PI))
@@ -702,25 +704,26 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       break
     }
     case 'fox': {
+      if (foxHair) {
+        const fox = portraitFox(look, f, foxHair)
+        head.push(...fox.head)
+        headPlain.push(...fox.plain)
+        eyesPlain.push(...fox.eyes)
+        rest.push(...fox.rest)
+        mouthAt = fox.mouth
+        tailRoot = fox.tailRoot
+        tail.push(fox.tail)
+        break
+      }
       head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.1, 1, 1] }, 26))
       for (const s of [-1, 1]) {
         head.push(P.cone(0.36 * R, 0.98 * R, look.fur, { at: [s * 0.58 * R, headY + 0.95 * R, -0.08 * R], rot: [-0.1, 0, -s * 0.38] }))
         headPlain.push(P.cone(0.2 * R, 0.6 * R, look.ear ?? look.light, { at: [s * 0.56 * R, headY + 0.88 * R, 0.06 * R], rot: [-0.1, 0, -s * 0.38] }))
-        if (look.cheeks === undefined) head.push(P.sphere(0.34 * R, look.light, { at: [s * 0.52 * R, headY - 0.42 * R, 0.55 * R] }))
-        else {
-          // Flatter cheeks: a low round mound lying on the face (turned to face out where it sits), not a ball.
-          const k = look.cheeks
-          const n: V3 = [s * 0.465, -0.429, 0.774]
-          // (On the fox's head, which is a little wider than round.)
-          const at: V3 = [s * 0.55 * R, headY - 0.42 * R, Math.sqrt(1 - 0.25 - 0.42 ** 2) * R]
-          const r = 0.3 * R * k / 0.8
-          head.push(P.sphere(r, look.light, { at: [at[0] - n[0] * 0.27 * r, at[1] - n[1] * 0.27 * r, at[2] - n[2] * 0.27 * r], rot: [0.52, s * 0.54, 0], scale: [1.15, 1, 0.45] }, 24))
-        }
+        head.push(P.sphere(0.34 * R, look.light, { at: [s * 0.52 * R, headY - 0.42 * R, 0.55 * R] }))
       }
       head.push(P.sphere(0.3 * R, look.light, { at: [0, headY - 0.36 * R, 0.8 * R], scale: [1.1, 0.8, 0.8] }))
       head.push(P.sphere(0.08 * R, look.dark, { at: [0, headY - 0.22 * R, 1.03 * R], scale: [1.3, 0.85, 0.9] }))
-      // (A smile with teeth sits a little higher, on the front of the muzzle.)
-      mouth(look.smile === 'teeth' ? mouthPoint(-0.42 * R, 1.03 * R) : mouthPoint(-0.48 * R, 1.0 * R))
+      mouth(mouthPoint(-0.48 * R, 1.0 * R))
       if (!look.hairdo) head.push(...[-0.2, 0.05, 0.28].map((x, i) => P.sphere((0.24 - i * 0.03) * R, look.fur, { at: [x * R, headY + (0.82 - i * 0.06) * R, 0.48 * R] })))
       tail.push(P.sphere(0.13 * H, look.fur, { at: [0.05 * H, 0.27 * H, -0.2 * H], rot: [-0.6, 0, 0.25], scale: [0.78, 1.38, 0.78] }))
       tail.push(P.sphere(0.085 * H, look.light, { at: [0.09 * H, 0.42 * H, -0.29 * H] }))
@@ -1198,7 +1201,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px, tailPlain)
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, expression, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
+  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, expression, open: (!!look.open || !!foxHair) && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
 }
 
 /** A five-petal flower (with two leaves behind it) printed on a surface at `at`, turned by `rot` to face out. */
@@ -1224,40 +1227,24 @@ function flower(parts: Parts, at: V3, rot: V3, r: number, color: string, seed: n
 function hairdo(h: NonNullable<Look['hairdo']>, f: Frame, head: Parts) {
   const { R, headY } = f
   const c = h.color
-  if (h.style === 'bob') {
-    // Straight hair to the shoulders, parted in the middle: a cap in two halves over the top (they meet in a groove
-    // above the head, the parting), the front swept to each side of it, a straight panel down each side past the
-    // cheeks, and the back. Every piece stands well off the head (never just on its surface, where the fur would
-    // flicker through).
-    for (const s of [-1, 1]) {
-      head.push(P.sphere(0.95 * R, c, { at: [s * 0.13 * R, headY + 0.3 * R, -0.3 * R], scale: [1.1, 0.92, 1.15] }, 40))
-      head.push(P.sphere(0.4 * R, c, { at: [s * 0.3 * R, headY + 0.68 * R, 0.58 * R], rot: [0.35, 0, s * 0.5], scale: [1.45, 0.6, 0.8] }, 24))
-      // The temple and the panel down the side overlap, so the hair frames the face from the temple to the shoulder.
-      head.push(P.sphere(0.4 * R, c, { at: [s * 0.85 * R, headY + 0.2 * R, 0.15 * R], scale: [0.7, 1.3, 1.1] }, 24))
-      head.push(P.capsule(0.26 * R, 0.7 * R, c, { at: [s * 1.0 * R, headY - 0.48 * R, 0.0], rot: [0.08, 0, s * 0.06], scale: [0.7, 1, 1.25] }))
-      head.push(P.sphere(0.24 * R, c, { at: [s * 1.03 * R, headY - 0.95 * R, 0.1 * R], scale: [0.72, 0.7, 1.25] }))
-    }
-    head.push(P.sphere(R, c, { at: [0, headY - 0.25 * R, -0.32 * R], scale: [1.2, 1.25, 0.92] }, 26))
-  } else {
-    // Short thick hair sticking up in spikes on top (between the horns), short at the sides, a little fringe in front.
-    head.push(P.sphere(0.92 * R, c, { at: [0, headY + 0.36 * R, -0.08 * R], scale: [1.05, 0.68, 1.06] }, 24))
-    const spikes: [number, number, number, number][] = [
-      // x, z, lean out (sideways), lean forward
-      [0, 0.25, 0, 0.35],
-      [-0.3, 0.3, -0.35, 0.45],
-      [0.3, 0.3, 0.35, 0.45],
-      [-0.16, -0.1, -0.15, 0.05],
-      [0.16, -0.1, 0.15, 0.05],
-      [-0.42, -0.25, -0.55, -0.2],
-      [0.42, -0.25, 0.55, -0.2],
-      [0, -0.45, 0, -0.45],
-      [-0.12, 0.55, -0.2, 0.9],
-      [0.14, 0.56, 0.25, 0.95],
-    ]
-    for (const [x, z, out, fwd] of spikes) {
-      const y = Math.sqrt(Math.max(0, 1 - x * x - (z + 0.08) ** 2)) * 0.68 + 0.36
-      head.push(P.cone(0.17 * R, 0.42 * R, c, { at: [x * R, headY + (y + 0.06) * R, z * R], rot: [fwd, 0, -out] }))
-    }
+  // Short thick hair sticking up in spikes on top (between the horns), short at the sides, a little fringe in front.
+  head.push(P.sphere(0.92 * R, c, { at: [0, headY + 0.36 * R, -0.08 * R], scale: [1.05, 0.68, 1.06] }, 24))
+  const spikes: [number, number, number, number][] = [
+    // x, z, lean out (sideways), lean forward
+    [0, 0.25, 0, 0.35],
+    [-0.3, 0.3, -0.35, 0.45],
+    [0.3, 0.3, 0.35, 0.45],
+    [-0.16, -0.1, -0.15, 0.05],
+    [0.16, -0.1, 0.15, 0.05],
+    [-0.42, -0.25, -0.55, -0.2],
+    [0.42, -0.25, 0.55, -0.2],
+    [0, -0.45, 0, -0.45],
+    [-0.12, 0.55, -0.2, 0.9],
+    [0.14, 0.56, 0.25, 0.95],
+  ]
+  for (const [x, z, out, fwd] of spikes) {
+    const y = Math.sqrt(Math.max(0, 1 - x * x - (z + 0.08) ** 2)) * 0.68 + 0.36
+    head.push(P.cone(0.17 * R, 0.42 * R, c, { at: [x * R, headY + (y + 0.06) * R, z * R], rot: [fwd, 0, -out] }))
   }
 }
 

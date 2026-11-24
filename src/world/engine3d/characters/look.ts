@@ -48,13 +48,10 @@ export interface Look {
     /** Flowers printed all over, in these colors, with green leaves and an open camp collar (Bird's party shirt). */
     print?: string[]
   }
-  /** The real person's hair on their animal (Dad's photos, 2026-10-24), so Kaylee knows who's who: a straight cut to the
-   *  shoulders parted in the middle (Joy), or short thick hair that sticks up in spikes (Bird). */
-  hairdo?: { style: 'bob' | 'spiky'; color: string }
-  /** A big smile showing the top teeth (Joy): it stretches when they talk. */
-  smile?: 'teeth'
-  /** A fox's cheeks as flatter, smaller mounds on the face, this big (Joy 0.8); without it, the usual round fluffy ones. */
-  cheeks?: number
+  /** Short, spiked hair between the horns. */
+  hairdo?: { style: 'spiky'; color: string }
+  /** Hair color for the sculpted fox portrait with a side part and a toothy smile. */
+  portraitHair?: string
   extras?: Extra[]
   /** Lashes on the eyes. */
   lashes?: boolean
