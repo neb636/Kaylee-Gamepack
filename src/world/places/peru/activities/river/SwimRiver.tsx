@@ -884,7 +884,7 @@ export function SwimRiver({ onDone, setProgress }: ActivityProps) {
   }, [])
 
   // ---- What Sparkle says when she's stuck. ----
-  const hint: Line | null = phase === 'treetops' ? (slothNear && !met.sloth ? R.idle.sloth : R.idle.swim) : phase === 'fruit' ? R.idle.fruit : phase === 'race' ? R.idle.race : null
+  const hint: Line | null = phase === 'treetops' ? (slothNear && !met.sloth ? R.idle.sloth : R.swim) : phase === 'fruit' ? R.idle.fruit : phase === 'race' ? R.idle.race : null
 
   // Only what's near the camera is on the page.
   const near = (x: number, pad = 500) => !!view && x > cell * 400 - pad && x < cell * 400 + 400 + view.w + pad

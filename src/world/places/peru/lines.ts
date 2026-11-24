@@ -183,9 +183,8 @@ export const L = {
     slothTap: sloth('Hiiiiii...'),
     // Sparkle, the first time she pokes Rosa, a bird or a tree trunk.
     facts: { rosa: 'This dolphin lives in a river!', forest: 'Half of Peru is rainforest!', flood: 'The river grows into the forest!' },
-    // Sparkle, when nothing has happened for a while.
+    // Sparkle, when nothing has happened for a while (before the sloth it's her first line again).
     idle: {
-      swim: onDevice('Hold the water! Rosa comes!', 'Click and hold the water! Rosa comes!'),
       sloth: 'Splash the sleepy sloth!',
       fruit: 'Leap up to the fruit!',
       race: 'Swim to the rainbow!',
