@@ -10,7 +10,6 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { stopSpeaking, useTimers } from '../../../../sdk'
 import type { Wearable } from '../characters/looks'
 import { kayleeReady } from '../characters/model'
-import { dadCandidatesReady } from '../characters/dad-candidates'
 import { momReady } from '../characters/mom-model'
 import type { Pose } from '../characters/types'
 import { View3D, type RenderMode } from '../../../engine3d/View3D'
@@ -110,8 +109,6 @@ export default function CharacterLab({ id, params = {} }: { id?: string; params?
   const timers = useTimers()
   use(kayleeReady())
   use(momReady())
-  // Dad 5’s skinned model and Blender wave.
-  use(dadCandidatesReady())
   const [view, setView] = useState(() => fromLink(id, params))
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [film, setFilm] = useState<string[]>([])
