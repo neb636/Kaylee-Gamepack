@@ -1,6 +1,7 @@
 // The alpaca rig's fleece: many round puffs she can brush and snip one at a time. Luna, Paco and Abuela Killa share
 // one body (viewBox 600 x 640, standing on the ground at y = 620, body facing right, face turned to the viewer), so the
-// puffs, the hat spot and the hit tests are the same numbers for all three.
+// puffs, the hat spot and the hit tests are the same numbers for all three. Also the woolly outlines (`fluff`) that the
+// alpacas and Tika's llamas (Tika.tsx) are both drawn with.
 
 export type Zone = 'body' | 'belly' | 'neck' | 'leg' | 'tail' | 'top' | 'bang'
 
@@ -95,91 +96,46 @@ export function makeFleece(seed: number, bangs: boolean): Puff[] {
 
   // The topknot on her head, and (Luna only) the long bangs over her eyes.
   for (const [x, y, r] of [
-    [424, 100, 22],
-    [455, 94, 24],
-    [486, 100, 22],
-    [438, 70, 23],
-    [472, 70, 23],
+    [420, 92, 22],
+    [455, 86, 25],
+    [490, 92, 22],
+    [437, 62, 22],
+    [473, 62, 22],
   ]) add(x, y, r, 'top')
   if (bangs) for (const [x, y, r] of [
-    [424, 132, 22],
-    [455, 128, 24],
-    [486, 132, 22],
+    [413, 138, 24],
+    [455, 134, 27],
+    [497, 138, 24],
   ]) add(x, y, r, 'bang')
   return puffs
-}
-
-/** The fluffy hood framing the face (part of the head drawing, never clipped): a ring over the top and down the cheeks. */
-export function makeHood(seed: number): Puff[] {
-  const rnd = prng(seed + 101)
-  const out: Puff[] = []
-  for (let k = 0; k <= 10; k++) {
-    const th = ((-32 + k * 24.4) * Math.PI) / 180
-    const r = 23 + rnd() * 5 + (k === 0 || k === 10 ? 4 : 0)
-    out.push({ id: -1 - k, x: 455 + Math.cos(th) * 70, y: 154 - Math.sin(th) * 76, r, zone: 'top', curl: rnd() * 360 })
-  }
-  return out
 }
 
 /** Puffs that count for "how much is clipped" (the topknot and bangs are extras). */
 export const isMain = (p: Puff) => p.zone !== 'top' && p.zone !== 'bang'
 
-/** A closed outline with little woolly bumps along every edge (the short fleece left after a haircut). */
-export function scallopPath(pts: [number, number][], bump = 7, step = 24) {
-  // Signed area tells which side is "outside".
-  let area = 0
-  for (let i = 0; i < pts.length; i++) {
-    const [x1, y1] = pts[i]
-    const [x2, y2] = pts[(i + 1) % pts.length]
-    area += x1 * y2 - x2 * y1
+/** A woolly outline: arcs that bulge outward between points listed clockwise (on screen). */
+export function fluff(pts: [number, number][], bulge = 1.05) {
+  let d = `M${pts[0][0]} ${pts[0][1]}`
+  for (let i = 1; i <= pts.length; i++) {
+    const [x0, y0] = pts[i - 1]
+    const [x1, y1] = pts[i % pts.length]
+    const r = Math.hypot(x1 - x0, y1 - y0) * bulge
+    d += `A${r.toFixed(1)} ${r.toFixed(1)} 0 0 1 ${x1} ${y1}`
   }
-  const out = area > 0 ? 1 : -1
-  let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`
-  for (let i = 0; i < pts.length; i++) {
-    const [x1, y1] = pts[i]
-    const [x2, y2] = pts[(i + 1) % pts.length]
-    const len = Math.hypot(x2 - x1, y2 - y1)
-    const n = Math.max(1, Math.round(len / step))
-    const nx = (out * (y2 - y1)) / len
-    const ny = (out * -(x2 - x1)) / len
-    for (let k = 0; k < n; k++) {
-      const ax = x1 + ((x2 - x1) * k) / n
-      const ay = y1 + ((y2 - y1) * k) / n
-      const bx = x1 + ((x2 - x1) * (k + 1)) / n
-      const by = y1 + ((y2 - y1) * (k + 1)) / n
-      d += `Q${((ax + bx) / 2 + nx * bump * 2).toFixed(1)} ${((ay + by) / 2 + ny * bump * 2).toFixed(1)} ${bx.toFixed(1)} ${by.toFixed(1)}`
-    }
-  }
-  return `${d}Z`
+  return d + 'Z'
 }
 
-const ellipsePts = (cx: number, cy: number, rx: number, ry: number, n: number) => Array.from({ length: n }, (_, i) => [cx + rx * Math.cos((i / n) * Math.PI * 2), cy + ry * Math.sin((i / n) * Math.PI * 2)] as [number, number])
+/** Points around an ellipse, clockwise on screen. */
+export function ring(cx: number, cy: number, rx: number, ry: number, n: number, turn = 0): [number, number][] {
+  const out: [number, number][] = []
+  for (let i = 0; i < n; i++) {
+    const a = ((turn + (360 * i) / n) * Math.PI) / 180
+    out.push([Math.round(cx + Math.cos(a) * rx), Math.round(cy + Math.sin(a) * ry)])
+  }
+  return out
+}
 
-/** The shorn body and neck (what shows as the fleece comes off). */
-export const SHORN_BODY = scallopPath(ellipsePts(272, 398, 158, 84, 28), 5)
-export const SHORN_NECK = scallopPath(
-  [
-    [346, 392],
-    [368, 300],
-    [396, 226],
-    [420, 204],
-    [456, 196],
-    [490, 212],
-    [474, 300],
-    [452, 400],
-  ],
-  5,
-)
-
-/** Short fleece on an upper leg (what's left after the leg clumps are clipped). */
-export const shornLeg = (x: number) =>
-  scallopPath(
-    [
-      [x - 19, 446],
-      [x + 19, 446],
-      [x + 16, 540],
-      [x - 16, 540],
-    ],
-    4,
-    18,
-  )
+/** The shorn body, neck and tail (the short fleece that shows as the long fleece comes off). */
+export const SHORN_BODY = fluff(ring(272, 404, 160, 96, 18, 9), 0.9)
+export const SHORN_NECK = fluff([[352, 396], [362, 318], [386, 240], [420, 206], [490, 206], [506, 250], [488, 320], [462, 404]], 0.8)
+export const SHORN_TAIL = fluff(ring(102, 372, 26, 24, 7), 0.8)

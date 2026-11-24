@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 74" width="460" height="74" preserveAspectRatio="none">
+  <title>A little pond</title>
+  <defs><clipPath id="water"><ellipse cx="230" cy="36" rx="218" ry="29"/></clipPath></defs>
+  <!-- the bank, then the water -->
+  <ellipse cx="230" cy="39" rx="230" ry="35" fill="#62c47f"/>
+  <ellipse cx="230" cy="36" rx="224" ry="33" fill="#c9f2b6"/>
+  <ellipse cx="230" cy="36" rx="218" ry="29" fill="#8fe3ea"/>
+  <g clip-path="url(#water)">
+    <ellipse cx="230" cy="52" rx="218" ry="29" fill="#3fc1cf" opacity="0.75"/>
+    <ellipse cx="230" cy="6" rx="200" ry="12" fill="#5fb0ea" opacity="0.35"/>
+  </g>
+  <path d="M96 30H170M186 30H206M270 48H350M364 48H380" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+  <!-- a lily pad and its flower -->
+  <path d="M356 22C378 14 406 18 408 28C408 38 376 42 354 36L378 28Z" fill="#48a96c"/>
+  <path d="M358 22C378 15 400 18 404 26L378 28Z" fill="#73cf86"/>
+  <path d="M384 24C380 14 388 10 392 18C396 10 404 14 400 24C408 20 410 28 400 30H384C374 28 376 20 384 24Z" fill="#ff8fb8"/>
+  <circle cx="392" cy="25" r="4" fill="#ffc83d"/>
+</svg>

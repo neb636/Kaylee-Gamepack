@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 180" width="250" height="180">
+  <title>A woven wool basket</title>
+  <defs><clipPath id="body"><path d="M22 44H228L208 160Q205 176 188 176H62Q45 176 42 160Z"/></clipPath></defs>
+  <ellipse cx="125" cy="173" rx="96" ry="7" fill="#4b3a8c" opacity="0.14"/>
+  <!-- handles -->
+  <path d="M30 40C10 40 6 8 28 6C46 4 52 22 50 40H38C40 28 36 18 29 19C20 20 22 32 30 40Z" fill="#a46e4b"/>
+  <path d="M220 40C240 40 244 8 222 6C204 4 198 22 200 40H212C210 28 214 18 221 19C230 20 228 32 220 40Z" fill="#8a5b3d"/>
+  <!-- the woven body -->
+  <path d="M22 44H228L208 160Q205 176 188 176H62Q45 176 42 160Z" fill="#c99266"/>
+  <g clip-path="url(#body)">
+    <path d="M10 70q13 -12 26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0" fill="none" stroke="#e5b78f" stroke-width="13" stroke-linecap="round"/>
+    <path d="M-3 96q13 -12 26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0" fill="none" stroke="#e5b78f" stroke-width="13" stroke-linecap="round"/>
+    <path d="M10 122q13 -12 26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0" fill="none" stroke="#e5b78f" stroke-width="13" stroke-linecap="round"/>
+    <path d="M-3 148q13 -12 26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0t26 0" fill="none" stroke="#e5b78f" stroke-width="13" stroke-linecap="round"/>
+    <path d="M176 30Q214 100 176 190H260V30Z" fill="#a46e4b" opacity="0.5"/>
+    <path d="M10 160H240V190H10Z" fill="#a46e4b" opacity="0.45"/>
+  </g>
+  <!-- the rim -->
+  <rect x="8" y="26" width="234" height="30" rx="15" fill="#e5b78f"/>
+  <path d="M184 26H227Q242 26 242 41Q242 56 227 56H184Z" fill="#c99266"/>
+  <path d="M26 36H150" fill="none" stroke="#fdeecc" stroke-width="6" stroke-linecap="round"/>
+</svg>

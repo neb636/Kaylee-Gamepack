@@ -1,7 +1,8 @@
 // Luna's Fluffy Day lays out on a logical stage that scales to fit (AGENTS.md "Screens"): one for wide screens and one
-// for tall ones, both drawn on the same meadow painting. Everything below is in stage units. The extra edge around the
-// stage is filled with the painting's own flat sky and meadow colors.
+// for tall ones, both drawn on the same meadow (Meadow.tsx). Everything below is in stage units. The meadow spills over the
+// stage's edges, so the extra room around it is more sky, hills and grass.
 import { VIEW } from '../../puppets/fleece'
+import { GLINT_PEAK, peakAt } from './Meadow'
 
 export type Who = 'luna' | 'paco' | 'abuela'
 export const FAMILY: Who[] = ['luna', 'paco', 'abuela']
@@ -17,8 +18,9 @@ export interface StageLayout {
   tall: boolean
   w: number
   h: number
-  /** Where the meadow starts in the painting (the alpacas stand in front of it). */
+  /** Where the meadow starts (the alpacas stand in front of it), and how much taller the mountains are drawn. */
   ground: number
+  rise: number
   solo: Spot
   family: Record<Who, Spot>
   offstage: Record<Who, Spot>
@@ -40,6 +42,7 @@ const WIDE: StageLayout = {
   w: 1500,
   h: 1000,
   ground: 657,
+  rise: 1,
   solo: { left: 430, feet: 900, k: 1 },
   family: { luna: { left: 10, feet: 720, k: 0.55 }, paco: { left: 295, feet: 905, k: 0.78 }, abuela: { left: 660, feet: 925, k: 0.92 } },
   offstage: { luna: { left: -900, feet: 720, k: 0.55 }, paco: { left: 2500, feet: 905, k: 0.78 }, abuela: { left: 2850, feet: 925, k: 0.92 } },
@@ -54,7 +57,7 @@ const WIDE: StageLayout = {
     { x: 230, y: 235, w: 150 },
     { x: 1170, y: 215, w: 180 },
   ],
-  peak: { x: 257, y: 302 },
+  peak: peakAt(GLINT_PEAK.wide, 1500, 657, 1),
   humming: { x: 1010, y: 320 },
   tool: 210,
 }
@@ -64,6 +67,7 @@ const TALL: StageLayout = {
   w: 1000,
   h: 1500,
   ground: 1062,
+  rise: 1.2,
   solo: { left: 22, feet: 1262, k: 1.5 },
   family: { luna: { left: 330, feet: 1010, k: 0.7 }, paco: { left: -45, feet: 1190, k: 0.95 }, abuela: { left: 430, feet: 1215, k: 1.05 } },
   offstage: { luna: { left: -900, feet: 1085, k: 0.6 }, paco: { left: 1800, feet: 1250, k: 0.75 }, abuela: { left: 2150, feet: 1270, k: 0.85 } },
@@ -73,12 +77,12 @@ const TALL: StageLayout = {
   pond: { cx: 400, y: 1285, w: 460 },
   cactus: { cx: 905, bottom: 1292, h: 190 },
   wall: { cx: 760, bottom: 1080, w: 230 },
-  post: { cx: 70, bottom: 1062, h: 200 },
+  post: { cx: 105, bottom: 1062, h: 200 },
   clouds: [
     { x: 200, y: 330, w: 160 },
     { x: 800, y: 300, w: 190 },
   ],
-  peak: { x: 157, y: 690 },
+  peak: peakAt(GLINT_PEAK.tall, 1000, 1062, 1.2),
   humming: { x: 150, y: 560 },
   tool: 230,
 }

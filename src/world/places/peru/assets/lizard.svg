@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 130" width="120" height="130">
+  <title>A little lizard peeking</title>
+  <defs><clipPath id="head"><ellipse cx="60" cy="46" rx="42" ry="36"/></clipPath></defs>
+  <!-- neck and shoulders -->
+  <path d="M34 130Q30 84 44 70H76Q90 84 86 130Z" fill="#5cc6a6"/>
+  <path d="M46 130Q46 96 60 86Q74 96 74 130Z" fill="#c7f3e4"/>
+  <!-- front feet on the wall -->
+  <path d="M26 104Q10 100 12 114Q14 124 30 120Z" fill="#5cc6a6"/><path d="M94 104Q110 100 108 114Q106 124 90 120Z" fill="#3fa98b"/>
+  <!-- head -->
+  <ellipse cx="60" cy="46" rx="42" ry="36" fill="#8fe3c8"/>
+  <g clip-path="url(#head)"><path d="M78 6Q118 46 74 90H110V6Z" fill="#5cc6a6"/></g>
+  <path d="M30 34Q36 20 50 16" fill="none" stroke="#c7f3e4" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="42" cy="12" r="5" fill="#ffc83d"/><circle cx="60" cy="7" r="5" fill="#ff8fb8"/><circle cx="78" cy="12" r="5" fill="#ffc83d"/>
+  <!-- face -->
+  <ellipse cx="43" cy="44" rx="9" ry="11" fill="#2b2330"/><ellipse cx="77" cy="44" rx="9" ry="11" fill="#2b2330"/>
+  <circle cx="46" cy="40" r="3.5" fill="#fff"/><circle cx="80" cy="40" r="3.5" fill="#fff"/>
+  <ellipse cx="30" cy="58" rx="8" ry="5" fill="#ff8fb8" opacity="0.55"/><ellipse cx="90" cy="58" rx="8" ry="5" fill="#ff8fb8" opacity="0.55"/>
+  <path d="M50 62Q60 70 70 62" fill="none" stroke="#2b2330" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

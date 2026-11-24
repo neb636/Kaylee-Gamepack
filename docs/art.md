@@ -20,6 +20,12 @@ screens, stickers and character references.
   sticker are SVG files in the shelf's look (no dark outlines; a base, a shade and a light tone); the walls, the
   terraces and the opening picture are drawn in code (`activities/terraces/Scene.tsx`, `Opening.tsx`); Tika and her
   friends are one puppet in four coats (`puppets/Tika.tsx`). New art for that level follows the same look.
+- **Luna's Fluffy Day is drawn by hand too** (user feedback, 2026-11-24: the generated pictures looked tacky and
+  lame next to the redrawn Peru levels). The meadow is drawn in code (`activities/fluffy/Meadow.tsx`: it also backs
+  Peru's opening story and Luna's balloon page), the wall, the clouds and the satchel in `activities/fluffy/Scene.tsx`;
+  the tools, the basket, the pond, the cactus and the things stuck in Luna's fleece are SVG files in the shelf's look.
+  Luna, Paco and Abuela Killa (`puppets/Alpaca.tsx`) wear Tika's head, face and ears in their own colors, with flat
+  woolly puffs and no ink outline; Luna's sticker `assets/sticker-luna.svg` is a still of the puppet.
 - **Peru's penguin coast is drawn by hand too** (user feedback, 2026-11-24: the generated pictures looked tacky and
   the drawn characters needed to look better). The far shore, the cliff with its burrow and Lobo's rock are drawn in
   code from the level's own layout numbers (`activities/penguins/Coast.tsx`, which also has the opening picture); the

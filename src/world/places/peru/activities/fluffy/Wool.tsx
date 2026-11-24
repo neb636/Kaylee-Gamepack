@@ -5,7 +5,6 @@ import { motion } from 'motion/react'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { useGameLoop, useTimers } from '../../../../../sdk'
 import { art } from '../../art'
-import { INK } from '../../puppets/Alpaca'
 
 /** How many puffs fill the basket to the brim. */
 const FULL = 150
@@ -74,7 +73,6 @@ export const Basket = forwardRef<BasketHandle, { cx: number; bottom: number; w: 
               <path d={`M${w * 0.1} ${moundH + 20}Q${w * 0.08} ${moundH * 0.15} ${w * 0.5} 0Q${w * 0.92} ${moundH * 0.15} ${w * 0.9} ${moundH + 20}Z`} />
             </clipPath>
           </defs>
-          <path d={`M${w * 0.1} ${moundH + 20}Q${w * 0.08} ${moundH * 0.15} ${w * 0.5} 0Q${w * 0.92} ${moundH * 0.15} ${w * 0.9} ${moundH + 20}Z`} fill={INK} transform={`translate(0 -5) scale(1 1)`} stroke={INK} strokeWidth="10" />
           <g clipPath="url(#peru-mound)">
             {bands.map((b, i) => {
               const bh = ((moundH + 20) * b.n) / total
@@ -85,6 +83,8 @@ export const Basket = forwardRef<BasketHandle, { cx: number; bottom: number; w: 
             {Array.from({ length: 7 }, (_, i) => (
               <circle key={i} cx={w * (0.18 + i * 0.11)} cy={moundH * (0.35 + (i % 2) * 0.25)} r={w * 0.035} fill="#fff" opacity=".35" />
             ))}
+            {/* Shaded on the right, away from the light. */}
+            <path d={`M${w * 0.66} -10Q${w * 0.86} ${moundH * 0.5} ${w * 0.7} ${moundH + 30}H${w}V-10Z`} fill="#4B3A8C" opacity=".12" />
           </g>
         </svg>
       )}
@@ -110,8 +110,8 @@ interface P {
 }
 
 export interface ParticlesHandle {
-  /** A snipped puff floats down into the basket; `land` runs when it arrives. */
-  wool: (x: number, y: number, size: number, color: string, to: { x: number; y: number }, land: () => void) => void
+  /** A snipped puff (its color and its shade) floats down into the basket; `land` runs when it arrives. */
+  wool: (x: number, y: number, size: number, color: string, shade: string, to: { x: number; y: number }, land: () => void) => void
   sparkle: (x: number, y: number) => void
 }
 
@@ -139,7 +139,7 @@ export const Particles = forwardRef<ParticlesHandle>(function Particles(_, ref) 
   }
 
   useImperativeHandle(ref, () => ({
-    wool: (x, y, size, color, to, land) => {
+    wool: (x, y, size, color, shade, to, land) => {
       const k = take()
       const el = els.current[k]
       Object.assign(pool.current[k], { on: true, kind: 'wool', x, y, x0: x, y0: y, tx: to.x + (Math.random() - 0.5) * 60, ty: to.y, t: 0, life: 0.9 + Math.random() * 0.4, size, color, spin: (Math.random() - 0.5) * 4, land })
@@ -147,7 +147,8 @@ export const Particles = forwardRef<ParticlesHandle>(function Particles(_, ref) 
         el.style.display = 'block'
         el.style.width = el.style.height = `${size}px`
         el.style.background = color
-        el.style.border = `${Math.max(3, size * 0.12)}px solid ${INK}`
+        // A flat puff: its shade is a crescent along the lower right.
+        el.style.boxShadow = `inset ${(-size * 0.1).toFixed(1)}px ${(-size * 0.13).toFixed(1)}px 0 ${shade}`
         el.style.borderRadius = '50%'
         el.style.clipPath = ''
       }
@@ -161,7 +162,7 @@ export const Particles = forwardRef<ParticlesHandle>(function Particles(_, ref) 
         el.style.display = 'block'
         el.style.width = el.style.height = `${pool.current[k].size}px`
         el.style.background = pool.current[k].color
-        el.style.border = 'none'
+        el.style.boxShadow = 'none'
         el.style.borderRadius = '0'
         el.style.clipPath = 'polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%)'
       }
