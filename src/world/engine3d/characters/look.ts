@@ -39,6 +39,8 @@ export interface Look {
   mane?: string[]
   /** Unicorn mane length: short (Dad), to the shoulders, or long and flowing (Mom). */
   hair?: 'short' | 'medium' | 'long'
+  /** Softer, rounded unicorn features for Dad's vinyl-toy look. */
+  softUnicorn?: boolean
   outfit?: {
     kind: Outfit
     color: string

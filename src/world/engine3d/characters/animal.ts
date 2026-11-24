@@ -526,8 +526,9 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     } else {
       const armColor = look.species === 'panda' ? look.dark : look.fur
       const hand = look.sculpted ? (look.paws ?? FOX_SOCK) : (darkPaws || seaOtter) ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' || look.species === 'otter' || polar ? look.light : look.fur
-      parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * 0.025 * H, -0.075 * H, 0], rot: [0, 0, s * 0.35] }))
-      parts.push(P.sphere(0.054 * H, hand, { at: [s * 0.05 * H, -0.14 * H, 0.005 * H], scale: seaOtter ? [0.84, 1.2, 0.67] : undefined }))
+      const spread = look.softUnicorn ? 0.72 : 0.35
+      parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * (look.softUnicorn ? 0.052 : 0.025) * H, -0.075 * H, 0], rot: [0, 0, s * spread] }))
+      parts.push(P.sphere(0.054 * H, hand, { at: [s * (look.softUnicorn ? 0.1 : 0.05) * H, -0.14 * H, 0.005 * H], scale: seaOtter ? [0.84, 1.2, 0.67] : undefined }))
       if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))
       // (The lace blouse's short sleeves have a pink edge.)
       if (o?.lace) parts.push(P.torus(0.054 * H, 0.01 * H, o.lace, { at: [s * 0.021 * H, -0.062 * H, 0], rot: [Math.PI / 2, s * 0.35, 0] }))
@@ -574,18 +575,28 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       const mane = look.mane ?? [look.fur]
       const m = (i: number) => mane[i % mane.length]
       head.push(P.sphere(R, look.fur, { at: [0, headY, 0] }, 26))
-      head.push(P.sphere(0.52 * R, look.light, { at: [0, headY - 0.36 * R, 0.6 * R], scale: [1.05, 0.66, 0.6] }))
-      headPlain.push(...[-1, 1].map((s) => P.sphere(0.032 * R, INK, { at: [s * 0.16 * R, headY - 0.27 * R, 0.91 * R], scale: [1, 0.7, 0.6] })))
-      mouth(mouthPoint(-0.47 * R, 0.86 * R))
+      if (!look.softUnicorn) {
+        head.push(P.sphere(0.52 * R, look.light, { at: [0, headY - 0.36 * R, 0.6 * R], scale: [1.05, 0.66, 0.6] }))
+        headPlain.push(...[-1, 1].map((s) => P.sphere(0.032 * R, INK, { at: [s * 0.16 * R, headY - 0.27 * R, 0.91 * R], scale: [1, 0.7, 0.6] })))
+      }
+      mouth(look.softUnicorn ? mouthPoint(-0.47 * R) : mouthPoint(-0.47 * R, 0.86 * R))
       for (const s of [-1, 1]) {
-        head.push(P.cone(0.24 * R, 0.7 * R, look.fur, { at: [s * 0.62 * R, headY + 0.92 * R, 0.0 * R], rot: [-0.1, 0, -s * 0.42] }))
-        headPlain.push(P.cone(0.13 * R, 0.44 * R, look.ear ?? look.light, { at: [s * 0.6 * R, headY + 0.87 * R, 0.1 * R], rot: [-0.1, 0, -s * 0.42] }))
+        if (look.softUnicorn) {
+          head.push(P.sphere(R, look.fur, { at: [s * 0.72 * R, headY + 0.82 * R, -0.03 * R], rot: [0, 0, -s * 0.38], scale: [0.29, 0.48, 0.20] }, 32))
+          headPlain.push(P.sphere(R, look.ear ?? look.light, { at: [s * 0.72 * R, headY + 0.84 * R, 0.13 * R], rot: [0, 0, -s * 0.38], scale: [0.19, 0.33, 0.08] }, 28))
+        } else {
+          head.push(P.cone(0.24 * R, 0.7 * R, look.fur, { at: [s * 0.62 * R, headY + 0.92 * R, 0.0 * R], rot: [-0.1, 0, -s * 0.42] }))
+          headPlain.push(P.cone(0.13 * R, 0.44 * R, look.ear ?? look.light, { at: [s * 0.6 * R, headY + 0.87 * R, 0.1 * R], rot: [-0.1, 0, -s * 0.42] }))
+        }
       }
       // The horn (gold, with a spiral of rings), the hair cap, the forelock, locks down the back and sides.
       head.push(P.cone(0.15 * R, 0.78 * R, '#FFC83D', { at: [0, headY + 1.12 * R, 0.25 * R], rot: [0.28, 0, 0] }))
       headPlain.push(...[0, 1, 2].map((i) => P.torus(0.12 * R - i * 0.03 * R, 0.022 * R, '#E8A92A', { at: [0, headY + (0.86 + i * 0.17) * R, (0.18 + i * 0.05) * R], rot: [Math.PI / 2 + 0.28, 0, 0] })))
       head.push(P.sphere(0.88 * R, m(0), { at: [0, headY + 0.42 * R, -0.12 * R], scale: [1.05, 0.62, 1.0] }))
-      head.push(P.sphere(0.32 * R, m(0), { at: [-0.32 * R, headY + 0.62 * R, 0.62 * R] }), P.sphere(0.27 * R, m(1), { at: [0.02 * R, headY + 0.72 * R, 0.6 * R] }))
+      if (look.softUnicorn) {
+        head.push(P.sphere(R, m(0), { at: [-0.34 * R, headY + 0.65 * R, 0.62 * R], rot: [0, 0, -0.48], scale: [0.32, 0.39, 0.24] }, 32))
+        head.push(P.sphere(R, m(1), { at: [0.02 * R, headY + 0.75 * R, 0.61 * R], rot: [0, 0, 0.35], scale: [0.27, 0.31, 0.22] }, 32))
+      } else head.push(P.sphere(0.32 * R, m(0), { at: [-0.32 * R, headY + 0.62 * R, 0.62 * R] }), P.sphere(0.27 * R, m(1), { at: [0.02 * R, headY + 0.72 * R, 0.6 * R] }))
       const back = look.hair === 'short' ? 2 : look.hair === 'long' ? 5 : 3
       const sides = look.hair === 'short' ? 0 : look.hair === 'long' ? 5 : 2
       for (let i = 0; i < back; i++) locks.push(P.sphere((0.42 - i * 0.03) * R, m(i + 1), { at: [0.05 * R * (i % 2), headY + (0.15 - i * 0.36) * R, -0.82 * R + i * 0.04 * R] }))
