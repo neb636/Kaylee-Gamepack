@@ -227,12 +227,18 @@ export function SwimRiver({ onDone, setProgress }: ActivityProps) {
   const startPlay = () => {
     if (g.current.phase !== 'story') return
     setPhase('treetops')
-    guide.current?.speak(R.swim)
   }
+  // Sparkle says how to swim once the forest is on screen. She only stands there after the story (the Guide isn't on
+  // the page during it), so this waits for the phase rather than speaking from startPlay.
+  const toldSwim = useRef(false)
+  useEffect(() => {
+    if (phase !== 'treetops' || toldSwim.current) return
+    toldSwim.current = true
+    guide.current?.speak(R.swim)
+  }, [phase])
   // A section link: say what to do there.
   useEffect(() => {
-    if (seed.at === 'treetops') guide.current?.speak(R.swim)
-    else if (seed.at === 'fruit') void say(R.monkeys)
+    if (seed.at === 'fruit') void say(R.monkeys)
     else if (seed.at === 'race') dare()
     else if (seed.at === 'rainbow') {
       g.current.otters[0].x = FINISH + (seed.result === 'lose' ? 90 : -220)
