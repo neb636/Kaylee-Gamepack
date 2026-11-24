@@ -40,7 +40,7 @@ export const L = {
     bonjour: 'People in Canada speak English and French. In Quebec, hello is Bonjour!',
     huge: 'Canada is the second biggest country in the world.',
     winter: 'Canada has long, snowy winters, and red and orange leaves in the fall.',
-    beaver: "The beaver is a Canadian animal. Its teeth are orange and never stop growing.",
+    beaver: "There are lots of beavers in Canada. Their teeth are orange and never stop growing.",
     syrup: "Most of the world's maple syrup comes from Quebec.",
     castle: "In Quebec City there's a hotel that looks like a castle.",
     hockey: "Hockey is Canada's favorite winter sport.",
@@ -474,7 +474,7 @@ export const L = {
     filmOut: {
       ask: maple('Ollie! Come and play hockey with us!'),
       wet: ollie("What's hockey?"),
-      ice: maple("It's like soccer, but with ice skating!"),
+      ice: maple("It's like soccer, but on ice!"),
       // She spins on her back like a top.
       spin: ollie('Wheee! I love to slide!'),
       // A whale spouts right behind them: everybody is soaked.
