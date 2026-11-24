@@ -1,0 +1,20 @@
+{
+  "title": "Snow Coats: redrawn by hand",
+  "checkIn": "fix",
+  "kaylee": "The fox, the hare, the ptarmigan, the lemming, the bear and the owl are redrawn and look at her, on a hand-drawn tundra where the snow settles on the same hills and bushes.",
+  "questions": [],
+  "reels": [
+    { "name": "snow-coats-after", "moments": ["poles-coats-rub", "#/world/poles/coats/hide?painted=fox~5", "#/world/poles/coats/summer~4"] },
+    { "name": "snow-coats-before", "moments": ["poles-coats-rub", "#/world/poles/coats/hide?painted=fox~5", "#/world/poles/coats/summer~4"] }
+  ],
+  "pictures": [
+    { "title": "Paint the fox", "before": "pics/fox-before.jpg", "after": "pics/fox-after.jpg", "caption": "The generated tundra is gone: sky, mountains, hills, bushes and stones are drawn in code" },
+    { "title": "Hide and seek", "before": "pics/hide-before.jpg", "after": "pics/hide-after.jpg", "caption": "Bushes and stones get snow caps; the white coats keep a soft shade" },
+    { "title": "Rub the summer back", "before": "pics/summer-before.jpg", "after": "pics/summer-after.jpg", "caption": "A new sun, and the owl on a drawn rock" }
+  ],
+  "links": [
+    { "label": "Play it", "hash": "#/world/poles/coats/fox" },
+    { "label": "Hide and seek", "hash": "#/world/poles/coats/hide?painted=fox" },
+    { "label": "Summer", "hash": "#/world/poles/coats/summer" }
+  ]
+}
