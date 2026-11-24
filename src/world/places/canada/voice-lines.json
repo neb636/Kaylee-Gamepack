@@ -6,7 +6,7 @@
   "People in Canada speak English and French. In Quebec, hello is Bonjour!",
   "Canada is the second biggest country in the world.",
   "Canada has long, snowy winters, and red and orange leaves in the fall.",
-  "The beaver is Canada's animal. Its teeth are orange and never stop growing.",
+  "There are lots of beavers in Canada. Their teeth are orange and never stop growing.",
   "Most of the world's maple syrup comes from Quebec.",
   "In Quebec City there's a hotel that looks like a castle.",
   "Hockey is Canada's favorite winter sport.",
@@ -19,7 +19,7 @@
   "The spirit bear is a black bear with white fur.",
   "Real maple taffy on real snow!",
   "The real Winter Carnival in Quebec City!",
-  "Real bikes on the real mountain!",
+  "Bikes on the mountain!",
   "Animals that can see in the dark!",
   "A real red canoe on Moraine Lake!",
   "Real animals crossing their bridge!",
@@ -421,7 +421,7 @@
     "voice": "maple"
   },
   {
-    "text": "There he is, in his bath!",
+    "text": "There he is, in the water!",
     "voice": "maple"
   },
   {
@@ -531,8 +531,7 @@
     "voice": "maple"
   },
   "Put a marshmallow on the stick! Toast it like the picture.",
-  "It's on fire! Tap it to blow it out!",
-  "It's on fire! Click it to blow it out!",
+  "It's on fire!",
   "Who wants that one?",
   {
     "text": "Golden! Yummy!",
@@ -736,7 +735,7 @@
     "voice": "maple"
   },
   {
-    "text": "Achoo! I am all wet!",
+    "text": "Hey, you splashed me!",
     "voice": "maple"
   },
   {
@@ -804,11 +803,11 @@
     "voice": "maple"
   },
   {
-    "text": "Hockey? Is it wet?",
+    "text": "What's hockey?",
     "voice": "otter"
   },
   {
-    "text": "It's ice! You slide on it!",
+    "text": "It's like soccer, but on ice!",
     "voice": "maple"
   },
   {

@@ -492,7 +492,7 @@ export const L = {
         hello: lung('Sawasdee krap! Welcome to my farm!'),
         uhoh: lung("Uh-oh. That's Jip!"),
         tell: lung('Let me tell you what Jip did last year.'),
-        nap: lung('My rice was all golden. So I had a little nap...'),
+        nap: lung('I finished working for the day and decided to take a little nap...'),
         along: lung('Then along came Jip!'),
         took: lung('He took my hat!'),
         gave: lung("And gave me the scarecrow's!"),
