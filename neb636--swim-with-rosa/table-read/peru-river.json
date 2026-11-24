@@ -1,0 +1,626 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "river",
+  "title": "Peru › River",
+  "intro": "---- 3. Swim with Rosa (the flooded forest: swim her, leap for the fruit, race the otters) ----",
+  "page": "peru-river.html",
+  "audio": "peru-river.mp3",
+  "lines": 33,
+  "seconds": 70,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "river.leap",
+      "text": "Swim up fast to leap!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "river.facts.flood",
+      "text": "The river grows into the forest!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "river.sticker",
+      "text": "Pink dolphin sticker! These dolphins live in rivers!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "river",
+        "story",
+        "0"
+      ],
+      "text": "The river is in the treetops!",
+      "voice": "rosa",
+      "key": "river.story.0",
+      "part": "river › story",
+      "when": "The story: one line from Rosa, then her hands are busy.",
+      "ms": 2208,
+      "flags": [],
+      "span": [
+        0,
+        2.1
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "swim",
+        "touch"
+      ],
+      "text": "Hold Rosa and swim!",
+      "voice": "sparkle",
+      "key": "river.swim.touch",
+      "part": "river › swim",
+      "when": "Sparkle, as the forest appears.",
+      "ms": 2256,
+      "flags": [],
+      "span": [
+        3.78,
+        5.93
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "swim",
+        "mouse"
+      ],
+      "text": "Click and hold Rosa to swim!",
+      "voice": "sparkle",
+      "key": "river.swim.mouse",
+      "part": "river › swim",
+      "when": "",
+      "ms": 2256,
+      "flags": [],
+      "span": [
+        6.32,
+        8.46
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "capy",
+        "0"
+      ],
+      "text": "Hola, capybaras!",
+      "voice": "rosa",
+      "key": "river.capy.0",
+      "part": "river › capy",
+      "when": "Rosa reaches the capybaras; the baby climbs on her back for a ride.",
+      "ms": 1710,
+      "flags": [],
+      "span": [
+        10.15,
+        11.84
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "capy",
+        "1"
+      ],
+      "text": "Ahh... a swim!",
+      "voice": "capy",
+      "key": "river.capy.1",
+      "part": "river › capy",
+      "when": "",
+      "ms": 2093,
+      "flags": [],
+      "span": [
+        12.22,
+        14.28
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "leap"
+      ],
+      "text": "Swim up fast to leap!",
+      "voice": "sparkle",
+      "key": "river.leap",
+      "part": "river",
+      "when": "Under the sleeping sloth. Sparkle, once.",
+      "ms": 3024,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        15.97,
+        18.84
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "sloth",
+        "0"
+      ],
+      "text": "Ooh... a shower...",
+      "voice": "sloth",
+      "key": "river.sloth.0",
+      "part": "river › sloth",
+      "when": "The splash wakes the sloth.",
+      "ms": 2629,
+      "flags": [],
+      "span": [
+        20.53,
+        23.09
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "sloth",
+        "1"
+      ],
+      "text": "Hola, sloth!",
+      "voice": "rosa",
+      "key": "river.sloth.1",
+      "part": "river › sloth",
+      "when": "",
+      "ms": 1670,
+      "flags": [],
+      "span": [
+        23.48,
+        25.11
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "monkeys"
+      ],
+      "text": "Fruit! Leap for the fruit!",
+      "voice": "monkey",
+      "key": "river.monkeys",
+      "part": "river",
+      "when": "The monkeys, when Rosa swims under their fruit.",
+      "ms": 2112,
+      "flags": [],
+      "span": [
+        26.8,
+        28.81
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "fruitDown",
+        "0"
+      ],
+      "text": "Splash! Splash!",
+      "voice": "monkey",
+      "key": "river.fruitDown.0",
+      "part": "river › fruitDown",
+      "when": "A monkey, each time a fruit falls in the water (one of these).",
+      "ms": 1701,
+      "flags": [],
+      "span": [
+        30.5,
+        32.16
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "fruitDown",
+        "1"
+      ],
+      "text": "Wheee!",
+      "voice": "monkey",
+      "key": "river.fruitDown.1",
+      "part": "river › fruitDown",
+      "when": "",
+      "ms": 1062,
+      "flags": [],
+      "span": [
+        32.55,
+        33.63
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "fruitDown",
+        "2"
+      ],
+      "text": "You got it!",
+      "voice": "monkey",
+      "key": "river.fruitDown.2",
+      "part": "river › fruitDown",
+      "when": "",
+      "ms": 1224,
+      "flags": [],
+      "span": [
+        34.01,
+        35.18
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "fruit"
+      ],
+      "text": "Some fish eat fruit!",
+      "voice": "sparkle",
+      "key": "river.fruit",
+      "part": "river",
+      "when": "Sparkle, the first time the fish come to nibble a fruit.",
+      "ms": 2600,
+      "flags": [],
+      "span": [
+        36.86,
+        39.4
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "lower"
+      ],
+      "text": "Here! Lower!",
+      "voice": "monkey",
+      "key": "river.lower",
+      "part": "river",
+      "when": "A monkey lets a fruit down a little after two leaps that missed it.",
+      "ms": 1464,
+      "flags": [],
+      "span": [
+        39.79,
+        41.17
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "dare"
+      ],
+      "text": "Race you to the rainbow!",
+      "voice": "otter",
+      "key": "river.dare",
+      "part": "river",
+      "when": "The otters pop up past the fruit tree.",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        41.56,
+        43.39
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "go"
+      ],
+      "text": "Ready... go!",
+      "voice": "otter",
+      "key": "river.go",
+      "part": "river",
+      "when": "",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        43.78,
+        45.6
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "comeOn"
+      ],
+      "text": "Come on, Rosa!",
+      "voice": "otter",
+      "key": "river.comeOn",
+      "part": "river",
+      "when": "An otter, if she turns back or stops during the race.",
+      "ms": 1824,
+      "flags": [],
+      "span": [
+        45.98,
+        47.72
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "bonk"
+      ],
+      "text": "Oopsie! Bonk!",
+      "voice": "rosa",
+      "key": "river.bonk",
+      "part": "river",
+      "when": "She bumps a log.",
+      "ms": 1464,
+      "flags": [],
+      "span": [
+        48.11,
+        49.5
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "win",
+        "0"
+      ],
+      "text": "You win! So fast!",
+      "voice": "otter",
+      "key": "river.win.0",
+      "part": "river › win",
+      "when": "The finish. She wins most of the time.",
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        51.19,
+        53.74
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "win",
+        "1"
+      ],
+      "text": "Wheee! Gracias!",
+      "voice": "rosa",
+      "key": "river.win.1",
+      "part": "river › win",
+      "when": "",
+      "ms": 1944,
+      "flags": [],
+      "span": [
+        54.13,
+        55.98
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "lose"
+      ],
+      "text": "So close! Again?",
+      "voice": "otter",
+      "key": "river.lose",
+      "part": "river",
+      "when": "The otters got there first: one more go, or on to the stamp.",
+      "ms": 2472,
+      "flags": [],
+      "span": [
+        57.66,
+        60.01
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "spout",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "rosa",
+      "key": "river.spout.0",
+      "part": "river › spout",
+      "when": "Taps: Rosa (a spout and one of these, then her fact), the sloth, the sleepy capybara.",
+      "ms": 458,
+      "flags": [],
+      "span": [
+        61.7,
+        62.21
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "spout",
+        "1"
+      ],
+      "text": "Pfff! Bubbles!",
+      "voice": "rosa",
+      "key": "river.spout.1",
+      "part": "river › spout",
+      "when": "",
+      "ms": 1622,
+      "flags": [],
+      "span": [
+        62.6,
+        64.19
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "spout",
+        "2"
+      ],
+      "text": "Splashy!",
+      "voice": "rosa",
+      "key": "river.spout.2",
+      "part": "river › spout",
+      "when": "",
+      "ms": 883,
+      "flags": [],
+      "span": [
+        64.57,
+        65.47
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "rosaTap"
+      ],
+      "text": "I live in a river, not the sea!",
+      "voice": "rosa",
+      "key": "river.rosaTap",
+      "part": "river",
+      "when": "",
+      "ms": 2249,
+      "flags": [],
+      "span": [
+        67.16,
+        69.35
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "slothTap"
+      ],
+      "text": "Hiiiiii...",
+      "voice": "sloth",
+      "key": "river.slothTap",
+      "part": "river",
+      "when": "",
+      "ms": 2558,
+      "flags": [],
+      "span": [
+        69.73,
+        72.22
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "rosa"
+      ],
+      "text": "This dolphin lives in a river!",
+      "voice": "sparkle",
+      "key": "river.facts.rosa",
+      "part": "river › facts",
+      "when": "Sparkle, the first time she pokes Rosa, a bird or a tree trunk.",
+      "ms": 2614,
+      "flags": [],
+      "span": [
+        73.91,
+        76.44
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "forest"
+      ],
+      "text": "Half of Peru is rainforest!",
+      "voice": "sparkle",
+      "key": "river.facts.forest",
+      "part": "river › facts",
+      "when": "",
+      "ms": 2901,
+      "flags": [],
+      "span": [
+        76.83,
+        79.63
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "flood"
+      ],
+      "text": "The river grows into the forest!",
+      "voice": "sparkle",
+      "key": "river.facts.flood",
+      "part": "river › facts",
+      "when": "",
+      "ms": 3030,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        80.02,
+        82.97
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "sloth"
+      ],
+      "text": "Splash the sleepy sloth!",
+      "voice": "sparkle",
+      "key": "river.idle.sloth",
+      "part": "river › idle",
+      "when": "Sparkle, when nothing has happened for a while (before the sloth it's her first line again).",
+      "ms": 2880,
+      "flags": [],
+      "span": [
+        84.65,
+        87.38
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "fruit"
+      ],
+      "text": "Leap up to the fruit!",
+      "voice": "sparkle",
+      "key": "river.idle.fruit",
+      "part": "river › idle",
+      "when": "Sparkle, when nothing has happened for a while (before the sloth it's her first line again).",
+      "ms": 1752,
+      "flags": [],
+      "span": [
+        87.77,
+        89.44
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "race"
+      ],
+      "text": "Swim to the rainbow!",
+      "voice": "sparkle",
+      "key": "river.idle.race",
+      "part": "river › idle",
+      "when": "Sparkle, when nothing has happened for a while (before the sloth it's her first line again).",
+      "ms": 2112,
+      "flags": [],
+      "span": [
+        89.83,
+        91.83
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "sticker"
+      ],
+      "text": "Pink dolphin sticker! These dolphins live in rivers!",
+      "voice": "sparkle",
+      "key": "river.sticker",
+      "part": "river",
+      "when": "",
+      "ms": 4707,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        93.52,
+        98.07
+      ]
+    }
+  ]
+}
