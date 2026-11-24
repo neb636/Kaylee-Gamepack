@@ -11,7 +11,7 @@
 import { Group, Matrix4, RingGeometry, Vector3, type BufferGeometry } from 'three'
 import { clamp } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
-import { bake, merge, P, placeMatrix, solid, solidMix, type PartOpts, type V3 } from '../../../engine3d/geo'
+import { bake, merge, P, placeMatrix, sculpt, solid, solidMix, type V3 } from '../../../engine3d/geo'
 import { CANADA_COLORS } from './looks'
 import { ToyActor, type ToyPose } from './toy'
 import { TEAM_SCARF, UNDER_HAT, type ToySpots } from './worn'
@@ -34,33 +34,6 @@ const FLUFF = '#BDB7B0'
 const FLUFF_DARK = '#A39C94'
 const FLUFF_PALE = '#F4F0EA'
 const CHICK_BILL = '#4A4048'
-
-/** A ball pushed into a shape: `f` moves each point of a unit ball, then the part is placed. Its shading follows the
- *  new surface, with no seam where the ball's own edges meet. */
-function sculpt(color: string, seg: number, f: (p: Vector3) => void, o?: PartOpts): BufferGeometry {
-  const g = P.sphere(1, color, {}, seg)
-  const pos = g.attributes.position
-  const p = new Vector3()
-  for (let i = 0; i < pos.count; i++) {
-    f(p.fromBufferAttribute(pos, i))
-    pos.setXYZ(i, p.x, p.y, p.z)
-  }
-  g.computeVertexNormals()
-  const nrm = g.attributes.normal
-  const sum = new Map<string, Vector3>()
-  const key = (i: number) => `${Math.round(pos.getX(i) * 1e4)},${Math.round(pos.getY(i) * 1e4)},${Math.round(pos.getZ(i) * 1e4)}`
-  for (let i = 0; i < pos.count; i++) {
-    const k = key(i)
-    const n = sum.get(k)
-    if (n) n.add(p.fromBufferAttribute(nrm, i))
-    else sum.set(k, new Vector3().fromBufferAttribute(nrm, i))
-  }
-  for (let i = 0; i < pos.count; i++) {
-    const n = p.copy(sum.get(key(i))!).normalize()
-    nrm.setXYZ(i, n.x, n.y, n.z)
-  }
-  return g.applyMatrix4(placeMatrix(o))
-}
 
 /** A flat little mark lying on a surface at `at`: `n` is the way the surface faces, `along` the way the mark's length
  *  runs. A rounded square (`round` 0) through to a circle (1), thin as paint (a jersey goes over it). */

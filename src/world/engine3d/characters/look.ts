@@ -43,18 +43,20 @@ export interface Look {
     kind: Outfit
     color: string
     shorts?: string
-    /** A scalloped lace collar in this color and a pleated front (Joy's white blouse). */
+    /** A collar of lace roses in this color, trim on the sleeves and hem and a pleated front (Joy's white blouse). */
     lace?: string
     /** Flowers printed all over, in these colors, with green leaves and an open camp collar (Bird's party shirt). */
     print?: string[]
   }
-  /** The real person's hair on their animal (Dad's photos, 2026-10-24), so Kaylee knows who's who: a straight cut to the
-   *  shoulders parted in the middle (Joy), or short thick hair that sticks up in spikes (Bird). */
-  hairdo?: { style: 'bob' | 'spiky'; color: string }
+  /** The real person's hair on their animal (from the family's photos), so Kaylee knows who's who: long straight hair
+   *  past the shoulders, parted in the middle, with lighter strands (Joy: hair.ts), or short thick hair that sticks up
+   *  in spikes (Bird). */
+  hairdo?: { style: 'long' | 'spiky'; color: string }
   /** A big smile showing the top teeth (Joy): it stretches when they talk. */
   smile?: 'teeth'
-  /** A fox's cheeks as flatter, smaller mounds on the face, this big (Joy 0.8); without it, the usual round fluffy ones. */
-  cheeks?: number
+  /** A fox sculpted in more detail (Joy: fox.ts): tall dark-tipped ears, the white of its face flush on the fur, cheek
+   *  fluff, a snout, brows, brown paws and a big bushy tail. Without it, the plain fox. */
+  sculpted?: boolean
   extras?: Extra[]
   /** Lashes on the eyes. */
   lashes?: boolean

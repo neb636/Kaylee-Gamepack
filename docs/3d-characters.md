@@ -239,6 +239,23 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
 - Before an in-game swap, check the remaining gestures and fit the gear Dad uses in the trips. The barber needs separate
   hair and the tail needs its own joint to swing. Issue #481 tracks the texture work.
 
+## Sculpting a code-built character instead (Joy, 2026-11-23)
+
+Not every family member needs Tripo. Joy stayed code-built and got the detail in code, which costs no credits and keeps
+every pose, voice and wearable working untouched:
+
+- `Look.sculpted` picks the detailed fox (`engine3d/characters/fox.ts`): tall cupped ears with brown tips, the white of
+  the face as flush patches (the raccoon's `patch`), cheek tufts, a snout shaped with `sculpt` (`engine3d/geo.ts`),
+  brows, brown paws and a big tail bent along a curve. The plain fox (Gan, Ken, the Arctic fox) is unchanged; add
+  `sculpted: true` to a fox's look to move it over.
+- `hairdo: { style: 'long' }` is one smooth sheet wrapped round the head (`engine3d/characters/hair.ts`), not balls: a
+  middle parting, curtains off the forehead, lighter strands painted into its vertex colors, an inside you see behind
+  the neck. Its constants (`OPEN`, `PART`, `SIZE`, the `length`) are the knobs for another person's long hair.
+- What made her read as less primitive: 36+ segments on anything round, markings flush on the surface instead of
+  stuck-on balls, and color changes that follow a row of the mesh (a slanted paint edge comes out as a sawtooth).
+- Check it like a model: the lab from the front, three-quarter, side and back, every pose, the lineup beside the
+  family, then `node scripts/qa-mom.mjs --who=joy` for the real scenes.
+
 ## Open questions
 
 - A GLB of a family member is OK in this repo (user feedback, 2026-10-25); photos never are.
