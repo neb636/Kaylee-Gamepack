@@ -1031,8 +1031,8 @@ export class MuayThai extends Stage {
     this.nick.update(dt, t)
     this.dadFrame(dt, t)
     if (!this.coach.look || this.time - this.lastTouch > 1.5) this.coach.look = this.phase === 'wai' ? k.position.clone().add(V(0, 0.7, 1.6)) : dadHead
-    this.coach.root.position.y += jump
     this.coach.update(dt, t)
+    this.coach.root.position.y += jump
 
     // ---- Her gold gloves, the belt popping on ----
     if (this.ready) {
@@ -1219,7 +1219,10 @@ export class MuayThai extends Stage {
       lean -= 0.2 * b
       if (this.bopped >= 1) this.bopped = -1
     }
-    // ---- Write it ----
+    // ---- Write it (she follows Dad as her punches push him back, and comes back to her corner after) ----
+    const d = this.dad
+    const chase = this.phase === 'bout' && d.mode !== 'fly' && d.mode !== 'sit' && d.mode !== 'up' ? d.push : 0
+    this.kBase.x += (KAYLEE.x + chase - this.kBase.x) * (1 - Math.exp(-dt * 5))
     k.position.set(this.kBase.x + off.x, y, this.kBase.z + off.z)
     r.body.position.set(bodyOff.x, bodyOff.y, bodyOff.z)
     r.body.rotation.set(lean, twist, tilt)
@@ -1367,7 +1370,7 @@ export class MuayThai extends Stage {
       case 'mitt':
         return this.mittUp ? { at: this.mittAt(), r: MITT_R * this.H * (1 + 1.7 * this.swell) * 1.15, glow: true, max: 260, prio: 4 } : null
       case 'bag':
-        return { at: this.built.bag.body.getWorldPosition(new Vector3()), r: BAG.r * 1.2, max: 130, prio: 1 }
+        return { at: this.built.bag.body.getWorldPosition(new Vector3()), r: BAG.r * 1.2, max: 130, prio: 3 }
       case 'bag2':
         return { at: this.built.bag2.body.getWorldPosition(new Vector3()), r: BAG2.r * 1.2, max: 120, prio: 2 }
       case 'drum':
