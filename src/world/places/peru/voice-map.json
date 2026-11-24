@@ -1099,11 +1099,11 @@
     "file": "11dba6a857df.mp3"
   },
   {
-    "text": "The river is in the treetops! Swim with me!",
+    "text": "The river is in the treetops!",
     "voice": "rosa",
     "sig": "795618f009",
-    "ms": 3048,
-    "file": "55ec50c5134e.mp3"
+    "ms": 2208,
+    "file": "a84637f7d927.mp3"
   },
   {
     "text": "Hold Rosa and swim!",
@@ -1113,11 +1113,11 @@
     "file": "f94fb5a2a3f3.mp3"
   },
   {
-    "text": "Click and hold Rosa, then swim!",
+    "text": "Click and hold Rosa to swim!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3480,
-    "file": "a81b03647bcb.mp3"
+    "ms": 2256,
+    "file": "7229bed0d873.mp3"
   },
   {
     "text": "Hola, capybaras!",
@@ -1134,11 +1134,11 @@
     "file": "c13c0b018c6a.mp3"
   },
   {
-    "text": "Swim up fast, and Rosa leaps!",
+    "text": "Swim up fast to leap!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3408,
-    "file": "4ad5ae23d649.mp3"
+    "ms": 3024,
+    "file": "d38364b00c2c.mp3"
   },
   {
     "text": "Ooh... a shower...",
@@ -1295,18 +1295,18 @@
     "file": "d937a06963af.mp3"
   },
   {
-    "text": "Hold the water, and Rosa swims to you!",
+    "text": "Hold the water! Rosa comes!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3984,
-    "file": "654209139265.mp3"
+    "ms": 4032,
+    "file": "027e6ba3581f.mp3"
   },
   {
-    "text": "Click and hold the water, and Rosa swims to you!",
+    "text": "Click and hold the water! Rosa comes!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4464,
-    "file": "7db44b6aad7a.mp3"
+    "ms": 4632,
+    "file": "b633a745b17b.mp3"
   },
   {
     "text": "Splash the sleepy sloth!",
