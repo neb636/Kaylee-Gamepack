@@ -1,11 +1,8 @@
 {
   "title": "The home screen: a globe to spin",
   "checkIn": "3 of 4: play it",
-  "kaylee": "The old map is now a toy globe she spins with her finger. Every country is a little window on it, and Sparkle's balloon flies down to the one she taps.",
-  "questions": [
-    "Canada's pin shows Maple in her canoe. Keep it, or bring the moose back?",
-    "Thailand's pin shows Krabi (the elephant and the islands). Or should it be Agong's house?"
-  ],
+  "kaylee": "The old map is now a toy globe she spins with her finger. Every country is a pin with one big friendly thing on it (a moose, a pizza, a panda, an elephant), and Sparkle's balloon flies down to the one she taps.",
+  "questions": [],
   "reels": [
     {
       "name": "globe",
@@ -30,10 +27,15 @@
   ],
   "pictures": [
     {
+      "title": "The pins",
+      "after": "pics/pins.jpg",
+      "caption": "Your notes are in: a pizza for Italy, the elephant for Thailand, a bigger panda, polar bear and alpaca, and a moose for Canada. Egypt is as it was."
+    },
+    {
       "title": "iPad",
       "before": "pics/ipad-before.jpg",
       "after": "pics/ipad-after.jpg",
-      "caption": "The pins are circles cut from each country's shelf banner, with its flag. No generated art, no emoji."
+      "caption": "Hand-drawn like the shelf, with each country's flag. No generated art, no emoji."
     },
     {
       "title": "iPad, upright",
