@@ -11,7 +11,7 @@
 // Payoff: twelve flowers on the garland, two green farms, and a lotus crown for the hippo.
 // Everything is drawn by hand in SVG (Scenery, Felucca, the Hippo puppet): no generated pictures. Every frame is
 // written straight to the DOM from one game loop; the feel numbers are knobs in river.ts.
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent, type Ref } from 'react'
 import { burst, clamp, damp, lerp, pick, say, smooth, sounds, speakingVoice, spendHint, useAlive, useElementSize, useGameLoop, useTimers, type Line, type PuppetHandle } from '../../../../../sdk'
 import { Flag } from '../../../../kit/Flag'
 import { useSections } from '../../../../kit/sections'
@@ -96,13 +96,14 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
   const seed = useMemo(() => {
     const leg = start === 'sail-2' || start === 'farm-2' || start === 'end' ? 1 : 0
     const phase: Phase = !start || start === 'story' ? 'story' : start === 'end' ? 'end' : start.startsWith('farm') ? 'farm' : 'sail'
-    const caught = phase === 'sail' ? leg * PER_LEG : (leg + 1) * PER_LEG
+    const caught = phase === 'story' || phase === 'sail' ? leg * PER_LEG : (leg + 1) * PER_LEG
     return { leg, phase, caught }
   }, [start])
   const [phase, setPhaseState] = useState<Phase>(seed.phase)
   const [leg, setLegState] = useState(seed.leg)
   const [landed, setLanded] = useState(seed.caught)
   const [farmOn, setFarmOn] = useState(false)
+  const [pastOn, setPastOn] = useState(false)
   const [water, setWater] = useState(0)
   const [hip, setHip] = useState({ lotus: false, crown: false })
 
@@ -126,7 +127,6 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
     wakeIn: 0,
     boat: { placed: false, x: 0, y: 0, vx: 0, vy: 0, tx: 0, ty: 0, lift: 0, liftV: 0, slow: 1, inReeds: false },
     held: false,
-    grab: { x: 0, y: 0 },
     down: { at: 0, x: 0, y: 0, onBoat: false },
     flowers: pool<Flower>(12, () => ({ on: false, state: 'float', wx: 0, y: 0, seed: 0, t: 0, fromX: 0, fromY: 0, slot: 0 })),
     reeds: pool<Drifter>(3, () => ({ on: false, wx: 0, y: 0, act: 0, hit: false })),
@@ -136,6 +136,8 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
     wake: pool<Leap>(14, () => ({ on: false, wx: 0, y: 0, t: 0 })),
     clouds: CLOUDS.map((c) => c.x),
     farm: { on: false, wx: 0, water: 0, steps: 0, done: false, angle: 0, spin: 0, tick: 0 },
+    /** The farm before this one, still green and turning, until it has slid off the screen (a wide screen shows both). */
+    past: { on: false, wx: 0 },
     hippo: { state: 'hidden' as 'hidden' | 'bubbles' | 'up' | 'diving' | 'party', x: 0, y: 0, t: 0, wait: 1.6, lotus: false, since: 0, greeted: false, bumped: false },
   }).current
 
@@ -150,6 +152,8 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
     sail: null as SVGGElement | null,
     farm: null as HTMLDivElement | null,
     wheel: null as SVGGElement | null,
+    past: null as HTMLDivElement | null,
+    pastWheel: null as SVGGElement | null,
     hippo: null as HTMLDivElement | null,
     bubbles: null as HTMLDivElement | null,
     flowers: [] as (HTMLDivElement | null)[],
@@ -179,6 +183,10 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
 
   /** A farm comes along: far enough off screen that its field slides in too. */
   const bringFarm = (l: Layout, here = false) => {
+    if (g.farm.on && g.farm.wx - g.scroll > -30) {
+      g.past = { on: true, wx: g.farm.wx }
+      setPastOn(true)
+    }
     Object.assign(g.farm, { on: true, wx: g.scroll + (here ? wheelStop(l) : l.viewW + FARM.fieldW + FARM.gap + 4), water: 0, steps: 0, done: false, spin: 0 })
     setWater(0)
     setFarmOn(true)
@@ -187,6 +195,8 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
   /** A flower hops from where it is (screen units) to the next free hook on the garland: `f` itself if it was floating,
    *  or a spare one from the pool (the hippo's). */
   const hop = (fromX: number, fromY: number, f = g.flowers.find((x) => !x.on)) => {
+    // Two things can touch the hull in one frame: the strand never takes more than it has hooks for.
+    if (!canHop()) return false
     const slot = g.caught
     g.caught++
     g.missed = 0
@@ -196,7 +206,10 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
     nsfx.catch((slot % PER_LEG) * 2)
     void miu.current?.play('wiggle')
     if (g.caught === (g.leg + 1) * PER_LEG) timers.later(strandDone, 750)
+    return true
   }
+  /** True while this sail's strand still has a free hook. */
+  const canHop = () => g.phase === 'sail' && g.caught < (g.leg + 1) * PER_LEG
 
   /** A strand of the garland is full: on to the farm. */
   const strandDone = () => {
@@ -303,7 +316,7 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
       // Something to catch straight away.
       if (g.phase !== 'farm' && g.phase !== 'end')
         [0.8].forEach((k, i) => {
-          Object.assign(g.flowers[i], { on: true, state: 'float', wx: viewW * k, y: lerp(b.y0 + 3, b.y1, 0.3 + i * 0.4), seed: i * 2.4, t: 0 })
+          Object.assign(g.flowers[i], { on: true, state: 'float', wx: viewW * k, y: lerp(b.y0 + 3, b.y1, 0.3 + i * 0.4), seed: i * 2.4, t: 1 })
         })
     }
     const playing = g.phase === 'sail' || g.phase === 'farm'
@@ -376,9 +389,10 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
       if (g.spawnIn <= 0 && open && g.flowers.filter((f) => f.on && f.state === 'float').length < 3) {
         const f = g.flowers.find((x) => !x.on)
         if (f) {
-          // After a couple of misses (or a while with none), the next one floats straight to her.
+          // After a couple of misses (or a while with none), the next one floats straight to her. On a wide screen it
+          // blooms up out of the water ahead of the boat, so she never waits for one to cross the whole river.
           const help = g.missed >= 2 || g.idle > 8
-          Object.assign(f, { on: true, state: 'float', wx: g.scroll + viewW + 8, y: help ? clamp(B.y + 1, b.y0 + 2, b.y1) : lerp(b.y0 + 2, b.y1, Math.random()), seed: Math.random() * 6, t: 0 })
+          Object.assign(f, { on: true, state: 'float', wx: g.scroll + Math.min(viewW + 8, B.x + 80), y: help ? clamp(B.y + 1, b.y0 + 2, b.y1) : lerp(b.y0 + 2, b.y1, Math.random()), seed: Math.random() * 6, t: 0 })
           g.spawnIn = g.leg === 0 ? 2.5 : 3.6
         }
       }
@@ -396,7 +410,7 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
         x = f.wx - g.scroll
         y = f.y
         const d = toHull(x, y)
-        if (open && d < FEEL.reach) return hop(x, y, f)
+        if (open && d < FEEL.reach && hop(x, y, f)) return
         if (open && d < FEEL.reach * 2.4) {
           // Close enough: it drifts to the boat by itself.
           const px = clamp(x, B.x - 11, B.x + 13)
@@ -408,6 +422,8 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
           if (open) g.missed++
         }
         y += Math.sin(t * 2 + f.seed) * 0.35
+        f.t += dt
+        k = smooth(f.t / 0.45)
       } else {
         f.t += dt / (f.state === 'fly' ? 0.5 : 0.7)
         const p = smooth(clamp(f.t))
@@ -566,6 +582,16 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
       }
     }
 
+    if (g.past.on) {
+      const x = g.past.wx - g.scroll
+      if (els.past) els.past.style.transform = `translate3d(${x * u}px, ${waterTop}px, 0)`
+      if (els.pastWheel) els.pastWheel.style.transform = `rotate(${-t * 50}deg)`
+      if (x < -30) {
+        g.past.on = false
+        setPastOn(false)
+      }
+    }
+
     // The hippo: bubbles, then up she pops with a lotus on her head, somewhere new each time.
     H.t += dt
     if (sailing && g.leg > 0) {
@@ -588,7 +614,7 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
           H.x += (clamp(B.x + 18, 20, viewW - 13) - H.x) * damp(dt, 0.9)
           H.y += (clamp(B.y + 2, b.y0 + 8, b.y1 + 3) - H.y) * damp(dt, 0.9)
         }
-        if (H.lotus && open && toHull(H.x - 2, H.y) < FEEL.reach + 3) {
+        if (H.lotus && canHop() && toHull(H.x - 2, H.y) < FEEL.reach + 3) {
           // Bump! The lotus hops aboard, she giggles and her fountain lifts the boat.
           H.lotus = false
           H.since = 0
@@ -671,8 +697,9 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
   }
   const aim = (e: PointerEvent) => {
     const p = at(e)
-    g.boat.tx = p.x + g.grab.x
-    g.boat.ty = p.y + g.grab.y
+    // The boat comes to sit under her finger (the hull a little below it, so her finger doesn't hide Miu).
+    g.boat.tx = p.x
+    g.boat.ty = p.y + 5
   }
   const onDown = (e: PointerEvent<HTMLDivElement>) => {
     if (!lay.current || g.phase === 'story') return
@@ -681,8 +708,6 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
     const onBoat = Math.abs(p.x - B.x) < BOAT.w * 0.5 && p.y > B.y - BOAT.h * 0.8 && p.y < B.y + 5
     g.down = { at: performance.now(), x: e.clientX, y: e.clientY, onBoat }
     if (g.phase === 'end') return
-    // A finger on the boat keeps hold of the spot it touched; anywhere else, the boat comes to the finger.
-    g.grab = onBoat ? { x: B.x - p.x, y: B.y - p.y } : { x: 0, y: 0 }
     g.held = true
     e.currentTarget.setPointerCapture?.(e.pointerId)
     aim(e)
@@ -711,6 +736,8 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
   }
 
   const u = layout?.u ?? 4
+  /** How many times a strip is drawn side by side: enough to cover the screen wherever it has slid to. */
+  const copies = (tile: number) => Math.ceil((layout?.viewW ?? 0) / tile) + 1
   const entity: CSSProperties = { position: 'absolute', left: 0, top: 0, willChange: 'transform', pointerEvents: 'none' }
   const above = (units: number) => (layout ? `calc(${layout.H - layout.waterTop}px + var(--u) * ${units})` : '0')
 
@@ -743,30 +770,30 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
           ))}
 
           {/* Far dunes and the pyramids, the village, the water, the bank */}
-          <Strip innerRef={(el) => void (els.far = el)} tile={TILE.far} height={TILE.far * (44 / 300)} bottom={above(14)} z={2}>
+          <Strip innerRef={(el) => void (els.far = el)} copies={copies(TILE.far)} tile={TILE.far} height={TILE.far * (44 / 300)} bottom={above(14)} z={2}>
             <FarDunes />
             <Glint onTap={() => nsfx.twinkle()} />
           </Strip>
-          <Strip innerRef={(el) => void (els.mid = el)} tile={TILE.mid} height={22} bottom={above(8)} z={3}>
+          <Strip innerRef={(el) => void (els.mid = el)} copies={copies(TILE.mid)} tile={TILE.mid} height={22} bottom={above(8)} z={3}>
             <MidDunes />
           </Strip>
           <div style={{ position: 'absolute', left: 0, right: 0, top: layout.waterTop, bottom: 0, zIndex: 4, overflow: 'hidden', background: 'linear-gradient(#8FE0EC 0%, #63C6E4 30%, #47AEDB 100%)' }}>
-            <div ref={(el) => void (els.rippleA = el)} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: U(TILE.ripple * 2), display: 'flex' }}>
-              {[0, 1].map((i) => (
-                <div key={i} style={{ position: 'relative', width: U(TILE.ripple), height: '100%' }}>
+            <div ref={(el) => void (els.rippleA = el)} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, display: 'flex' }}>
+              {Array.from({ length: copies(TILE.ripple) }, (_, i) => (
+                <div key={i} style={{ position: 'relative', width: U(TILE.ripple), height: '100%', flexShrink: 0 }}>
                   <Ripples seed={1} />
                 </div>
               ))}
             </div>
-            <div ref={(el) => void (els.rippleB = el)} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: U(TILE.ripple * 2), display: 'flex' }}>
-              {[0, 1].map((i) => (
-                <div key={i} style={{ position: 'relative', width: U(TILE.ripple), height: '100%' }}>
+            <div ref={(el) => void (els.rippleB = el)} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, display: 'flex' }}>
+              {Array.from({ length: copies(TILE.ripple) }, (_, i) => (
+                <div key={i} style={{ position: 'relative', width: U(TILE.ripple), height: '100%', flexShrink: 0 }}>
                   <Ripples seed={2} opacity={0.35} />
                 </div>
               ))}
             </div>
           </div>
-          <Strip innerRef={(el) => void (els.bank = el)} tile={TILE.bank} height={14} bottom={above(-1)} z={5}>
+          <Strip innerRef={(el) => void (els.bank = el)} copies={copies(TILE.bank)} tile={TILE.bank} height={14} bottom={above(-1)} z={5}>
             <Bank />
             {PALMS.map((p) => (
               <div key={p.x} style={{ position: 'absolute', left: U(p.x), bottom: U(8.5), width: 0, height: 0 }}>
@@ -777,16 +804,8 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
 
           {/* Everything on the water */}
           <div style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none' }}>
-            {farmOn && (
-              <div ref={(el) => void (els.farm = el)} style={{ ...entity, zIndex: 1 }}>
-                <div style={{ position: 'absolute', left: U(-(FARM.gap + FARM.fieldW)), top: U(-13.5), width: U(FARM.fieldW), height: U(12.5) }}>
-                  <Field water={water} />
-                </div>
-                <div style={{ position: 'absolute', left: U(-WHEEL / 2), top: U(-WHEEL * 0.48 - 2.5), width: U(WHEEL), height: U(WHEEL) }}>
-                  <WaterWheel wheelRef={(el) => void (els.wheel = el)} glow={phase === 'farm' && water < 1} />
-                </div>
-              </div>
-            )}
+            {farmOn && <Farm innerRef={(el) => void (els.farm = el)} wheelRef={(el) => void (els.wheel = el)} water={water} glow={phase === 'farm' && water < 1} style={entity} />}
+            {pastOn && <Farm innerRef={(el) => void (els.past = el)} wheelRef={(el) => void (els.pastWheel = el)} water={1} glow={false} style={entity} />}
             {g.wake.map((_, i) => (
               <div key={i} ref={(el) => void (els.wake[i] = el)} style={{ ...entity, width: U(5), height: U(1), borderRadius: '50%', border: `${Math.max(2, u * 0.45)}px solid #fff`, borderBottomColor: 'transparent', borderLeftColor: 'transparent', display: 'none', zIndex: 50 }} />
             ))}
@@ -848,7 +867,7 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
           </div>
 
           {/* Reeds in front of everything */}
-          <Strip innerRef={(el) => void (els.fore = el)} tile={TILE.fore} height={15} bottom="0px" z={20}>
+          <Strip innerRef={(el) => void (els.fore = el)} copies={copies(TILE.fore)} tile={TILE.fore} height={15} bottom="0px" z={20}>
             <Foreground />
           </Strip>
         </>
@@ -861,6 +880,20 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
         </div>
       )}
       {phase === 'story' && <StoryBeat lines={[N.story]} friend={<Miu height="100%" />} onDone={() => setPhase('sail')} />}
+    </div>
+  )
+}
+
+/** A farm: its field on the bank and its water wheel in the shallows. The loop slides it and turns the wheel. */
+function Farm({ innerRef, wheelRef, water, glow, style }: { innerRef: Ref<HTMLDivElement>; wheelRef: Ref<SVGGElement>; water: number; glow: boolean; style: CSSProperties }) {
+  return (
+    <div ref={innerRef} style={{ ...style, zIndex: 1 }}>
+      <div style={{ position: 'absolute', left: U(-(FARM.gap + FARM.fieldW)), top: U(-13.5), width: U(FARM.fieldW), height: U(12.5) }}>
+        <Field water={water} />
+      </div>
+      <div style={{ position: 'absolute', left: U(-WHEEL / 2), top: U(-WHEEL * 0.48 - 2.5), width: U(WHEEL), height: U(WHEEL) }}>
+        <WaterWheel wheelRef={wheelRef} glow={glow} />
+      </div>
     </div>
   )
 }

@@ -10,11 +10,12 @@ export const U = (n: number) => `calc(var(--u) * ${n})`
 
 const ink = (w = 3) => ({ stroke: INK, strokeWidth: w, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const })
 
-/** A strip that repeats: the same drawing twice, side by side, slid by the game loop through `ref`. */
-export function Strip({ innerRef, tile, height, bottom, z, children }: { innerRef: Ref<HTMLDivElement>; tile: number; height: number; bottom: string; z: number; children: ReactNode }) {
+/** A strip that repeats: the same drawing `copies` times, side by side (enough to cover the screen plus one tile),
+ *  slid by the game loop through `ref`. */
+export function Strip({ innerRef, tile, copies, height, bottom, z, children }: { innerRef: Ref<HTMLDivElement>; tile: number; copies: number; height: number; bottom: string; z: number; children: ReactNode }) {
   return (
-    <div ref={innerRef} style={{ position: 'absolute', left: 0, bottom, width: U(tile * 2), height: U(height), display: 'flex', willChange: 'transform', zIndex: z, pointerEvents: 'none' }}>
-      {[0, 1].map((i) => (
+    <div ref={innerRef} style={{ position: 'absolute', left: 0, bottom, width: U(tile * copies), height: U(height), display: 'flex', willChange: 'transform', zIndex: z, pointerEvents: 'none' }}>
+      {Array.from({ length: copies }, (_, i) => (
         <div key={i} style={{ position: 'relative', width: U(tile), height: '100%', flexShrink: 0 }}>
           {children}
         </div>

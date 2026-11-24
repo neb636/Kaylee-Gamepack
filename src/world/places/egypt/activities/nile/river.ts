@@ -13,7 +13,7 @@ export const FEEL = knobs(
   {
     chase: { value: 4.4, min: 1, max: 10, step: 0.1, label: 'Chase', unit: '/s', note: 'how eagerly the boat follows her finger', main: true },
     top: { value: 78, min: 20, max: 160, step: 1, label: 'Top speed', unit: 'u/s', note: 'the fastest the boat slides', main: true },
-    cruise: { value: 12, min: 4, max: 30, step: 0.5, label: 'River speed', unit: 'u/s', note: 'how fast the flowers float by', main: true },
+    cruise: { value: 14, min: 4, max: 30, step: 0.5, label: 'River speed', unit: 'u/s', note: 'how fast the flowers float by', main: true },
     reach: { value: 9, min: 4, max: 18, step: 0.5, label: 'Catch reach', unit: 'u', note: 'how close a flower has to be to hop aboard', main: true },
     pull: { value: 9, min: 0, max: 30, step: 0.5, label: 'Flower pull', unit: 'u/s', note: 'how fast a near flower drifts to the boat' },
     lean: { value: 0.22, min: 0, max: 0.6, step: 0.01, label: 'Lean', unit: 'deg per u/s', note: 'how much the boat tips as it climbs or dives' },
@@ -50,13 +50,13 @@ export interface Layout {
 
 /** The river fits any screen: the waterline sits under the prompt, sky fills what's above and water what's below. */
 export function layoutFor(W: number, H: number): Layout {
-  const u = clamp(Math.min(W, H * 0.75) / 86, 3.4, 9.5)
+  const u = clamp(Math.min(W, H * 0.75) / 86, 3, 9.5)
   const waterTop = Math.min(H * 0.52, Math.max(H * 0.42, 150 + 30 * u))
   return { W, H, u, viewW: W / u, waterTop, depth: (H - waterTop) / u }
 }
 
 /** Where the boat may go (its hull point), in units. */
-export const bounds = (l: Layout) => ({ x0: 15, x1: l.viewW - 19, y0: 7, y1: Math.max(12, l.depth - 9) })
+export const bounds = (l: Layout) => ({ x0: 18, x1: l.viewW - 19, y0: 7, y1: Math.max(12, l.depth - 9) })
 
 /** The garland's twelve hooks in the boat's own drawing (340 x 360): the bow strand first, then the stern strand. */
 export const HOOKS: [number, number][] = (() => {
