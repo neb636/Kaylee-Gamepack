@@ -156,11 +156,6 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
         </TopBar>
       ) : (
         <TopBar {...worldBack} label="World map" onBack={() => go.world()}>
-          {meta.activities.length > 0 && (
-            <BarPill>
-              <DockGlyph kind="passport" /> {stamps.length}/{meta.activities.length}
-            </BarPill>
-          )}
           {!!meta.puzzles?.length && (
             <motion.button aria-label="Puzzle book" whileTap={{ scale: 0.88, y: 3 }}
               onClick={() => { sounds.pop(); go.world('puzzles', meta.id) }}
@@ -181,6 +176,12 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
             >
               <DOCK.theater.Icon shade={DOCK.theater.shade} />
             </motion.button>
+          )}
+          {/* The stamp count always comes last, after the puzzle and theater tiles. */}
+          {meta.activities.length > 0 && (
+            <BarPill>
+              <DockGlyph kind="passport" /> {stamps.length}/{meta.activities.length}
+            </BarPill>
           )}
         </TopBar>
       )}
