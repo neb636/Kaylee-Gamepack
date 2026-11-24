@@ -1,0 +1,148 @@
+{
+  "title": "One set of controls: Thailand",
+  "checkIn": "fix",
+  "kaylee": "Every Thailand game now has the same buttons as the other countries: back is always top left, the way on is always bottom right, and every button has a drawn picture instead of an emoji.",
+  "questions": [],
+  "pictures": [
+    {
+      "title": "The house: arriving by tuk-tuk",
+      "after": "pics/house-arrive-skip.jpg",
+      "caption": "Skip is the quiet white button bottom right, with the drawn skip"
+    },
+    {
+      "title": "The house: dress-up",
+      "after": "pics/house-street-dressup.jpg",
+      "caption": "The mirror button top right is butter with a drawn mirror"
+    },
+    {
+      "title": "The wardrobe",
+      "after": "pics/house-wardrobe-done.jpg",
+      "caption": "Done is the mint tick, bottom right"
+    },
+    {
+      "title": "The house: the party (every stamp)",
+      "after": "pics/house-party.jpg",
+      "caption": "The party is the butter button with a drawn party popper"
+    },
+    {
+      "title": "The Thailand map: the party",
+      "after": "pics/thai-map-party.jpg",
+      "caption": "Same party button as in the house"
+    },
+    {
+      "title": "The game table",
+      "after": "pics/table-playing.jpg",
+      "caption": "Getting up is the top-left back button now; the 👋 is gone. Games stays top right"
+    },
+    {
+      "title": "The game table: someone won",
+      "after": "pics/table-again.jpg",
+      "caption": "Again is lavender, bottom centre"
+    },
+    {
+      "title": "Packing the suitcase",
+      "after": "pics/boat-pack-done.jpg",
+      "caption": "The 🧳✅ circle is the mint tick"
+    },
+    {
+      "title": "The plane to Krabi",
+      "after": "pics/boat-plane-skip.jpg",
+      "caption": "Skip ahead: the same white skip as everywhere"
+    },
+    {
+      "title": "The bay: the trip album",
+      "after": "pics/bay-album.jpg",
+      "caption": "The album button is butter with a drawn album"
+    },
+    {
+      "title": "The bay: the album open",
+      "after": "pics/bay-album-open.jpg",
+      "caption": "Closing it is the mint tick"
+    },
+    {
+      "title": "The boat race podium",
+      "after": "pics/boat-race-podium.jpg",
+      "caption": "An end card: a small lavender again, a big pink way on"
+    },
+    {
+      "title": "HarborLand: the map",
+      "after": "pics/mall-hall-map.jpg",
+      "caption": "The map button is butter with a drawn map"
+    },
+    {
+      "title": "Mall: the Vet Clinic, finished",
+      "after": "pics/mall-vet-done.jpg",
+      "caption": "Back is top left (the ↩️ under it is gone); the way on is pink, bottom right. On a phone the sticker band wraps to two rows"
+    },
+    {
+      "title": "Mall: the Barber Salon, finished",
+      "after": "pics/mall-barber-done.jpg",
+      "caption": "Same: back top left, the way on bottom right"
+    },
+    {
+      "title": "Mall: Cafe & Cake, finished",
+      "after": "pics/mall-cafe-done.jpg",
+      "caption": "Same"
+    },
+    {
+      "title": "Mall: the Racing Slide, finished",
+      "after": "pics/mall-race-done.jpg",
+      "caption": "The way on used to sit on top of Sparkle; now bottom right"
+    },
+    {
+      "title": "Mall: Little Land, finished",
+      "after": "pics/mall-blocks-done.jpg",
+      "caption": "Same"
+    },
+    {
+      "title": "Mall: the Golden Mountain, finished",
+      "after": "pics/mall-mountain-done.jpg",
+      "caption": "Same"
+    },
+    {
+      "title": "Mall: Muay Thai, finished",
+      "after": "pics/mall-boxing-done.jpg",
+      "caption": "Same"
+    },
+    {
+      "title": "Mall: the Sky Pod, finished",
+      "after": "pics/mall-skypod-done.jpg",
+      "caption": "Same"
+    },
+    {
+      "title": "The plane to Nan",
+      "after": "pics/nan-plane-skip.jpg",
+      "caption": "Skip ahead, the same white skip"
+    },
+    {
+      "title": "Nan: the end of a road",
+      "after": "pics/nan-drive-end.jpg",
+      "caption": "End card: again small, the map, the next stop big on the right"
+    },
+    {
+      "title": "Nan: the number 3 road",
+      "after": "pics/nan-three-home.jpg",
+      "caption": "End card: again, the map, fly home"
+    },
+    {
+      "title": "Nan: the mushroom farm's end",
+      "after": "pics/nan-mushrooms-end.jpg",
+      "caption": "End card: again small, the Nan map big (the rice farm and salt hut share it)"
+    },
+    {
+      "title": "The speedboat to Koh Samet",
+      "after": "pics/speedboat-skip.jpg",
+      "caption": "Skip ahead, the same white skip"
+    },
+    {
+      "title": "Koh Samet: the jet ski race",
+      "after": "pics/jetski-won.jpg",
+      "caption": "The again pill is lavender with the drawn again"
+    },
+    {
+      "title": "Koh Samet: the jet ski race, lost",
+      "after": "pics/jetski-lost.jpg",
+      "caption": "\"So close!\" with the drawn again"
+    }
+  ]
+}
