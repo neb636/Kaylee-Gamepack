@@ -1,0 +1,11 @@
+{
+  "title": "The Poles: hand-drawn level pictures",
+  "checkIn": "fix",
+  "kaylee": "The five level pictures on the Poles' globe are now hand-drawn round stickers (polar bear, narwhal, arctic fox, Adelie penguin, emperor chick) instead of the generated ones. She sees the same new pictures on the stamp screen and in her passport.",
+  "questions": ["Pola's portrait on the passport page is still the generated picture. Redraw it by hand too?"],
+  "pictures": [
+    { "title": "The trail on the globe", "before": "pics/trail-before.jpg", "after": "pics/trail-after.jpg", "caption": "Each picture now fills its circle" },
+    { "title": "The five stickers", "before": "pics/stickers-old.jpg", "after": "pics/stickers.jpg", "caption": "Drawn in code in the game shelf's flat look; the bear and fox match their shelf icons" }
+  ],
+  "links": [{ "label": "Open the Poles' globe", "hash": "#/world/poles/hub/globe" }]
+}
