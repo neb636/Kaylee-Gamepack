@@ -7,7 +7,7 @@
 #
 # Only that branch's folder is downloaded. The whole review-pages tip once passed 1 GB and a 60 s fetch of it timed
 # out, so previews went out with no review page. Never fails the job: it sets the outputs
-#   status=ready|none|failed   reason=<why it failed>   stamp=<what <outdir>/built.txt holds, to see it's live>
+#   status=ready|none|failed   reason=<why it failed>
 set -uo pipefail
 # Runs against the checkout it's called from (review-page.yml runs main's copy of this script on a PR's checkout).
 . "$(dirname "$0")/ci-lib.sh"
@@ -16,7 +16,6 @@ cd "$(git rev-parse --show-toplevel)"
 branch=$1 out=$2 pr=$3
 slug=$(slug_of "$branch")
 tmp="${RUNNER_TEMP:-${TMPDIR:-/tmp}}/review-pages-$pr"
-stamp="${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-$(date -u +%H%M%S)"
 
 fail() {
   echo "::warning title=Review page::$1"
@@ -44,9 +43,7 @@ with_timeout 120 node scripts/review.mjs --out="$out" --changed=HEAD^1 --keep --
   || fail "scripts/review.mjs failed (see the job's log)"
 
 if [ -f "$out/index.html" ]; then
-  echo "$stamp" > "$out/built.txt"
   output status ready
-  output stamp "$stamp"
 else
   rm -rf "$out"
   output status none

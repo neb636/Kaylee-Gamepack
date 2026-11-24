@@ -89,10 +89,6 @@ jobs:
 
   preview:
     needs: voices
-    outputs:
-      review: ${{ steps.review.outputs.status }}
-      stamp: ${{ steps.review.outputs.stamp }}
-      reason: ${{ steps.review.outputs.reason }}
     # Also when voices is skipped (a fork, or the PR closing) or fails: the preview never waits on the voices.
     if: always()
     # The main deploy writes to gh-pages too. A shared group prevents push races.
@@ -127,8 +123,7 @@ jobs:
       # The review page the user opens from the PR (scripts/review.mjs), at <preview>/review/: what the agent published for
       # this branch to the review-pages branch (reels, table reads, questions), plus the script sheet of every group of
       # spoken lines this PR changes. Only this branch's folder is downloaded (scripts/ci-review-page.sh). A failure
-      # never blocks the preview (or main's deploys, which share the gh-pages lane); it shows as a warning and a PR
-      # comment. A page published after this run is put up by review-page.yml.
+      # never blocks the preview (or main's deploys, which share the gh-pages lane); it shows as a warning on the run. A page published after this run is put up by review-page.yml.
       - if: github.event.action != 'closed'
         name: Review page
         id: review
@@ -143,19 +138,3 @@ jobs:
           preview-branch: gh-pages
           umbrella-dir: pr-preview
 
-  # Says on the PR when the review page is really up (or why it isn't). Its own job, so waiting for GitHub Pages
-  # doesn't hold the gh-pages lane.
-  review-comment:
-    needs: preview
-    if: github.event.action != 'closed' && (needs.preview.outputs.review == 'ready' || needs.preview.outputs.review == 'failed')
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          sparse-checkout: scripts
-      - env:
-          GH_TOKEN: ${{ github.token }}
-        run: >-
-          scripts/ci-review-comment.sh "${{ github.event.number }}" "${{ needs.preview.outputs.review }}"
-          "${{ needs.preview.outputs.review == 'ready' && needs.preview.outputs.stamp || needs.preview.outputs.reason }}"

@@ -31,10 +31,9 @@ below. Never paste fifteen links or a page of prose at them.
    The PR preview copies the page to `<preview>/review/` and adds the script sheet of any lines the PR changes.
    Publishing again once the PR is open (a fix, a new reel) puts the page up by itself in a minute or two; no push
    needed. A merged or closed PR's page comes off `review-pages` by itself.
-4. **Before you tell the user it's ready, see it live.** One PR comment (the "review page" comment, kept up to date)
-   says when the page is up, or why it didn't build. Wait for it, or check the page yourself:
-   `curl -so /dev/null -w '%{http_code}' https://neb636.github.io/Kaylee-Gamepack/pr-preview/pr-<n>/review/` → `200`.
-   If it says the page didn't build, fix it and publish again. Never hand the user a link that 404s.
+4. **Before you tell the user it's ready, see it live:**
+   `curl -so /dev/null -w '%{http_code}' https://neb636.github.io/Kaylee-Gamepack/pr-preview/pr-<n>/review/` → `200`
+   (a minute or two after publishing). If the run warns the page didn't build, fix it and publish again. Never hand the user a link that 404s.
 
 ## 3. The PR body
 

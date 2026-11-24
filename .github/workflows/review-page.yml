@@ -13,7 +13,7 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
+  pull-requests: read
 
 jobs:
   publish:
@@ -24,9 +24,6 @@ jobs:
       group: gh-pages-publish
       cancel-in-progress: false
       queue: max
-    outputs:
-      ready: ${{ steps.put.outputs.ready }}
-      failed: ${{ steps.put.outputs.failed }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -77,31 +74,12 @@ jobs:
             cigit -C "$pages" sparse-checkout add "$dest"
             rm -rf "${pages:?}/$dest" && mkdir -p "$pages/$dest" && cp -R "$out/." "$pages/$dest/"
             cigit -C "$pages" add --sparse -A "$dest"
-            ready+=("$pr:$(sed -n 's/^stamp=//p' <<< "$res")")
+            ready+=("$pr")
             echo "::endgroup::"
           done <<< "$prs"
           if $cloned && ! cigit -C "$pages" diff --cached --quiet; then
-            cigit -C "$pages" commit -q -m "Review pages for PR ${ready[*]%%:*}"
+            cigit -C "$pages" commit -q -m "Review pages for PR ${ready[*]}"
             push_retry "$pages" gh-pages || { echo "::error::Couldn't push to gh-pages"; exit 1; }
           fi
-          output ready "${ready[*]}"
-          output failed "${failed[*]}"
+          [ ${#failed[@]} -eq 0 ] || { echo "::warning::No review page for PR ${failed[*]}"; exit 1; }
 
-  comment:
-    needs: publish
-    if: needs.publish.outputs.ready != '' || needs.publish.outputs.failed != ''
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: main
-          sparse-checkout: scripts
-      - env:
-          GH_TOKEN: ${{ github.token }}
-          READY: ${{ needs.publish.outputs.ready }}
-          FAILED: ${{ needs.publish.outputs.failed }}
-        run: |
-          for f in $FAILED; do scripts/ci-review-comment.sh "$f" failed "see the Review page workflow's log" & done
-          for r in $READY; do scripts/ci-review-comment.sh "${r%%:*}" ready "${r#*:}" & done
-          wait
