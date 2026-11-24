@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "peru-hub-after",
+  "title": "Peru hub after",
+  "video": "peru-hub-after.mp4",
+  "gif": "peru-hub-after.gif",
+  "seconds": 10,
+  "browser": "chromium",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "hub-worlds",
+      "where": "hub-worlds",
+      "seconds": 8,
+      "fps": 18,
+      "status": "ok"
+    }
+  ]
+}
