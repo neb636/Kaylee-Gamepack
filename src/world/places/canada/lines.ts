@@ -40,7 +40,7 @@ export const L = {
     bonjour: 'People in Canada speak English and French. In Quebec, hello is Bonjour!',
     huge: 'Canada is the second biggest country in the world.',
     winter: 'Canada has long, snowy winters, and red and orange leaves in the fall.',
-    beaver: "The beaver is Canada's animal. Its teeth are orange and never stop growing.",
+    beaver: "The beaver is a Canadian animal. Its teeth are orange and never stop growing.",
     syrup: "Most of the world's maple syrup comes from Quebec.",
     castle: "In Quebec City there's a hotel that looks like a castle.",
     hockey: "Hockey is Canada's favorite winter sport.",
@@ -59,7 +59,7 @@ export const L = {
   videos: {
     taffy: 'Real maple taffy on real snow!',
     snowman: 'The real Winter Carnival in Quebec City!',
-    bike: 'Real bikes on the real mountain!',
+    bike: 'Bikes on the mountain!',
     campfire: 'Animals that can see in the dark!',
     canoe: 'A real red canoe on Moraine Lake!',
     bridge: 'Real animals crossing their bridge!',
@@ -282,7 +282,7 @@ export const L = {
     blue: maple('The blue way! Hold on!'),
     jump: maple('Up, up and away!'),
     // At the bottom: she spots Monty in the pool (he says hello, `moose[0]`), and the film out picks up there.
-    falls: maple('There he is, in his bath!'),
+    falls: maple('There he is, in the water!'),
     // The animals, in their own voices.
     moose: [by('moose')('Mmm. Bonjour.'), by('moose')('Munch, munch.')],
     chipmunk: by('chipmunk')('Seeds! Seeds!'),
@@ -340,7 +340,7 @@ export const L = {
     // it looks like somebody's picture and is still on the stick.
     roast: maple("Let's roast more!"),
     marshmallow: 'Put a marshmallow on the stick! Toast it like the picture.',
-    onFire: onDevice("It's on fire! Tap it to blow it out!", "It's on fire! Click it to blow it out!"),
+    onFire: "It's on fire!",
     marshmallowHint: 'Who wants that one?',
     // Who gets it: Maple wants golden, a kit squishy (white, straight out of the bag), Roxy and a kit burnt, Monty the giant one (he eats the stick).
     golden: maple('Golden! Yummy!'),
@@ -445,7 +445,7 @@ export const L = {
     tapWhale: onDevice('Tap the whale and see what it does!', 'Click the whale and see what it does!'),
     // The blowhole: the spout comes down on the boat (the second time, Maple's soaked face in close-up).
     whaleBlow: maple('It breathes out of its head!'),
-    sneeze: maple('Achoo! I am all wet!'),
+    sneeze: maple('Hey, you splashed me!'),
     // The tail (a slap, or held: a push for the boat); after a while Ollie asks, and the tail shows a sea star.
     seenRock: ollie('Have you seen my rock?'),
     whaleTail: maple('Look at its tail!'),
@@ -473,8 +473,8 @@ export const L = {
     // The film out: Ollie on her back in the kelp, juggling her rock while they talk.
     filmOut: {
       ask: maple('Ollie! Come and play hockey with us!'),
-      wet: ollie('Hockey? Is it wet?'),
-      ice: maple("It's ice! You slide on it!"),
+      wet: ollie("What's hockey?"),
+      ice: maple("It's like soccer, but with ice skating!"),
       // She spins on her back like a top.
       spin: ollie('Wheee! I love to slide!'),
       // A whale spouts right behind them: everybody is soaked.
