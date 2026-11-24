@@ -1,0 +1,23 @@
+{
+  "title": "The home globe: a toy planet",
+  "checkIn": "fix",
+  "kaylee": "Her globe is a little toy planet now: candy trees, snowy peaks, a pink whale, sailboats and a rainbow stand on it, clouds hang over its edge, a sleepy baby moon goes round it, and every one of them does something when she pokes it.",
+  "questions": [
+    "How full should the world be: more toys, just right, or fewer?",
+    "The baby moon flies across the front of the globe on its way round. Keep it, or keep it off the face?"
+  ],
+  "reels": [
+    { "name": "globe-after", "moments": ["globe-spin", "globe-fly"] },
+    { "name": "globe-toys", "moments": ["globe-toys"] }
+  ],
+  "pictures": [
+    { "title": "iPad", "before": "pics/ipad-before.jpg", "after": "pics/ipad-after.jpg", "caption": "Puffy land with a rim of light, and toys that stick out past the edge of the world" },
+    { "title": "iPhone", "before": "pics/iphone-before.jpg", "after": "pics/iphone-after.jpg", "caption": "Same toys, same pins, on the small screen" },
+    { "title": "The Pacific side", "after": "pics/pacific-after.jpg", "caption": "The empty side has an island under a rainbow, a whale and a sailboat" },
+    { "title": "Poked", "after": "pics/pokes.jpg", "caption": "The whale spouts, the moon wakes up, the rainbow shimmers. Trees, boats and clouds boing" }
+  ],
+  "links": [
+    { "label": "Play it: spin the globe and poke things", "hash": "#/world?view=map" },
+    { "label": "Tune how far the toys lean in a spin", "hash": "#/world?view=map&feel=1" }
+  ]
+}

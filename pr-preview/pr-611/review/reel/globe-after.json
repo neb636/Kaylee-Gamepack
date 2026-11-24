@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "globe-after",
+  "title": "Globe after",
+  "video": "globe-after.mp4",
+  "gif": "globe-after.gif",
+  "seconds": 16,
+  "browser": "chromium",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "globe-spin",
+      "where": "globe-spin",
+      "seconds": 9,
+      "fps": 7.4,
+      "status": "ok"
+    },
+    {
+      "name": "globe-fly",
+      "where": "globe-fly",
+      "seconds": 3.4,
+      "fps": 12.6,
+      "status": "ok"
+    }
+  ]
+}
