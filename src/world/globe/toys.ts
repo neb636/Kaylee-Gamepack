@@ -55,7 +55,8 @@ interface Toy {
   z: number
   /** When she last poked it (the loop's clock, seconds). */
   poked: number
-  /** Where her finger finds it this frame: px from the globe's center, and how near counts (0: out of sight). */
+  /** Where her finger finds it this frame: px from the globe's center, and its own size there (0: out of sight).
+   *  A poke reaches at least a finger's width round it (pokeAt's `reach`). */
   hx: number
   hy: number
   hr: number
@@ -432,7 +433,7 @@ function draw(g: G, t: Toy, R: number, time: number, sway: number) {
   // Her finger finds it around its middle.
   t.hx = X(0.5)
   t.hy = Y(0.5)
-  t.hr = Math.max(26, R * t.size * 0.62)
+  t.hr = R * t.size * 0.62
   // Round the back, only the part that peeks over the edge can be poked.
   if (t.z < 0 && Math.hypot(t.hx, t.hy) < R) t.hr = 0
   switch (t.kind) {
@@ -501,7 +502,7 @@ function cloud(g: G, t: Toy, R: number, time: number) {
   puffs(g, x, y, w)
   t.hx = x
   t.hy = y
-  t.hr = t.z < 0 && Math.hypot(x, y) < R ? 0 : Math.max(26, w * 0.45)
+  t.hr = t.z < 0 && Math.hypot(x, y) < R ? 0 : w * 0.45
 }
 
 // ---- The rainbow ----
@@ -558,7 +559,7 @@ function rainbow(g: G, R: number, t: Turn, time: number) {
       if (i === 2 && k === BOW_STEPS / 2 && seen) {
         BOW.hx = x * R
         BOW.hy = -y * R
-        BOW.hr = Math.max(30, BOW.half * R * 0.5)
+        BOW.hr = BOW.half * R * 0.5
       }
     }
     g.stroke()
@@ -719,12 +720,16 @@ let lastPoke = -99
 
 /**
  * She tapped at x, y (px from the globe's center): the toy there boings, and its kind comes back (for its sound).
- * Nothing there: undefined. `time` is the loop's clock, in seconds.
+ * Nothing there: undefined. `reach` is half a finger target (px): every toy can be poked from at least that far,
+ * however small it is drawn, and where two are close the nearer one wins. `within` (px) leaves out toys whose middle
+ * is farther from the tap than that. `time` is the loop's clock, in seconds.
  */
-export function pokeAt(x: number, y: number, R: number, time: number): ToyKind | undefined {
+export function pokeAt(x: number, y: number, R: number, time: number, reach: number, within = Infinity): ToyKind | undefined {
   let hit: ToyKind | undefined
+  const moonAway = Math.hypot(x - moon.x, y - moon.y)
+  const bowAway = Math.hypot(x - BOW.hx, y - BOW.hy)
   // The moon first (it flies over everything), unless it is behind the world.
-  if ((moon.z >= 0 || Math.hypot(moon.x, moon.y) > R) && Math.hypot(x - moon.x, y - moon.y) < Math.max(30, moon.r * 1.5)) {
+  if ((moon.z >= 0 || Math.hypot(moon.x, moon.y) > R) && moonAway < Math.max(reach, moon.r * 1.5) && moonAway < within) {
     moon.poked = time
     hit = 'moon'
   } else {
@@ -732,8 +737,9 @@ export function pokeAt(x: number, y: number, R: number, time: number): ToyKind |
     let near = 1
     for (const toy of TOYS) {
       if (!toy.hr) continue
-      const d = Math.hypot(x - toy.hx, y - toy.hy) / toy.hr
-      if (d < near) {
+      const away = Math.hypot(x - toy.hx, y - toy.hy)
+      const d = away / Math.max(reach, toy.hr)
+      if (d < near && away < within) {
         near = d
         best = toy
       }
@@ -741,7 +747,7 @@ export function pokeAt(x: number, y: number, R: number, time: number): ToyKind |
     if (best) {
       best.poked = time
       hit = best.kind
-    } else if (BOW.hr && Math.hypot(x - BOW.hx, y - BOW.hy) < BOW.hr) {
+    } else if (BOW.hr && bowAway < Math.max(reach, BOW.hr) && bowAway < within) {
       BOW.poked = time
       hit = 'rainbow'
     }

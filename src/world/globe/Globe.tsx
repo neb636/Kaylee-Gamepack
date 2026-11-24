@@ -351,6 +351,17 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
     else sounds.note(s.current.note++ % 8)
   }
 
+  /** Pokes the toy at a spot of the box (px from its top-left), if there is one. A toy answers from a full finger
+   *  target (88px on an iPad, 64px on an iPhone), however small it is drawn. */
+  const poke = (x: number, y: number, within?: number) => {
+    const { cx, cy, R, pin } = layRef.current
+    const toy = pokeAt(x - cx, y - cy, R, s.current.time, Math.min(44, pin / 2), within)
+    if (!toy) return false
+    s.current.idle = 0
+    toySound(toy)
+    return true
+  }
+
   const tap = (e: MouseEvent) => {
     if (heldRef.current || (e.target as Element).closest('button')) return
     const rect = box.current!.getBoundingClientRect()
@@ -358,11 +369,7 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
     // A toy first: the ones on the edge of the world stand out past it, and the moon flies beside it.
-    const toy = pokeAt(x - cx, y - cy, R, s.current.time)
-    if (toy) {
-      s.current.idle = 0
-      return toySound(toy)
-    }
+    if (poke(x, y)) return
     const at = unproject((x - cx) / R, -(y - cy) / R, turnOf(s.current.view))
     if (!at) return
     s.current.idle = 0
@@ -401,12 +408,19 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
           }}
           className="globe-land"
           aria-label={key}
-          onClick={() => {
+          onClick={(e) => {
             if (heldRef.current) return
             const el = landEls.current.get(key)
             const rect = el?.getBoundingClientRect()
             const from = box.current?.getBoundingClientRect()
-            if (rect && from) onLand(key, rect.left + rect.width / 2 - from.left, rect.top + rect.height / 2 - from.top)
+            if (!rect || !from) return
+            const x = rect.left + rect.width / 2 - from.left
+            const y = rect.top + rect.height / 2 - from.top
+            // Her finger on a toy that stands by this spot pokes the toy: when the tap is nearer the toy's middle
+            // than the spot's. (A robot or a screen reader presses the spot's own middle: always the continent.)
+            const away = Math.hypot(e.clientX - from.left - x, e.clientY - from.top - y)
+            if (e.detail && away > 1 && poke(e.clientX - from.left, e.clientY - from.top, away)) return
+            onLand(key, x, y)
           }}
         />
       ))}
