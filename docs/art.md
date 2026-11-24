@@ -15,6 +15,11 @@ screens, stickers and character references.
   hippo's 6-unit ink line (`inkStyle(INK, 6, 0.75)`), round shapes, a base, a shade and a cream tone, plain dark eyes
   with two highlights, no lashes, brows or fussy fur lines. Their stickers (`assets/miu.svg`, `assets/jamal.svg`) are
   stills of the puppets too. A new Egypt character follows them.
+- **Egypt's Sphinx is drawn by hand too** (user feedback, 2026-11-24: the generated desert behind him looked tacky).
+  The desert is drawn in code (`activities/SphinxDesert.tsx`: the Nile's sky, sun, clouds and palms, the pyramids and
+  flat dunes with no outlines); the sand heap is painted in the same tones with one ink line along its top, and its
+  foot is the ground's own color (`GROUND`) so it grows out of the desert. The Sphinx puppet has the hippo's 6-unit
+  line, his sticker `assets/sphinx.svg` is a still of the puppet, and the old pot is `egypt/Pot.tsx`.
 - **Peru's Machu Picchu level is drawn by hand as well** (user feedback, 2026-11-24: the generated pictures looked
   cheesy and the drawn llama looked bad). The view behind (`bg-machu-picchu*.svg`), the critters, the crops and Tika's
   sticker are SVG files in the shelf's look (no dark outlines; a base, a shade and a light tone); the walls, the

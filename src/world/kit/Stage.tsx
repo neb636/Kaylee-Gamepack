@@ -2,15 +2,18 @@ import { motion } from 'motion/react'
 import { useEffect, type CSSProperties, type ReactNode } from 'react'
 import { lineText, SayButton, say, type Line } from '../../sdk'
 
-/** Activity layout: a full-bleed picture, a spoken prompt under the top bar, then the play area. */
-export function Stage({ bg, prompt, children, style }: { bg: string; prompt?: Line; children: ReactNode; style?: CSSProperties }) {
+/** Activity layout: a full-bleed picture, a spoken prompt under the top bar, then the play area.
+ *  `scene` is a drawn backdrop instead of the `bg` picture (like StoryBeat's). It fills the screen behind the play
+ *  area and its own buttons (a sun, a cloud) can be tapped: the play area then only catches touches on what's in it, so
+ *  give the things she plays with `pointerEvents: 'auto'`. */
+export function Stage({ bg, scene, prompt, children, style }: { bg?: string; scene?: ReactNode; prompt?: Line; children: ReactNode; style?: CSSProperties }) {
   return (
     <div
       style={{
         position: 'absolute',
         inset: 0,
         backgroundColor: 'var(--lavender)',
-        backgroundImage: `url(${bg})`,
+        backgroundImage: bg ? `url(${bg})` : undefined,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',
@@ -22,8 +25,9 @@ export function Stage({ bg, prompt, children, style }: { bg: string; prompt?: Li
         ...style,
       }}
     >
+      {scene && <div style={{ position: 'absolute', inset: 0 }}>{scene}</div>}
       {prompt && <PromptBubble text={prompt} />}
-      <div style={{ flex: 1, minHeight: 0, width: '100%', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>{children}</div>
+      <div style={{ flex: 1, minHeight: 0, width: '100%', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pointerEvents: scene ? 'none' : undefined }}>{children}</div>
     </div>
   )
 }

@@ -3,7 +3,6 @@ import bgGizaDay from './assets/bg-giza-day.webp'
 import bgGizaNight from './assets/bg-giza-night.webp'
 import bgMarket from './assets/bg-market.webp'
 import bgScribe from './assets/bg-scribe.webp'
-import bgSphinx from './assets/bg-sphinx.webp'
 import bgTomb from './assets/bg-tomb.webp'
 import capstone from './assets/capstone.webp'
 import colorFelucca from './assets/bg-color-felucca.webp'
@@ -22,12 +21,11 @@ import map from './assets/scene-egypt-map.webp'
 import miu from './assets/miu.svg'
 import onions from './assets/onions.webp'
 import pasta from './assets/pasta.webp'
-import pot from './assets/pot.webp'
 import rice from './assets/rice.webp'
 import sarcophagus from './assets/sarcophagus.webp'
 import sauce from './assets/sauce.webp'
 import scarab from './assets/scarab.webp'
-import sphinx from './assets/sphinx.webp'
+import sphinx from './assets/sphinx.svg'
 import teapot from './assets/teapot.webp'
 import tutu from './assets/tutu.webp'
 
@@ -37,7 +35,6 @@ export const art = {
   bgGizaNight,
   bgMarket,
   bgScribe,
-  bgSphinx,
   bgTomb,
   capstone,
   colorFelucca,
@@ -56,7 +53,6 @@ export const art = {
   miu,
   onions,
   pasta,
-  pot,
   rice,
   sarcophagus,
   sauce,
