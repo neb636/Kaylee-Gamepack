@@ -21,7 +21,7 @@ const WINDOWS: Record<string, { pin?: string; icon?: string; x: number; y: numbe
   canada: { pin: 'canada', x: 60, y: 60, r: 55 }, // a moose in a red scarf (the user's pick for Canada, 2026-11-20)
   china: { icon: 'china/bamboo', x: 58, y: 61, r: 51 }, // the panda with its bamboo
   egypt: { x: 560, y: 215, r: 185 }, // the pyramid over the Nile
-  italy: { pin: 'italy', x: 60, y: 60, r: 54 }, // a pizza, a slice coming out
+  italy: { pin: 'italy', x: 60, y: 60, r: 54 }, // a slice of pizza
   peru: { pin: 'peru', x: 57, y: 51, r: 53 }, // Luna the alpaca in the Andes
   poles: { icon: 'poles/floe', x: 61, y: 57, r: 48 }, // the polar bear cub waving from its ice floe
   thailand: { pin: 'thailand', x: 60, y: 60, r: 56 }, // an elephant on the beach in Krabi, reaching for bananas

@@ -1,51 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <title>Italy: a pizza with a slice coming out</title>
+  <title>Italy: a slice of pizza</title>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9de"/><stop offset="1" stop-color="#ffc3a8"/></linearGradient>
     <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-    <!-- the slice: a wedge to the lower right -->
-    <clipPath id="slice"><path d="M60 61L105.5 71.5A46.5 46.5 0 0 1 81 103Z"/></clipPath>
     <path id="leaf" d="M0 0C3-6 11-7.5 16-3.5C12 2 4 3.5 0 0Z"/>
-    <!-- the whole pizza: golden crust, red sauce, mozzarella, basil -->
-    <g id="pie">
-      <circle cx="60" cy="62.5" r="41" fill="#d9954a"/>
-      <circle cx="60" cy="60.5" r="41" fill="#f2b765"/>
-      <path d="M24 50C28 37 38 27 51 23" fill="none" stroke="#ffd99a" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="60" cy="61.5" r="33" fill="#e04e5a"/>
-      <circle cx="60" cy="60.5" r="33" fill="#ff6b6b"/>
-      <g fill="#efdccd">
-        <ellipse cx="45" cy="45.5" rx="9" ry="7"/><ellipse cx="72" cy="42.5" rx="8" ry="6.5"/><ellipse cx="40" cy="70.5" rx="8" ry="7"/>
-        <ellipse cx="62" cy="62.5" rx="8.5" ry="7"/><ellipse cx="82" cy="60.5" rx="7" ry="6.5"/><ellipse cx="60" cy="84.5" rx="8" ry="6"/><ellipse cx="77" cy="80" rx="6.5" ry="5.5"/>
-      </g>
-      <g fill="#fff7f0">
-        <ellipse cx="44.5" cy="44.5" rx="9" ry="7"/><ellipse cx="71.5" cy="41.5" rx="8" ry="6.5"/><ellipse cx="39.5" cy="69.5" rx="8" ry="7"/>
-        <ellipse cx="61.5" cy="61.5" rx="8.5" ry="7"/><ellipse cx="81.5" cy="59.5" rx="7" ry="6.5"/><ellipse cx="59.5" cy="83.5" rx="8" ry="6"/><ellipse cx="76.5" cy="79" rx="6.5" ry="5.5"/>
-      </g>
-      <use href="#leaf" transform="translate(52 34) rotate(-20)" fill="#48a96c"/>
-      <use href="#leaf" transform="translate(30 58) rotate(-70)" fill="#73cf86"/>
-      <use href="#leaf" transform="translate(48 78) rotate(15)" fill="#48a96c"/>
-      <use href="#leaf" transform="translate(70 70) rotate(40)" fill="#73cf86"/>
-      <use href="#leaf" transform="translate(74 52) rotate(-35)" fill="#48a96c"/>
-    </g>
   </defs>
   <rect width="120" height="120" fill="url(#bg)"/>
   <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="62" cy="106" rx="22" ry="4.5" fill="#4b3a8c" opacity="0.14"/>
 
-  <!-- everything on the board, a little smaller than the picture so the pulled slice stays inside the pin's circle -->
-  <g transform="translate(3 2) scale(0.88)">
-    <!-- the round wooden board -->
-    <circle cx="60" cy="66" r="50" fill="#c99266"/>
-    <circle cx="60" cy="63.5" r="50" fill="#e5b78f"/>
-    <path d="M17 50C22 35 33 23 47 17" fill="none" stroke="#f3d3b2" stroke-width="3" stroke-linecap="round"/>
-
-    <use href="#pie"/>
-    <!-- the gap the slice left, strings of cheese across it, and the slice pulled out -->
-    <path d="M60 61L105.5 71.5A46.5 46.5 0 0 1 81 103Z" fill="#e5b78f" stroke="#e5b78f" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M60 61L105.5 71.5A46.5 46.5 0 0 1 81 103Z" fill="#c99266" opacity="0.35"/>
-    <path d="M79 66L90 77M68 78L78 90M88 69L98 80" fill="none" stroke="#fff7f0" stroke-width="3" stroke-linecap="round"/>
-    <g transform="translate(11 12)"><g clip-path="url(#slice)"><use href="#pie"/></g></g>
+  <!-- the slice: its point down, tipped a little, the crust across the top -->
+  <g transform="rotate(-9 60 62)">
+    <!-- the sauce's edge and its shade -->
+    <path d="M24 44.5H99L64.5 107Q61.5 111.5 58.5 107Z" fill="#d9485e"/>
+    <path d="M22 42H98L63 104.500Q60 109 57 104.500Z" fill="#ff6b6b"/>
+    <!-- melted mozzarella, with one drip off the point -->
+    <path d="M28.5 44H91.500L62 96.500Q60 99.5 58 96.500Z" fill="#ffe189"/>
+    <path d="M57 92H63V106A3 3 0 0 1 57 106Z" fill="#ffe189"/>
+    <path d="M33 47H52L44.5 53.500Q40 56 37 53Z" fill="#fff6cc"/>
+    <!-- tomato rounds -->
+    <circle cx="46.5" cy="59" r="8" fill="#d9485e"/><circle cx="46" cy="58" r="8" fill="#ff6b6b"/><circle cx="43.5" cy="55.5" r="2.5" fill="#ffa3a3"/>
+    <circle cx="72.5" cy="57" r="7.5" fill="#d9485e"/><circle cx="72" cy="56" r="7.5" fill="#ff6b6b"/><circle cx="69.5" cy="53.5" r="2.5" fill="#ffa3a3"/>
+    <circle cx="60.5" cy="77" r="7" fill="#d9485e"/><circle cx="60" cy="76" r="7" fill="#ff6b6b"/><circle cx="58" cy="73.5" r="2" fill="#ffa3a3"/>
+    <!-- basil -->
+    <use href="#leaf" transform="translate(52 68) rotate(-25)" fill="#48a96c"/>
+    <use href="#leaf" transform="translate(78 67) rotate(115)" fill="#73cf86"/>
+    <use href="#leaf" transform="translate(55 50) rotate(-5) scale(0.8)" fill="#73cf86"/>
+    <!-- the crust: a fat golden roll, its shade under it, a light along the top left -->
+    <path d="M23 43.500Q60 25.5 97 43.5" fill="none" stroke="#d9954a" stroke-width="13" stroke-linecap="round"/>
+    <path d="M23 41Q60 23 97 41" fill="none" stroke="#f2b765" stroke-width="13" stroke-linecap="round"/>
+    <path d="M26 37Q39 30.5 53 28.5" fill="none" stroke="#ffd99a" stroke-width="3" stroke-linecap="round"/>
   </g>
 
   <!-- steam -->
-  <path d="M38 14q4 4 0 8t0 8M54 8q4 4 0 8t0 8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M40 9q4 3.5 0 7t0 7M57 5q4 3.5 0 7t0 7" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
 </svg>

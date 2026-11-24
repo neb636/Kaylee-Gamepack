@@ -106,7 +106,7 @@ Start from this template:
 ## Pins (one per country, on the home globe)
 
 A country's pin is a round picture of the one thing a five-year-old knows it by, big: its animal (a moose, a panda, an
-elephant), a pizza, the pyramid. A building or a wide view is too quiet at 90 px (user feedback, 2026-11-24).
+elephant), a slice of pizza, the pyramid. A building or a wide view is too quiet at 90 px (user feedback, 2026-11-24).
 `WINDOWS` in `src/world/globe/Medallion.tsx` says what each pin shows: a circle of the pin's own drawing
 (`src/world/globe/pins/<place>.svg`), of one of the icons above, or of the place's banner.
 
