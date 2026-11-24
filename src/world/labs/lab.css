@@ -4,7 +4,8 @@
    game it frames, which has its own --radius and --shadow. */
 .cast-lab,
 .cam-panel,
-.dialogue-lab {
+.dialogue-lab,
+.lab-bar {
   --studio: #f2f2f3;
   --card: #ffffff;
   --line: #ececee;
@@ -1127,10 +1128,6 @@
   padding: 8px 10px;
   border-radius: var(--radius);
 }
-.dl-title {
-  font-size: 14px;
-  margin-right: 4px;
-}
 .dl-spacer {
   flex: 1;
 }
@@ -1249,6 +1246,60 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+.dl-row {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+.dl-row > .dl-line {
+  flex: 1;
+  min-width: 0;
+  padding-right: 48px;
+}
+/* The copy button sits at the row's right edge: faint until you point at the row (always there on a touch screen). */
+.dl-copy-line {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.35;
+  transition: opacity 0.15s;
+}
+.dl-row:hover .dl-copy-line,
+.dl-copy-line:focus-within {
+  opacity: 1;
+}
+@media (hover: none) {
+  .dl-copy-line {
+    opacity: 0.8;
+  }
+}
+.dl-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 12px;
+  border-radius: 10px;
+  background: var(--soft);
+  border: 1px solid var(--line) !important;
+  font-weight: 600;
+}
+.dl-copy:hover {
+  background: var(--hover);
+}
+.dl-copy:disabled {
+  opacity: 0.4;
+}
+.dl-toast {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--safe-bottom, 0px) + 18px);
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  font-weight: 600;
+  z-index: 20;
+}
 .dl-line {
   display: grid;
   grid-template-columns: 112px minmax(0, 1fr) auto;
@@ -1313,5 +1364,120 @@
     flex-direction: row;
     gap: 6px;
     align-items: baseline;
+  }
+}
+
+/* ---------------------------------------------------------------- the lab bar (LabBar.tsx)
+   One strip over every lab: home, the word "Lab", and a tab per lab (grey track, white pill on the one you're in, like
+   .cl-seg). World.tsx puts the lab below it (--lab-bar-h) and gives the lab no safe-area top of its own. */
+.lab-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--lab-bar-h, 52px);
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: env(safe-area-inset-top, 0px) max(10px, env(safe-area-inset-right, 0px)) 0 max(10px, env(safe-area-inset-left, 0px));
+  box-sizing: border-box;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+.lab-bar button,
+.lab-bar a {
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lab-home {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  font-size: 17px;
+  background: var(--soft) !important;
+  border: 1px solid var(--line) !important;
+}
+.lab-home:hover {
+  background: var(--hover) !important;
+}
+.lab-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  flex: none;
+}
+.lab-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  margin: 0 auto;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.lab-tabs::-webkit-scrollbar {
+  display: none;
+}
+.lab-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 14px;
+  border-radius: 9px;
+  color: var(--muted) !important;
+  font-weight: 600;
+  white-space: nowrap;
+  flex: none;
+}
+.lab-tab:hover {
+  color: var(--text) !important;
+}
+.lab-tab[aria-selected='true'] {
+  background: var(--card);
+  color: var(--text) !important;
+  box-shadow:
+    0 1px 2px rgba(20, 20, 30, 0.08),
+    0 0 0 1px var(--line);
+}
+/* Balances the home button and the word on the left, so the tabs sit in the middle. */
+.lab-bar::after {
+  content: '';
+  width: 78px;
+  flex: none;
+}
+@media (max-width: 620px) {
+  .lab-name,
+  .lab-bar::after {
+    display: none;
+  }
+  .lab-tabs {
+    margin: 0;
+    flex: 1;
+  }
+  .lab-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 4px 8px;
+  }
+}
+@media (max-width: 420px) {
+  .lab-tab-label {
+    display: none;
+  }
+  .lab-tab {
+    font-size: 17px;
   }
 }

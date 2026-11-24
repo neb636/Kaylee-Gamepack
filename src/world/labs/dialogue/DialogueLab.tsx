@@ -8,7 +8,8 @@ import { hasClip, lineMs, say, stopSpeaking, unlockSpeech } from '../../../sdk/s
 import { useTimers } from '../../../sdk/timers'
 import { go } from '../../../router'
 import { Icon, IconButton, Segmented, Select } from '../ui'
-import { humanize, linesOf, loadScript, scriptPlaces, type Script, type ScriptLine, type Speaker } from './script'
+import { shareLab } from '../share'
+import { humanize, linesOf, loadScript, LOOSE, scriptPlaces, WORLD, type Group, type Script, type ScriptLine, type Speaker } from './script'
 import '../lab.css'
 
 const COLORS = ['#ff5fa2', '#7b61ff', '#18a0fb', '#14ae5c', '#f24822', '#ffa629', '#9747ff', '#0fa958', '#e2558f', '#5b8def']
@@ -22,6 +23,7 @@ export default function DialogueLab({ place = 'thailand', group }: { place?: str
   const [playing, setPlaying] = useState<number | null>(null)
   const [running, setRunning] = useState(false)
   const [openSpeaker, setOpenSpeaker] = useState<string | null>(null)
+  const [toast, setToast] = useState<string | null>(null)
   const run = useRef(0)
   const timers = useTimers()
   const rows = useRef<(HTMLElement | null)[]>([])
@@ -42,7 +44,10 @@ export default function DialogueLab({ place = 'thailand', group }: { place?: str
   // Stop talking when the game changes or the lab closes.
   useEffect(() => stop, [place, group]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const current = script && (script.groups.find((g) => g.id === group) ?? script.groups[0])
+  // The game asked for (the lab bar guesses `mall.barber` from a scene), else its game (`mall`), else a game named like
+  // the section (`hub.map` → `map`), else the first one.
+  const pick = (id?: string) => script?.groups.find((g) => g.id === id)
+  const current = script && (pick(group) ?? pick(group?.split('.')[0]) ?? pick(group?.split('.').pop()) ?? script.groups[0])
   const lines = useMemo(() => (script && current ? linesOf(script, current.id) : []), [script, current])
   const cast = useMemo(() => [...new Set(lines.map((l) => l.speaker))], [lines])
   const total = lines.reduce((sum, l) => sum + lineMs(l.line), 0)
@@ -85,6 +90,16 @@ export default function DialogueLab({ place = 'thailand', group }: { place?: str
     }
   }
 
+  // Copy for an agent: a line (or the whole game) with where it is and who says it, so you can paste it with what to change.
+  const placeName = (places.find((p) => p.id === place)?.name ?? humanize(place)).replace(/^\S+\s+(?=\S)/u, '')
+  const copy = async (text: string, label: string) => {
+    const msg = await shareLab(text, label)
+    setToast(msg)
+    timers.later(() => setToast(null), 1800)
+  }
+  const copyLine = (l: ScriptLine) => script && current && void copy(lineNote(l, script, current, place, placeName), 'Line')
+  const copyAll = () => script && current && void copy(scriptNote(lines, script, current, place, placeName), 'Script')
+
   const pickPlace = (id: string) => go.world('dialogue', id)
   const pickGroup = (id: string) => go.world('dialogue', place, id)
   const setDevice = (d: string) => {
@@ -102,8 +117,6 @@ export default function DialogueLab({ place = 'thailand', group }: { place?: str
   return (
     <div className="dialogue-lab">
       <header className="dl-bar cl-card">
-        <IconButton icon="back" label="Back to the world map" onClick={() => go.world()} />
-        <strong className="dl-title">Dialogue lab</strong>
         <Select
           value={place}
           options={places.map((p) => ({ id: p.id, label: p.name }))}
@@ -133,6 +146,10 @@ export default function DialogueLab({ place = 'thailand', group }: { place?: str
           ]}
           onChange={(d) => d !== DEVICE && setDevice(d)}
         />
+        <button className="dl-copy" onClick={copyAll} disabled={!lines.length} title="Copy every line of this game, with who says it and where it lives, to paste to an agent">
+          <Icon name="copy" size={14} />
+          Copy script
+        </button>
         <button className="dl-play" onClick={() => (running ? stop() : void playAll())} disabled={!lines.length}>
           <Icon name={running ? 'pause' : 'play'} size={15} fill />
           {running ? 'Stop' : 'Play all'}
@@ -172,26 +189,31 @@ export default function DialogueLab({ place = 'thailand', group }: { place?: str
                 return (
                   <div key={l.path.join('.')} ref={(el) => void (rows.current[i] = el)}>
                     {head && <h3 className="dl-part">{head}</h3>}
-                    <button className={`dl-line${playing === i ? ' on' : ''}${recorded ? '' : ' mute'}`} onClick={() => (playing === i ? stop() : void playOne(i))} disabled={!recorded}>
-                      <span className="dl-who" style={{ color: colorOf(cast, l.speaker) }}>
-                        {s?.name ?? humanize(l.speaker)}
-                        <span className="dl-voice">{s?.voice ?? '?'}</span>
+                    <div className="dl-row">
+                      <button className={`dl-line${playing === i ? ' on' : ''}${recorded ? '' : ' mute'}`} onClick={() => (playing === i ? stop() : void playOne(i))} disabled={!recorded}>
+                        <span className="dl-who" style={{ color: colorOf(cast, l.speaker) }}>
+                          {s?.name ?? humanize(l.speaker)}
+                          <span className="dl-voice">{s?.voice ?? '?'}</span>
+                        </span>
+                        <span className="dl-text">
+                          {l.text}
+                          {l.note && <span className="dl-when">{l.note}</span>}
+                        </span>
+                        <span className="dl-meta">
+                          {recorded ? (
+                            <>
+                              <Icon name={playing === i ? 'volume' : 'play'} size={13} fill={playing !== i} />
+                              <span className={ms > 3000 ? 'dl-long' : ''}>{seconds(ms)}</span>
+                            </>
+                          ) : (
+                            <span className="dl-flag">not recorded</span>
+                          )}
+                        </span>
+                      </button>
+                      <span className="dl-copy-line">
+                        <IconButton icon="copy" label={`Copy this line for an agent: ${l.text}`} tip="Copy for an agent" small onClick={() => copyLine(l)} />
                       </span>
-                      <span className="dl-text">
-                        {l.text}
-                        {l.note && <span className="dl-when">{l.note}</span>}
-                      </span>
-                      <span className="dl-meta">
-                        {recorded ? (
-                          <>
-                            <Icon name={playing === i ? 'volume' : 'play'} size={13} fill={playing !== i} />
-                            <span className={ms > 3000 ? 'dl-long' : ''}>{seconds(ms)}</span>
-                          </>
-                        ) : (
-                          <span className="dl-flag">not recorded</span>
-                        )}
-                      </span>
-                    </button>
+                    </div>
                   </div>
                 )
               })}
@@ -199,8 +221,46 @@ export default function DialogueLab({ place = 'thailand', group }: { place?: str
           </>
         )}
       </main>
+      {toast && <div className="dl-toast cl-card">{toast}</div>}
     </div>
   )
+}
+
+/** Where a country's lines live in the repo. */
+const fileOf = (place: string) => (place === WORLD ? 'src/world/lines.ts' : `src/world/places/${place}/lines.ts`)
+/** The line's key in lines.ts: the lab files the country's loose lines (trophy, passport...) under LOOSE, which isn't
+ *  in the file. */
+const keyOf = (l: ScriptLine) => (l.path[0] === LOOSE ? l.path.slice(1) : l.path).join('.')
+const quote = (t: string) => `"${t.replace(/"/g, '\\"')}"`
+
+/** One line, ready to paste to an agent with what you'd like instead. */
+function lineNote(l: ScriptLine, script: Script, group: Group, place: string, placeName: string): string {
+  const s = script.speakers[l.speaker]
+  const part = partOf(l, group.id)
+  return [
+    `Country: ${placeName}`,
+    `Mini-game: ${group.label}${part ? ` › ${part}` : ''}`,
+    `Character: ${s?.name ?? humanize(l.speaker)} (OpenAI voice: ${s?.voice ?? 'none'})`,
+    ...(l.note ? [`When it plays: ${l.note}`] : []),
+    `Where: ${fileOf(place)} → ${keyOf(l)}`,
+    `Line: ${quote(l.text)}`,
+    `Change: `,
+  ].join('\n')
+}
+
+/** The whole game's script, one line each, in play order. */
+function scriptNote(lines: ScriptLine[], script: Script, group: Group, place: string, placeName: string): string {
+  const head = [`Country: ${placeName}`, `Mini-game: ${group.label} (${lines.length} lines)`, `File: ${fileOf(place)}`, '']
+  let last = ''
+  const body = lines.flatMap((l) => {
+    const part = partOf(l, group.id)
+    const s = script.speakers[l.speaker]
+    const out = part !== last ? ['', `## ${part || group.label}`] : []
+    last = part
+    out.push(`- ${s?.name ?? humanize(l.speaker)} (${s?.voice ?? 'no voice'}) · ${keyOf(l)}: ${quote(l.text)}${l.note ? `  [when: ${l.note}]` : ''}`)
+    return out
+  })
+  return [...head, ...body.slice(body[0] === '' ? 1 : 0), '', 'Changes: '].join('\n')
 }
 
 /** The part of the scene a line belongs to: its path inside the group, minus list positions and its own key

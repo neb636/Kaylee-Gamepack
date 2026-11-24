@@ -62,10 +62,13 @@ export default function FeelLab({ place }: { place: string }) {
   useLayoutEffect(() => {
     if (location.hash !== written.current) feelLab.applyLink()
   })
-  // The address bar follows the knobs (replaceState: no hashchange, so the game doesn't restart).
+  // The address bar follows the knobs (replaceState: no hashchange, so the game doesn't restart). Not once the address
+  // has moved on to a link without the feel lab (the lab bar's other tabs): the next tick would put ?feel=1 back on it.
   useEffect(() => {
-    const hash = withFeel(location.hash, { feel: '1', ...feelLab.params() })
-    if (location.hash !== hash) history.replaceState(history.state, '', hash)
+    if (/[?&]feel=/.test(location.hash)) {
+      const hash = withFeel(location.hash, { feel: '1', ...feelLab.params() })
+      if (location.hash !== hash) history.replaceState(history.state, '', hash)
+    }
     written.current = location.hash
   })
 
