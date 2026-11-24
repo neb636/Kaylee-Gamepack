@@ -1,6 +1,6 @@
 // HarborLand's map: the hall is a long walk, and the games at its far end (Little Land, the Golden Mountain, Muay Thai,
 // the Sky Pod) are off the screen until she walks past the racing slide, so Kaylee and Dad missed them. A big 🗺️
-// button in the corner opens a card with every mini game as a big picture, in the order they stand along the hall:
+// button in the corner opens a card with every mini game as its shelf picture (hall/art.ts), in the order they stand along the hall:
 // the ones she's played wear a gold star, the rest wiggle, and a 🦄 shows where she is. Tap one and she goes there and
 // in (hall.ts `travel`). When she's stuck and every new game is off the screen, the button bounces with a finger
 // (`nudge`). Sparkle asks "Where shall we play?" as it opens (lines.ts `L.mall.hall.map`).
@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import { sounds, useLandscape, useTimers } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { mallVoice } from '../voice'
+import { GAME_ART, HALL_ART } from './art'
 import { GAMES, type DoorId, type GameDoor } from './layout'
 
 /** Times the map has opened by itself (coming back out of a mini game) this time in the mall. */
@@ -73,9 +74,7 @@ export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick
             {badge && (
               <span aria-hidden style={{ position: 'absolute', right: -8, top: -8, width: 'clamp(40px, 6vmin, 50px)', height: 'clamp(40px, 6vmin, 50px)', borderRadius: '50%', background: badge.color, border: '3px solid #fff', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
                 <AnimatePresence mode="popLayout">
-                  <motion.span key={badge.id} initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} style={{ fontSize: 'clamp(22px, 3.4vmin, 28px)', lineHeight: 1 }}>
-                    {badge.icon}
-                  </motion.span>
+                  <motion.img key={badge.id} src={GAME_ART[badge.id]} alt="" draggable={false} initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </AnimatePresence>
               </span>
             )}
@@ -109,7 +108,10 @@ export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick
               onClick={(e) => e.stopPropagation()}
               style={{ position: 'relative', maxWidth: '100%', maxHeight: '100%', overflow: 'auto', background: '#FFF7F0', border: '6px solid #fff', borderRadius: 36, boxShadow: 'var(--shadow)', padding: 'clamp(12px, 2.4vmin, 24px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(8px, 1.6vmin, 16px)' }}
             >
-              <div style={{ fontWeight: 700, fontSize: 'clamp(20px, 3.4vmin, 30px)', color: 'var(--lavender-dark)' }}>🗺️ HarborLand</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 'clamp(20px, 3.4vmin, 30px)', color: 'var(--lavender-dark)' }}>
+                <img src={HALL_ART} alt="" draggable={false} style={{ width: '1.6em', height: '1.6em', borderRadius: '0.4em', boxShadow: 'var(--shadow)' }} />
+                HarborLand
+              </div>
               <div style={{ display: 'grid', gridTemplateColumns: `repeat(${landscape ? 5 : 3}, ${tile})`, gap: 'clamp(8px, 1.8vmin, 18px)' }}>
                 {GAMES.map((g, i) => {
                   const played = done.includes(g.id)
@@ -125,12 +127,12 @@ export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick
                         sounds.sparkle()
                         onPick(g.id)
                       }}
-                      style={{ position: 'relative', width: tile, height: tile, borderRadius: 28, border: played ? '5px solid var(--gold)' : '5px solid #fff', background: g.color, boxShadow: 'var(--shadow)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, padding: 4, color: 'var(--ink)' }}
+                      style={{ position: 'relative', width: tile, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: 0, background: 'none', border: 'none', color: 'var(--ink)' }}
                     >
-                      <span aria-hidden style={{ fontSize: `calc(${tile} * 0.42)`, lineHeight: 1 }}>
-                        {g.icon}
+                      <span aria-hidden style={{ width: tile, height: tile, borderRadius: 28, border: played ? '5px solid var(--gold)' : '5px solid #fff', background: g.color, boxShadow: 'var(--shadow)', overflow: 'hidden', boxSizing: 'border-box' }}>
+                        <img src={GAME_ART[g.id]} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                       </span>
-                      <span style={{ fontSize: 'clamp(11px, calc(' + tile + ' * 0.12), 17px)', fontWeight: 700, lineHeight: 1.05, textAlign: 'center' }}>{g.name}</span>
+                      <span style={{ fontSize: 'clamp(12px, calc(' + tile + ' * 0.13), 18px)', fontWeight: 700, lineHeight: 1.05, textAlign: 'center' }}>{g.name}</span>
                       {played && (
                         <motion.span
                           aria-hidden
