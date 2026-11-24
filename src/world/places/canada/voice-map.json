@@ -49,11 +49,11 @@
     "file": "4b7b4fa24189.mp3"
   },
   {
-    "text": "The beaver is Canada's animal. Its teeth are orange and never stop growing.",
+    "text": "The beaver is a Canadian animal. Its teeth are orange and never stop growing.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5755,
-    "file": "c430fa0dbc41.mp3"
+    "ms": 5808,
+    "file": "6d8d5c17abdf.mp3"
   },
   {
     "text": "Most of the world's maple syrup comes from Quebec.",
@@ -140,11 +140,11 @@
     "file": "cbce36933b68.mp3"
   },
   {
-    "text": "Real bikes on the real mountain!",
+    "text": "Bikes on the mountain!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3426,
-    "file": "2b7cc196ef0d.mp3"
+    "ms": 1872,
+    "file": "cda8f535df28.mp3"
   },
   {
     "text": "Animals that can see in the dark!",
@@ -1288,11 +1288,11 @@
     "file": "b9b48dbd3516.mp3"
   },
   {
-    "text": "There he is, in his bath!",
+    "text": "There he is, in the water!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2016,
-    "file": "ce9e348580a0.mp3"
+    "ms": 1944,
+    "file": "68a5e38b0a2f.mp3"
   },
   {
     "text": "Mmm. Bonjour.",
@@ -1526,18 +1526,11 @@
     "file": "f2b50f03b6df.mp3"
   },
   {
-    "text": "It's on fire! Tap it to blow it out!",
+    "text": "It's on fire!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3916,
-    "file": "ca5b53ae205b.mp3"
-  },
-  {
-    "text": "It's on fire! Click it to blow it out!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3120,
-    "file": "73f9ff33d2be.mp3"
+    "ms": 1104,
+    "file": "b92d0c62213e.mp3"
   },
   {
     "text": "Who wants that one?",
@@ -2009,11 +2002,11 @@
     "file": "f7bd8c7cb878.mp3"
   },
   {
-    "text": "Achoo! I am all wet!",
+    "text": "Hey, you splashed me!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2256,
-    "file": "11f522d060dd.mp3"
+    "ms": 1704,
+    "file": "13fd3b2af1f4.mp3"
   },
   {
     "text": "Have you seen my rock?",
@@ -2149,18 +2142,18 @@
     "file": "3c5c6014bf37.mp3"
   },
   {
-    "text": "Hockey? Is it wet?",
+    "text": "What's hockey?",
     "voice": "otter",
     "sig": "6c3e96c659",
-    "ms": 2064,
-    "file": "dd1eb10b5b2e.mp3"
+    "ms": 1272,
+    "file": "4b2f7e11d6f8.mp3"
   },
   {
-    "text": "It's ice! You slide on it!",
+    "text": "It's like soccer, but with ice skating!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2400,
-    "file": "b8202946af74.mp3"
+    "ms": 1992,
+    "file": "70a14f1bdd1b.mp3"
   },
   {
     "text": "Wheee! I love to slide!",
