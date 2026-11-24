@@ -47,26 +47,13 @@ export const screens = [
     },
   })),
   { name: 'river-story', hash: '#/world/peru/river/story', reset: true, wait: 400 },
-  { name: 'river-play', hash: '#/world/peru/river/forest', reset: true, wait: 1800 },
-  // Rosa's Rainy River moments, opened through section URLs: raining on the river, the river
-  // view once it's filled, the lagoon, the lily pads with the friends, the rainbow.
-  {
-    name: 'river-rain',
-    hash: '#/world/peru/river/forest',
+  // Swim with Rosa, opened through section URLs: the treetops, the fruit tree, the start of the race, and the rainbow
+  // both ways (she wins; the otters win and the again button shows).
+  ...['treetops', 'fruit', 'race', 'rainbow', 'rainbow?result=lose'].map((to) => ({
+    name: `river-${to.replace('?result=', '-')}`,
+    hash: `#/world/peru/river/${to}`,
     reset: true,
-    act: async (p) => {
-      await p.evaluate(() => window.__peruRiverQA?.rain(0.5, 12))
-      await p.waitForTimeout(3500)
-    },
-  },
-  ...['river', 'lagoon', 'pads', 'rainbow'].map((to) => ({
-    name: `river-${to === 'river' ? 'full' : to}`,
-    hash: `#/world/peru/river/${to}${to === 'river' ? '?river=1' : ''}`,
-    reset: true,
-    act: async (p) => {
-      await p.waitForTimeout(500)
-      await p.waitForTimeout(to === 'rainbow' ? 2600 : 3200)
-    },
+    wait: to.startsWith('rainbow') ? 1400 : 2200,
   })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party/soon', stampAll: 'peru', wait: 800 },
@@ -78,7 +65,7 @@ export const pacing = [
   { name: "peru luna's fluffy day", id: 'alpaca', hash: '#/world/peru/alpaca', reset: true },
   { name: "peru tika's mountain terraces", id: 'machu-picchu', hash: '#/world/peru/machu-picchu', reset: true },
   { name: "peru pepa's penguin cliff", id: 'penguins', hash: '#/world/peru/penguins', reset: true },
-  { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
+  { name: 'peru swim with rosa', id: 'river', hash: '#/world/peru/river', reset: true },
 ]
 
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
@@ -168,27 +155,69 @@ const penguinLaunch = (name, seconds, jump, pull) => ({
 })
 motion.push(penguinLaunch('penguin-launch', 8, null, 0.13), penguinLaunch('penguin-fish', 5, 'fish', 0.09), penguinLaunch('penguin-chick-swim', 4.5, 'swim', 0.08))
 
-// Rosa's Rainy River: grab the cloud and squeeze it (it squishes and rains), wiggle it over the river (harder rain, a
-// rumble), then a lily bud unrolling in the lagoon's rain.
-const riverSqueeze = (name, seconds, jump) => ({
+// Swim with Rosa: a finger held ahead of her and she swims after it; a run-up from the deep and she leaps. The robot
+// reads where things are on screen from window.__peruRiverQA.state() and plays the way a child would: to the
+// capybaras (the baby rides), a leap that wakes the sloth, the fruit, and the race to the rainbow.
+const riverState = (page) => page.evaluate(() => window.__peruRiverQA?.state())
+/** Hold the finger where `aim(state)` says until `done(state)`, or `ms` at most. */
+async function riverHold(page, done, aim, ms = 8000) {
+  const t0 = Date.now()
+  while (Date.now() - t0 < ms) {
+    const s = await riverState(page)
+    if (!s || done(s)) return s
+    const a = aim(s)
+    await page.mouse.move(a.x, a.y, { steps: 2 })
+    await page.waitForTimeout(35)
+  }
+}
+const riverSwimTo = (page, wx, depth = 110) =>
+  riverHold(
+    page,
+    (s) => Math.abs(s.rosa.wx - wx) < 60,
+    (s) => ({ x: s.rosa.x + Math.sign(wx - s.rosa.wx) * 240, y: s.water + depth * s.scale }),
+  )
+/** Down to the riverbed just before `wx`, then straight up at it. */
+async function riverLeap(page, wx) {
+  await riverHold(page, (s) => s.rosa.wy > 270 && Math.abs(s.rosa.wx - (wx - 120)) < 80, (s) => ({ x: s.rosa.x + (wx - 120 - s.rosa.wx) * s.scale, y: s.bed - 60 * s.scale }), 2600)
+  await riverHold(page, (s) => s.rosa.air, (s) => ({ x: s.rosa.x + (wx - s.rosa.wx) * s.scale * 0.8 + 30, y: s.water - 300 * s.scale }), 2600)
+  await riverHold(page, (s) => !s.rosa.air, (s) => ({ x: s.rosa.x, y: s.water - 100 * s.scale }), 2600)
+}
+const riverRun = (name, seconds, section, play) => ({
   name,
   seconds,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/river/${jump || 'forest'}`)
-    await page.waitForTimeout(600)
-    await page.waitForTimeout(jump ? 3200 : 900)
+    await page.goto(`${base}#/world/peru/river/${section}`)
+    await page.waitForTimeout(1600)
   },
   act: async (page) => {
-    const b = await page.locator('[aria-label="rain cloud"]').first().boundingBox()
-    if (!b) throw new Error('no cloud found')
-    const x = b.x + b.width / 2
-    const y = b.y + b.height / 2
-    await page.mouse.move(x, y)
+    const s = await riverState(page)
+    if (!s) throw new Error('the river is not on screen')
+    await page.mouse.move(s.rosa.x, s.rosa.y)
     await page.mouse.down()
-    await page.waitForTimeout(700)
-    for (let i = 0; i < 6; i++) await page.mouse.move(x + (i % 2 ? 60 : -60) + i * 12, y + (i % 2 ? 10 : -10), { steps: 6 })
-    await page.waitForTimeout(600)
+    await play(page)
     await page.mouse.up()
   },
 })
-motion.push(riverSqueeze('river-squeeze', 3.2), riverSqueeze('river-lagoon-rain', 3.2, 'lagoon'))
+motion.push(
+  riverRun('river-swim', 8, 'treetops', async (page) => {
+    await riverSwimTo(page, 1000)
+    await riverSwimTo(page, 1500, 60)
+  }),
+  riverRun('river-leap', 8, 'treetops?met=capy', async (page) => {
+    await riverSwimTo(page, 1500)
+    await riverLeap(page, 1860)
+    await riverLeap(page, 2060)
+  }),
+  riverRun('river-fruit', 12, 'fruit', async (page) => {
+    for (let i = 0; i < 6; i++) {
+      const f = (await riverState(page)).fruit.find((f) => f.state === 'hang')
+      if (!f) break
+      await riverLeap(page, f.wx)
+    }
+    await page.waitForTimeout(1500)
+  }),
+  riverRun('river-race', 16, 'race', async (page) => {
+    await riverHold(page, (s) => s.race === 'won' || s.race === 'lost', (s) => ({ x: s.rosa.x + 280, y: s.water + 130 * s.scale }), 30000)
+    await page.waitForTimeout(1500)
+  }),
+)

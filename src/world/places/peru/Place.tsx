@@ -1,8 +1,8 @@
 import { useSections } from '../../kit/sections'
 import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
 // Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md (retired; in git history)). All four
-// places on Luna's map are built: Pepa's Penguin Cliff, Tika's Mountain Terraces, Luna's Fluffy Day and Rosa's Rainy
-// River. The balloon finale (route `party`) isn't built yet: it shows `BalloonSoon`.
+// places on Luna's map are built: Pepa's Penguin Cliff, Tika's Mountain Terraces, Luna's Fluffy Day and Swim with Rosa.
+// The balloon finale (route `party`) isn't built yet: it shows `BalloonSoon`.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle, useTimers } from '../../../sdk'
@@ -13,7 +13,7 @@ import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
 import { PenguinCliff } from './activities/penguins/PenguinCliff'
-import { RainyRiver } from './activities/river/RainyRiver'
+import { SwimRiver } from './activities/river/SwimRiver'
 import { Terraces } from './activities/terraces/Terraces'
 import { art } from './art'
 import { L } from './lines'
@@ -24,14 +24,14 @@ import './peru.css'
 
 export type { ActivityProps } from '../../kit/stampFlow'
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, 'machu-picchu': Terraces, river: RainyRiver }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, 'machu-picchu': Terraces, river: SwimRiver }
 
 /** The four places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
   { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', x: 38.75, y: 75 },
   { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', x: 51.5, y: 60 },
   { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', x: 71.7, y: 73 },
-  { id: 'river', name: "Rosa's Rainy River", icon: '🐬', x: 61.25, y: 27.5 },
+  { id: 'river', name: 'Swim with Rosa', icon: '🐬', x: 61.25, y: 27.5 },
 ]
 
 export default function Place(props: PlaceProps) {
@@ -53,7 +53,7 @@ export default function Place(props: PlaceProps) {
 }
 
 /** Pins that show their friend instead of an emoji. */
-const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.mpPin, river: art.rosa }
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.mpPin, river: art.stickerRosa }
 
 // Luna says hello once per visit to the app.
 let introSeen = false
@@ -215,15 +215,8 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
               // Pepa and her three round chicks, porpoising home.
               <img src={art.pepa} alt="" style={{ height: '88%', maxWidth: '90%', objectFit: 'contain' }} />
             ) : done && spot.id === 'river' ? (
-              // Rosa leaping under the rainbow she made.
-              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                <svg viewBox="-60 -60 120 66" style={{ position: 'absolute', inset: '4% 0 auto', width: '100%' }}>
-                  {['#FF6B6B', '#FFB347', '#FFE27A', '#8FE3C8', '#7FB2FF'].map((c, k) => (
-                    <path key={c} d={`M${-54 + k * 7} 0A${54 - k * 7} ${54 - k * 7} 0 0 1 ${54 - k * 7} 0`} fill="none" stroke={c} strokeWidth="7.5" />
-                  ))}
-                </svg>
-                <img src={art.rosa} alt="" style={{ position: 'absolute', left: '12%', bottom: '8%', width: '76%', objectFit: 'contain', rotate: '-12deg' }} />
-              </div>
+              // Rosa leaping at the rainbow she raced to.
+              <img src={art.stickerRosa} alt="" style={{ height: '92%', maxWidth: '94%', objectFit: 'contain' }} />
             ) : <span style={{ fontSize: 'min(30px, 7cqmin)', opacity: 0.35 }}>{spot.icon}</span>}
           </motion.button>
         )

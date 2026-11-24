@@ -121,7 +121,7 @@ export const WORLD_LINES = {
       'peru/alpaca': "Luna's fluffy day!",
       'peru/machu-picchu': 'The mountain terraces!',
       'peru/penguins': 'The penguin cliff!',
-      'peru/river': 'The rainy river!',
+      'peru/river': 'Swim with Rosa!',
       'canada/snowman': 'The snowman parade!',
       'canada/bike': 'The mountain bike!',
       'canada/campfire': 'The campfire night!',
