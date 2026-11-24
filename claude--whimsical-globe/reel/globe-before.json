@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "globe-before",
+  "title": "Globe before",
+  "video": "globe-before.mp4",
+  "gif": "globe-before.gif",
+  "seconds": 16,
+  "browser": "chromium",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "globe-spin",
+      "where": "globe-spin",
+      "seconds": 9,
+      "fps": 9.3,
+      "status": "ok"
+    },
+    {
+      "name": "globe-fly",
+      "where": "globe-fly",
+      "seconds": 3.4,
+      "fps": 14.3,
+      "status": "ok"
+    }
+  ]
+}
