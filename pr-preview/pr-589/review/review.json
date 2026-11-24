@@ -1,0 +1,11 @@
+{
+  "title": "Agong's cane",
+  "checkIn": "fix",
+  "kaylee": "Agong's cane is one smooth walking stick: its crook curls into his paw and its rubber foot stands on the floor.",
+  "questions": [],
+  "pictures": [
+    { "title": "From his side", "before": "pics/cane-before-0.jpg", "after": "pics/cane-after-0.jpg", "caption": "The hook was a hollow half-ring next to the stick; now it's one bent stick" },
+    { "title": "From the front", "before": "pics/cane-before-1.jpg", "after": "pics/cane-after-1.jpg", "caption": "The crook sits in his paw and the foot touches the floor (it used to sink in)" }
+  ],
+  "links": [{ "label": "See Agong in the character lab", "hash": "#/world/characters/agong" }]
+}
