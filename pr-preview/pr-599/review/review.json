@@ -1,0 +1,11 @@
+{
+  "title": "Round buttons everywhere",
+  "checkIn": "fix",
+  "kaylee": "Her passport, coloring, puzzles and movies buttons are now round like the rest of her buttons, in the same colors.",
+  "questions": [],
+  "pictures": [
+    { "title": "The home dock", "before": "pics/pic-before-home.jpg", "after": "pics/pic-after-home.jpg", "caption": "Square tiles become round buttons with the white ring; each word moves under its button" },
+    { "title": "A country's top bar", "before": "pics/pic-before-country.jpg", "after": "pics/pic-after-country.jpg", "caption": "The globe, puzzle and theater buttons match too" }
+  ],
+  "links": [{ "label": "Home", "hash": "#/world?view=map" }, { "label": "Peru", "hash": "#/world/peru" }]
+}
