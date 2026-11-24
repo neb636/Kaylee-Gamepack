@@ -733,6 +733,7 @@ export function pokeAt(x: number, y: number, R: number, time: number, reach: num
     moon.poked = time
     hit = 'moon'
   } else {
+    // Then whichever is nearest for its size: the things on the ground, or the rainbow over them.
     let best: Toy | undefined
     let near = 1
     for (const toy of TOYS) {
@@ -744,12 +745,12 @@ export function pokeAt(x: number, y: number, R: number, time: number, reach: num
         best = toy
       }
     }
-    if (best) {
-      best.poked = time
-      hit = best.kind
-    } else if (BOW.hr && bowAway < Math.max(reach, BOW.hr) && bowAway < within) {
+    if (BOW.hr && bowAway < within && bowAway / Math.max(reach, BOW.hr) < near) {
       BOW.poked = time
       hit = 'rainbow'
+    } else if (best) {
+      best.poked = time
+      hit = best.kind
     }
   }
   if (hit) lastPoke = time
