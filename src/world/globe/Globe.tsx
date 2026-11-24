@@ -1,11 +1,20 @@
 // The home screen's globe: a toy Earth she spins with a finger (or the mouse). It keeps turning after a flick, drifts
 // slowly when left alone, and every country stands on it as a pin that rides round with the land and peeks over the
-// edge as it comes. A tap on the land names its continent; the sea plops. The picture is sphere.ts; this file is the
-// hands: dragging, flicking, turning to a country, and keeping the pins on their spots.
+// edge as it comes. A tap on the land names its continent; the sea plops; a poke at one of the toys that stand on it
+// (a tree, a whale, the rainbow, the baby moon: toys.ts) makes that toy boing. The picture is sphere.ts; this file is
+// the hands: dragging, flicking, turning to a country, and keeping the pins on their spots.
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, type MouseEvent, type PointerEvent, type ReactNode } from 'react'
-import { clamp, damp, DEG, lerp, smooth, smoothstep, sounds, TO_DEG, useElementSize, useGameLoop, wrapAngle } from '../../sdk'
+import { clamp, damp, DEG, lerp, smooth, smoothstep, sounds, TO_DEG, useElementSize, useGameLoop, useTimers, wrapAngle } from '../../sdk'
 import { feelLab, knobs } from '../kit/knobs'
 import { continentAt, LIFT, paintGlobe, project, TILT, turnOf, unproject, type Continent, type Stalk, type View } from './sphere'
+import { pokeAt, toysBusy, toySpots, type ToyKind } from './toys'
+
+declare global {
+  interface Window {
+    /** For the robots (globe/qa.mjs): where each toy on the globe is on the page right now. */
+    __homeGlobeQA?: () => { kind: ToyKind; x: number; y: number }[]
+  }
+}
 
 export interface GlobePin {
   id: string
@@ -86,6 +95,8 @@ const FEEL = knobs(
     drift: { value: 2.4, min: 0, max: 12, step: 0.1, label: 'Drift when left alone', unit: '°/s', note: 'the way the real Earth turns; 0 keeps it still', main: true },
     rest: { value: 4, min: 0.5, max: 15, step: 0.5, label: 'Wait before drifting', unit: 's' },
     slop: { value: 9, min: 2, max: 30, step: 1, label: 'Tap or turn', unit: 'px', note: 'how far a finger moves before a tap becomes a turn' },
+    sway: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Toys lean in a spin', note: 'how far the trees and boats lean when she spins it; 0 keeps them stiff', main: true },
+    jelly: { value: 7, min: 2, max: 20, step: 0.5, label: 'Wobble settling', unit: '/s', note: 'lower wobbles longer after the spin stops' },
   },
   { shared: true },
 )
@@ -116,7 +127,15 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
     side: new Map<string, number>(),
     note: 0,
     frame: 0,
+    /** The toys on the globe lean back from a spin and wobble upright again: a little spring (-1..1) and its speed. */
+    sway: 0,
+    swing: 0,
+    /** Where it faced a frame ago, for how fast it is turning (her finger turns it between frames). */
+    lonWas: startLon + (still ? 0 : ARRIVE),
+    /** The loop's clock (seconds), for a poke. */
+    time: 0,
   })
+  const timers = useTimers()
   const heldRef = useRef(held)
   heldRef.current = held
   const pinsRef = useRef(pins)
@@ -147,6 +166,18 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
   // The feel lab lists the spin's knobs while the globe is on screen.
   useEffect(() => feelLab.claim(FEEL_ID), [])
 
+  // The robots ask where the toys are, so their finger can poke one.
+  useEffect(() => {
+    window.__homeGlobeQA = () => {
+      const rect = box.current?.getBoundingClientRect()
+      const { cx, cy, R } = layRef.current
+      return toySpots(R).map((spot) => ({ kind: spot.kind, x: spot.x + cx + (rect?.left ?? 0), y: spot.y + cy + (rect?.top ?? 0) }))
+    }
+    return () => {
+      delete window.__homeGlobeQA
+    }
+  }, [])
+
   // The canvas covers the globe, its glow and the pins' stalks, at the screen's own sharpness (2x at most).
   const side = Math.ceil(lay.R * 2.7)
   useEffect(() => {
@@ -163,6 +194,7 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
     if (!size.width) return
     st.frame++
     st.idle += dt
+    st.time = time
 
     // Turn it: by itself to somewhere, with her finger, on with the flick she gave it, or the slow drift.
     let moving = false
@@ -198,7 +230,14 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
       }
     }
 
-    // Left alone, only the clouds move: every third frame is plenty.
+    // The toys lean back from the spin and spring upright when it stops.
+    const lean = still || !dt ? 0 : clamp(((st.view.lon - st.lonWas) / dt / 300) * FEEL.sway, -1, 1)
+    st.lonWas = st.view.lon
+    st.swing += ((lean - st.sway) * 90 - st.swing * FEEL.jelly) * dt
+    st.sway = clamp(st.sway + st.swing * dt, -1.2, 1.2)
+    if (Math.abs(st.sway) > 0.004 || Math.abs(st.swing) > 0.02 || toysBusy(time)) moving = true
+
+    // Left alone, only the clouds, the moon and the whales move: every third frame is plenty.
     if (!moving && st.frame % 3) return
     const t = turnOf(st.view)
 
@@ -247,7 +286,7 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
     const dpr = c.width / side
     g.setTransform(dpr, 0, 0, dpr, c.width / 2, c.height / 2)
     g.clearRect(-side / 2, -side / 2, side, side)
-    paintGlobe(g, R, st.view, time, stalks)
+    paintGlobe(g, R, st.view, time, stalks, st.sway)
   })
 
   // Her finger. A turn starts once it has moved a little; until then it may still be a tap on a pin or the land.
@@ -301,12 +340,36 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
   }
   const wasDrag = () => performance.now() - s.current.dragged < 400
 
+  /** Each toy answers a poke with its own sound (the toy itself boings: toys.ts). */
+  const toySound = (kind: ToyKind) => {
+    if (kind === 'whale') sounds.whoosh()
+    else if (kind === 'moon') sounds.sparkle()
+    else if (kind === 'cloud') sounds.pop()
+    else if (kind === 'peak' || kind === 'berg') sounds.place()
+    // The rainbow plays its colors, top to bottom.
+    else if (kind === 'rainbow') for (let i = 0; i < 6; i++) timers.later(() => sounds.note(7 - i), i * 70)
+    else sounds.note(s.current.note++ % 8)
+  }
+
+  /** Pokes the toy at a spot of the box (px from its top-left), if there is one. A toy answers from a full finger
+   *  target (88px on an iPad, 64px on an iPhone), however small it is drawn. */
+  const poke = (x: number, y: number, within?: number) => {
+    const { cx, cy, R, pin } = layRef.current
+    const toy = pokeAt(x - cx, y - cy, R, s.current.time, Math.min(44, pin / 2), within)
+    if (!toy) return false
+    s.current.idle = 0
+    toySound(toy)
+    return true
+  }
+
   const tap = (e: MouseEvent) => {
     if (heldRef.current || (e.target as Element).closest('button')) return
     const rect = box.current!.getBoundingClientRect()
     const { cx, cy, R } = layRef.current
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
+    // A toy first: the ones on the edge of the world stand out past it, and the moon flies beside it.
+    if (poke(x, y)) return
     const at = unproject((x - cx) / R, -(y - cy) / R, turnOf(s.current.view))
     if (!at) return
     s.current.idle = 0
@@ -345,12 +408,19 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
           }}
           className="globe-land"
           aria-label={key}
-          onClick={() => {
+          onClick={(e) => {
             if (heldRef.current) return
             const el = landEls.current.get(key)
             const rect = el?.getBoundingClientRect()
             const from = box.current?.getBoundingClientRect()
-            if (rect && from) onLand(key, rect.left + rect.width / 2 - from.left, rect.top + rect.height / 2 - from.top)
+            if (!rect || !from) return
+            const x = rect.left + rect.width / 2 - from.left
+            const y = rect.top + rect.height / 2 - from.top
+            // Her finger on a toy that stands by this spot pokes the toy: when the tap is nearer the toy's middle
+            // than the spot's. (A robot or a screen reader presses the spot's own middle: always the continent.)
+            const away = Math.hypot(e.clientX - from.left - x, e.clientY - from.top - y)
+            if (e.detail && away > 1 && poke(e.clientX - from.left, e.clientY - from.top, away)) return
+            onLand(key, x, y)
           }}
         />
       ))}

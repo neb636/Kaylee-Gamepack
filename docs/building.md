@@ -101,7 +101,8 @@ offers one, skippable, right after that activity's stamp); a country with videos
 and the world map's Theater shows every country's videos.
 
 Adding a country: make the folder, put its pin on the home globe (`globe` in `meta.ts`, and its picture: `WINDOWS` in
-`src/world/globe/Medallion.tsx`, see Pins in `src/world/shelf/STYLE.md`),
+`src/world/globe/Medallion.tsx`, see Pins in `src/world/shelf/STYLE.md`; move any toy that stands under the new pin:
+`TOYS` in `src/world/globe/toys.ts`),
 write its plan in `planning/around-the-world/`, draw its shelf banner and an icon per activity (`src/world/shelf/STYLE.md`),
 generate backgrounds, props and character reference pictures with Codex
 (`codex exec -m gpt-6.1-sol -c model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`; tell Codex never

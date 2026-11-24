@@ -116,6 +116,22 @@ elephant), a slice of pizza, the pyramid. A building or a wide view is too quiet
   radius 50 around the centre (the moose's antlers fan up along that edge).
 - Look at it on the globe (`#/world?view=map`), on an iPad and on an iPhone, where the pin is 64 px.
 
+## Toys on the home globe
+
+The globe is a toy planet (user feedback, 2026-11-24: more fun and whimsical): little clay things stand on it and ride
+round with it, and each one answers a poke. They are painted on the globe's canvas in `src/world/globe/toys.ts`, not
+drawn as SVG, in this page's flat tones (base, shade, light; light from the top-left; no outlines).
+
+- **What stands there** (`TOYS`): candy-colored round trees, pines, palms, snowy peaks, a pink whale that spouts,
+  sailboats, icebergs, one island under a rainbow, puffy clouds that hang over the globe's edge, and a sleepy baby
+  moon going round it. Things a five-year-old names at a glance; no landmarks or buildings (rule 8 covers temples).
+- **Where**: a few per continent, clear of every country's pin (`globe` in its `meta.ts`) and of the continents'
+  named spots (`CONTINENTS` in `Globe.tsx`), so a tap on the land still names it.
+- **How they stand**: upright on the side facing her, tipped straight out at the globe's edge so they stick out past
+  it as they come and go. A new kind is built from the clay shapes there (`ball`, `cone`, `dome`, `post`), which look
+  right from every side; give it a boing (it comes free) and a sound in `Globe.tsx` (`toySound`).
+- Look at the whole turn, tipped up and down, on an iPad and an iPhone (`#/world?view=map`).
+
 ## Banners (one per place)
 
 `viewBox="0 0 1200 450"` with `preserveAspectRatio="xMidYMid slice"`. The shelf shows it as wide as 4:1 (phones on
