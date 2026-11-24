@@ -20,6 +20,10 @@ and a saved shortlist with notes and export. Documentation is available online a
 - [The map](https://neb636.github.io/Kaylee-Gamepack/#/world?view=map)
 - [The game shelf](https://neb636.github.io/Kaylee-Gamepack/#/world?view=list) (every game as a picture card, a row per country and per Thailand trip; ❤️ favorites, 🎁 surprise)
 
+**The lab** (development tools, one bar with a tab for each lab below: Characters, Camera, Feel, Dialogue; each tab keeps
+your scene, and this link opens the one you used last):
+- [Open the lab](https://neb636.github.io/Kaylee-Gamepack/#/world/lab)
+
 **3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): 
 - [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee)
 - [Kaylee in a look from her wardrobe](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee?look=crown,stars,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky) (the Look panel: her things and the paint)
@@ -36,7 +40,8 @@ for agent" note with the numbers to bake in):
 <!-- /feel-lab -->
 
 **Dialogue lab** (development tool: pick a country and a mini-game, read its whole script in play order with when each
-line plays and each speaker's OpenAI voice, tap a line to hear it or play the scene through):
+line plays and each speaker's OpenAI voice, tap a line to hear it or play the scene through, copy a line or the whole script for an agent with its country, game,
+character, voice and place in lines.ts):
 - [The Barber Salon's script](https://neb636.github.io/Kaylee-Gamepack/#/world/dialogue/thailand/mall.barber)
 
 

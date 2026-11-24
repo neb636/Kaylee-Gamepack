@@ -110,6 +110,8 @@ export function withCam(hash: string, cam: Record<string, string>) {
 
 /** The address bar follows the lab (replaceState: no hashchange, so the game doesn't restart). */
 export function writeHash(v: CamView) {
+  // Not once the address has moved on to a link without the camera lab (the lab bar's other tabs).
+  if (!/[?&]cam=/.test(location.hash)) return
   const hash = withCam(location.hash, camParams(v))
   if (location.hash !== hash) history.replaceState(history.state, '', hash)
 }
