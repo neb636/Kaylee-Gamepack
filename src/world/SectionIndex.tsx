@@ -24,6 +24,9 @@ export function SectionIndex() {
           <a href="#/world/puppets" style={chip}>
             🎭 2D puppets
           </a>
+          <a href="#/world/dialogue" style={chip}>
+            💬 Dialogue
+          </a>
           <button onClick={() => setCam((c) => !c)} aria-pressed={cam} style={{ ...chip, border: 'none', font: 'inherit', cursor: 'pointer', ...(cam ? { background: 'var(--ink)', color: '#fff' } : {}) }}>
             🎥 Camera lab {cam ? 'on' : 'off'}
           </button>

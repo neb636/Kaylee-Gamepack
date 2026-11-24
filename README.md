@@ -35,6 +35,10 @@ for agent" note with the numbers to bake in):
 - [Open the feel lab](https://neb636.github.io/Kaylee-Gamepack/#/world?feel=1)
 <!-- /feel-lab -->
 
+**Dialogue lab** (development tool: pick a country and a mini-game, read its whole script in play order with when each
+line plays and each speaker's OpenAI voice, tap a line to hear it or play the scene through):
+- [The Barber Salon's script](https://neb636.github.io/Kaylee-Gamepack/#/world/dialogue/thailand/mall.barber)
+
 
 **Offline:** after it opens once on wifi it saves every game, picture and voice, so it plays in the car or on a plane.
 Online it always loads the latest version; offline the YouTube videos are hidden. After a new deploy, open it once on

@@ -37,6 +37,10 @@ world feel alive and helps a child who can't read know who is talking:
   re-runs CI. So agents need no key. Locally (auditions, or to hear lines before pushing) it needs `OPENAI_API_KEY` in
   `.env` and ffmpeg.
 
+**The dialogue lab** (`#/world/dialogue/<place>/<group>`, `src/world/labs/dialogue/`) shows the same script in the
+app: pick a country and a mini-game, see the cast with each OpenAI voice and pitch, tap a line to hear its clip or play
+the scene through. It reads `lines.ts` and `cast.json` directly, so it's always current.
+
 ## The table read
 
 `node scripts/table-read.mjs <place> <group>` stitches a group's recorded lines, in the order `lines.ts` lists them,
