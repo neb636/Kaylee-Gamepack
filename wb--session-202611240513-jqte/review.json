@@ -1,8 +1,0 @@
-{
-  "title": "Dad's softer look",
-  "checkIn": "fix",
-  "kaylee": "Dad gets softer ears and hair, open arms and a mint face, keeping his eyes and yellow polo.",
-  "questions": [],
-  "pictures": [{ "title": "Dad, before and after", "before": "pics/nick-before.png", "after": "pics/nick-after.png", "caption": "The current rig has rounded ears and hair, with no pale muzzle patch. A fully sculpted mesh like Mom's is still a separate step." }],
-  "links": [{ "label": "See Dad in the character lab", "hash": "#/world/characters/nick" }]
-}
