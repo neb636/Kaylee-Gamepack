@@ -7,6 +7,7 @@
 // edge, and down it goes from the crown to the tips. It has an outside and an inside (you see the inside behind the
 // neck), which meet in a thin rounded edge.
 import { BufferAttribute, BufferGeometry, Color } from 'three'
+import { lerp, smooth as ease } from '../../../sdk/math'
 import type { Frame } from './animal'
 
 const ACROSS = 76
@@ -22,9 +23,6 @@ const SIZE = [1.25, 1.16, 1.14]
 const BACK = -0.05
 /** How close the edge lies to the head (1 = the hair's full size). */
 const LIE = 0.915
-
-const ease = (x: number) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x))
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
 /** Long straight hair in `color`, on the head of `f` (head-local, like every part of the head). */
 export function longHair(color: string, { R, headY }: Frame): BufferGeometry {
