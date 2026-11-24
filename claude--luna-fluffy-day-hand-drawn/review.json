@@ -1,0 +1,17 @@
+{
+  "title": "Luna's Fluffy Day: drawn by hand",
+  "checkIn": "fix",
+  "kaylee": "Luna's salon looks like the rest of new Peru: Luna, Paco and Abuela Killa now have Tika's face and soft flat wool, in a hand-drawn highland meadow. She plays it exactly as before.",
+  "questions": ["Luna, Paco and Abuela Killa all wear Tika's face now. Family, or too alike?"],
+  "reels": [
+    { "name": "fluffy-day-after", "moments": ["fluffy-brush", "fluffy-clip", "#/world/peru/alpaca/hats~3", "#/world/peru/alpaca/photo~3"] },
+    { "name": "fluffy-day-before", "moments": ["fluffy-brush", "fluffy-clip", "#/world/peru/alpaca/hats~3", "#/world/peru/alpaca/photo~3"] }
+  ],
+  "pictures": [
+    { "title": "Brushing Luna", "before": "pics/brush-before.jpg", "after": "pics/brush-after.jpg", "caption": "Every generated picture is gone: the meadow, the tools, the basket and the things in her fleece are drawn by hand" }
+  ],
+  "links": [
+    { "label": "Play it", "hash": "#/world/peru/alpaca/story?yarn=cream&hats=none,none,none" },
+    { "label": "Hats", "hash": "#/world/peru/alpaca/hats" }
+  ]
+}
