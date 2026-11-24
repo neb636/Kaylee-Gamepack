@@ -7,7 +7,7 @@
 // (vet?patient=puppy|pony|elephant), the Barber Salon (barber?round=1|2|3&hair=<Dad's hairdo>), Cafe & Cake
 // (cafe?round=1|2|3), the Racing Slide (race?round=1|2|3), Little Land's foam blocks
 // (blocks?round=1|2|3&card=chedi|elephant), the Golden Mountain (mountain?round=1|2|3), Muay Thai (boxing?round=1|2|3:
-// the wai kru and free punching, on the beat, Dad's pad), the Sky Pod's lights (skypod?round=1|2|3), the Big Frame
+// a bout with Dad: the super punch, his big mitt, his guard and the big kick), the Sky Pod's lights (skypod?round=1|2|3), the Big Frame
 // (frame?at=in|pit|l1|l2|top|out: the level she's on), and the pizza toy (menu, then
 // share?pizza=hawaiian|seafood|cheese&shared=0..8). Loaded at startup: keep three.js out of this
 // file.
@@ -27,7 +27,7 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
     rides: { default: '', doc: 'the old name of games (links from PR #120 still work)' },
     hair: { default: '', doc: "Dad's hairdo from the barber, which he keeps for the rest of the trip (games/barber/hair.ts): <lengths>.<colors>.<styles>.<bows>.<brows>, e.g. k.r (long and red), k.n.s (long spikes). Empty: his own mane" },
     patient: { default: 'puppy', values: PATIENTS, doc: "who's on the vet's table: the puppy's sore paw, the muddy pony's bath, the sniffly baby elephant" },
-    round: { default: '1', values: ['1', '2', '3'], doc: 'the round of a mini game. The cafe: 1 blend anything, 2 orders in picture bubbles, 3 Thai drinks (cha yen, a coconut shake), two at once. The racing slide: 1 the first race, 2 tap at a bump to fly, 3 in spinning rubber rings. The barber: 1 grow and snip, 2 colors, the dryer, bows, 3 kids with picture cards. Little Land: 1 free stacking, 2 the picture cards, 3 taller than Dad. The Golden Mountain: 1 holds in a line, 2 only the pink ones, 3 race Dad up the other side. Muay Thai: 1 the wai kru then free punching, 2 on the beat, 3 Dad\'s pad and the big kick. The Sky Pod: 1 pop the lights, 2 copy the tune, 3 race Dad to ten' },
+    round: { default: '1', values: ['1', '2', '3'], doc: 'the round of a mini game. The cafe: 1 blend anything, 2 orders in picture bubbles, 3 Thai drinks (cha yen, a coconut shake), two at once. The racing slide: 1 the first race, 2 tap at a bump to fly, 3 in spinning rubber rings. The barber: 1 grow and snip, 2 colors, the dryer, bows, 3 kids with picture cards. Little Land: 1 free stacking, 2 the picture cards, 3 taller than Dad. The Golden Mountain: 1 holds in a line, 2 only the pink ones, 3 race Dad up the other side. Muay Thai, a bout with Dad: 1 the bow, punches and the super punch, 2 Dad swings back with his big mitt, 3 his guard goes up and down, then the big kick and the belt. The Sky Pod: 1 pop the lights, 2 copy the tune, 3 race Dad to ten' },
     card: { default: 'chedi', values: ['chedi', 'elephant'], doc: "Little Land's picture card in round 2: the chedi, then the elephant" },
     pizza: { default: 'cheese', values: PIZZAS, doc: 'the pizza she picked at The Pizza Company: Hawaiian, Seafood or Double Cheese (the longest stretch)' },
     at: { default: 'in', values: AT, doc: "where she is in the Big Frame: in (just through the tunnel), pit (in the balls with Dad), l1, l2, top (the levels) or out (on the mats in front)" },
@@ -46,7 +46,7 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
     { id: 'race', name: 'The Racing Slide: climb, 3-2-1, scoot down into the balls', params: ['socks', 'games', 'round'], group: 'HarborLand mini games' },
     { id: 'blocks', name: 'Little Land: stack the giant foam bricks, copy the card, build taller than Dad', params: ['socks', 'games', 'round', 'card'], group: 'HarborLand mini games' },
     { id: 'mountain', name: 'The Golden Mountain: climb hold by hold, counting, ring the bell, zoom down the steel slide, then race Dad', params: ['socks', 'games', 'round', 'hair'], group: 'HarborLand mini games' },
-    { id: 'boxing', name: "Muay Thai: the wai kru, then punch the bag to the drum's beat, then Dad's pad and the big kick", params: ['socks', 'games', 'round'], group: 'HarborLand mini games', links: [{ label: 'Muay Thai: the wai kru, then free punching' }, { label: 'Muay Thai: punch along on the beat', params: { round: '2' } }, { label: "Muay Thai: Dad's pad and the big kick", params: { round: '3' } }] },
+    { id: 'boxing', name: "Muay Thai: a bout with Dad. Punch him where your finger lands, fill the super punch, knock him into the ropes", params: ['socks', 'games', 'round'], group: 'HarborLand mini games', links: [{ label: 'Muay Thai: the bow, then punch Dad and the super punch' }, { label: "Muay Thai: Dad swings back (pop his big mitt)", params: { round: '2' } }, { label: "Muay Thai: Dad's guard, the big kick and the belt", params: { round: '3' } }] },
     { id: 'skypod', name: 'The Sky Pod: slap the lights, copy the tune, race Dad to ten', params: ['socks', 'games', 'round'], group: 'HarborLand mini games' },
     { id: 'frame', name: 'The Big Frame: climb up, slide down (the mask, the dragons, the roller, the donut, the zip line), the cannon at Dad', params: ['socks', 'games', 'at', 'hair'], group: 'HarborLand mini games' },
     { id: 'hungry', name: "HarborLand: Dad's tummy rumbles, Mom asks: pizza time?", params: ['socks', 'games'], group: 'HarborLand mini games' },

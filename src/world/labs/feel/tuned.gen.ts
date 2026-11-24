@@ -19,6 +19,7 @@ export const TUNED: Record<string, '*' | string[]> = {
   'poles/slide': ['bumps', 'dive', 'top'],
   'thailand/boat-trip': ['map'],
   'thailand/hub': ['bangkok', 'candy', 'chutes', 'colors', 'map', 'table', 'unicorn'],
+  'thailand/mall-trip': ['boxing'],
   'thailand/nan-trip': ['drive', 'map', 'race'],
   'thailand/samet-trip': ['deck', 'fireshow', 'hideseek', 'island', 'jetski', 'sandcastle', 'snorkel', 'speedboat', 'sunset'],
 }

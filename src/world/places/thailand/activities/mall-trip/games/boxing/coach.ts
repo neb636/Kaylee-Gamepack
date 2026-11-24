@@ -2,9 +2,9 @@
 // rig (characters/looks.ts COACH_LOOK: the red headband, red gloves, blue shorts). He's driven by hand every frame:
 //   - 'wai':   standing for the wai kru, his gloves pressed together; he copies her bows and her dance steps.
 //   - 'drum':  behind his drum, a glove coming down on every beat (the world tells him where in the beat he is).
-//   - 'guard': gloves up, bouncing on his toes.
+//   - 'guard': gloves up, bouncing on his toes (trotting to a knocked-down Dad to count him out).
 // On top of that, actions that ease in and out (anticipation, a settle): a bow, a dance step, a cheer, a spinning kick
-// on the small bag, a hop, a ram muay pose. Blinks and the mouth with his voice come from FaceLife (cast id `coach`).
+// on the small bag, a hop, a ram muay pose, a referee's count (one glove up, then chopped down). Blinks and the mouth with his voice come from FaceLife (cast id `coach`).
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../../../../sdk'
 import { buildAnimal, type Rig } from '../../../../../../engine3d/characters/animal'
@@ -14,7 +14,7 @@ import type { Bag } from '../../../../../../engine3d/dispose'
 
 const deg = Math.PI / 180
 export type CoachMode = 'wai' | 'drum' | 'guard'
-type ActKind = 'bow' | 'dance' | 'cheer' | 'kick' | 'hop' | 'pose'
+type ActKind = 'bow' | 'dance' | 'cheer' | 'kick' | 'hop' | 'pose' | 'count'
 interface Act {
   kind: ActKind
   t: number
@@ -24,7 +24,7 @@ interface Act {
   hit?: () => void
   hitDone?: boolean
 }
-const DUR: Record<ActKind, number> = { bow: 1.0, dance: 0.62, cheer: 1.3, kick: 0.95, hop: 0.55, pose: 1.2 }
+const DUR: Record<ActKind, number> = { bow: 1.0, dance: 0.62, cheer: 1.3, kick: 0.95, hop: 0.55, pose: 1.2, count: 0.6 }
 
 /** Arm angles for a pose: [x, z] for each arm (left, right). */
 type Arms = [number, number, number, number]
@@ -169,6 +169,14 @@ export class Coach {
         y -= 0.06 * e
         lean += 0.15 * e
         tilt = 0.12 * e
+      } else if (act.kind === 'count') {
+        // The referee's count: a glove up high, chopped down in front of him, a dip of the knees with it.
+        const up = span(p, 0, 0.3) * (1 - span(p, 0.42, 0.62))
+        const down = span(p, 0.42, 0.62) * (1 - span(p, 0.85, 1))
+        arms = lerpArms(arms, [-3.0, 0.15, -0.6, -0.2], up)
+        arms = lerpArms(arms, [-1.25, 0.1, -0.6, -0.2], down)
+        y -= 0.05 * down
+        lean += 0.2 * down
       } else if (act.kind === 'kick') {
         // A wind-up, a spin all the way round (the tail whips), contact on the way through, and a settle.
         arms = lerpArms(arms, GUARD, span(p, 0, 0.15))

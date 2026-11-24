@@ -1,5 +1,6 @@
-// Muay Thai's screen: the 3D ring (ring.ts), its tap targets, the POWs popping off each punch, the ring that closes on
-// the bag (round 2) or Dad's pad (round 3) before each beat and the 👆 after a while with nothing touched. After the third round (the belt) the way on (bottom right) takes her back to the hall.
+// Muay Thai's screen: the 3D ring (ring.ts), its tap targets, the POWs popping off each punch (and the numbers of the
+// coach's count), the combo's number over Dad's head and the 👆 after a while with nothing touched. After the third
+// round (the belt) the way on (bottom right) takes her back to the hall.
 import { HudButton } from '../../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
@@ -14,7 +15,7 @@ interface Props {
   round: Round
   socks: string
   onRound: (n: Round) => void
-  /** The wai kru warm-up done (the sock band's 🥊). */
+  /** The bow before the bout done (the sock band's 🥊). */
   onWarmedUp: () => void
   onPlay: () => void
 }
@@ -27,7 +28,7 @@ export function Boxing({ round, socks, onRound, onWarmedUp, onPlay }: Props) {
   const [allDone, setAllDone] = useState(false)
   const worldRef = useRef<MuayThai | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
-  const ringRef = useRef<HTMLDivElement>(null)
+  const comboRef = useRef<HTMLDivElement>(null)
   const powRefs = useRef<HTMLDivElement[]>([])
   // A rebuilt world (a lost GPU context) starts at the round she's on now, not the link's.
   const now = useRef(round)
@@ -51,7 +52,7 @@ export function Boxing({ round, socks, onRound, onWarmedUp, onPlay }: Props) {
       { round: now.current, socks },
     )
     w.setHintElement(hintRef.current)
-    w.setRingElement(ringRef.current)
+    w.setComboElement(comboRef.current)
     w.setPowElements(powRefs.current.filter(Boolean))
     return w
   }
@@ -68,8 +69,8 @@ export function Boxing({ round, socks, onRound, onWarmedUp, onPlay }: Props) {
         anchors={(input, els) => (
           <>
             <Anchors list={BOXING_ANCHORS} els={els} {...input} />
-            {/* Before each beat (rounds 2 and 3): a ring closing on the bag or the pad, gold when a punch is on the beat. */}
-            <div ref={ringRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 15000, borderRadius: '50%', border: '7px solid rgba(255,255,255,.9)', boxSizing: 'border-box' }} />
+            {/* The combo's number over Dad's head (it jumps with each hit). */}
+            <div ref={comboRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 15000, fontWeight: 800, fontSize: 'clamp(40px, 7vmin, 72px)', lineHeight: 1, color: '#FFC83D', WebkitTextStroke: '3px #2B2330', textShadow: '4px 4px 0 #FF4F9A' }} />
             {/* The POWs off each punch (comic words over the hit; the big gold ones on the beat). */}
             {Array.from({ length: POWS }, (_, i) => (
               <div
@@ -83,7 +84,7 @@ export function Boxing({ round, socks, onRound, onWarmedUp, onPlay }: Props) {
               />
             ))}
             <style>{`.boxing-pow[data-big="1"] { color: #FFC83D; text-shadow: 4px 4px 0 #FF4F9A; }`}</style>
-            {/* After a while with nothing touched: a finger on her gloves, the bag or the pad. */}
+            {/* After a while with nothing touched: a finger on her gloves, Dad or his big mitt. */}
             <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
               <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
                 👆

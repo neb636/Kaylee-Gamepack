@@ -78,8 +78,6 @@ Code paths are under `src/world/places/thailand/`.
   game's 🛝 (back to the hall, at the end) sits over the sock band.
   - Check: `#/world/thailand/mall-trip/hall?from=boxing` and `skypod?round=3` at iPhone landscape size.
   - Code: `activities/mall-trip/MallTrip.tsx` (`SockBand`), each game's 🛝 button.
-- [ ] **Muay Thai, round 3:** when Dad holds the pad on her left, he hides the coach and the drum.
-  - Check: `#/world/thailand/mall-trip/boxing?round=3`.
 - [ ] **The pizza box only closes with two slices in it.** If she hands out all eight onto plates, nothing tells her to
   move two into the box, so the trip doesn't go home until she does. Make the box glow when the pan is empty.
   - Check: `#/world/thailand/mall-trip/share`, give every slice to a plate.

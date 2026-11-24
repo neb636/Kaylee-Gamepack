@@ -261,9 +261,8 @@ export const screens = [
       await p.waitForTimeout(after)
     },
   })),
-  // Muay Thai (greybox): each round at the start (1: the wai kru beside the coach; 2: the drum and the ring on the bag;
-  // 3: Dad's pad, the bag hooked back), the 👆 on her gloves after a while, a bow, a punch on the beat (the gold POW),
-  // the big kick.
+  // Muay Thai, a bout with Dad: each round at the start (1: the bow beside the coach; 2 and 3: the bell), the 👆 on her
+  // gloves after a while, the bow, a combo, Dad's big mitt up (round 2), Dad in the air off the ropes, the count.
   ...[1, 2, 3].map((n) => ({ name: `boxing-${n}`, hash: `#/world/thailand/mall-trip/boxing?round=${n}`, reset: true, wait: 3000 })),
   { name: 'boxing-hint', hash: '#/world/thailand/mall-trip/boxing', reset: true, wait: 9500 },
   {
@@ -277,30 +276,55 @@ export const screens = [
     },
   },
   {
-    name: 'boxing-pow',
+    name: 'boxing-combo',
     hash: '#/world/thailand/mall-trip/boxing?round=2',
     reset: true,
     act: async (p) => {
-      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 }).catch(() => {})
-      await p.waitForFunction(() => window.__thaiMallQA().window && window.__thaiMallQA().toNext < 0.3, null, { timeout: 8000, polling: 20 }).catch(() => {})
-      const q = await p.evaluate(() => window.__thaiMallQA())
-      if (q.bag) await p.mouse.click(...q.bag)
-      await p.waitForTimeout(160)
+      await p.waitForFunction(() => window.__thaiMallQA?.().phase === 'bout', null, { timeout: 20000 }).catch(() => {})
+      for (let i = 0; i < 6; i++) {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        await p.mouse.click(...(i % 3 === 2 ? q.head : q.body))
+        await p.waitForTimeout(200)
+      }
     },
   },
   {
-    name: 'boxing-kick',
+    name: 'boxing-mitt',
+    hash: '#/world/thailand/mall-trip/boxing?round=2',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().mitt, null, { timeout: 20000, polling: 50 }).catch(() => {})
+      await p.waitForTimeout(700)
+    },
+  },
+  {
+    name: 'boxing-air',
+    hash: '#/world/thailand/mall-trip/boxing?round=2',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().phase === 'bout', null, { timeout: 20000 }).catch(() => {})
+      for (let i = 0; i < 80; i++) {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        if (q.air) break
+        if (q.phase === 'bout') await p.mouse.click(...(q.mitt ?? q.body))
+        await p.waitForTimeout(150)
+      }
+      await p.waitForTimeout(350)
+    },
+  },
+  {
+    name: 'boxing-count',
     hash: '#/world/thailand/mall-trip/boxing?round=3',
     reset: true,
     act: async (p) => {
-      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 }).catch(() => {})
-      for (let i = 0; i < 40; i++) {
+      await p.waitForFunction(() => window.__thaiMallQA?.().phase === 'bout', null, { timeout: 20000 }).catch(() => {})
+      for (let i = 0; i < 120; i++) {
         const q = await p.evaluate(() => window.__thaiMallQA())
-        if (q.phase === 'finale') break
-        if (q.pad && !q.hopping) await p.mouse.click(...q.pad)
-        await p.waitForTimeout(450)
+        if (q.counting > 0) break
+        if (q.phase === 'bout') await p.mouse.click(...(q.mitt ?? (q.guard === 'low' ? q.head : q.body)))
+        await p.waitForTimeout(150)
       }
-      await p.waitForTimeout(500)
+      await p.waitForTimeout(250)
     },
   },
   // The Golden Mountain (greybox): each round at the foot (round 2: the pinks glow among the silly ones; round 3: Dad
@@ -1612,10 +1636,11 @@ const thaiBlocks = (name, seconds, round, targets, end) => ({
 })
 motion.push(thaiBlocks('blocks-stack-crash', 7, 1, [[3, 0], [4, 1], [1, 0], [2, 1]], 'swipe'), thaiBlocks('blocks-sneeze', 8, 3, [[3, 0], [3, 1], [3, 2], [3, 3]], 'wait'))
 
-// Muay Thai (mall trip, greybox): the core verb, a punch. Round 1: her finger goes down on the bag, high then low, and
-// a swipe across it (a hook): the glove goes out where she touched, the bag swings and squashes, Dad staggers, POW.
-// Round 2: punches on the drum's beat (when the ring is gold): the big gold POW. Round 3: Dad's pad as it moves, then
-// the big kick. Where things are comes from window.__thaiMallQA (screen pixels).
+// Muay Thai (mall trip), a bout with Dad: the core verb, a punch on Dad wherever her finger lands. Round 1: the bow,
+// then quick punches at his tummy and his head (a combo), gold gloves, the super punch, a juggle off the ropes, the
+// count. Round 2: his big mitt goes up and she pops it (`mitt`), or she doesn't and it bops her (`bop`). Round 3: his
+// guard goes up and down, she hits the open spot, the big kick, the belt. Where things are comes from
+// window.__thaiMallQA (screen pixels).
 const thaiBoxing = (name, seconds, round, mode) => ({
   name,
   seconds,
@@ -1624,39 +1649,29 @@ const thaiBoxing = (name, seconds, round, mode) => ({
     await page.waitForTimeout(600)
     await page.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 })
     await page.waitForTimeout(400)
-    // Round 1 starts with the wai kru: six taps on her gloves.
-    for (let i = 0; i < 8 && (await page.evaluate(() => window.__thaiMallQA().phase)) !== 'play'; i++) {
-      await page.locator('[data-anchor="gloves"]').click({ force: true }).catch(() => {})
-      await page.waitForTimeout(500)
-    }
   },
   act: async (page) => {
     const t0 = Date.now()
     let i = 0
     while (Date.now() - t0 < seconds * 1000) {
       const q = await page.evaluate(() => window.__thaiMallQA())
-      if (mode === 'bag' && q.bag) {
-        const [x, y] = q.bag
-        if (i % 3 === 2) {
-          await page.mouse.move(x - 40, y)
-          await page.mouse.down()
-          await page.mouse.move(x + 60, y, { steps: 4 })
-          await page.mouse.up()
-        } else await page.mouse.click(x, y + (i % 2 ? -50 : 40))
+      if (q.phase === 'wai') {
+        await page.locator('[data-anchor="gloves"]').click({ force: true }).catch(() => {})
+        await page.waitForTimeout(700)
+      } else if (q.phase === 'ko' && q.air && q.body) {
+        await page.mouse.click(...q.body)
+        await page.waitForTimeout(320)
+      } else if (q.phase === 'bout' && q.dad !== 'up') {
+        if (q.mitt && mode !== 'bop') await page.mouse.click(...q.mitt)
+        else if (!(mode === 'bop' && q.dad === 'windup')) await page.mouse.click(...(q.guard === 'high' ? q.body : q.guard === 'low' ? q.head : i % 3 === 2 ? q.head : q.body))
         i++
-        await page.waitForTimeout(550)
-      } else if (mode === 'beat' && q.bag && q.window && q.toNext < 0.3) {
-        await page.mouse.click(...q.bag)
-        await page.waitForTimeout(400)
-      } else if (mode === 'pad' && q.pad && !q.hopping && (q.phase === 'play' || q.phase === 'kick')) {
-        await page.mouse.click(...q.pad)
-        await page.waitForTimeout(500)
+        await page.waitForTimeout(mode === 'bop' ? 420 : 230)
       }
-      await page.waitForTimeout(30)
+      await page.waitForTimeout(40)
     }
   },
 })
-motion.push(thaiBoxing('boxing-punch', 5, 1, 'bag'), thaiBoxing('boxing-beat', 6, 2, 'beat'), thaiBoxing('boxing-pad-kick', 9, 3, 'pad'))
+motion.push(thaiBoxing('boxing-punch', 16, 1, 'punch'), thaiBoxing('boxing-mitt', 16, 2, 'mitt'), thaiBoxing('boxing-bop', 9, 2, 'bop'), thaiBoxing('boxing-kick', 26, 3, 'kick'))
 // The Golden Mountain (mall trip, greybox): the core verb, pulling up hold by hold. Her finger goes down on a glowing
 // hold and pulls down (she reaches, rises, lands with a squash, the number pops); at the top the bell and the slide.
 // In round 3 Dad climbs the other side, puffing, a hold behind. Where things are comes from window.__thaiMallQA.

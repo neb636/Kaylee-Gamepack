@@ -1,49 +1,72 @@
-// Muay Thai at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "7. Muay Thai bags"), greybox
-// shapes with voices (lines.ts `L.mall.boxing`: the coach's wai kru, Sparkle's few lines, Dad's oofs, said through
-// blocks/talk.ts). A blue ring mat with its ropes, the big red bag on its bracket with Dad holding it from
-// behind, the coach (the boxer kid from the Big Frame, a little monkey) and his drum, Kaylee in her pink gloves, red
-// headband and grip socks.
+// Muay Thai at HarborLand: a bout with Dad. A blue ring mat with its ropes, Dad in his sparring gear (two fat blue
+// mitts and a belly pad), the coach (the boxer kid from the Big Frame, a little monkey) on his drum and as the referee,
+// Kaylee in her pink gloves, red headband and grip socks. Voices: lines.ts `L.mall.boxing`, said through blocks/talk.ts.
 //
-// The toy: punch. A finger going down on the bag (or the pad) and Kaylee punches it right there, at once: the gloves
-// take turns, she lunges in and bounces back on her toes, and the arm aims at the height her finger hit. The bag swings
-// on its chain and squashes, gold stars and a POW pop out, and Dad staggers. A swipe across it is a hook.
-//   The warm-up, the wai kru: tap her gloves and she presses them together and bows (three bows, lower each time); the
-//     coach bows back. Then three dance steps (the ram muay), each with a drum beat; the coach copies her. Then he
-//     cheers and goes to his drum: ding ding.
-//   1. Free punching: after three punches the drum joins in. Eight punches: a star.
-//   2. On the beat: a slow drum (beat.ts), a ring closing on the bag, gold just before the beat: a punch then is a huge
-//      POW. Six of those (or 16 punches anyway): a star. Off-beat ones are normal punches; the window grows if she's off.
-//   3. Dad's pad: he holds it up, left high, left low, right high, right low, the middle; she follows it. Then it
-//      glows at kick height: her big unicorn kick sends the pad flying and Dad into the ropes, which boing him back
-//      onto his bottom. The coach holds her glove up and the gold belt goes round her waist. A star.
-// Then it stays a toy: the drum keeps going, Dad gets up with the pad, and every few hits it glows for another kick.
-// Nothing fails: every punch is a fun punch, the window grows, round 2 ends anyway, a hit while Dad hops still lands.
+// The toy: punch Dad. A finger going down on him and she punches right there, at once: the gloves take turns, she
+// lunges in (and leaps for his head), he staggers back toward the ropes, stars and a POW pop out. Quick punches are a
+// combo: the number climbs, each hit a note higher. Every hit fills her super punch (the lamps on the board, and her
+// gloves turn gold when it's full): the next punch is in slow motion and sends Dad flying into the ropes, which sling
+// him back through the air. A tap while he's up there bounces him again (a juggle). He lands on his bottom, the ring
+// jumps, and the coach counts him out: nueng, song, saam. A star.
+//   The start: one tap on her gloves and everyone bows (the wai before a bout), then the bell.
+//   1. Dad just takes it. Twelve hits to the first super punch.
+//   2. Dad swings back: his near mitt swells up like a balloon over his head, then comes down on her head (a soft bop,
+//      she giggles and nothing is lost). A punch on the big mitt first pops it: BONK, he spins round dizzy and her
+//      hits count double for a while.
+//   3. Dad guards: mitts up by his face (his tummy is open) or down by his tummy (his head is open). A punch on the
+//      mitts counts a little, one on the open spot counts in full. The super punch is her big unicorn kick; then the
+//      coach holds her glove up and the gold belt goes round her waist.
+// Then it stays a toy: the bout goes on, round after round, with everything in it.
+// Nothing fails: every punch lands, a bop is a giggle, and his wind-up gets slower each time one lands on her.
 import { Color, Group, IcosahedronGeometry, OctahedronGeometry, Plane, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, span, wobble } from '../../../../../../../sdk'
+import { knobs } from '../../../../../../kit/knobs'
 import type { Avatar } from '../../../../characters/avatar'
 import type { Member } from '../../../../characters/member'
+import { along, ARM, HOOF } from '../../../../characters/model-wear'
 import type { AnchorInfo } from '../../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../../engine3d/camera'
 import { PAL, toon } from '../../../../../../engine3d/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../../trip/legs/stage'
 import { SOCK_COLORS, wearSocks } from '../../socks'
 import { Beat, PERIOD } from './beat'
-import { buildGym, LAMP_DIM, LAMP_LIT, LAMPS, setPiece, starGeometry, type Built, type Rope } from './build'
+import { buildGear, buildGym, goldGlove, LAMP_DIM, LAMP_LIT, LAMPS, MITT_R, setPiece, starGeometry, type Built, type Gear, type Rope } from './build'
 import { Coach, GUARD } from './coach'
 import { Floaters } from './fx'
-import { BAG, BAG2, BAG_HOOK, BELL, BOARD, BOTTLE, BOWS, COACH_DRUM, COACH_WAI, DADDY_BAG, DRUM, DRUM_JOINS, KAYLEE, NEED, PAD, PAD_OUT, PAD_SIDES, PAD_STEPS, PAD_Y, POSTS, ROUND2_MAX, STEPS, TALL_SHIFT, type Round } from './layout'
-import { boxingSfx as sfx } from './sounds'
+import { BAG, BAG2, BELL, BOARD, BOTTLE, COACH_DRUM, COACH_WAI, COUNT, DAD, DRUM, KAYLEE, NEED, NEED_FREE, POSTS, TALL_SHIFT, type Round } from './layout'
+import { boxingSfx as sfx, hallBed } from './sounds'
 import { Talk } from '../blocks/talk'
 import { L } from '../../../../lines'
 
 const T = L.mall.boxing
+const FILE = 'src/world/places/thailand/activities/mall-trip/games/boxing/ring.ts'
+
+/** How the bout feels under her finger (the feel lab: ?feel=1). */
+const FEEL = knobs(
+  'boxBout',
+  'The bout with Dad',
+  FILE,
+  {
+    punch: { value: 0.26, min: 0.14, max: 0.5, step: 0.01, label: 'Punch time', unit: 's', note: 'finger down to back in her guard', main: true },
+    push: { value: 0.09, min: 0, max: 0.3, step: 0.01, label: 'Push back', unit: 'm', note: 'how far each hit shoves Dad toward the ropes', main: true },
+    combo: { value: 0.9, min: 0.3, max: 2, step: 0.05, label: 'Combo gap', unit: 's', note: 'the longest pause that keeps a combo going', main: true },
+    windUp: { value: 1.6, min: 0.6, max: 3, step: 0.1, label: "Dad's wind-up", unit: 's', note: 'how long his big mitt swells before it comes down', main: true },
+    swingGap: { value: 4.4, min: 2, max: 9, step: 0.2, label: 'Between swings', unit: 's', note: 'how often Dad swings back', main: true },
+    launch: { value: 5.4, min: 2, max: 9, step: 0.2, label: 'Knock-back', unit: 'm/s', note: 'how hard the super punch sends him into the ropes', main: true },
+    juggle: { value: 3.3, min: 1, max: 6, step: 0.1, label: 'Juggle pop', unit: 'm/s', note: 'how high a tap bounces him in the air' },
+    float: { value: 7.5, min: 3, max: 14, step: 0.5, label: 'Gravity in the air', unit: 'm/s²', note: 'lower: he hangs up there longer' },
+    slowmo: { value: 0.32, min: 0.1, max: 1, step: 0.02, label: 'Slow motion', note: 'how slow time runs while the super punch winds up (1: none)' },
+    dizzy: { value: 3.4, min: 1, max: 7, step: 0.2, label: 'Dizzy for', unit: 's', note: 'how long he spins and wobbles after she pops his mitt' },
+  },
+  { sections: ['boxing'] },
+)
 
 export interface BoxingEvents extends LegEvents {
   /** The round on now (the address bar follows). */
   round(n: Round): void
-  /** The wai kru warm-up is done (the sock band's 🥊). */
+  /** The bow before the bout is done (the sock band's 🥊). */
   warmedUp(): void
-  /** All three rounds done (the 🛝 back to the hall shows; she can keep punching). */
+  /** All three rounds done (the way back to the hall shows; she can keep punching). */
   allDone(): void
 }
 export interface BoxingStart {
@@ -52,9 +75,10 @@ export interface BoxingStart {
 }
 
 export const BOXING_ANCHORS: AnchorInfo[] = [
-  { id: 'gloves', label: "Your gloves", kind: 'thing' },
+  { id: 'gloves', label: 'Your gloves', kind: 'thing' },
+  { id: 'dad', label: 'Dad', kind: 'thing' },
+  { id: 'mitt', label: "Dad's big glove", kind: 'thing' },
   { id: 'bag', label: 'The punching bag', kind: 'thing' },
-  { id: 'pad', label: "Dad's pad", kind: 'thing' },
   { id: 'bag2', label: 'The small bag', kind: 'thing' },
   { id: 'drum', label: 'The drum', kind: 'thing' },
   { id: 'bell', label: 'The ring bell', kind: 'thing' },
@@ -63,84 +87,140 @@ export const BOXING_ANCHORS: AnchorInfo[] = [
   { id: 'board', label: 'Star board', kind: 'thing' },
   { id: 'coach', label: 'The coach', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Dad', kind: 'family' },
 ]
 
-type Phase = 'wai' | 'play' | 'between' | 'kick' | 'finale' | 'free'
-type Target = 'bag' | 'pad'
+/** wai: the bow before the bout. bout: punching. super: her super punch (or the big kick) on its way. ko: Dad flying,
+ *  landing, being counted out. between: the star, Dad getting up. finale: the belt. */
+type Phase = 'wai' | 'bout' | 'super' | 'ko' | 'between' | 'finale'
+type DadMode = 'guard' | 'windup' | 'swing' | 'dizzy' | 'fly' | 'sit' | 'up'
+type Guard = 'open' | 'high' | 'low'
+type Zone = 'head' | 'body' | 'mitt'
 interface Punch {
   t: number
   dur: number
   /** Which glove: 0 her left (the near one when she faces right), 1 her right. */
   arm: 0 | 1
-  kind: 'jab' | 'hook' | 'kick'
-  what: Target
+  kind: 'jab' | 'super' | 'kick'
+  zone: Zone
   at: Vector3
-  big: boolean
   hit: boolean
-  /** Where she's punching toward, flat (her lunge goes that way). */
+  /** Where she's punching toward, flat (her lunge goes that way), and how high she leaps for it. */
   dir: Vector3
   lunge: number
+  leap: number
 }
 interface Pow {
   el: HTMLElement
   at: Vector3
   t: number
   big: boolean
+  /** A number of the count: bigger, and it stays up longer. */
+  count?: boolean
 }
-type DaddyMode = 'bag' | 'pad' | 'fly' | 'sit' | 'up'
+/** Dad in the air: where his feet are, how fast, his tumble, how many times she has bounced him. */
+interface Flight {
+  p: Vector3
+  v: Vector3
+  rot: number
+  spin: number
+  roped: boolean
+  juggles: number
+}
+type Arms = [number, number, number, number]
 
 const tmp = new Vector3()
 const V = (x: number, y: number, z: number) => new Vector3(x, y, z)
 const deg = Math.PI / 180
 /** Her shoulders' height (Kaylee is 1 m to the top of her head). */
 const SHOULDER = 0.47
-const JABS = ['POW!', 'BAM!', 'BOP!', 'POW!']
-/** Free play after the belt: a kick every this many pad hits. */
-const FREE_KICK = 4
-/** The wai kru: she faces out, turned a little toward the coach on her left. */
-const KAYLEE_WAI_YAW = -0.45
+const JABS = ['POW!', 'BAM!', 'BOP!', 'BIFF!']
+/** The wai: she faces out, turned a little toward the coach on her left. */
+const KAYLEE_WAI_YAW = -0.3
+/** They stand side on to us, each turned well toward us (like actors on a stage), so both faces show: her yaw to
+ *  fight (radians), turned right round for the kick, and Dad's (degrees; and sitting on the mat after a knock-down). */
+const KAYLEE_FACE = 0.72
+const KAYLEE_KICK = -1.0
+const DAD_FACE = -40
+const DAD_SIT = -28
+/** Dad's arms ([x, z] left then right; his right is the one nearer us): mitts apart, up by his face, down by his tummy,
+ *  the right one wound up over his head, and brought down. */
+const ARMS: Record<Guard | 'wind' | 'swung' | 'limp' | 'flail' | 'cower', Arms> = {
+  open: [-1.35, -0.55, -1.35, 0.55],
+  high: [-2.3, 0.3, -2.3, -0.3],
+  low: [-1.1, 0.4, -1.1, -0.4],
+  wind: [-1.5, 0.2, -2.8, 0.55],
+  swung: [-1.5, 0.2, -1.25, -0.2],
+  limp: [-0.2, -0.35, -0.2, 0.35],
+  flail: [-0.4, -2.2, -0.4, 2.2],
+  cower: [-2.5, 0.45, -2.5, -0.45],
+}
+/** How far along his swing the mitt lands on her head. */
+const SWING = { dur: 0.36, lands: 0.6 }
+/** The ropes on the right, where a flying Dad meets them. */
+const ROPE_X = POSTS[1][0] - 0.3
+/** How many times a tap bounces a flying Dad before he's too heavy. */
+const JUGGLES = 6
 
 export class MuayThai extends Stage {
   private built: Built
+  private gear: Gear
+  private gold: Group[] = []
   private kaylee: Avatar
   private nick: Member
   private coach: Coach
   private beat = new Beat()
   private phase: Phase = 'wai'
   private round: Round
-  private count = 0
-  private punches = 0
-  private pads = 0
-  private padStep = 0
+  /** After the belt: the bout goes on. */
+  private free = false
   private stars: number
   private starPop = [1, 1, 1]
   private starTwinkle = -1
-  private wai = { bows: 0, steps: 0 }
+  private bowed = false
+  // ---- Her ----
   private kAct: { kind: 'bow' | 'dance' | 'hop'; t: number; dur: number; k: number } | null = null
   private punch: Punch | null = null
   private nextArm: 0 | 1 = 0
-  /** Which way she faces (radians), and where she stands. */
   private kYaw = 0
   private kBase = V(KAYLEE.x, 0, KAYLEE.z)
   private guardK = 0
-  private bonk = 0
-  private swing = { a: 0, v: 0, x: 0, vx: 0 }
-  private swing2 = { a: 0, v: 0 }
-  private squash = { t: 9, y: 0, k: 1 }
-  private daddy: DaddyMode = 'bag'
-  /** Round 3 on: the big bag is hooked back. */
-  private hooked = false
-  private dSpot = { x: DADDY_BAG.x, z: DADDY_BAG.z, face: DADDY_BAG.face }
-  private padY = PAD_Y.high
-  private padYGoal = PAD_Y.high
+  /** Time into being bopped by his mitt (-1: not). */
+  private bopped = -1
+  private steps = 0
+  // ---- The bout ----
+  /** Her super punch: 0 empty, 1 full (then `ready`). */
+  private power = 0
+  private ready = false
+  private combo = 0
+  private best = 0
+  private lastHit = -9
+  private hits = 0
+  private counters = 0
+  private bopsInARow = 0
+  private bops = 0
+  private kos = 0
+  private juggles = 0
+  // ---- Dad ----
+  private dad: { mode: DadMode; t: number; push: number; guard: Guard; guardT: number; windDur: number; back: number } = { mode: 'guard', t: 0, push: 0, guard: 'open', guardT: 2, windDur: 1.6, back: -1 }
+  private dArms: Arms = [...ARMS.open]
+  private nextSwing = Infinity
+  private swell = 0
   private stagger = { s: 0, v: 0 }
-  private dizzy = -1
-  private padHit = 9
-  private padPop = 1
-  private padFly: { p: Vector3; v: Vector3; r: Vector3; spin: Vector3; down: boolean } | null = null
-  private fly: { t: number; from: Vector3 } | null = null
-  private dHop = false
+  private nod = { a: 0, v: 0 }
+  private bellyT = 9
+  private mittT = 9
+  private dBow = -1
+  private flight: Flight | null = null
+  private counting = -1
+  // ---- Juice ----
+  /** Seconds of freeze left (a big hit stops time for a blink), and the camera's shake. */
+  private freeze = 0
+  private shake = 0
+  private slow = false
+  private ringHop = 9
+  // ---- The gym ----
+  private swing = { a: 0, v: 0 }
+  private swing2 = { a: 0, v: 0 }
   private ropeBack = { a: 0, v: 0 }
   private ropeSide = { a: 0, v: 0 }
   private skin = 9
@@ -150,18 +230,17 @@ export class MuayThai extends Stage {
   private later: { t: number; f: () => void }[] = []
   private pows: Pow[] = []
   private powEls: HTMLElement[] = []
-  private ringEl: HTMLElement | null = null
-  private down: { what: Target; x: number; y: number; hooked: boolean } | null = null
+  private comboEl: HTMLElement | null = null
+  private comboPop = 9
   private downHandled = false
   private tall = false
   private allDoneSent = false
-  private onBeats = 0
   private talk = new Talk((l) => this.bev.say(l))
   private starsFx: Floaters
   private sparkles: Floaters
   private drops: Floaters
   private ray = new Raycaster()
-  private bagPlane = new Plane(new Vector3(0, 0, 1), -BAG.z)
+  private dadPlane = new Plane(new Vector3(0, 0, 1), -DAD.z)
 
   constructor(renderer: WebGLRenderer, private bev: BoxingEvents, start: BoxingStart) {
     super(renderer, bev)
@@ -170,7 +249,7 @@ export class MuayThai extends Stage {
     this.rig.fov = 30
     this.built = buildGym(bag)
     scene.add(this.built.root)
-    // ---- Kaylee in her gloves, headband and grip socks; Dad holding the bag; the coach ----
+    // ---- Kaylee in her gloves, headband and grip socks; Dad in his sparring gear; the coach ----
     const { kaylee, members } = this.makeFamily(['nick'])
     this.kaylee = kaylee
     this.nick = members.get('nick')!
@@ -186,35 +265,61 @@ export class MuayThai extends Stage {
     fit.scale.set(waist.rx / 0.172, 1, waist.rz / 0.172)
     fit.add(this.built.belt)
     kaylee.rig.body.add(fit)
+    // A gold shell over each of her gloves, for when the super punch is ready.
+    for (const [arm, s] of [[kaylee.rig.armL, -1], [kaylee.rig.armR, 1]] as const) {
+      const g = goldGlove(bag)
+      g.position.set(...along(s, HOOF + 0.012))
+      g.rotation.z = s * ARM
+      g.visible = false
+      arm.add(g)
+      this.gold.push(g)
+    }
+    // Dad's mitts on his hands, the pad on his tummy.
+    const H = this.nick.height
+    this.gear = buildGear(H, bag)
+    this.nick.rig.armL.add(this.gear.mitts[0])
+    this.nick.rig.armR.add(this.gear.mitts[1])
+    this.gear.belly.position.set(0, 0.33 * H, 0.105 * H)
+    this.nick.rig.body.add(this.gear.belly)
+    this.nick.root.userData.pick = 'dad'
     this.coach = new Coach(bag)
+    bag.add({ dispose: hallBed() })
     scene.add(kaylee.root, this.nick.root, this.coach.root)
     this.put(kaylee, KAYLEE.x, 0, KAYLEE.z, 'stand', 0)
-    this.starsFx = new Floaters(starGeometry(), [PAL.gold, '#FFFFFF', PAL.hotpink, PAL.gold], 80, bag, 2.2, 1.6)
-    this.sparkles = new Floaters(new OctahedronGeometry(0.5), [PAL.gold, PAL.hotpink, '#FFFFFF', PAL.mint], 80, bag, 1.2, 1.2)
+    this.put(this.nick, DAD.x, 0, DAD.z, 'stand', DAD_FACE)
+    this.starsFx = new Floaters(starGeometry(), [PAL.gold, '#FFFFFF', PAL.hotpink, PAL.gold], 90, bag, 2.2, 1.6)
+    this.sparkles = new Floaters(new OctahedronGeometry(0.5), [PAL.gold, PAL.hotpink, '#FFFFFF', PAL.mint], 90, bag, 1.2, 1.2)
     this.drops = new Floaters(new IcosahedronGeometry(0.5, 1), ['#A8DCFF', '#FFFFFF', '#8EC9F5'], 40, bag, 6, 0.4)
     scene.add(this.starsFx.mesh, this.sparkles.mesh, this.drops.mesh)
     // ---- The round the link starts at (the stars before it are already on the board) ----
     this.round = start.round
     this.stars = start.round - 1
     this.built.stars.forEach((s, i) => (s.visible = i < this.stars))
-    this.startRound(start.round, true)
-    // What's said first: the coach's hello and thank you, then "Tap your gloves to bow!" (a link to a later round:
-    // that round's line).
-    this.after(0.5, () => {
-      if (start.round > 1) return this.roundLine(start.round)
-      this.talk.say(T.hello)
-      this.after(3.0, () => this.talk.say(T.bow))
-    })
+    this.bev.round(this.round)
+    this.lightLamps()
+    if (start.round === 1) {
+      // The bow first: the coach beside her, gloves together.
+      this.coach.place(COACH_WAI.x, COACH_WAI.z, COACH_WAI.face)
+      this.coach.setMode('wai')
+      this.faceWai()
+      // The coach's hello and thank you, then "Tap your gloves to bow!".
+      this.after(0.5, () => {
+        this.talk.say(T.hello)
+        this.after(3.0, () => !this.bowed && this.talk.say(T.bow))
+      })
+    } else {
+      this.bowed = true
+      this.phase = 'between'
+      this.coach.place(this.coachDrum.x, this.coachDrum.z, 0)
+      this.coach.setMode('drum')
+      this.faceDad()
+      this.guardK = 1
+      this.after(0.6, () => this.startBout())
+    }
   }
 
   private after(s: number, f: () => void) {
     this.later.push({ t: this.time + s, f })
-  }
-
-  /** Sparkle, when a round's new thing shows: the gold ring on the bag, Dad's pad. */
-  private roundLine(n: Round) {
-    if (n === 2) this.talk.say(T.gold)
-    if (n === 3) this.talk.say(T.pad)
   }
 
   // ---------------------------------------------------------------- places (a tall screen brings the left side in)
@@ -244,51 +349,58 @@ export class MuayThai extends Stage {
     super.setSize(w, h, top)
   }
 
-  // ---------------------------------------------------------------- rounds
+  // ---------------------------------------------------------------- the bow, the bell, the rounds
 
-  private startRound(n: Round, now = false) {
-    this.round = n
-    this.count = 0
-    this.punches = 0
-    this.bev.round(n)
-    this.layoutLamps()
-    if (n === 1 && now) {
-      // The wai kru first: the coach faces her, gloves together.
-      this.phase = 'wai'
-      this.coach.place(COACH_WAI.x, COACH_WAI.z, COACH_WAI.face)
-      this.coach.setMode('wai')
-      this.faceWai()
-      this.guardK = 0
-      return
-    }
-    this.phase = 'play'
-    if (!now) this.after(0.5, () => this.roundLine(n))
-    if (now) {
-      this.coach.place(this.coachDrum.x, this.coachDrum.z, 0)
-      this.coach.setMode('drum')
-      this.faceBag()
-      this.guardK = 1
-    }
-    if (n === 2) this.beat.start(this.time, PERIOD[2], now ? 1.4 : 1.0)
-    if (n === 3) {
-      if (!this.beat.on) this.beat.start(this.time, PERIOD[3], 1.2)
-      else this.beat.setPeriod(PERIOD[3])
-      this.padUp(now)
-    }
+  /** The wai before a bout: she bows, and the coach and Dad bow back. Then the bell. */
+  private bow() {
+    if (this.bowed) return
+    this.bowed = true
+    this.faceWai()
+    this.kAct = { kind: 'bow', t: 0, dur: 1.0, k: 0.42 }
+    sfx.bow(2)
+    this.after(0.25, () => this.coach.play('bow', 0.42))
+    this.after(0.35, () => (this.dBow = 0))
+    this.after(1.3, () => {
+      this.bev.warmedUp()
+      this.coach.setMode('guard')
+      this.coach.goTo(this.coachDrum.x, this.coachDrum.z, 0, () => this.coach.setMode('drum'))
+      this.faceDad()
+      this.phase = 'between'
+    })
+    this.after(1.9, () => this.startBout())
   }
 
-  /** Ding ding, a star on the board, then the next round. */
-  private finishRound() {
-    this.phase = 'between'
+  /** Ding ding, "Chok!", and they fight. */
+  private startBout() {
+    if (this.disposed) return
+    this.phase = 'bout'
+    this.power = 0
+    this.ready = false
+    this.combo = 0
+    this.bopsInARow = 0
+    this.lightLamps()
+    this.dad.mode = 'guard'
+    this.dad.push = 0
+    this.dad.guard = this.guards() ? 'high' : 'open'
+    this.dad.guardT = 2.6
+    this.nextSwing = this.swings() ? this.time + 2.4 : Infinity
+    this.faceDad()
     sfx.bell(2)
     this.bellT = 0
-    this.after(0.5, () => this.giveStar())
-    this.after(0.6, () => {
-      this.coach.play('cheer')
-      this.nick.react('wave')
-      this.talk.say(T.again)
-    })
-    this.after(2.0, () => this.startRound((this.round + 1) as Round))
+    this.beat.start(this.time, PERIOD.calm, 0.5)
+    this.after(0.35, () => this.talk.say(T.chok))
+    // What's new this round, from Sparkle (round 1: how to punch).
+    if (!this.free && this.round === 1) this.after(1.3, () => this.talk.once('punch', T.punch))
+  }
+  /** Does Dad swing back now (round 2 on), and does he guard high and low (round 3 on)? */
+  private swings() {
+    return this.free || this.round >= 2
+  }
+  private guards() {
+    return this.free || this.round >= 3
+  }
+  private get need() {
+    return this.free ? NEED_FREE : NEED[this.round]
   }
 
   private giveStar() {
@@ -300,74 +412,13 @@ export class MuayThai extends Stage {
     this.sparkles.burst(this.built.stars[i].getWorldPosition(new Vector3()), 16, 1.4, 1.6, 1, 0.05)
   }
 
-  /** The board's lamps: one for each thing the round needs, lit as she gets them. */
-  private layoutLamps() {
-    const n = this.phase === 'free' ? 0 : NEED[this.round]
-    this.built.lamps.forEach((m, i) => {
-      m.visible = i < n
-      m.position.x = (i - (n - 1) / 2) * 0.13
-    })
-    this.lightLamps()
-  }
+  /** The board's lamps: her super punch filling up. */
   private lightLamps() {
+    const lit = this.ready ? LAMPS : Math.floor(clamp(this.power) * LAMPS + 0.001)
     this.built.lamps.forEach((m, i) => {
-      const mat = toon(i < this.count ? LAMP_LIT : LAMP_DIM)
+      const mat = toon(i < lit ? LAMP_LIT : LAMP_DIM)
       if (m.material !== mat) m.material = mat
     })
-  }
-  private progress() {
-    this.count++
-    this.lightLamps()
-    sfx.lamp(2 + this.count)
-  }
-
-  // ---------------------------------------------------------------- the wai kru
-
-  private waiTap() {
-    const w = this.wai
-    this.faceWai()
-    if (w.bows < BOWS) {
-      const depth = 0.32 + 0.14 * w.bows
-      this.kAct = { kind: 'bow', t: 0, dur: 1.0, k: depth }
-      sfx.bow(w.bows * 2)
-      this.after(0.3, () => this.coach.play('bow', depth))
-      if (w.bows === 0) this.after(0.5, () => this.nick.react('wiggle'))
-      w.bows++
-      // Three bows done: the coach asks her to dance (the ram muay steps come next).
-      if (w.bows === BOWS) this.after(1.0, () => this.talk.say(T.dance))
-      return
-    }
-    if (w.steps < STEPS) {
-      const side = w.steps % 2 ? 1 : -1
-      this.kAct = { kind: 'dance', t: 0, dur: 0.62, k: side }
-      sfx.step(w.steps * 2)
-      sfx.drum(w.steps === 0)
-      this.skin = 0
-      this.after(0.3, () => sfx.ching())
-      this.after(0.22, () => this.coach.play('dance', -side))
-      w.steps++
-      if (w.steps === STEPS) this.warmedUp()
-    }
-  }
-
-  /** The coach cheers, ding ding, and off he goes to his drum: round 1. */
-  private warmedUp() {
-    this.phase = 'between'
-    this.after(0.7, () => {
-      this.coach.play('cheer')
-      sfx.cheer()
-      sounds.sparkle()
-      this.sparkles.burst(this.coach.root.position.clone().add(V(0, 1.1, 0)), 14, 1.2, 1.4, 0.9, 0.05)
-    })
-    this.after(1.4, () => {
-      sfx.bell(2)
-      this.bellT = 0
-      this.bev.warmedUp()
-      this.coach.setMode('guard')
-      this.coach.goTo(this.coachDrum.x, this.coachDrum.z, 0, () => this.coach.setMode('drum'))
-      this.faceBag()
-    })
-    this.after(1.9, () => (this.phase = 'play'))
   }
 
   // ---------------------------------------------------------------- facing
@@ -376,253 +427,350 @@ export class MuayThai extends Stage {
     this.kYaw = Math.atan2(x - this.kBase.x, z - this.kBase.z)
     this.kaylee.face(this.kYaw)
   }
-  /** The wai kru: she faces out (like a dance class), turned a little toward the coach beside her. */
   private faceWai() {
     this.kYaw = KAYLEE_WAI_YAW
     this.kaylee.face(this.kYaw)
   }
-  private faceBag() {
-    this.faceToward(BAG.x, BAG.z)
+  private faceDad() {
+    this.kYaw = KAYLEE_FACE
+    this.kaylee.face(this.kYaw)
+  }
+  /** Where Dad stands now (pushed back by her punches). */
+  private get dadX() {
+    return DAD.x + this.dad.push
+  }
+  private get H() {
+    return this.nick.height
   }
 
   // ---------------------------------------------------------------- punching
 
-  /** Where her finger is on the bag (its front plane), clamped to what she can reach. */
-  private bagPoint(x: number, y: number) {
+  /** Where her finger is on Dad (a flat plane through him), and which part of him that is. */
+  private aim(x: number, y: number): { zone: Zone; at: Vector3 } {
     this.ray.setFromCamera(this.ndc(x, y), this.rig.camera)
-    const p = this.ray.ray.intersectPlane(this.bagPlane, tmp)?.clone() ?? V(BAG.x, 0.75, BAG.z)
-    return V(BAG.x - BAG.r * 0.6, clamp(p.y, BAG.y0 + 0.12, 0.98), BAG.z)
+    const p = this.ray.ray.intersectPlane(this.dadPlane, tmp)
+    const py = p ? p.y : 0.6 * this.H
+    const zone: Zone = py > 0.6 * this.H ? 'head' : 'body'
+    const at = V(this.dadX - 0.17 * this.H, zone === 'head' ? clamp(py, 0.68 * this.H, 0.86 * this.H) : clamp(py, 0.2 * this.H, 0.5 * this.H), DAD.z)
+    return { zone, at }
   }
-  private padWorld() {
-    return this.built.pad.position.clone()
+  private mittAt() {
+    return this.gear.mitts[1].getWorldPosition(new Vector3())
+  }
+  /** His big mitt is up and swelling: she can pop it. */
+  private get mittUp() {
+    return this.phase === 'bout' && this.dad.mode === 'windup' && this.swell > 0.2
   }
 
-  /** A punch at the bag or the pad (from her finger going down, a swipe's hook, or a key). */
-  private strike(what: Target, sx: number, sy: number, kind: 'jab' | 'hook') {
-    if (this.phase === 'finale') return
-    if (what === 'pad' && (!this.built.pad.visible || this.padFly)) return
-    if (what === 'pad' && this.phase === 'kick') return this.kick()
-    if (what === 'bag' && this.hooked) {
-      // Up on its hook: it just swings a little.
-      this.swing.vx += 1.2
-      sfx.thud(0.5)
-      return
-    }
-    const at = what === 'bag' ? this.bagPoint(sx, sy) : this.padWorld()
-    // Turn to face it (the pad can be on either side).
-    if (what === 'pad') this.faceToward(at.x, at.z)
-    else this.faceBag()
-    // On the beat? (Rounds 2 and 3, and the toy after; round 1's drum is just music.)
-    const judged = this.beat.on && this.round >= 2 && this.phase !== 'between'
-    const big = judged ? this.beat.judge(this.time) : false
+  /** A finger on Dad (or his big mitt): what it does depends on where the bout is. */
+  private hitDad(x: number, y: number, what: 'dad' | 'mitt') {
+    if (this.phase === 'wai') return this.bow()
+    if (this.phase === 'super') return
+    if (this.phase === 'ko') return this.flight ? this.bounceDad() : this.pokeDad()
+    if (this.phase !== 'bout') return this.pokeDad()
+    if (this.dad.mode === 'up') return
+    if (this.ready) return this.superPunch()
+    const a = what === 'mitt' && this.mittUp ? { zone: 'mitt' as Zone, at: this.mittAt() } : this.aim(x, y)
+    this.jab(a.zone, a.at)
+  }
+
+  private jab(zone: Zone, at: Vector3) {
+    // A punch still on its way out lands now, so every tap counts however fast she goes.
+    if (this.punch && !this.punch.hit && this.punch.kind === 'jab') this.contact(this.punch)
+    this.faceDad()
     const dir = V(at.x - this.kBase.x, 0, at.z - this.kBase.z)
     const dist = dir.length()
     dir.normalize()
-    const reach = what === 'bag' ? BAG.r * 0.4 : PAD.d / 2
-    const lunge = clamp(dist - reach - 0.34, 0, 0.36)
-    this.punch = { t: 0, dur: kind === 'hook' ? 0.42 : 0.3, arm: this.nextArm, kind, what, at, big, hit: false, dir, lunge }
+    this.punch = { t: 0, dur: FEEL.punch, arm: this.nextArm, kind: 'jab', zone, at, hit: false, dir, lunge: clamp(dist - 0.36, 0, 0.75), leap: clamp(at.y - 0.78, 0, 1.6) }
     this.nextArm = this.nextArm ? 0 : 1
     this.guardK = 1
     sfx.swish()
-    // What it counts for.
-    if (this.phase !== 'play' && this.phase !== 'free') return
-    if (this.phase === 'free') {
-      if (what === 'pad' && ++this.pads % FREE_KICK === 0) this.after(0.4, () => this.kickReady())
-      return
-    }
-    if (this.round === 1) {
-      this.progress()
-      if (this.count === DRUM_JOINS && !this.beat.on) {
-        this.after(0.4, () => this.beat.start(this.time, PERIOD[1], 0.35))
-        this.after(0.6, () => this.talk.once('drum', T.drum))
-      }
-      if (this.count >= NEED[1]) this.after(0.35, () => this.finishRound())
-    } else if (this.round === 2) {
-      this.punches++
-      if (big) {
-        this.onBeats++
-        this.progress()
-      }
-      if (this.count >= NEED[2] || this.punches >= ROUND2_MAX) this.after(0.4, () => this.finishRound())
-    } else if (what === 'pad') {
-      this.progress()
-      if (big) this.onBeats++
-      if (this.count >= NEED[3]) this.after(0.45, () => this.kickReady())
-      else this.after(0.38, () => this.padNext())
-    }
   }
 
-  /** The glove lands: the bag (or the pad) takes it. */
+  /** The glove lands. */
   private contact(p: Punch) {
-    const power = (p.kind === 'hook' ? 1.6 : 1) * (p.big ? 1.7 : 1)
-    if (p.what === 'bag') {
-      const lever = clamp((BAG.pivot - p.at.y) / (BAG.pivot - BAG.y0), 0.5, 1)
-      const held = this.daddy === 'bag'
-      // A bag swinging back at her bonks her (she bounces back with a giggle).
-      if (this.swing.v < -1.6) {
-        this.bonk = 0
-        sfx.boing()
-        this.after(0.2, () => sfx.giggle())
-      }
-      this.swing.v += (held ? 1.1 : 1.6) * power * lever
-      this.swing.vx += (Math.random() - 0.5) * 0.3 * power
-      this.squash = { t: 0, y: p.at.y - (BAG.pivot + this.built.bag.mid), k: power }
-      sfx.thud(power)
-      if (held) {
-        this.stagger.v += 1.4 * power
-        if (power > 1.5) this.after(0.1, () => this.oof(p.big))
-      }
-    } else {
-      this.padHit = 0
-      this.stagger.v += 1.5 * power
+    p.hit = true
+    const d = this.dad
+    if (this.phase !== 'bout' || d.mode === 'fly' || d.mode === 'sit' || d.mode === 'up') return
+    if (p.zone === 'mitt') return d.mode === 'windup' ? this.popMitt(p) : void sfx.pap()
+    const blocked = (d.guard === 'high' && p.zone === 'head') || (d.guard === 'low' && p.zone === 'body')
+    const dizzy = d.mode === 'dizzy'
+    this.combo = this.time - this.lastHit <= FEEL.combo ? this.combo + 1 : 1
+    this.best = Math.max(this.best, this.combo)
+    this.lastHit = this.time
+    this.hits++
+    this.comboPop = 0
+    const fifth = this.combo % 5 === 0
+    this.gain((blocked ? 0.4 : 1) * (dizzy ? 2 : 1))
+    // What Dad does with it: a step back toward the ropes, a lean, his head or his tummy pad taking it.
+    const k = blocked ? 0.4 : fifth ? 1.6 : 1
+    d.push += FEEL.push * k
+    this.stagger.v += 1.5 * k
+    if (blocked) {
+      this.mittT = 0
       sfx.pap()
-      if (power > 1.5) this.after(0.1, () => this.oof(p.big))
+    } else {
+      if (p.zone === 'head') this.nod.v += 7
+      else this.bellyT = 0
+      sfx.thud(fifth ? 1.6 : 1)
+      sfx.combo(Math.min(10, this.combo - 1))
     }
-    if (p.big) {
+    const at = p.at.clone().add(tmp.copy(p.dir).multiplyScalar(-0.06))
+    if (fifth) {
+      // Every fifth hit of a combo is a big one.
       sfx.pow()
-      this.coach.look = p.at
+      this.freeze = 0.05
+      this.shake = Math.max(this.shake, 0.35)
+      this.starsFx.burst(at, 16, 2.0, 2.0, 0.6, 0.09)
+      this.popPow(at, 'POW!', true)
+      this.after(0.1, () => this.oof(this.combo >= 10))
+    } else {
+      this.starsFx.burst(at, blocked ? 3 : 6, 1.2, 1.2, 0.6, 0.06)
+      this.popPow(at, blocked ? 'PAP!' : dizzy ? 'BAM!' : JABS[this.hits % JABS.length], false)
     }
-    const at = p.at.clone().add(tmp.copy(p.dir).multiplyScalar(-0.08))
-    this.starsFx.burst(at, p.big ? 16 : 6, p.big ? 2.0 : 1.2, p.big ? 2.0 : 1.2, 0.6, p.big ? 0.09 : 0.06)
-    this.popPow(at, p.big ? 'POW!' : p.kind === 'hook' ? 'WHAM!' : p.what === 'pad' ? 'PAP!' : JABS[this.touches % JABS.length], p.big || p.kind === 'hook')
+    // Into the ropes: they stretch and boing him back in.
+    if (d.push >= DAD.rope - DAD.x && d.back < 0) {
+      d.back = 0
+      this.ropeSide.v += 4
+      sfx.twang()
+      this.after(0.08, () => sfx.boing())
+    }
   }
 
-  /** Dad takes a big one: now and then he says so (a big POW on the beat: "Oof! Good one!"), else just oof. */
+  /** Her super punch fills by `hits` (a plain hit is one). */
+  private gain(hits: number) {
+    if (this.ready) return
+    this.power = clamp(this.power + hits / this.need)
+    this.lightLamps()
+    if (this.power < 1) return
+    // Full: her gloves turn gold, and Dad doesn't like the look of it.
+    this.ready = true
+    this.lightLamps()
+    this.gold.forEach((g) => (g.visible = true))
+    sfx.ready()
+    this.sparkles.burst(this.glovesAt(), 18, 1.4, 1.6, 0.9, 0.05)
+    if (this.dad.mode === 'windup') this.dad.mode = 'guard'
+    this.nextSwing = Infinity
+    const kick = this.kicks()
+    this.after(0.25, () => {
+      if (!this.talk.once(kick ? 'kick' : 'super', kick ? T.kick : T.super)) this.talk.react(this.time, T.uhOh)
+    })
+  }
+  /** Is this round's super punch the big unicorn kick (the third round's, and every other one after the belt)? */
+  private kicks() {
+    return this.free ? this.kos % 2 === 1 : this.round === 3
+  }
+
+  /** Dad takes a big one: now and then he says so, else just oof. */
   private oof(big: boolean) {
     if (!this.talk.react(this.time, big ? T.oof : T.strong)) sfx.oof()
   }
 
-  // ---------------------------------------------------------------- Dad's pad, the kick
-
-  private padSpot() {
-    const step = PAD_STEPS[Math.min(this.padStep, PAD_STEPS.length - 1)]
-    return { ...this.side(step.side), y: PAD_Y[step.y] }
-  }
-  /** Where Dad stands on that side, facing her. */
-  private side(id: 'left' | 'right') {
-    const s = PAD_SIDES[id]
-    return { x: s.x, z: s.z, face: Math.atan2(this.kBase.x - s.x, this.kBase.z - s.z) / deg }
-  }
-
-  /** Round 3: Dad lets go of the bag and the pad pops onto his hands, then he hops to its first place. */
-  private padUp(now: boolean) {
-    this.daddy = 'pad'
-    this.hooked = true
-    if (now) this.swing.x = BAG_HOOK
-    else sfx.whoosh(0.4)
-    this.padStep = 0
-    this.built.pad.visible = true
-    this.padPop = 0
-    const s = this.padSpot()
-    if (now) {
-      this.dSpot = { x: s.x, z: s.z, face: s.face }
-      this.put(this.nick, s.x, 0, s.z, 'stand', s.face)
-      this.padY = this.padYGoal = s.y
-      this.faceToward(s.x, s.z)
-    } else this.daddyHop(s.x, s.z, s.face, s.y)
-  }
-  private padNext() {
-    if (this.phase !== 'play' || this.round !== 3) return
-    this.padStep++
-    // The pad's first move down low: Dad calls it.
-    if (this.padStep === 1) this.talk.once('upDown', T.upDown)
-    const s = this.padSpot()
-    if (s.x === this.dSpot.x && s.z === this.dSpot.z) this.padYGoal = s.y
-    else this.daddyHop(s.x, s.z, s.face, s.y)
-  }
-  private daddyHop(x: number, z: number, face: number, y: number) {
-    this.dHop = true
-    this.padYGoal = y
-    this.hop(this.nick, this.scene, V(x, 0, z), {
-      face,
-      dur: 0.42,
-      arc: 0.35,
-      done: () => {
-        this.dHop = false
-        this.dSpot = { x, z, face }
-      },
-    })
+  /** She pops his big mitt before it comes down: BONK. It deflates, he spins round and wobbles, dizzy. */
+  private popMitt(p: Punch) {
+    const d = this.dad
+    d.mode = 'dizzy'
+    d.t = 0
+    this.counters++
+    this.bopsInARow = 0
+    this.combo++
+    this.lastHit = this.time
+    this.comboPop = 0
+    sfx.bonk()
+    this.freeze = 0.08
+    this.shake = Math.max(this.shake, 0.5)
+    this.starsFx.burst(p.at, 20, 2.2, 2.0, 0.7, 0.09)
+    this.popPow(p.at, 'BONK!', true)
+    this.gain(3)
+    this.after(0.5, () => this.talk.react(this.time, T.dizzy))
   }
 
-  /** The pad glows at kick height on her right: the big kick. */
-  private kickReady() {
-    this.phase = 'kick'
-    const s = this.side('right')
-    if (this.dSpot.x !== s.x || this.dSpot.z !== s.z) this.daddyHop(s.x, s.z, s.face, PAD_Y.mid)
-    else this.padYGoal = PAD_Y.mid
-    sounds.sparkle()
-    // The first glow at kick height is new: Sparkle says so. (The toy's later ones, now and then.)
-    if (!this.talk.once('kick', T.kick)) this.talk.react(this.time, T.kick)
+  /** His mitt comes down on her head: a soft bop. She squashes, slides back and giggles; next time he's slower. */
+  private bop() {
+    this.bopped = 0
+    this.bops++
+    this.bopsInARow++
+    this.combo = 0
+    sfx.bop()
+    this.after(0.25, () => sfx.giggle())
+    const at = this.kaylee.root.position.clone().add(V(0, 1.0, 0))
+    this.starsFx.burst(at, 5, 1.0, 1.2, 0.5, 0.05)
+    this.popPow(at, 'BOP!', false)
+    this.after(0.3, () => this.talk.react(this.time, T.gotcha))
   }
 
-  /** Her unicorn kick: she turns her back to Dad and bucks with both back hooves. */
-  private kick() {
-    if (this.phase !== 'kick' || this.dHop) return
-    this.phase = 'finale'
-    const at = this.padWorld()
-    // Face away from the pad (her back hooves toward it).
-    this.kYaw = Math.atan2(this.kBase.x - at.x, this.kBase.z - at.z)
-    this.kaylee.face(this.kYaw)
-    const dir = V(this.kBase.x - at.x, 0, this.kBase.z - at.z).normalize()
-    this.punch = { t: 0, dur: 1.0, arm: 0, kind: 'kick', what: 'pad', at, big: true, hit: false, dir, lunge: 0.12 }
-    sfx.whoosh(0.4)
+  // ---------------------------------------------------------------- the super punch, the knock-down, the count
+
+  private superPunch() {
+    const kick = this.kicks()
+    this.phase = 'super'
+    this.slow = true
+    const at = V(this.dadX - 0.15 * this.H, 0.36 * this.H, DAD.z)
+    const dir = V(at.x - this.kBase.x, 0, at.z - this.kBase.z).normalize()
+    if (kick) {
+      // Her unicorn kick: she turns her back to Dad and bucks with both back hooves.
+      this.kYaw = KAYLEE_KICK
+      this.kaylee.face(this.kYaw)
+      this.punch = { t: 0, dur: 0.62, arm: 0, kind: 'kick', zone: 'body', at, hit: false, dir: dir.clone().negate(), lunge: 0.25, leap: 0 }
+    } else {
+      this.faceDad()
+      this.punch = { t: 0, dur: 0.5, arm: 1, kind: 'super', zone: 'body', at, hit: false, dir, lunge: clamp(at.x - this.kBase.x - 0.3, 0.1, 1.2), leap: 0 }
+    }
+    sfx.windUp()
   }
 
-  private kickLands() {
-    const at = this.padWorld()
+  /** It lands: KA-POW. Dad flies into the ropes. */
+  private superLands() {
+    const at = this.punch?.at.clone() ?? V(this.dadX, 0.6, DAD.z)
+    this.phase = 'ko'
+    this.slow = false
+    this.ready = false
+    this.power = 0
+    this.lightLamps()
+    this.gold.forEach((g) => (g.visible = false))
+    this.kos++
+    this.freeze = 0.12
+    this.shake = 1
     sfx.bigKick()
     this.after(0.05, () => sfx.pow())
-    this.starsFx.burst(at, 24, 2.6, 2.4, 0.8, 0.1)
+    this.starsFx.burst(at, 28, 2.8, 2.4, 0.9, 0.1)
+    this.sparkles.burst(at, 14, 2.0, 1.6, 0.8, 0.06)
     this.popPow(at, 'KA-POW!', true)
-    // The pad flies off spinning, Dad flies into the ropes.
-    this.padFly = { p: at.clone(), v: V(1.4, 3.4, 0.5), r: V(0, 0, 0), spin: V(4, 2, 9), down: false }
-    this.fly = { t: 0, from: this.nick.root.position.clone() }
-    this.daddy = 'fly'
+    this.dad.mode = 'fly'
+    this.dad.t = 0
+    this.swell = 0
+    this.flight = { p: V(this.dadX, 0.05, DAD.z), v: V(FEEL.launch, 2.0, 0), rot: 0, spin: -5, roped: false, juggles: 0 }
+    this.nick.setPose('stand')
     this.after(0.1, () => this.talk.say(T.ropes))
-    const first = !this.allDoneSent
-    // Then the champion: ding ding ding, the coach holds her glove up, the belt goes on.
-    this.after(1.5, () => {
-      sfx.bell(3)
-      this.bellT = 0
-      this.coach.setMode('guard')
-      const side = this.kBase.x - 0.62
-      this.coach.goTo(side, this.kBase.z + 0.12, 90, () => this.coach.play('cheer'))
+  }
+
+  /** A tap on Dad in the air: boing, up he goes again. */
+  private bounceDad() {
+    const f = this.flight
+    if (!f || !f.roped) return
+    // (After a few he's too heavy to bounce, so the count still comes.)
+    if (f.juggles >= JUGGLES) {
+      sfx.pap()
+      return
+    }
+    f.juggles++
+    this.juggles++
+    // Up toward the ceiling, never past it (he stays on screen).
+    f.v.y = Math.min(FEEL.juggle, Math.sqrt(2 * FEEL.float * Math.max(0.08, DAD.ceil - f.p.y)))
+    f.v.x = (DAD.land - f.p.x) / ((2 * f.v.y) / FEEL.float + 0.2)
+    f.spin = (f.juggles % 2 ? 7 : -7) * (0.8 + Math.random() * 0.4)
+    sfx.juggle(Math.min(6, f.juggles))
+    if (f.juggles === 2) this.after(0.1, () => sfx.giggle())
+    const at = f.p.clone().add(V(0, 0.5 * this.H, 0))
+    this.starsFx.burst(at, 8, 1.6, 1.4, 0.6, 0.07)
+    this.popPow(at, 'BOING!', false)
+    this.shake = Math.max(this.shake, 0.2)
+  }
+
+  /** A poke at Dad when there's no bout on (sitting on the mat, between rounds): a wiggle and a laugh. */
+  private pokeDad() {
+    this.nick.react(this.dad.mode === 'sit' ? 'wiggle' : 'hop')
+    sfx.boing()
+    this.after(0.15, () => sfx.haha())
+  }
+
+  /** He's down. The coach trots over and counts him out. */
+  private landed(f: Flight) {
+    const x = clamp(f.p.x, DAD.x + 0.1, DAD.rope - 0.1)
+    this.flight = null
+    this.dad.mode = 'sit'
+    this.dad.push = x - DAD.x
+    this.nick.place(x, 0, DAD.z, DAD_SIT, 'sit')
+    this.nick.rig.body.rotation.set(0, 0, 0)
+    this.nick.root.rotation.z = 0
+    sfx.land()
+    this.shake = Math.max(this.shake, 0.7)
+    this.ringHop = 0
+    this.starsFx.burst(V(x, 0.15, DAD.z + 0.2), 14, 2.0, 1.2, 0.6, 0.07)
+    this.after(0.3, () => {
+      this.nick.react('wiggle')
+      sfx.haha()
     })
-    this.after(2.4, () => {
+    this.coach.setMode('guard')
+    this.coach.goTo(Math.min(x + 0.7, ROPE_X - 0.1), DAD.z - 0.4, -50, () => (this.counting = 0))
+  }
+
+  private count() {
+    const n = this.counting
+    this.coach.play('count')
+    sfx.drum(true)
+    this.skin = 0
+    this.talk.say(T.count[n])
+    this.popPow(V(this.dadX - 0.1, 1.35, DAD.z), String(n + 1), true, true)
+    this.counting++
+    if (this.counting < COUNT) this.after(0.85, () => this.count())
+    else {
+      this.counting = -1
+      this.after(0.85, () => this.wonRound())
+    }
+  }
+
+  /** Counted out: ding ding ding, a star, and (after the third) the belt. */
+  private wonRound() {
+    this.phase = 'between'
+    sfx.bell(3)
+    this.bellT = 0
+    this.beat.stop()
+    this.coach.play('cheer')
+    this.kAct = { kind: 'hop', t: 0, dur: 0.6, k: 1 }
+    const last = !this.free && this.round === 3
+    if (last) return this.champion()
+    if (this.free) sfx.cheer()
+    else this.after(0.4, () => this.giveStar())
+    this.after(0.7, () => this.talk.say(T.again))
+    this.after(1.7, () => this.dadUp())
+    this.after(2.9, () => {
+      this.coach.goTo(this.coachDrum.x, this.coachDrum.z, 0, () => this.coach.setMode('drum'))
+      if (!this.free) {
+        this.round = (this.round + 1) as Round
+        this.bev.round(this.round)
+      }
+      this.startBout()
+    })
+  }
+
+  /** The champion: the coach holds her glove up and the gold belt goes round her waist. Then the bout goes on, a toy. */
+  private champion() {
+    this.phase = 'finale'
+    this.coach.goTo(this.kBase.x - 0.6, this.kBase.z + 0.12, 90, () => this.coach.play('cheer'))
+    this.after(0.9, () => {
       this.faceToward(this.kBase.x, this.kBase.z + 2)
       this.kAct = { kind: 'hop', t: 0, dur: 0.6, k: 1 }
-      if (first) {
-        this.beltPop = 0
-        this.built.belt.visible = true
-        sfx.fanfare()
-        sounds.sparkle()
-        this.sparkles.burst(this.kaylee.root.position.clone().add(V(0, 0.5, 0.2)), 24, 1.6, 2.0, 1.2, 0.06)
-        this.giveStar()
-        this.after(0.4, () => this.talk.say(T.champion))
-      } else sfx.cheer()
+      this.beltPop = 0
+      this.built.belt.visible = true
+      sfx.fanfare()
+      sounds.sparkle()
+      this.sparkles.burst(this.kaylee.root.position.clone().add(V(0, 0.5, 0.2)), 24, 1.6, 2.0, 1.2, 0.06)
+      this.giveStar()
+      this.after(0.4, () => this.talk.say(T.champion))
     })
-    this.after(4.2, () => {
-      this.phase = 'free'
-      this.layoutLamps()
-      this.coach.goTo(this.coachDrum.x, this.coachDrum.z, 0, () => this.coach.setMode('drum'))
+    this.after(2.2, () => this.kaylee.twirl())
+    this.after(3.6, () => {
+      this.free = true
       if (!this.allDoneSent) {
         this.allDoneSent = true
         this.bev.allDone()
       }
+      this.dadUp()
     })
-    this.after(4.6, () => this.daddyUp())
+    this.after(4.9, () => {
+      this.coach.goTo(this.coachDrum.x, this.coachDrum.z, 0, () => this.coach.setMode('drum'))
+      this.startBout()
+    })
   }
 
-  /** Dad gets up, the pad hops back into his hands, and he holds it up again. */
-  private daddyUp() {
-    this.daddy = 'pad'
-    this.padFly = null
-    this.padPop = 0
+  /** Dad hops up and back to his corner. */
+  private dadUp() {
+    this.dad.mode = 'up'
     this.nick.setPose('stand')
-    this.nick.react('hop')
-    const s = this.side('right')
-    this.daddyHop(s.x, s.z, s.face, PAD_Y.mid)
-    if (!this.talk.react(this.time, T.hit)) sfx.haha()
+    this.hop(this.nick, this.scene, V(DAD.x, 0, DAD.z), { face: DAD_FACE, dur: 0.5, arc: 0.4, done: () => (this.dad.push = 0) })
+    this.dad.push = 0
+    this.after(0.3, () => this.talk.react(this.time, T.more))
   }
 
   // ---------------------------------------------------------------- touch
@@ -633,32 +781,15 @@ export class MuayThai extends Stage {
 
   pointerDown(x?: number, y?: number, id?: string) {
     super.pointerDown()
-    this.down = null
     this.downHandled = false
     if (x === undefined || y === undefined) return
     const what = id ?? this.pick(x, y)
-    if (what === 'bag' || what === 'pad') {
+    if (what === 'dad' || what === 'mitt') {
       // The punch starts on the finger going down (no waiting for it to lift).
       this.touches++
       this.downHandled = true
-      this.down = { what, x, y, hooked: false }
-      this.strike(what, x, y, 'jab')
+      this.hitDad(x, y, what)
     }
-  }
-
-  pointerMove(x: number, y: number, _dx: number, _dy: number, held: boolean) {
-    const d = this.down
-    if (!held || !d || d.hooked) return
-    // A swipe across the bag: a hook (a jab, then a hook: a combo).
-    if (Math.hypot(x - d.x, y - d.y) > 48 && this.phase !== 'kick' && this.phase !== 'finale') {
-      d.hooked = true
-      this.lastTouch = this.time
-      this.after(0.13, () => this.strike(d.what, d.x, d.y, 'hook'))
-    }
-  }
-
-  pointerUp() {
-    this.down = null
   }
 
   tap(x: number, y: number, id?: string) {
@@ -674,21 +805,32 @@ export class MuayThai extends Stage {
   protected onTap(id: string | null, x: number, y: number) {
     if (!id) return
     switch (id) {
-      case 'bag':
-      case 'pad':
-        // (A key press: no finger went down. Aim at the middle.)
-        return this.strike(id, x || this.w / 2, y || this.h / 2, 'jab')
+      case 'dad':
+      case 'mitt': {
+        // (A key press: no finger went down. Aim at his tummy.)
+        const s = this.toScreen(V(this.dadX, 0.36 * this.H, DAD.z), 0)
+        return this.hitDad(x || s?.x || this.w / 2, y || s?.y || this.h / 2, id)
+      }
       case 'gloves':
       case 'kaylee':
       case 'family:kaylee':
-        if (this.phase === 'wai') return this.waiTap()
-        this.kAct = { kind: 'hop', t: 0, dur: 0.5, k: 1 }
-        sfx.giggle()
+        if (this.phase === 'wai') return this.bow()
+        // A ram muay dance step (arms out like a bird's wings), a drum beat with it; the coach copies her.
+        if (this.punch || this.bopped >= 0) return
+        this.kAct = { kind: 'dance', t: 0, dur: 0.62, k: this.steps % 2 ? 1 : -1 }
+        sfx.step((this.steps % 4) * 2)
+        if (!this.coach.busy && this.coach.mode !== 'drum') this.coach.play('dance', this.steps % 2 ? -1 : 1)
+        this.steps++
+        return
+      case 'bag':
+        this.swing.v += 2.2
+        sfx.thud(0.8)
+        this.starsFx.burst(V(BAG.x, 0.95, BAG.z + 0.2), 5, 1.2, 1.2, 0.5, 0.05)
         return
       case 'bag2':
         // The coach shows a kick on the small bag (a spin, thwack).
         this.coach.look = V(BAG2.x, 1, BAG2.z)
-        if (this.coach.busy) return void (this.swing2.v += 1.2)
+        if (this.coach.busy || this.coach.mode !== 'drum') return void (this.swing2.v += 1.2)
         this.coach.play('kick', 1, () => {
           this.swing2.v += 2.4
           sfx.thwack()
@@ -713,11 +855,8 @@ export class MuayThai extends Stage {
       case 'bottle':
         this.bottleT = 0
         sfx.squirt()
-        for (let i = 0; i < 14; i++) this.drops.emit(this.built.bottle.position.clone().add(V(0, 0.34, 0)), V(1.4 + Math.random() * 0.5, 2.2 + Math.random() * 0.8, -0.3 + Math.random() * 0.3), 0.9, 0.035 + Math.random() * 0.02)
-        this.after(0.7, () => {
-          this.kAct = { kind: 'hop', t: 0, dur: 0.5, k: 1 }
-          sfx.giggle()
-        })
+        for (let i = 0; i < 14; i++) this.drops.emit(this.built.bottle.position.clone().add(V(0, 0.34, 0)), V(1.0 + Math.random() * 0.5, 2.2 + Math.random() * 0.8, -0.3 + Math.random() * 0.3), 0.9, 0.035 + Math.random() * 0.02)
+        this.after(0.7, () => sfx.giggle())
         return
       case 'board':
         this.after(0.3, () => this.talk.once('sport', T.sport))
@@ -729,35 +868,54 @@ export class MuayThai extends Stage {
         this.starTwinkle = 0
         return
       case 'coach':
+        if (this.counting >= 0) return
         this.coach.play(this.coach.mode === 'drum' ? 'hop' : 'pose')
-        // The first poke: what the wai kru is, in his own voice (after that, his babble).
+        // The first poke: what the wai is for, in his own voice (after that, his babble).
         if (!this.talk.once('waiKru', T.waiKru)) sfx.coach()
-        return
-      case 'family:nick':
-        if (this.daddy === 'fly') return
-        this.nick.react('hop')
-        sfx.haha()
         return
     }
   }
 
-  // ---------------------------------------------------------------- the POWs
+  // ---------------------------------------------------------------- the POWs, the combo number
 
   setPowElements(els: HTMLElement[]) {
     this.powEls = els
   }
-  setRingElement(el: HTMLElement | null) {
-    this.ringEl = el
+  setComboElement(el: HTMLElement | null) {
+    this.comboEl = el
   }
-  private popPow(at: Vector3, text: string, big: boolean) {
+  private popPow(at: Vector3, text: string, big: boolean, count = false) {
     const free = this.powEls.find((el) => !this.pows.some((p) => p.el === el)) ?? this.pows.shift()?.el
     if (!free) return
     free.textContent = text
     free.dataset.big = big ? '1' : ''
-    this.pows.push({ el: free, at: at.clone(), t: 0, big })
+    this.pows.push({ el: free, at: at.clone(), t: 0, big, count })
   }
 
   // ---------------------------------------------------------------- per frame
+
+  /** Big hits stop time for a blink, and the super punch winds up in slow motion. */
+  update(dt: number) {
+    this.shake *= Math.exp(-dt * 7)
+    if (this.freeze > 0) {
+      this.freeze -= dt
+      dt *= 0.03
+    } else if (this.slow) dt *= FEEL.slowmo
+    super.update(dt)
+  }
+
+  render() {
+    const k = this.shake
+    if (k < 0.01) return super.render()
+    const c = this.rig.camera.position
+    const ox = Math.sin(this.time * 97) * 0.035 * k
+    const oy = Math.cos(this.time * 83) * 0.035 * k
+    c.x += ox
+    c.y += oy
+    super.render()
+    c.x -= ox
+    c.y -= oy
+  }
 
   protected step(dt: number, t: number) {
     for (const l of [...this.later]) {
@@ -766,40 +924,53 @@ export class MuayThai extends Stage {
       l.f()
     }
 
-    // ---- The drum's beat ----
+    // ---- The drum's beat: faster as her super punch fills ----
+    const hot = this.ready || this.phase === 'super' ? 1 : clamp((this.power - 0.5) * 2)
+    this.beat.setPeriod(PERIOD.calm + (PERIOD.hot - PERIOD.calm) * hot)
     const tick = this.beat.tick(t)
     if (tick === 'beat') {
-      sfx.drum(this.beat.n % 4 === 1)
-      this.skin = 0
+      if (this.coach.mode === 'drum') {
+        sfx.drum(this.beat.n % 4 === 1)
+        this.skin = 0
+      }
       this.coach.drumArm = this.coach.drumArm ? 0 : 1
-    } else if (tick === 'off') sfx.ching()
+    } else if (tick === 'off' && this.coach.mode === 'drum') sfx.ching()
     this.coach.drumPhase = this.beat.on ? 1 - this.beat.ring(t) : 0
 
-    // ---- The bags: pendulums (stiffer while Dad holds the big one), the squash where it was hit ----
-    const held = this.daddy === 'bag'
+    // ---- The count ----
+    if (this.counting === 0 && !this.coach.busy && !this.pows.some((p) => p.count)) this.count()
+
+    // ---- Dad's turn: a swing now and then (round 2 on), his guard up and down (round 3 on) ----
+    const d = this.dad
+    if (this.phase === 'bout' && d.mode === 'guard' && !this.ready) {
+      if (t >= this.nextSwing) {
+        d.mode = 'windup'
+        d.t = 0
+        // Slower the first time, and after each one that lands on her.
+        d.windDur = FEEL.windUp + (this.counters + this.bops === 0 ? 0.6 : 0) + Math.min(2, this.bopsInARow) * 0.35
+        sfx.whoop(d.windDur)
+        this.after(0.3, () => this.talk.once('glove', T.glove))
+      } else if (this.guards()) {
+        d.guardT -= dt
+        if (d.guardT <= 0) {
+          d.guard = d.guard === 'high' ? 'low' : 'high'
+          d.guardT = 2.2 + Math.random() * 0.8
+          sfx.swish()
+          this.talk.once('upDown', T.upDown)
+        }
+      }
+    }
+    this.dadState(dt)
+
+    // ---- The bags (pendulums), the ropes, the drum's skin, the bell, the bottle, the board ----
     const sw = this.swing
-    sw.v += (-(held ? 18 : 9) * sw.a - (held ? 3.2 : 1.3) * sw.v) * dt
+    sw.v += (-9 * sw.a - 1.3 * sw.v) * dt
     sw.a = clamp(sw.a + sw.v * dt, -0.6, 0.6)
-    // (Round 3: Dad has swung it back onto its hook, out of the pad's way.)
-    const hook = this.hooked ? BAG_HOOK : 0
-    sw.vx += (-12 * (sw.x - hook) - (this.hooked ? 4 : 2) * sw.vx) * dt
-    sw.x += sw.vx * dt
-    this.built.bag.pivot.rotation.set(sw.x, 0, this.hooked ? sw.a * 0.3 : sw.a)
-    this.squash.t += dt
-    const sq = Math.exp(-this.squash.t * 7) * Math.cos(this.squash.t * 26) * 0.12 * Math.min(1.6, this.squash.k)
-    this.built.bag.body.scale.set(1 - sq, 1 + sq * 0.4, 1 + sq * 0.6)
+    this.built.bag.pivot.rotation.z = sw.a
     const s2 = this.swing2
     s2.v += (-9 * s2.a - 1.4 * s2.v) * dt
     s2.a += s2.v * dt
     this.built.bag2.pivot.rotation.z = -s2.a
-    // A big swing into Dad's face: dizzy stars round his head.
-    if (held && sw.a > 0.24 && this.dizzy < 0) {
-      this.dizzy = 0
-      this.nick.react('wiggle')
-      sfx.boing()
-    }
-
-    // ---- The ropes (a bow in the middle of each), the drum's skin, the bell, the bottle, the board ----
     for (const [r, w, k] of [
       [this.built.back, this.ropeBack, 0],
       [this.built.side, this.ropeSide, 1],
@@ -816,15 +987,20 @@ export class MuayThai extends Stage {
         setPiece(rope.b, mid, rope.to)
       })
     }
+    // (When Dad lands, everything on the mat jumps.)
+    this.ringHop += dt
+    const jump = bell(clamp(this.ringHop / 0.32)) * 0.09
     this.skin += dt
     const sk = Math.exp(-this.skin * 10) * 0.35
     this.built.skin.scale.set(1 + sk * 0.2, 1 - sk, 1 + sk * 0.2)
     this.built.drum.scale.set(1 + sk * 0.04, 1 - sk * 0.05, 1 + sk * 0.04)
+    this.built.drum.position.y = jump
     this.bellT += dt
     this.built.bell.rotation.z = Math.sin(this.bellT * 40) * 0.12 * Math.exp(-this.bellT * 3)
     this.bottleT += dt
     this.built.bottle.rotation.z = Math.sin(this.bottleT * 18) * 0.2 * Math.exp(-this.bottleT * 4)
     this.built.bottle.scale.y = 1 - 0.15 * bell(clamp(this.bottleT / 0.3))
+    this.built.bottle.position.y = BOTTLE.stool + 0.03 + jump * 1.6
     this.built.board.rotation.z *= Math.exp(-dt * 6)
     this.built.stars.forEach((s, i) => {
       this.starPop[i] = Math.min(1, this.starPop[i] + dt / 0.6)
@@ -841,45 +1017,28 @@ export class MuayThai extends Stage {
     }
 
     // ---- The 👆 after a while with nothing touched: Sparkle says what to do, once each time it shows ----
-    this.talk.hint(this.time, this.lastTouch, () => this.hintAt() !== null, () =>
-      this.phase === 'wai' ? T.hint.gloves : this.phase === 'kick' ? T.kick : this.round === 3 ? T.hint.pad : T.hint.bag,
-    )
+    this.talk.hint(this.time, this.lastTouch, () => this.hintAt() !== null, () => (this.phase === 'wai' ? T.hint.gloves : this.mittUp ? T.glove : T.hint.dad))
 
     // ---- The people ----
     const k = this.kaylee
-    // (In the wai kru she and the coach glance at each other but keep their faces to us.)
-    const lookAt = this.punch ? this.punch.at : this.phase === 'wai' ? this.coach.root.position.clone().add(V(0, 0.85, 1.6)) : this.daddy === 'pad' ? this.padWorld() : V(BAG.x, 0.8, BAG.z)
+    const dadHead = this.flight ? this.flight.p.clone().setY(this.flight.p.y + 0.5 * this.H) : V(this.dadX, 0.75 * this.H, DAD.z)
+    // (For the bow she and the coach glance at each other but keep their faces to us.)
+    const lookAt = this.punch ? this.punch.at : this.phase === 'wai' ? this.coach.root.position.clone().add(V(0, 0.85, 1.6)) : this.mittUp ? this.mittAt() : dadHead
     k.lookAt(lookAt.x, lookAt.y, lookAt.z)
     k.update(dt, t)
     this.kayleeFrame(dt, t)
     this.nick.lookAt(k.position.x, 0.75, k.position.z)
     this.nick.update(dt, t)
-    this.daddyFrame(dt, t)
-    if (!this.coach.look || this.time - this.lastTouch > 1.5) this.coach.look = k.position.clone().add(V(0, 0.7, this.phase === 'wai' ? 1.6 : 0))
+    this.dadFrame(dt, t)
+    if (!this.coach.look || this.time - this.lastTouch > 1.5) this.coach.look = this.phase === 'wai' ? k.position.clone().add(V(0, 0.7, 1.6)) : dadHead
+    this.coach.root.position.y += jump
     this.coach.update(dt, t)
 
-    // ---- The pad flying, the belt popping on ----
-    const pf = this.padFly
-    if (pf) {
-      if (!pf.down) {
-        pf.v.y -= 9 * dt
-        pf.p.addScaledVector(pf.v, dt)
-        pf.r.addScaledVector(pf.spin, dt)
-        if (pf.p.y < PAD.d / 2 && pf.v.y < 0) {
-          pf.p.y = PAD.d / 2
-          if (pf.v.y < -1.2) {
-            pf.v.y *= -0.35
-            pf.v.x *= 0.5
-            sfx.thump()
-          } else {
-            pf.down = true
-            pf.r.set(-Math.PI / 2, pf.r.y, 0)
-          }
-        }
-        pf.p.x = Math.min(pf.p.x, POSTS[1][0] - 0.3)
-      }
-      this.built.pad.position.copy(pf.p)
-      this.built.pad.rotation.set(pf.r.x, pf.r.y, pf.r.z)
+    // ---- Her gold gloves, the belt popping on ----
+    if (this.ready) {
+      const pulse = 1.12 + 0.1 * Math.sin(t * 11)
+      this.gold.forEach((g) => g.scale.setScalar(pulse))
+      if (Math.floor(t * 14) !== Math.floor((t - dt) * 14)) this.sparkles.emit(this.glovesAt().add(V((Math.random() - 0.5) * 0.25, (Math.random() - 0.5) * 0.2, 0.1)), V(0, 0.6, 0), 0.5, 0.035)
     }
     if (this.beltPop >= 0) {
       this.beltPop = Math.min(1, this.beltPop + dt / 0.6)
@@ -891,20 +1050,76 @@ export class MuayThai extends Stage {
     this.starsFx.update(dt)
     this.sparkles.update(dt)
     this.drops.update(dt)
+    this.comboPop += dt
+    if (this.combo && this.time - this.lastHit > FEEL.combo) this.combo = 0
     for (const p of [...this.pows]) {
       p.t += dt
-      if (p.t > 0.75) this.pows.splice(this.pows.indexOf(p), 1)
+      if (p.t > (p.count ? 0.8 : 0.75)) this.pows.splice(this.pows.indexOf(p), 1)
     }
   }
 
-  /** Kaylee, driven by hand: her guard and bounce, the punches (aimed at her finger), the wai kru's bows and steps,
-   *  the big kick, a hop. (After Avatar.update, which does her blinks and her turning.) */
+  /** Dad's part of the bout as time goes by: stepping back in, his wind-up and swing, being dizzy, flying. */
+  private dadState(dt: number) {
+    const d = this.dad
+    d.t += dt
+    // Pushed back by her punches, he steps back in when she lets up; from the ropes he's boinged back in.
+    if (d.back >= 0) {
+      d.back += dt / 0.45
+      d.push *= Math.exp(-dt * 7)
+      if (d.back >= 1) d.back = -1
+    } else if (d.mode !== 'sit' && d.mode !== 'fly' && d.mode !== 'up' && this.time - this.lastHit > 0.45) d.push = Math.max(0, d.push - 0.45 * dt)
+    if (d.mode === 'windup') {
+      this.swell = Math.min(1, d.t / (d.windDur * 0.7))
+      if (d.t >= d.windDur) {
+        d.mode = 'swing'
+        d.t = 0
+        sfx.whoosh(0.25)
+      }
+    } else {
+      this.swell = Math.max(0, this.swell - dt * (d.mode === 'swing' ? 1.2 : 5))
+      if (d.mode === 'swing') {
+        const before = (d.t - dt) / SWING.dur
+        const now = d.t / SWING.dur
+        if (before < SWING.lands && now >= SWING.lands && this.phase === 'bout') this.bop()
+        if (now >= 1.8) this.backToGuard()
+      } else if (d.mode === 'dizzy' && d.t >= FEEL.dizzy) this.backToGuard()
+    }
+    // In the air: up into the ropes, slung back, tumbling; down on his bottom.
+    const f = this.flight
+    if (!f) return
+    f.v.y -= FEEL.float * dt
+    f.p.addScaledVector(f.v, dt)
+    f.rot += f.spin * dt
+    if (f.p.x >= ROPE_X && f.v.x > 0) {
+      f.p.x = ROPE_X
+      f.roped = true
+      // Slung back up and over, to land between the ropes and her.
+      f.v.y = Math.sqrt(2 * FEEL.float * (DAD.ceil - f.p.y))
+      f.v.x = (DAD.land - f.p.x) / ((2 * f.v.y) / FEEL.float)
+      f.spin = 6.5
+      this.ropeSide.v += 6
+      sfx.twang()
+      this.after(0.05, () => sfx.boing())
+    }
+    if (f.p.x < DAD.x && f.v.x < 0) f.v.x = 0
+    if (f.p.y <= 0 && f.v.y < 0 && f.roped) this.landed(f)
+    else if (f.p.y < 0.05 && !f.roped) f.p.y = 0.05
+  }
+  private backToGuard() {
+    const d = this.dad
+    d.mode = 'guard'
+    d.t = 0
+    this.nextSwing = this.swings() ? this.time + FEEL.swingGap * (0.8 + Math.random() * 0.4) : Infinity
+  }
+
+  /** Kaylee, driven by hand: her guard and bounce, the punches (aimed at her finger, a leap for his head), the super
+   *  punch and the big kick, the bow, a dance step, being bopped. (After Avatar.update: her blinks and her turning.) */
   private kayleeFrame(dt: number, t: number) {
     const k = this.kaylee
     const r = k.rig
     const fight = this.phase !== 'wai'
     this.guardK += ((fight ? 1 : 0) - this.guardK) * (1 - Math.exp(-dt * 6))
-    // At rest: gloves down by her sides in the wai kru, the guard up (and a bounce on her toes) to fight.
+    // At rest: gloves down by her sides for the bow, the guard up (and a bounce on her toes) to fight.
     let aL = [-0.25 * (1 - this.guardK) + GUARD[0] * this.guardK, 0.15 * (1 - this.guardK) + GUARD[1] * this.guardK]
     let aR = [-0.25 * (1 - this.guardK) + GUARD[2] * this.guardK, -0.15 * (1 - this.guardK) + GUARD[3] * this.guardK]
     let y = fight ? Math.abs(Math.sin(t * 6.2)) * 0.022 : 0
@@ -912,9 +1127,10 @@ export class MuayThai extends Stage {
     let twist = 0
     let tilt = 0
     let headPitch = 0
+    let squash = 0
     const off = new Vector3()
     const bodyOff = new Vector3()
-    // ---- The wai kru's bows and steps, a hop ----
+    // ---- The bow, a dance step, a hop ----
     const a = this.kAct
     if (a) {
       a.t += dt / a.dur
@@ -932,23 +1148,22 @@ export class MuayThai extends Stage {
         aL = [aL[0] + (-0.25 - aL[0]) * e, aL[1] + (-1.25 - aL[1]) * e]
         aR = [aR[0] + (-0.25 - aR[0]) * e, aR[1] + (1.25 - aR[1]) * e]
         y += 0.13 * bell(span(p, 0.1, 0.8))
-        off.set(a.k * 0.15 * e, 0, 0).applyAxisAngle(V(0, 1, 0), this.kYaw)
         tilt = -a.k * 0.22 * e
       } else {
         y += 0.2 * bell(span(p, 0.1, 0.9))
       }
       if (p >= 1) this.kAct = null
     }
-    // ---- A punch (or the kick) ----
+    // ---- A punch, the super punch or the kick ----
     const pu = this.punch
     if (pu) {
       pu.t += dt / pu.dur
       const p = Math.min(1, pu.t)
       if (pu.kind === 'kick') {
         // Turn (the yaw spring), crouch, then buck: the body tips forward round her chest, so her back hooves fly up
-        // behind her into the pad; then down again with a settle.
-        const crouch = bell(span(p, 0.25, 0.48))
-        const buck = span(p, 0.42, 0.6) * (1 - span(p, 0.7, 0.95))
+        // behind her into Dad; then down again with a settle.
+        const crouch = bell(span(p, 0.2, 0.5))
+        const buck = span(p, 0.45, 0.62) * (1 - span(p, 0.72, 0.97))
         const th = 1.25 * buck
         y -= 0.06 * crouch
         lean += th
@@ -956,167 +1171,188 @@ export class MuayThai extends Stage {
         y += 0.12 * buck
         aL = [-2.0 * buck + aL[0] * (1 - buck), aL[1]]
         aR = [-2.0 * buck + aR[0] * (1 - buck), aR[1]]
-        off.copy(pu.dir).multiplyScalar(-pu.lunge * buck)
-        if (!pu.hit && p >= 0.55) {
+        off.copy(pu.dir).multiplyScalar(-pu.lunge * span(p, 0.3, 0.6) * (1 - span(p, 0.75, 1)))
+        if (!pu.hit && p >= 0.58) {
           pu.hit = true
-          this.kickLands()
+          this.superLands()
+        }
+      } else if (pu.kind === 'super') {
+        // A huge wind-up (a crouch, the glove right back, a twist away), then she shoots across the ring behind it.
+        const wind = span(p, 0, 0.5) * (1 - span(p, 0.56, 0.66))
+        const ext = span(p, 0.56, 0.66) * (1 - span(p, 0.8, 1))
+        y -= 0.07 * wind
+        y += 0.1 * ext
+        aR = [GUARD[2] + 1.9 * wind + (-(Math.PI / 2) - GUARD[2]) * ext, GUARD[3] * (1 - ext) - 0.18 * ext]
+        twist = -0.75 * wind + 0.45 * ext
+        lean += -0.12 * wind + 0.3 * ext
+        off.copy(pu.dir).multiplyScalar(-0.1 * wind + pu.lunge * ext)
+        if (!pu.hit && p >= 0.66) {
+          pu.hit = true
+          this.superLands()
         }
       } else {
-        // Wind up, out to the target (her arm aimed at the height her finger hit), back to the guard.
+        // Wind up, out to the target (her arm aimed at the height her finger hit, a leap if it's up high), back.
         const ext = span(p, 0.18, 0.42) * (1 - span(p, 0.55, 1))
         const wind = bell(span(p, 0, 0.25))
+        y += pu.leap * bell(span(p, 0.05, 0.95))
         const dist = Math.max(0.25, Math.hypot(pu.at.x - this.kBase.x, pu.at.z - this.kBase.z) - pu.lunge - 0.08)
         const e = Math.atan2(pu.at.y - SHOULDER - y, dist)
         const aim = -(Math.PI / 2 + e)
-        const hook = pu.kind === 'hook'
         const near = pu.arm === 0
-        const zOut = hook ? (near ? -0.7 : 0.7) * (1 - ext) : 0
         const zIn = near ? 0.18 : -0.18
-        const arm = [GUARD[0] + 0.5 * wind + (aim - GUARD[0]) * ext, (near ? GUARD[1] : GUARD[3]) * (1 - ext) + (zIn + zOut) * ext]
+        const arm = [GUARD[0] + 0.5 * wind + (aim - GUARD[0]) * ext, (near ? GUARD[1] : GUARD[3]) * (1 - ext) + zIn * ext]
         if (near) aL = arm
         else aR = arm
         off.copy(pu.dir).multiplyScalar(pu.lunge * ext)
         lean += 0.22 * ext
-        twist = (near ? 1 : -1) * (hook ? 0.55 : 0.3) * (ext - 0.4 * wind)
-        if (!pu.hit && p >= 0.42) {
-          pu.hit = true
-          this.contact(pu)
-        }
+        twist = (near ? 1 : -1) * 0.3 * (ext - 0.4 * wind)
+        if (!pu.hit && p >= 0.42) this.contact(pu)
       }
       if (p >= 1) this.punch = null
     }
-    // A bonk from the bag swinging back: a little bounce back.
-    if (this.bonk >= 0) {
-      this.bonk += dt / 0.45
-      const b = bell(Math.min(1, this.bonk))
-      off.addScaledVector(V(Math.sin(this.kYaw), 0, Math.cos(this.kYaw)), -0.14 * b)
-      lean -= 0.25 * b
-      if (this.bonk >= 1) this.bonk = -1
+    // ---- Bopped by his mitt: a squash, a slide back, up again ----
+    if (this.bopped >= 0) {
+      this.bopped += dt / 0.7
+      const b = bell(Math.min(1, this.bopped))
+      squash = 0.3 * bell(span(this.bopped, 0, 0.35)) - 0.08 * bell(span(this.bopped, 0.35, 0.7))
+      off.addScaledVector(V(Math.sin(this.kYaw), 0, Math.cos(this.kYaw)), -0.22 * b)
+      lean -= 0.2 * b
+      if (this.bopped >= 1) this.bopped = -1
     }
     // ---- Write it ----
     k.position.set(this.kBase.x + off.x, y, this.kBase.z + off.z)
     r.body.position.set(bodyOff.x, bodyOff.y, bodyOff.z)
     r.body.rotation.set(lean, twist, tilt)
+    k.root.scale.set(1 + squash * 0.5, 1 - squash, 1 + squash * 0.5)
     r.head.rotation.x = headPitch
     r.armL.rotation.set(aL[0], 0, aL[1])
     r.armR.rotation.set(aR[0], 0, aR[1])
   }
 
-  /** Dad: holding the bag from behind (staggering when it swings into him), then holding the pad up where it should
-   *  be, flying into the ropes, sitting on the mat laughing. (After Member.update: his blinks, breath and hops.) */
-  private daddyFrame(dt: number, t: number) {
+  /** Dad, driven by hand: on his toes behind his mitts, staggering, his big mitt winding up and coming down, spinning
+   *  dizzy, tumbling through the air, sitting on the mat. (After Member.update: his blinks, breath and hops.) */
+  private dadFrame(dt: number, t: number) {
     const n = this.nick
     const r = n.rig
+    const d = this.dad
+    const H = this.H
     const st = this.stagger
     st.v += (-60 * st.s - 9 * st.v) * dt
     st.s = clamp(st.s + st.v * dt, -0.2, 0.5)
-    if (this.dizzy >= 0) {
-      this.dizzy += dt
-      if (Math.floor(this.dizzy * 8) !== Math.floor((this.dizzy - dt) * 8)) this.starsFx.emit(r.head.localToWorld(V(Math.cos(this.dizzy * 9) * 0.3, r.face.headY + r.face.R * 1.3, Math.sin(this.dizzy * 9) * 0.3)), V(0, 0.3, 0), 0.5, 0.05, 0)
-      if (this.dizzy > 1.4) this.dizzy = -1
-    }
-    if (this.daddy === 'fly') return this.flyFrame(dt)
-    if (this.daddy === 'sit') return
-    const fwd = V(Math.sin(this.dSpot.face * deg), 0, Math.cos(this.dSpot.face * deg))
-    if (this.daddy === 'bag') {
-      // Hands on the bag, leaning in; a punch pushes him back a step and he leans in again.
-      n.root.position.set(DADDY_BAG.x - fwd.x * st.s * 0.35, n.root.position.y, DADDY_BAG.z - fwd.z * st.s * 0.35)
-      n.root.rotation.y = DADDY_BAG.face * deg
-      r.body.rotation.x = 0.12 - st.s * 0.7
-      const sway = this.swing.a * 0.6
-      r.armL.rotation.set(-1.25 + sway, 0, 0.32)
-      r.armR.rotation.set(-1.25 + sway, 0, -0.32)
+    const nod = this.nod
+    nod.v += (-90 * nod.a - 8 * nod.v) * dt
+    nod.a = clamp(nod.a + nod.v * dt, -0.5, 0.7)
+    this.bellyT += dt
+    this.mittT += dt
+    // The tummy pad boings in where she hit it; the mitts squash when they block; the near one swells for his swing.
+    const bq = Math.exp(-this.bellyT * 8) * Math.cos(this.bellyT * 28) * 0.22
+    this.gear.belly.scale.set(1 + bq * 0.5, 1 + bq * 0.5, 1 - bq * 1.6)
+    const mq = Math.exp(-this.mittT * 9) * Math.cos(this.mittT * 30) * 0.2
+    const big = 1 + 1.7 * this.swell * (1 + 0.06 * Math.sin(t * 22))
+    this.gear.mitts[0].scale.setScalar(1 + mq)
+    this.gear.mitts[1].scale.setScalar((1 + mq) * big)
+
+    if (d.mode === 'sit' || d.mode === 'up') {
+      r.head.rotation.x = 0
+      r.armL.rotation.set(0, 0, 0)
+      r.armR.rotation.set(0, 0, 0)
+      this.dArms = [...ARMS.limp]
       return
     }
-    // The pad, held out in front at its height (it eases between heights), pushed back by each hit.
-    this.padY += (this.padYGoal - this.padY) * (1 - Math.exp(-dt * 8))
-    const root = n.root.position
-    if (!this.dHop) {
-      root.x = this.dSpot.x - fwd.x * st.s * 0.3
-      root.z = this.dSpot.z - fwd.z * st.s * 0.3
+    // ---- His arms for what he's doing, eased so they never snap ----
+    let want: Arms = ARMS[d.guard]
+    let lean = 0.1 - st.s * 0.75
+    let tilt = 0
+    let spin = 0
+    let lunge = 0
+    let y = Math.abs(Math.sin(t * 5.6)) * 0.03
+    let rate = 14
+    if (d.mode === 'windup') {
+      // The mitt goes up over his head and swells; he leans back on his heels.
+      const k = span(d.t, 0, 0.35)
+      want = ARMS.wind
+      lean -= 0.3 * k
+      y = Math.abs(Math.sin(t * 9)) * 0.015
+    } else if (d.mode === 'swing') {
+      const k = clamp(d.t / SWING.dur)
+      const down = span(k, 0.15, SWING.lands)
+      const back = span(d.t / SWING.dur, 1.2, 1.8)
+      want = down > 0 ? ARMS.swung : ARMS.wind
+      rate = 30
+      lean += 0.4 * down * (1 - back)
+      lunge = 0.42 * down * (1 - back)
+    } else if (d.mode === 'dizzy') {
+      // Round and round, then wobbling on the spot with stars round his head.
+      const s = span(d.t, 0, 0.9)
+      spin = Math.PI * 4 * s * s * (3 - 2 * s)
+      const w = span(d.t, 0.7, 1.2) * (1 - span(d.t, FEEL.dizzy - 0.5, FEEL.dizzy))
+      want = ARMS.limp
+      tilt = Math.sin(t * 5) * 0.2 * w
+      lean += Math.cos(t * 3.7) * 0.1 * w
+      y = 0
+      if (Math.floor(d.t * 8) !== Math.floor((d.t - dt) * 8)) this.starsFx.emit(r.head.localToWorld(V(Math.cos(d.t * 9) * 0.3, r.face.headY + r.face.R * 1.3, Math.sin(d.t * 9) * 0.3)), V(0, 0.3, 0), 0.5, 0.05, 0)
+    } else if (d.mode === 'fly') {
+      want = ARMS.flail
+      rate = 20
+    } else if (this.ready) {
+      // Her gloves are gold: he hides behind his mitts, knees knocking.
+      want = ARMS.cower
+      lean -= 0.12
+      y = Math.abs(Math.sin(t * 22)) * 0.012
     }
-    const yaw = n.root.rotation.y
-    const f = V(Math.sin(yaw), 0, Math.cos(yaw))
-    const out = PAD_OUT - st.s * 0.12
-    const pad = this.built.pad
-    if (!this.padFly) {
-      pad.position.set(root.x + f.x * out, this.padY + (root.y > 0.01 ? root.y * 0.6 : 0), root.z + f.z * out)
-      pad.rotation.set(0, yaw, 0)
-      this.padHit += dt
-      this.padPop = Math.min(1, this.padPop + dt / 0.45)
-      const hk = Math.exp(-this.padHit * 9) * Math.cos(this.padHit * 30) * 0.12
-      const pop = this.padPop < 1 ? span(this.padPop, 0, 0.5) * (1 + wobble(this.padPop, 2) * 0.3) : 1
-      pad.scale.set(pop * (1 + hk), pop * (1 + hk * 0.5), pop * (1 - hk * 1.5))
-      // The kick: the pad glows by pulsing.
-      if (this.phase === 'kick') pad.scale.multiplyScalar(1 + 0.08 * Math.sin(t * 9))
+    // (The bow before the bout.)
+    if (this.dBow >= 0) {
+      this.dBow += dt
+      const b = bell(span(this.dBow, 0.1, 0.95))
+      want = ARMS.low
+      lean += 0.5 * b
+      if (this.dBow >= 1) this.dBow = -1
     }
-    const shoulder = 0.47 * n.height
-    const e = Math.atan2(this.padY - shoulder, out)
-    const aim = -(Math.PI / 2 + e)
-    r.armL.rotation.set(aim, 0, 0.42)
-    r.armR.rotation.set(aim, 0, -0.42)
-    r.body.rotation.x = 0.05 - st.s * 0.8
+    const e = 1 - Math.exp(-dt * rate)
+    this.dArms = this.dArms.map((v, i) => v + (want[i] - v) * e) as Arms
+    r.armL.rotation.set(this.dArms[0], 0, this.dArms[1])
+    r.armR.rotation.set(this.dArms[2], 0, this.dArms[3])
+    r.head.rotation.x = -nod.a * 0.6
+
+    const f = this.flight
+    if (f) {
+      // Tumbling about his middle.
+      const c = 0.45 * H
+      n.root.position.set(f.p.x + Math.sin(f.rot) * c, f.p.y + c - Math.cos(f.rot) * c, f.p.z)
+      n.root.rotation.set(0, DAD_FACE * deg, 0)
+      n.root.rotation.z = f.rot
+      r.body.rotation.set(-0.3, 0, 0)
+      return
+    }
+    n.root.rotation.z = 0
+    const fwd = V(Math.sin(DAD_FACE * deg), 0, Math.cos(DAD_FACE * deg))
+    const back = st.s * 0.3 - lunge
+    // (Boinged back in off the ropes: a hop.)
+    if (d.back >= 0) y += bell(d.back) * 0.3
+    n.root.position.set(this.dadX - fwd.x * back, y, DAD.z - fwd.z * back)
+    n.root.rotation.y = DAD_FACE * deg + spin
+    r.body.rotation.set(lean, 0, tilt)
   }
 
-  /** Into the ropes: up and back, the ropes stretch and boing him back, and he plops onto his bottom. */
-  private flyFrame(dt: number) {
-    const f = this.fly
-    if (!f) return
-    const n = this.nick
-    f.t += dt
-    const rope = POSTS[1][0] - 0.28
-    let x: number
-    let y: number
-    let z: number
-    if (f.t < 0.42) {
-      const k = f.t / 0.42
-      x = f.from.x + (rope - f.from.x) * k
-      z = f.from.z + (0.1 - f.from.z) * k
-      y = bell(k) * 0.45
-      n.rig.body.rotation.x = -0.9 * k
-      n.rig.armL.rotation.set(-0.3, 0, -2.2)
-      n.rig.armR.rotation.set(-0.3, 0, 2.2)
-    } else {
-      if (f.t - dt < 0.42) {
-        this.ropeSide.v += 5
-        sfx.twang()
-        this.after(0.05, () => sfx.boing())
-      }
-      const k = clamp((f.t - 0.42) / 0.5)
-      x = rope - 0.55 * k
-      z = 0.1 + 0.3 * k
-      y = bell(k) * 0.3
-      n.rig.body.rotation.x = -0.9 * (1 - k)
-    }
-    n.place(x, y, z, -100, 'stand')
-    if (f.t >= 0.92) {
-      this.fly = null
-      this.daddy = 'sit'
-      n.place(x, 0, z, -60, 'sit')
-      n.rig.body.rotation.x = 0
-      n.rig.armL.rotation.set(0, 0, 0)
-      n.rig.armR.rotation.set(0, 0, 0)
-      sfx.thump()
-      this.after(0.3, () => {
-        sfx.haha()
-        n.react('wiggle')
-      })
-    }
-  }
-
-  // ---------------------------------------------------------------- camera, anchors, the POWs and the ring
+  // ---------------------------------------------------------------- camera, anchors, the POWs
 
   protected shot(): Shot {
+    // The super punch: in close on the two of them. A flying Dad: room over the ropes.
+    if (this.phase === 'super') return { center: V(0.05, 0.85, 0.15), half: V(1.25, 0.95, 0.8), yaw: 6, pitch: 8, minDist: 4 }
+    const up = this.flight ? 0.3 : 0
     // (A tall screen comes in closer: the left side moves in, TALL_SHIFT, and the bell sits on the inside of its post.)
-    if (this.w < this.h) return { center: V(0.08, 1.0, 0.25), half: V(1.85, 1.15, 0.9), yaw: 0, pitch: 12, minDist: 5 }
-    return { center: V(-0.12, 1.02, 0.15), half: V(2.2, 1.12, 1.0), yaw: 0, pitch: 9, minDist: 5 }
+    if (this.w < this.h) return { center: V(0.08, 1.0 + up, 0.25), half: V(1.85, 1.15 + up, 0.9), yaw: 0, pitch: 12, minDist: 5 }
+    return { center: V(0.08, 1.02 + up, 0.15), half: V(1.92, 1.12 + up, 1.0), yaw: 0, pitch: 9, minDist: 5 }
   }
 
   private glovesAt() {
     return this.kaylee.root.position.clone().add(V(Math.sin(this.kYaw) * 0.16, 0.4, Math.cos(this.kYaw) * 0.16))
   }
-  private bagMid() {
-    return this.built.bag.body.getWorldPosition(new Vector3())
+  /** The middle of Dad, wherever he is (standing, flying, sitting). */
+  private dadMid() {
+    const p = this.nick.root.position
+    if (this.flight) return this.flight.p.clone().setY(this.flight.p.y + 0.45 * this.H)
+    return V(p.x, this.dad.mode === 'sit' ? 0.4 * this.H : 0.5 * this.H, p.z)
   }
 
   protected anchorAt(id: string): AnchorSpot | null {
@@ -1125,12 +1361,13 @@ export class MuayThai extends Stage {
     switch (id) {
       case 'gloves':
         return this.phase === 'wai' ? { at: this.glovesAt(), r: 0.16, glow: true, max: 130, prio: 3 } : null
+      case 'dad':
+        // All of him, head to toe: a punch lands wherever her finger does.
+        return { at: this.dadMid(), r: 0.52 * this.H, glow: this.phase === 'bout' && idle && !this.mittUp, max: 420, prio: 2 }
+      case 'mitt':
+        return this.mittUp ? { at: this.mittAt(), r: MITT_R * this.H * (1 + 1.7 * this.swell) * 1.15, glow: true, max: 260, prio: 4 } : null
       case 'bag':
-        return this.hooked ? null : { at: this.bagMid(), r: BAG.r * 1.3, glow: this.phase === 'play' && this.round < 3 && idle, max: 220, prio: 2 }
-      case 'pad': {
-        if (!this.built.pad.visible || this.padFly || this.daddy === 'fly') return null
-        return { at: this.padWorld(), r: PAD.w * 0.6, glow: this.phase === 'kick' || (this.phase === 'play' && idle), max: 190, prio: 3 }
-      }
+        return { at: this.built.bag.body.getWorldPosition(new Vector3()), r: BAG.r * 1.2, max: 130, prio: 1 }
       case 'bag2':
         return { at: this.built.bag2.body.getWorldPosition(new Vector3()), r: BAG2.r * 1.2, max: 120, prio: 2 }
       case 'drum':
@@ -1138,7 +1375,7 @@ export class MuayThai extends Stage {
       case 'bell':
         return { at: V(BELL.x, BELL.y, BELL.z), r: 0.18, max: 110, prio: 3 }
       case 'ropes':
-        return { at: V(POSTS[1][0], 0.8, 0.0), r: 0.3, max: 110, prio: 1 }
+        return { at: V(POSTS[0][0] + 0.9, 0.8, POSTS[0][1]), r: 0.3, max: 110, prio: 1 }
       case 'bottle':
         return { at: this.built.bottle.position.clone().add(V(0, 0.15, 0)), r: 0.14, max: 100, prio: 3 }
       case 'board':
@@ -1146,24 +1383,22 @@ export class MuayThai extends Stage {
       case 'coach':
         return { at: this.coach.root.position.clone().setY(0.6), r: 0.3, max: 130, prio: 0 }
       case 'family:kaylee':
-        return this.phase === 'wai' ? null : { at: k.position.clone().setY(0.62), r: 0.28, max: 110, prio: 0 }
-      case 'family:nick':
-        return { at: this.nick.root.position.clone().setY(this.nick.root.position.y + (this.daddy === 'sit' ? 0.6 : 1.2)), r: 0.3, max: 120, prio: 0 }
+        return this.phase === 'wai' ? null : { at: k.position.clone().setY(0.62), r: 0.28, max: 110, prio: 3 }
     }
     return null
   }
 
-  /** After a while with nothing touched: her gloves (the wai kru), the bag, or Dad's pad. */
+  /** After a while with nothing touched: her gloves (the bow), Dad's big mitt, or Dad. */
   protected hintAt() {
     if (this.phase === 'wai') return this.glovesAt()
-    if (this.phase === 'kick' || (this.round === 3 && this.phase === 'play')) return this.built.pad.visible && !this.dHop ? this.padWorld() : null
-    if (this.phase === 'play') return this.bagMid()
+    if (this.mittUp) return this.mittAt()
+    if (this.phase === 'bout') return this.dadMid()
     return null
   }
 
   placeAnchors() {
     super.placeAnchors()
-    // The POWs: popping up from the hit, then floating off and fading.
+    // The POWs: popping up from the hit, then floating off and fading. (The count's numbers: bigger, in place.)
     for (const el of this.powEls) {
       const p = this.pows.find((x) => x.el === el)
       const s = p ? this.toScreen(p.at, 0.1) : null
@@ -1171,28 +1406,24 @@ export class MuayThai extends Stage {
         if (el.style.display !== 'none') el.style.display = 'none'
         continue
       }
-      const k = p.t / 0.75
-      const scale = (p.big ? 1.5 : 1) * (0.4 + 0.9 * span(k, 0, 0.18) - 0.1 * span(k, 0.18, 0.4))
+      const k = p.t / (p.count ? 0.8 : 0.75)
+      const scale = (p.count ? 3 : p.big ? 1.5 : 1) * (0.4 + 0.9 * span(k, 0, 0.18) - 0.1 * span(k, 0.18, 0.4))
       el.style.display = ''
-      el.style.opacity = String(1 - span(k, 0.6, 1))
-      el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${(s.y - 30 - 50 * k).toFixed(1)}px, 0) translate(-50%, -50%) rotate(${p.big ? -8 : 6}deg) scale(${scale.toFixed(3)})`
+      el.style.opacity = String(1 - span(k, 0.7, 1))
+      el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${(s.y - 30 - (p.count ? 10 : 50) * k).toFixed(1)}px, 0) translate(-50%, -50%) rotate(${p.count ? 0 : p.big ? -8 : 6}deg) scale(${scale.toFixed(3)})`
     }
-    // The ring closing on the bag (round 2) or the pad (round 3): gold when a punch would be on the beat.
-    const el = this.ringEl
+    // The combo's number over Dad's head (from three hits): it jumps with each one.
+    const el = this.comboEl
     if (!el) return
-    const target = this.round === 2 && this.phase === 'play' ? this.bagMid() : this.round === 3 && this.phase === 'play' && this.built.pad.visible && !this.dHop ? this.padWorld() : null
-    const s = target && this.beat.on ? this.toScreen(target, this.round === 2 ? BAG.r * 1.4 : PAD.w * 0.7, 230) : null
+    const s = this.combo >= 3 && this.phase === 'bout' ? this.toScreen(V(this.dadX + 0.1, this.H + 0.22, DAD.z), 0.1) : null
     if (!s) {
       if (el.style.display !== 'none') el.style.display = 'none'
       return
     }
-    const k = this.beat.ring(this.time)
-    const now = this.beat.inWindow(this.time)
+    const text = String(this.combo)
+    if (el.textContent !== text) el.textContent = text
     el.style.display = ''
-    el.style.width = el.style.height = `${s.size.toFixed(0)}px`
-    el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0) translate(-50%, -50%) scale(${(1 + 1.5 * k).toFixed(3)})`
-    el.style.borderColor = now ? '#FFC83D' : 'rgba(255,255,255,.9)'
-    el.style.boxShadow = now ? '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' : 'none'
+    el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0) translate(-50%, -50%) rotate(-6deg) scale(${(1 + 0.5 * Math.exp(-this.comboPop * 9) + Math.min(0.5, this.combo * 0.03)).toFixed(3)})`
   }
 
   get calm() {
@@ -1208,25 +1439,30 @@ export class MuayThai extends Stage {
       game: 'boxing',
       round: this.round,
       phase: this.phase,
-      count: this.count,
-      need: NEED[this.round],
-      punches: this.punches,
-      onBeats: this.onBeats,
-      bows: this.wai.bows,
-      steps: this.wai.steps,
-      padStep: this.padStep,
+      free: this.free,
+      dad: this.dad.mode,
+      guard: this.dad.guard,
+      power: Math.round(this.power * 100) / 100,
+      ready: this.ready,
+      need: this.need,
+      hits: this.hits,
+      combo: this.combo,
+      best: this.best,
+      counters: this.counters,
+      bops: this.bops,
+      kos: this.kos,
+      juggles: this.juggles,
+      air: !!this.flight?.roped,
+      counting: this.counting,
+      push: Math.round(this.dad.push * 100) / 100,
       beat: this.beat.on,
-      window: this.beat.inWindow(this.time),
-      toNext: Math.round(this.beat.toNext(this.time) * 1000) / 1000,
-      grown: this.beat.grown,
       stars: this.stars,
       belt: this.built.belt.visible,
-      daddy: this.daddy,
-      hopping: this.dHop,
-      swing: Math.round(this.swing.a * 100) / 100,
       touches: this.touches,
-      bag: px(this.bagMid()),
-      pad: this.built.pad.visible && !this.padFly ? px(this.padWorld()) : null,
+      // Where to put a finger (screen pixels): his tummy, his head, his big mitt (when it's up), her gloves.
+      body: px(this.flight ? this.dadMid() : V(this.dadX - 0.05, 0.36 * this.H, DAD.z)),
+      head: px(V(this.dadX - 0.05, 0.76 * this.H, DAD.z)),
+      mitt: this.mittUp ? px(this.mittAt()) : null,
       gloves: px(this.glovesAt()),
       lamps: LAMPS,
     }

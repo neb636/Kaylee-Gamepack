@@ -1,0 +1,20 @@
+[
+ { "id": "boxing-thud", "label": "A punch on Dad's tummy pad", "prompt": "One single soft boxing glove punch on a padded training pad, a dull friendly thump. Close, dry, cartoon-light. No music, no voices.", "seconds": 0.5 },
+ { "id": "boxing-pap", "label": "A punch on his mitts", "prompt": "One single crisp slap of a boxing glove on a leather focus mitt, a bright pap. Close, dry. No music, no voices.", "seconds": 0.5 },
+ { "id": "boxing-swish", "label": "A glove going out", "prompt": "One quick small whoosh of a boxing glove through the air, light and soft. No music, no voices.", "seconds": 0.5 },
+ { "id": "boxing-pow", "label": "A big hit (every fifth of a combo)", "prompt": "One big comedic cartoon punch impact, a fat thump with a bright pop on top, playful not violent. No music, no voices.", "seconds": 0.8 },
+ { "id": "boxing-whoop", "label": "Dad's big mitt swelling up", "prompt": "A rubber balloon being inflated in one long breath, rubbery squeaky stretching that rises in pitch. Toy-like, funny. No music, no voices.", "seconds": 1.8 },
+ { "id": "boxing-bonk", "label": "She pops the big mitt", "prompt": "A comedic cartoon bonk on a hollow rubber ball, then a balloon deflating with a silly raspberry sputter. Funny, soft. No music, no voices.", "seconds": 1.5 },
+ { "id": "boxing-bop", "label": "His mitt bops her on the head", "prompt": "A soft pillow bop with a little squeaky toy squeak, gentle and funny. No music, no voices.", "seconds": 0.6 },
+ { "id": "boxing-ready", "label": "Her gloves turn gold", "prompt": "A magical power-up shimmer, sparkling chimes rising quickly to a bright glow. Short, sweet, toy-like. No voices.", "seconds": 1.2 },
+ { "id": "boxing-windup", "label": "The super punch winding up", "prompt": "A cartoon wind-up whoosh that rises and rises, air rushing faster and higher, building up to a hit (without the hit). No music, no voices.", "seconds": 1.2 },
+ { "id": "boxing-kapow", "label": "The super punch lands", "prompt": "A huge comedic cartoon punch impact: a deep soft boom with a bright pop and a twinkle of sparkles after. Playful, not violent or scary. No music, no voices.", "seconds": 1.3 },
+ { "id": "boxing-twang", "label": "The ropes", "prompt": "Thick elastic boxing ring ropes stretching and springing back, a rubbery boing twang. Cartoon, funny. No music, no voices.", "seconds": 1.0 },
+ { "id": "boxing-juggle", "label": "A tap bounces Dad in the air", "prompt": "One springy cartoon boing, a bouncy rubber spring going up. Short, funny. No music, no voices.", "seconds": 0.6 },
+ { "id": "boxing-land", "label": "Dad lands on his bottom", "prompt": "Someone big plopping down onto a padded gym mat: a heavy soft whump and a little rattle of things on the floor. Funny, not painful. No music, no voices.", "seconds": 0.9 },
+ { "id": "boxing-bell", "label": "The ring bell", "prompt": "One single clear strike of a boxing ring bell, bright ding that rings out. Close, clean. No music, no voices.", "seconds": 1.2 },
+ { "id": "boxing-drum", "label": "The coach's drum", "prompt": "One single hit on a Thai klong drum, a deep round wooden boom. Close, dry, clean. No music, no voices.", "seconds": 0.6 },
+ { "id": "boxing-ching", "label": "The little cymbals", "prompt": "One single soft ting of small Thai finger cymbals (ching), bright and delicate, ringing briefly. No music, no voices.", "seconds": 0.7 },
+ { "id": "boxing-squirt", "label": "The water bottle", "prompt": "A squeeze water bottle squirting a quick jet of water, then two little drips. Toy-like. No music, no voices.", "seconds": 0.8 },
+ { "id": "boxing-hall", "label": "The play hall (ambience)", "prompt": "Room tone of a big bright indoor soft-play hall: soft air conditioning hum, faint far-off happy bustle and bouncy play sounds, no clear voices or words. Calm, warm. Seamless loop, no music.", "seconds": 15, "loop": true }
+]

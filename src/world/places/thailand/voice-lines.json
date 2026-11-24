@@ -3160,7 +3160,19 @@
   "Tap your gloves to bow!",
   "Click your gloves to bow!",
   {
-    "text": "Now dance with me!",
+    "text": "Chok!",
+    "voice": "coach"
+  },
+  {
+    "text": "Nueng!",
+    "voice": "coach"
+  },
+  {
+    "text": "Song!",
+    "voice": "coach"
+  },
+  {
+    "text": "Saam!",
     "voice": "coach"
   },
   {
@@ -3171,9 +3183,10 @@
     "text": "Champion!",
     "voice": "coach"
   },
-  "Punch to the drum!",
-  "Punch when it's gold!",
-  "Follow Dad's pad!",
+  "Tap Dad to punch!",
+  "Click Dad to punch!",
+  "Gold gloves! Super punch!",
+  "Punch his big glove!",
   "Big kick!",
   {
     "text": "Ooh, strong!",
@@ -3184,19 +3197,30 @@
     "voice": "nick"
   },
   {
+    "text": "Uh oh!",
+    "voice": "nick"
+  },
+  {
+    "text": "Gotcha!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa, I'm dizzy!",
+    "voice": "nick"
+  },
+  {
     "text": "Up high! Down low!",
     "voice": "nick"
   },
   {
-    "text": "Hit the pad!",
+    "text": "One more round!",
     "voice": "nick"
   },
   "Tap your gloves!",
   "Click your gloves!",
-  "Punch the bag!",
-  "Punch Dad's pad!",
+  "Punch Dad!",
   {
-    "text": "The wai kru dance says thank you to your teacher!",
+    "text": "Before a fight, a boxer bows to say thank you to the teacher!",
     "voice": "coach"
   },
   "Muay Thai is Thailand's own sport!",

@@ -1,13 +1,13 @@
 // Muay Thai at HarborLand, built from simple shapes in the house's toon look (greybox: no generated art). The flower
 // mats and a blue ring mat, the ring's posts and ropes (red, white, blue; each rope two pieces that bow in the middle),
 // the big red bag and the small blue one on their brackets, the coach's drum (a klong on a stand), the ring bell, the
-// water bottle on its stool, the board with three stars and the lamps that fill each round, Dad's pink pad, and the
-// gold champion's belt. Pure shapes: the world (ring.ts) moves them.
+// water bottle on its stool, the board with three stars and the lamps that fill with her super punch, Dad's sparring
+// gear (two fat blue mitts and a belly pad), and the gold champion's belt. Pure shapes: the world (ring.ts) moves them.
 import { Group, Mesh, SphereGeometry, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../../engine3d/geo'
 import { PAL, toon } from '../../../../../../engine3d/toon'
-import { BAG, BAG2, BELL, BOARD, BOTTLE, DRUM, MAT, PAD, POST_H, POSTS, ROPE_COLORS, ROPE_Y, WALL_Z } from './layout'
+import { BAG, BAG2, BELL, BOARD, BOTTLE, DRUM, MAT, POST_H, POSTS, ROPE_COLORS, ROPE_Y, WALL_Z } from './layout'
 
 export interface Swinger {
   /** The pivot at the bracket: it swings (rotation.z sideways, rotation.x toward her). */
@@ -41,7 +41,6 @@ export interface Built {
   stars: Group[]
   /** The lamps on the board (a material each: dim or lit). */
   lamps: Mesh[]
-  pad: Group
   belt: Group
   picks: Group[]
 }
@@ -287,22 +286,6 @@ export function buildGym(bag: Bag): Built {
     return m
   })
 
-  // ---- Dad's pad: a fat pink kick pad with a white target on the front and handles at the back ----
-  const pad = solid(
-    merge([
-      P.rbox(PAD.w, PAD.h, PAD.d, 0.07, '#FF8FB8', {}),
-      P.cyl(0.13, 0.13, 0.02, '#FFFFFF', { at: [0, 0.02, PAD.d / 2], rot: [Math.PI / 2, 0, 0] }, 20),
-      P.cyl(0.06, 0.06, 0.024, '#FF4F9A', { at: [0, 0.02, PAD.d / 2 + 0.004], rot: [Math.PI / 2, 0, 0] }, 16),
-      ...[-1, 1].map((s) => P.box(0.06, 0.04, 0.08, '#B9A6F5', { at: [s * 0.12, -0.1, -PAD.d / 2 - 0.03] })),
-    ]),
-    bag,
-    2,
-  )
-  pad.userData.pick = 'pad'
-  pad.visible = false
-  add(pad)
-  picks.push(pad)
-
   // ---- The champion's belt (it goes round Kaylee's waist at the end) ----
   const belt = solid(
     merge([
@@ -316,5 +299,54 @@ export function buildGym(bag: Bag): Built {
   )
   belt.visible = false
 
-  return { root, bag: big, bag2: small, drum, skin, bell, bottle, stool, back: backRopes, side: sideRopes, board, stars, lamps, pad, belt, picks }
+  return { root, bag: big, bag2: small, drum, skin, bell, bottle, stool, back: backRopes, side: sideRopes, board, stars, lamps, belt, picks }
+}
+
+/** Dad's sparring gear, sized to him (`H`, his height): a fat blue mitt on each hand (a group each, at the hand, so
+ *  one can swell up before his big swing) and a round belly pad with a gold star. They take her punches. */
+export interface Gear {
+  /** His left and right mitts (children of his arm pivots). */
+  mitts: [Group, Group]
+  belly: Group
+}
+export const MITT_R = 0.085
+export function buildGear(H: number, bag: Bag): Gear {
+  const mitt = (s: number) => {
+    const g = new Group()
+    // (Where the chibi rig's hands are: engine3d/characters/animal.ts, the gloves.)
+    g.position.set(s * 0.054 * H, -0.158 * H, 0.012 * H)
+    const r = MITT_R * H
+    g.add(
+      solid(
+        merge([
+          P.sphere(r, '#5D8BF0', { scale: [1, 1.1, 1.15] }),
+          P.sphere(r * 0.42, '#5D8BF0', { at: [-s * r * 0.55, 0.01 * H, r * 0.75], scale: [0.9, 1.4, 0.9] }),
+          P.cyl(r * 0.72, r * 0.78, 0.045 * H, '#FFFFFF', { at: [-s * 0.012 * H, r * 1.02, 0] }, 16),
+          // A white target with a pink middle on its front.
+          P.cyl(r * 0.6, r * 0.6, 0.012 * H, '#FFFFFF', { at: [0, -r * 0.2, r * 1.1], rot: [Math.PI / 2, 0, 0] }, 18),
+          P.cyl(r * 0.28, r * 0.28, 0.016 * H, '#FF4F9A', { at: [0, -r * 0.2, r * 1.11], rot: [Math.PI / 2, 0, 0] }, 14),
+        ]),
+        bag,
+        2,
+      ),
+    )
+    g.userData.pick = 'mitt'
+    return g
+  }
+  const belly = solid(
+    merge([
+      P.sphere(0.16 * H, '#5D8BF0', { scale: [1, 0.92, 0.42] }),
+      P.torus(0.118 * H, 0.014 * H, '#FFFFFF', { at: [0, 0, 0.052 * H] }),
+      star(0.07 * H, PAL.gold, 0.02 * H, [0, 0, 0.062 * H]),
+    ]),
+    bag,
+    2,
+  )
+  belly.userData.pick = 'dad'
+  return { mitts: [mitt(-1), mitt(1)], belly }
+}
+
+/** A gold shell that fits over one of her gloves when the super punch is ready (it pulses). */
+export function goldGlove(bag: Bag) {
+  return solid(merge([P.sphere(0.074, PAL.gold, { scale: [1, 1.1, 1.12] }), star(0.05, '#FFFFFF', 0.016, [0, 0, 0.08])]), bag, 1.5)
 }
