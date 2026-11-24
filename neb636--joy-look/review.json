@@ -1,38 +1,22 @@
 {
   "title": "Joy: a fox that looks like Joy",
   "checkIn": "fix",
-  "kaylee": "Aunt Joy at Agong's house is a proper fox now, with Joy's long hair, big smile and lace blouse. New since your last notes: her puffy cheeks are back, flatter than the old ones, in two versions for you to choose.",
+  "kaylee": "Aunt Joy at Agong's house is a proper fox now, with Joy's long hair, big smile and lace blouse. Newest: the pink puffy cheeks you chose, a little narrower and set out from her white snout.",
   "questions": [
-    "Choose one: A (white cheeks) or B (pink cheeks)?",
     "Inside her ears is a paler orange so they still read as ears. Good, or plain orange all through?"
   ],
   "pictures": [
     {
-      "title": "Choose her cheeks",
-      "after": "pics/joy-cheeks-face.jpg",
-      "caption": "A is in the game on this branch; B is one word away"
-    },
-    {
-      "title": "From a little way off",
-      "after": "pics/joy-cheeks-front.jpg",
-      "caption": "How each reads at the size she is in the house"
-    },
-    {
-      "title": "Turned",
-      "after": "pics/joy-cheeks-faceq.jpg",
-      "caption": "Both are low mounds, not the old cheek balls"
+      "title": "Her face",
+      "before": "pics/joy-face-before.jpg",
+      "after": "pics/joy-face-after.jpg",
+      "caption": "Soft brows, pink puffy cheeks, the same big smile, no white beard"
     },
     {
       "title": "From the front",
       "before": "pics/joy-front-before.jpg",
       "after": "pics/joy-front-after.jpg",
-      "caption": "Smaller orange ears, a white snout, long parted hair with lighter strands, a collar of lace roses (A shown)"
-    },
-    {
-      "title": "Her face",
-      "before": "pics/joy-face-before.jpg",
-      "after": "pics/joy-face-after.jpg",
-      "caption": "Soft brows, puffy cheeks, the same big smile, no white beard (A shown)"
+      "caption": "Smaller orange ears, a white snout, long parted hair with lighter strands, a collar of lace roses"
     },
     {
       "title": "Three-quarter",
@@ -54,19 +38,15 @@
   ],
   "links": [
     {
-      "label": "A and B side by side in the lab",
-      "hash": "#/world/characters/joy?lineup=joy,joy-pink"
+      "label": "Turn her round in the character lab",
+      "hash": "#/world/characters/joy"
     },
     {
-      "label": "A: white cheeks",
-      "hash": "#/world/characters/joy?shot=face"
+      "label": "Joy beside her boys and Jum",
+      "hash": "#/world/characters/joy?lineup=joy,gan,ken,jum"
     },
     {
-      "label": "B: pink cheeks",
-      "hash": "#/world/characters/joy-pink?shot=face"
-    },
-    {
-      "label": "Downstairs at Agong's house (A)",
+      "label": "Downstairs at Agong's house",
       "hash": "#/world/thailand/hub/downstairs"
     }
   ]

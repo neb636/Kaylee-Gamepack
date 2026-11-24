@@ -37,19 +37,13 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 </style></head><body><main>
 <span class="chip">Check-in fix</span>
 <h1>Joy: a fox that looks like Joy</h1>
-<p class="kaylee">Aunt Joy at Agong's house is a proper fox now, with Joy's long hair, big smile and lace blouse. New since your last notes: her puffy cheeks are back, flatter than the old ones, in two versions for you to choose.</p>
+<p class="kaylee">Aunt Joy at Agong's house is a proper fox now, with Joy's long hair, big smile and lace blouse. Newest: the pink puffy cheeks you chose, a little narrower and set out from her white snout.</p>
 
 
-<h2>Before and after</h2><div class="pics"><figure class="solo"><img src="pics/joy-cheeks-face.jpg" alt="Choose her cheeks" loading="lazy">
-<figcaption><b>Choose her cheeks</b>: A is in the game on this branch; B is one word away</figcaption></figure>
-<figure class="solo"><img src="pics/joy-cheeks-front.jpg" alt="From a little way off" loading="lazy">
-<figcaption><b>From a little way off</b>: How each reads at the size she is in the house</figcaption></figure>
-<figure class="solo"><img src="pics/joy-cheeks-faceq.jpg" alt="Turned" loading="lazy">
-<figcaption><b>Turned</b>: Both are low mounds, not the old cheek balls</figcaption></figure>
+<h2>Before and after</h2><div class="pics"><figure class="pair"><div><img src="pics/joy-face-before.jpg" alt="Before: Her face" loading="lazy"><span>Before</span></div><div><img src="pics/joy-face-after.jpg" alt="After: Her face" loading="lazy"><span>After</span></div>
+<figcaption><b>Her face</b>: Soft brows, pink puffy cheeks, the same big smile, no white beard</figcaption></figure>
 <figure class="pair"><div><img src="pics/joy-front-before.jpg" alt="Before: From the front" loading="lazy"><span>Before</span></div><div><img src="pics/joy-front-after.jpg" alt="After: From the front" loading="lazy"><span>After</span></div>
-<figcaption><b>From the front</b>: Smaller orange ears, a white snout, long parted hair with lighter strands, a collar of lace roses (A shown)</figcaption></figure>
-<figure class="pair"><div><img src="pics/joy-face-before.jpg" alt="Before: Her face" loading="lazy"><span>Before</span></div><div><img src="pics/joy-face-after.jpg" alt="After: Her face" loading="lazy"><span>After</span></div>
-<figcaption><b>Her face</b>: Soft brows, puffy cheeks, the same big smile, no white beard (A shown)</figcaption></figure>
+<figcaption><b>From the front</b>: Smaller orange ears, a white snout, long parted hair with lighter strands, a collar of lace roses</figcaption></figure>
 <figure class="pair"><div><img src="pics/joy-q-before.jpg" alt="Before: Three-quarter" loading="lazy"><span>Before</span></div><div><img src="pics/joy-q-after.jpg" alt="After: Three-quarter" loading="lazy"><span>After</span></div>
 <figcaption><b>Three-quarter</b>: A big bushy tail with a white tip, out to one side so it shows from the front</figcaption></figure>
 <figure class="pair"><div><img src="pics/joy-back-before.jpg" alt="Before: From behind" loading="lazy"><span>Before</span></div><div><img src="pics/joy-back-after.jpg" alt="After: From behind" loading="lazy"><span>After</span></div>
@@ -58,12 +52,11 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <figcaption><b>In the house</b>: Downstairs at Agong's, where she lives in the game</figcaption></figure></div>
 
 
-<h2>Your call</h2><ol><li><p>Choose one: A (white cheeks) or B (pink cheeks)?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>Inside her ears is a paler orange so they still read as ears. Good, or plain orange all through?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
-<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/characters/joy?lineup=joy,joy-pink">A and B side by side in the lab</a> <a class="pill" href="../#/world/characters/joy?shot=face">A: white cheeks</a> <a class="pill" href="../#/world/characters/joy-pink?shot=face">B: pink cheeks</a> <a class="pill" href="../#/world/thailand/hub/downstairs">Downstairs at Agong's house (A)</a></p>
+<h2>Your call</h2><ol><li><p>Inside her ears is a paler orange so they still read as ears. Good, or plain orange all through?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/characters/joy">Turn her round in the character lab</a> <a class="pill" href="../#/world/characters/joy?lineup=joy,gan,ken,jum">Joy beside her boys and Jum</a> <a class="pill" href="../#/world/thailand/hub/downstairs">Downstairs at Agong's house</a></p>
 </main>
 <script>
-const qs=["Choose one: A (white cheeks) or B (pink cheeks)?","Inside her ears is a paler orange so they still read as ears. Good, or plain orange all through?"],titles=[]
+const qs=["Inside her ears is a paler orange so they still read as ears. Good, or plain orange all through?"],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
