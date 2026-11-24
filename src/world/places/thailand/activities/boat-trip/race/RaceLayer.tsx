@@ -6,6 +6,7 @@
 // - Banners sweeping across: lap 2, the last lap, 1st!
 // - The podium: the trophy with the trophy title on it (the SDK's own, as in her Trophy Room), then 🔁 race again or 🚤 back to the
 //   bay.
+import { EndCard, HudButton } from '../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { bigCelebration, Trophy, useTimers } from '../../../../../../sdk'
@@ -85,21 +86,10 @@ function Podium({ trophy, onAgain, onBay }: { trophy: boolean; onAgain: () => vo
       </AnimatePresence>
       <AnimatePresence>
         {buttons && (
-          <motion.div key="buttons" initial={{ y: 120 }} animate={{ y: 0 }} exit={{ y: 120 }} transition={{ type: 'spring', stiffness: 260, damping: 18 }} style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom) + 18px)', display: 'flex', justifyContent: 'center', gap: 'clamp(14px, 3vw, 28px)', zIndex: 38 }}>
-            <motion.button aria-label="Race again" whileTap={{ scale: 0.88 }} onClick={onAgain} style={{ width: 'clamp(92px, 14vmin, 116px)', height: 'clamp(92px, 14vmin, 116px)', borderRadius: '50%', border: '5px solid #fff', background: 'var(--lavender)', fontSize: 'clamp(40px, 7vmin, 54px)', boxShadow: 'var(--shadow)', padding: 0 }}>
-              🔁
-            </motion.button>
-            <motion.button
-              aria-label="Back to the bay"
-              animate={{ scale: [1, 1.08, 1] }}
-              transition={{ repeat: Infinity, duration: 1.4 }}
-              whileTap={{ scale: 0.88 }}
-              onClick={onBay}
-              style={{ minWidth: 'clamp(140px, 24vmin, 200px)', height: 'clamp(92px, 14vmin, 116px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--mint)', fontSize: 'clamp(40px, 7vmin, 54px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', padding: '0 22px' }}
-            >
-              🚤▶
-            </motion.button>
-          </motion.div>
+          <EndCard key="buttons" style={{ zIndex: 38 }}>
+            <HudButton role="again" icon="again" label="Race again" onClick={onAgain} />
+            <HudButton role="go" icon="play" size="lg" pulse label="Back to the bay" onClick={onBay} />
+          </EndCard>
         )}
       </AnimatePresence>
     </>

@@ -1,7 +1,7 @@
 // The speedboat to Koh Samet, on screen (speedboat.ts is the world): the ride as a cutscene, the boat and everyone on
 // it still tap targets, and ⏩ to skip on to Na Dan pier. Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks through her bubble.
+import { HudButton } from '../../../../../kit/Hud'
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
 import { sounds, useTimers } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
@@ -35,7 +35,6 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#BFE9FA', overflow: 'clip' }}>
-      <style>{CSS}</style>
       <View3D
         key={n}
         name="The speedboat to Koh Samet"
@@ -46,20 +45,7 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
         anchors={(input, els) => <Anchors list={BOAT_ANCHORS} els={els} {...input} />}
       />
       {skip && mode === 'webgl' && (
-        <motion.button
-          aria-label="Skip ahead"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          whileTap={{ scale: 0.88 }}
-          onClick={() => {
-            sounds.whoosh()
-            worldRef.current?.skip()
-            setSkip(false)
-          }}
-          className="sb-skip"
-        >
-          ⏩
-        </motion.button>
+        <HudButton role="skip" icon="skip" slot="bottom-right" label="Skip ahead" pop={false} onClick={() => { sounds.whoosh(); worldRef.current?.skip(); setSkip(false) }} style={{ zIndex: 33 }} />
       )}
       {mode === 'webgl' && <TripGuide ref={guideRef} />}
       {mode === 'lost' && (
@@ -77,6 +63,3 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
   )
 }
 
-const CSS = `
-.sb-skip { position: absolute; right: calc(var(--safe-right, 0px) + 18px); bottom: calc(var(--safe-bottom, 0px) + 18px); width: clamp(88px, 12vmin, 104px); height: clamp(88px, 12vmin, 104px); border-radius: 50%; border: 5px solid #fff; background: var(--lavender); font-size: clamp(36px, 6vmin, 48px); box-shadow: var(--shadow); z-index: 12; padding: 0; }
-`

@@ -9,9 +9,10 @@ import { sounds } from '../../sdk'
  */
 export function TopBar({ icon, tile, label, onBack, children }: { icon: ReactNode; tile?: { color: string; shade: string }; label: string; onBack: () => void; children?: ReactNode }) {
   return (
-    <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', left: 16, right: 16, display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 16px)', pointerEvents: 'none', zIndex: 50 }}>
+    <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', left: 16, right: 16, display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 16px)', pointerEvents: 'none', zIndex: 'var(--z-bar)' }}>
       <motion.button
         aria-label={label}
+        className={tile ? undefined : 'hud-btn hud-leave hud-sm'}
         whileTap={tile ? { scale: 0.88, y: 3 } : { scale: 0.85 }}
         onClick={() => {
           sounds.pop()
@@ -27,7 +28,7 @@ export function TopBar({ icon, tile, label, onBack, children }: { icon: ReactNod
           placeItems: 'center',
           ...(tile
             ? { borderRadius: 'calc(var(--btn) * 0.28)', background: tile.color, boxShadow: `0 5px 0 ${tile.shade}`, padding: 'calc(var(--btn) * 0.14)' }
-            : { borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'calc(var(--btn) * 0.5)' }),
+            : {}),
         }}
       >
         {icon}

@@ -2,6 +2,7 @@
 // touched, and at the end (every slice shared) the video of real mushrooms growing (skippable: ⏭ 🍄 to the end card; the
 // 3D world holds still under it), then the end card: 🔁 the farm again, or 🗺️ back to the Nan map (its stamp
 // lands there). Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks out loud in their own voice.
+import { EndCard, HudButton } from '../../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -118,23 +119,10 @@ export function Mushrooms({ round, basket, onRound, onBasket, onMap }: Props) {
 /** Lunch is over: the farm again, or back to the Nan map (big pictures, no reading). Stop Time Cafe's and the salt
  *  hut's end card too. */
 export function FarmEnd({ onAgain, onMap, label = 'The mushroom farm again' }: { onAgain: () => void; onMap: () => void; label?: string }) {
-  const size = 'clamp(92px, 15vmin, 128px)'
-  const btn = { width: size, height: size, borderRadius: '50%', border: '6px solid #fff', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 } as const
   return (
-    <motion.div
-      key="end"
-      initial={{ y: 160 }}
-      animate={{ y: 0 }}
-      exit={{ y: 160 }}
-      transition={{ type: 'spring', stiffness: 240, damping: 18 }}
-      style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom, 0px) + 18px)', display: 'flex', justifyContent: 'center', gap: 'clamp(16px, 3vw, 30px)', padding: '0 16px', zIndex: 50 }}
-    >
-      <motion.button aria-label={label} whileTap={{ scale: 0.88 }} onClick={onAgain} style={{ ...btn, background: 'var(--lavender)' }}>
-        🔁
-      </motion.button>
-      <motion.button aria-label="The Nan map" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.07, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} onClick={onMap} style={{ ...btn, background: 'var(--pink)' }}>
-        🗺️
-      </motion.button>
-    </motion.div>
+    <EndCard key="end">
+      <HudButton role="again" icon="again" label={label} onClick={onAgain} />
+      <HudButton role="go" icon="map" size="lg" pulse label="The Nan map" onClick={onMap} />
+    </EndCard>
   )
 }

@@ -1,6 +1,7 @@
 // Agong's house in Bangkok (tapping Bangkok on the Thailand map opens it). Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
 // room upstairs (deep-linkable spots, sections.ts). The 3D house is HouseView.
 // Sparkle (Guide) says the few things there are to say; the family say hello themselves.
+import { HudButton } from '../../../../kit/Hud'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { say, sounds, useSaved, type Line } from '../../../../../sdk'
@@ -285,33 +286,10 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
         </button>
       )}
       {arriving && (
-        <motion.button
-          aria-label="Skip"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          onClick={() => {
-            sounds.pop()
-            houseRef.current?.skipArrival()
-          }}
-          style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: '-50% 0', minHeight: 64, padding: '0 28px', borderRadius: 999, border: '4px solid #fff', background: 'var(--lavender)', color: 'var(--ink)', fontSize: 22, fontWeight: 700, boxShadow: 'var(--shadow)', zIndex: 20 }}
-        >
-          Skip ⏩
-        </motion.button>
+        <HudButton role="skip" icon="skip" slot="bottom-right" label="Skip" onClick={() => houseRef.current?.skipArrival()} />
       )}
-      {allStamps && !playing && (
-        <motion.button
-          aria-label="Party"
-          whileTap={{ scale: 0.88 }}
-          animate={{ rotate: [-4, 4, -4] }}
-          transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
-          onClick={() => {
-            sounds.pop()
-            openActivity('party')
-          }}
-          style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 14px)', bottom: 'calc(var(--safe-bottom) + 14px)', width: 88, height: 88, borderRadius: '50%', border: '4px solid #fff', background: 'var(--butter)', fontSize: 44, boxShadow: 'var(--shadow)', zIndex: 20, opacity: meta.activities.length ? 1 : 0.85 }}
-        >
-          🎉
-        </motion.button>
+      {allStamps && !playing && !arriving && (
+        <HudButton role="open" icon="party" slot="bottom-right" pulse label="Party" onClick={() => openActivity('party')} style={{ opacity: meta.activities.length ? 1 : 0.85 }} />
       )}
       {/* A trip photo from the wall, close up. Tap anywhere to put it back. */}
       <AnimatePresence>
@@ -343,47 +321,13 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       {/* Done dressing up: the doors close (tapping the doors or the room does too). */}
       <AnimatePresence>
         {dressing && mode !== 'lost' && (
-          <motion.button
-            key="wardrobe-done"
-            aria-label="Done dressing up"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            whileTap={{ scale: 0.88 }}
-            onClick={() => {
-              sounds.pop()
-              wardrobe.current?.close()
-            }}
-            style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 14px)', bottom: 'calc(var(--safe-bottom) + 14px)', width: 88, height: 88, borderRadius: '50%', border: '4px solid #fff', background: 'var(--mint)', color: 'var(--ink)', fontSize: 44, fontWeight: 700, boxShadow: 'var(--shadow)', zIndex: 21 }}
-          >
-            ✓
-          </motion.button>
+          <HudButton key="wardrobe-done" role="done" icon="check" slot="bottom-right" label="Done dressing up" onClick={() => wardrobe.current?.close()} />
         )}
       </AnimatePresence>
       {/* The mirror button, in the house's top bar on every floor and the street: tap it and she's at her wardrobe. */}
       <AnimatePresence>
         {!photo && !arriving && !dressing && !asking && !playing && mode !== 'lost' && (
-          <motion.button
-            key="mirror"
-            aria-label="Dress up"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            transition={{ type: 'spring', delay: 0.2 }}
-            whileTap={{ scale: 0.85 }}
-            onClick={toWardrobe}
-            // A big target (--target: 96px on iPad, 72px in iPhone landscape) round a circle the size of the top bar's
-            // buttons, lined up with them.
-            style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px - (var(--target) - var(--btn)) / 2)', right: 'calc(var(--safe-right, 0px) + 16px - (var(--target) - var(--btn)) / 2)', width: 'var(--target)', height: 'var(--target)', padding: 0, border: 'none', background: 'none', display: 'grid', placeItems: 'center', zIndex: 50 }}
-          >
-            <motion.span
-              animate={{ rotate: [-6, 6, -6] }}
-              transition={{ repeat: Infinity, duration: 2.8, ease: 'easeInOut' }}
-              style={{ width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', border: '4px solid #fff', background: 'var(--pink)', fontSize: 'calc(var(--btn) * .5)', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center', boxSizing: 'border-box' }}
-            >
-              🪞
-            </motion.span>
-          </motion.button>
+          <HudButton key="mirror" role="open" icon="mirror" size="sm" slot="top-right" label="Dress up" pop={false} onClick={toWardrobe} />
         )}
       </AnimatePresence>
       <AnimatePresence>

@@ -15,7 +15,9 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { sounds, stopSpeaking, useSaved, useTimers } from '../../../../../sdk'
+import { HUD_ICONS } from '../../../../kit/Hud'
 import { useSections } from '../../../../kit/sections'
+import { useTopLeft } from '../../../../kit/topLeft'
 import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { BoardingPass, type PassChoice } from '../../trip/legs/BoardingPass'
 import { justSaidYes, saidYes } from '../../trip/legs/Ask'
@@ -247,6 +249,21 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
     setSection('hall')
   }
 
+  // Inside a mini game the top-left button goes back to the hall (one level up), not off the trip: the one back button.
+  const inGame = !inHall && !pizzaTime && !onLoop
+  useTopLeft(
+    inGame
+      ? {
+          icon: <span style={{ width: '58%', height: '58%' }}>{HUD_ICONS.back}</span>,
+          label: 'Back to the hall',
+          onBack: () => {
+            sounds.whoosh()
+            goOut()
+          },
+        }
+      : null,
+  )
+
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#F1E8FF', overflow: 'clip' }}>
       {onLoop ? (
@@ -307,21 +324,6 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
       ) : section === 'frame' ? (
         <FrameScreen at={at} socks={socks} hair={hair} onAt={setAt} onRide={() => sticker('frame')} />
       ) : null}
-      {!inHall && !pizzaTime && !onLoop && (
-        <motion.button
-          aria-label="Back to the hall"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          whileTap={{ scale: 0.86 }}
-          onClick={() => {
-            sounds.whoosh()
-            goOut()
-          }}
-          style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 12px)', top: 'calc(var(--top-clear, 104px) + 10px)', width: 'clamp(72px, 11vmin, 92px)', height: 'clamp(72px, 11vmin, 92px)', borderRadius: '50%', border: '5px solid #fff', background: 'var(--lavender)', boxShadow: 'var(--shadow)', fontSize: 'clamp(34px, 5.5vmin, 46px)', padding: 0, zIndex: 40 }}
-        >
-          ↩️
-        </motion.button>
-      )}
       {!onLoop && <TripGuide ref={guide} />}
       {!pizzaTime && !onLoop && <SockBand done={band} color={SOCK_COLORS[socks] ?? SOCK_COLORS.pink} />}
       <AnimatePresence>{pass && <BoardingPass key="pass" legs={DAY_PASS} done={pass.done} punch={pass.punch} choices={pass.choices} title="DAY PASS" badge="🚗 🛝" route="ICONSIAM · 6F" />}</AnimatePresence>
@@ -329,16 +331,30 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   )
 }
 
+const NARROW = '(max-width: 540px)'
+function useNarrow() {
+  const [narrow, setNarrow] = useState(() => matchMedia(NARROW).matches)
+  useEffect(() => {
+    const m = matchMedia(NARROW)
+    const f = () => setNarrow(m.matches)
+    m.addEventListener('change', f)
+    return () => m.removeEventListener('change', f)
+  }, [])
+  return narrow
+}
+
 /** Her sock band in the corner: a sticker for each mini game she's played, popping in the first time (the ones still to
  *  play show faintly, so she can see what's left). */
 export function SockBand({ done, color }: { done: GameDoor[]; color: string }) {
+  // On a phone held upright one row of nine would crowd the back button (or shrink to dots she can't see): two rows.
+  const narrow = useNarrow()
   return (
     <div
       aria-label={`Stickers: ${done.length} of ${BAND.length}`}
-      style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 12px)', top: 'calc(var(--safe-top) + 14px)', display: 'flex', gap: 'clamp(4px, 0.8vw, 8px)', padding: 'clamp(5px, 0.9vw, 8px) clamp(8px, 1.4vw, 12px)', borderRadius: 999, background: color, border: '4px solid #fff', boxShadow: 'var(--shadow)', zIndex: 30, pointerEvents: 'none' }}
+      style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 12px)', top: 'calc(var(--safe-top) + 14px)', display: 'grid', gridTemplateColumns: `repeat(${narrow ? Math.ceil(BAND.length / 2) : BAND.length}, var(--dot))`, gap: 'clamp(4px, 0.8vw, 8px)', padding: 'clamp(5px, 0.9vw, 8px) clamp(8px, 1.4vw, 12px)', borderRadius: narrow ? 24 : 999, background: color, border: '4px solid #fff', boxShadow: 'var(--shadow)', zIndex: 30, pointerEvents: 'none', ['--dot' as string]: narrow ? 'clamp(30px, 9vw, 40px)' : 'clamp(34px, 5.2vmin, 48px)' }}
     >
       {BAND.map(({ id, icon }) => (
-        <div key={id} style={{ position: 'relative', width: 'clamp(34px, 5.2vmin, 48px)', height: 'clamp(34px, 5.2vmin, 48px)', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.55)', border: '2px dashed rgba(255,255,255,.9)', fontSize: 'clamp(20px, 3.3vmin, 30px)' }}>
+        <div key={id} style={{ position: 'relative', width: 'var(--dot)', height: 'var(--dot)', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.55)', border: '2px dashed rgba(255,255,255,.9)', fontSize: 'calc(var(--dot) * 0.62)' }}>
           {!done.includes(id) && (
             <span aria-hidden style={{ position: 'absolute', opacity: 0.3, filter: 'grayscale(1)' }}>
               {icon}

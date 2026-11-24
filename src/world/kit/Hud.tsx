@@ -17,7 +17,7 @@ import { HUD_ICONS, sounds, type HudIcon } from '../../sdk'
 export { HUD_ICONS, type HudIcon }
 
 /** The job a button does, which picks its colour: leave (white), go (pink, the way on), done (mint), again
- *  (lavender), open (butter: a map, an album, the party), skip (quiet and smaller). */
+ *  (lavender), open (gold: a map, an album, the party), skip (quiet and smaller). */
 export type HudRole = 'leave' | 'go' | 'done' | 'again' | 'open' | 'skip'
 /** Where it sits (absolute, clear of the safe areas). */
 export type HudSlot = 'top-right' | 'top-center' | 'bottom-right' | 'bottom-left' | 'bottom-center'

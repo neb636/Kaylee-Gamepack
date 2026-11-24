@@ -79,7 +79,9 @@ export const WhaleGuide = forwardRef<WhaleGuideHandle, { hidden?: boolean }>(fun
       >
         <SparklePuppet ref={sparkle} height="100%" lookToward={-0.4} />
       </button>
-      <AnimatePresence>
+      {/* popLayout: a line that cuts in takes the old bubble's place at once. In the default mode the old one stayed in
+          the row while it faded, so the new one opened squeezed off to its right, then jumped back beside Sparkle. */}
+      <AnimatePresence mode="popLayout" anchorX="right" anchorY="bottom">
         {line && (
           <motion.div
             key={line.n}
@@ -87,14 +89,18 @@ export const WhaleGuide = forwardRef<WhaleGuideHandle, { hidden?: boolean }>(fun
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 'min(56px, 8vh)', background: 'rgba(255,255,255,0.95)', borderRadius: 'var(--radius)', padding: who ? '6px 14px 6px 6px' : '10px 16px', boxShadow: 'var(--shadow)', transformOrigin: 'bottom right' }}
+            // The gap under the bubble is padding on a wrapper, not margin: popLayout pins a fading bubble by its bottom, and a
+            // margin would lift it by that much as it goes.
+            style={{ paddingBottom: 'min(56px, 8vh)', transformOrigin: 'bottom right' }}
           >
-            {who && (
-              <span title={who.name} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 44, height: 44, borderRadius: 22, background: who.color, fontSize: 24, border: '3px solid #fff' }}>
-                {who.icon}
-              </span>
-            )}
-            <span style={{ fontSize: 'clamp(16px, min(3vw, 3.4vh), 24px)', fontWeight: 600, lineHeight: 1.15 }}>{lineText(line.l)}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.95)', borderRadius: 'var(--radius)', padding: who ? '6px 14px 6px 6px' : '10px 16px', boxShadow: 'var(--shadow)' }}>
+              {who && (
+                <span title={who.name} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 44, height: 44, borderRadius: 22, background: who.color, fontSize: 24, border: '3px solid #fff' }}>
+                  {who.icon}
+                </span>
+              )}
+              <span style={{ fontSize: 'clamp(16px, min(3vw, 3.4vh), 24px)', fontWeight: 600, lineHeight: 1.15 }}>{lineText(line.l)}</span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
