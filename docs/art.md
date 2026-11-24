@@ -20,6 +20,14 @@ screens, stickers and character references.
   sticker are SVG files in the shelf's look (no dark outlines; a base, a shade and a light tone); the walls, the
   terraces and the opening picture are drawn in code (`activities/terraces/Scene.tsx`, `Opening.tsx`); Tika and her
   friends are one puppet in four coats (`puppets/Tika.tsx`). New art for that level follows the same look.
+- **Peru's penguin coast is drawn by hand too** (user feedback, 2026-11-24: the generated pictures looked tacky and
+  the drawn characters needed to look better). The far shore, the cliff with its burrow and Lobo's rock are drawn in
+  code from the level's own layout numbers (`activities/penguins/Coast.tsx`, which also has the opening picture); the
+  boat, the tern, the kelp, the jellyfish, the crab and the pelican are in `activities/penguins/Critters.tsx`; Pepa,
+  the divers, the chicks and Lobo are puppets in the same look (`puppets/Penguin.tsx`, `Chick.tsx`, `Lobo.tsx`), and
+  Pepa's sticker `assets/sticker-pepa.svg` is a still of her puppet. What stands under the water is drawn in its own
+  cool tones and the sea's tint goes over it; what should stay bright there (sea stars, the anemone) is drawn in
+  front of the tint.
 - Save to `art/source/world/<id>/<name>.png`, run `npm run art -- world`, then
   `node scripts/contact-sheet.mjs src/world/places/<id>/assets` and **look at** `/tmp/contact-sheet.png`.
   Regenerate anything that cut out badly.

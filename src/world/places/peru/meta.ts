@@ -16,7 +16,7 @@ const meta: PlaceMeta = {
   activities: [
     { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', pos: { x: 70, y: 74 }, sticker: { name: 'Alpaca', img: art.luna, fact: L.sticker } },
     { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', pos: { x: 51.5, y: 60 }, sticker: { name: 'Llama', img: art.tika, fact: L.terracesSticker } },
-    { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', pos: { x: 38.75, y: 75 }, sticker: { name: 'Humboldt penguin', img: art.pepa, fact: L.penguinSticker } },
+    { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', pos: { x: 38.75, y: 75 }, sticker: { name: 'Humboldt penguin', img: art.stickerPepa, fact: L.penguinSticker } },
     { id: 'river', name: 'Swim with Rosa', icon: '🐬', pos: { x: 61, y: 28 }, sticker: { name: 'Pink dolphin', img: art.stickerRosa, fact: L.river.sticker } },
   ],
   facts: [

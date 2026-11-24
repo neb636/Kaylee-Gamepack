@@ -2,7 +2,6 @@
 // wool particles), so a big belly-flop never re-renders React.
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useGameLoop } from '../../../../../sdk'
-import { INK } from '../../puppets/Alpaca'
 
 const POOL = 48
 
@@ -43,14 +42,14 @@ export const Splash = forwardRef<SplashHandle>(function Splash(_, ref) {
     el.style.borderRadius = '50%'
     el.style.clipPath = ''
     if (kind === 'drop') {
-      el.style.background = '#BFE6FF'
-      el.style.border = `3px solid ${INK}`
+      el.style.background = '#f2fbff'
+      el.style.border = 'none'
     } else if (kind === 'ring') {
       el.style.background = 'transparent'
-      el.style.border = '6px solid #FFF7F0'
+      el.style.border = '6px solid #fff'
     } else if (kind === 'bubble') {
       el.style.background = 'rgba(255,255,255,.3)'
-      el.style.border = '3px solid #FFF7F0'
+      el.style.border = '3px solid #fff'
     } else {
       el.style.background = '#FFC83D'
       el.style.border = 'none'
