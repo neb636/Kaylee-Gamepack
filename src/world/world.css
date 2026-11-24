@@ -302,10 +302,12 @@
   min-width: 0;
   min-height: 0;
 }
-/* The whole box turns the globe, so a drag that starts on a pin or the sky beside it still spins it. */
+/* The whole box turns the globe, so a drag that starts on a pin or the sky beside it still spins it. Its ball and pins
+   stack among themselves (isolation), under the toggle, the dock and the flight. */
 .world .globe {
   position: absolute;
   inset: 0;
+  isolation: isolate;
   touch-action: none;
   cursor: grab;
   animation: globe-arrive 0.7s cubic-bezier(0.2, 1.25, 0.4, 1) both;
@@ -416,12 +418,13 @@
   border-radius: 50%;
   box-shadow: 0 3px 0 rgba(235, 161, 35, 0.5);
 }
-/* Sparkle's balloon (GlobeHome.tsx sizes and moves it). Only the balloon itself takes a tap, not its whole box. */
+/* Sparkle's balloon (GlobeHome.tsx sizes and moves it). Only the balloon itself takes a tap, not its whole box. It
+   flies over everything, the opening screen of the flight too. */
 .world .globe-balloon {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 320;
+  z-index: 61;
   pointer-events: none;
   will-change: transform;
 }
@@ -444,12 +447,12 @@
   position: absolute;
   left: 4px;
   bottom: 4px;
-  z-index: 300;
+  z-index: 2;
 }
 /* A continent's name, over the spot she tapped. */
 .world .globe-label {
   position: absolute;
-  z-index: 330;
+  z-index: 3;
   translate: -50% calc(-100% - 22px);
   padding: 8px 20px;
   border-radius: 999px;
@@ -464,7 +467,7 @@
 /* A ring on the water where she tapped the sea. */
 .world .globe-plop {
   position: absolute;
-  z-index: 150;
+  z-index: 2;
   width: 64px;
   height: 64px;
   margin: -32px 0 0 -32px;

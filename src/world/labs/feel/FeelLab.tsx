@@ -34,7 +34,8 @@ function withFeel(hash: string, feel: Record<string, string>) {
 let version = 0
 feelLab.subscribe(() => void version++)
 
-export default function FeelLab({ place }: { place: string }) {
+/** `place`: the country on screen, or none on the home screen (its globe's knobs are a shared group it claims). */
+export default function FeelLab({ place }: { place?: string }) {
   useSyncExternalStore(feelLab.subscribe, () => version)
   // The section on screen changes as she plays (replaceState, no event): look a few times a second.
   const [, tick] = useState(0)
@@ -42,7 +43,7 @@ export default function FeelLab({ place }: { place: string }) {
     const id = setInterval(() => tick((n) => n + 1), 250)
     return () => clearInterval(id)
   }, [])
-  const { activity, section } = sceneHere(place)
+  const { activity, section } = place ? sceneHere(place) : ({} as ReturnType<typeof sceneHere>)
   const groups = feelLab.groupsFor(place, activity, section)
   const watchers = feelLab.watchers()
   const [open, setOpen] = useState(true)
@@ -74,7 +75,7 @@ export default function FeelLab({ place }: { place: string }) {
 
   // Another scene keeps what you changed (the bike's steering comes along from the green trail to the berms).
   const go = (act: string, sec: string | undefined) => {
-    location.hash = worldLink(place, act, sec, { feel: '1', ...feelLab.params() })
+    if (place) location.hash = worldLink(place, act, sec, { feel: '1', ...feelLab.params() })
   }
   // The pickers mark where the tuning is (from the source: a game's knobs register only once its code loads).
   const tuned = (act: string, sec?: string) => {
@@ -83,7 +84,7 @@ export default function FeelLab({ place }: { place: string }) {
   }
   // (Only sections: nearly every game has some.)
   const mark = (act: string, sec?: string) => (sec && tuned(act, sec) ? '🎛️ ' : '')
-  const elsewhere = activity && groups.length === 0 ? (sectionsFor(place, activity)?.sections ?? []).filter((s) => tuned(activity, s.id)) : []
+  const elsewhere = activity && groups.length === 0 ? (sectionsFor(place ?? '', activity)?.sections ?? []).filter((s) => tuned(activity, s.id)) : []
 
   const copy = (text: string, label: string) => {
     void shareLab(text, label).then(say, (error) => say(String(error)))
@@ -127,7 +128,7 @@ export default function FeelLab({ place }: { place: string }) {
         <IconButton icon="x" label="Close the feel lab" small onClick={() => (location.hash = withFeel(location.hash, {}))} />
       </div>
       <div className="cl-panel-scroll">
-        <ScenePicker place={place} open={go} mark={mark} openPlace={(pl, act, sec) => (location.hash = worldLink(pl, act, sec, { feel: '1', ...feelLab.params() }))} />
+        {place && <ScenePicker place={place} open={go} mark={mark} openPlace={(pl, act, sec) => (location.hash = worldLink(pl, act, sec, { feel: '1', ...feelLab.params() }))} />}
         {watchers.length > 0 && groups.length > 0 && (
           <Section title="Live">
             {watchers.map(([id, read]) => (

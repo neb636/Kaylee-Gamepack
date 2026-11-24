@@ -4,6 +4,7 @@
 // hands: dragging, flicking, turning to a country, and keeping the pins on their spots.
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, type MouseEvent, type PointerEvent, type ReactNode } from 'react'
 import { clamp, damp, DEG, lerp, smooth, smoothstep, sounds, TO_DEG, useElementSize, useGameLoop, wrapAngle } from '../../sdk'
+import { feelLab, knobs } from '../kit/knobs'
 import { continentAt, LIFT, paintGlobe, project, TILT, turnOf, unproject, type Continent, type Stalk, type View } from './sphere'
 
 export interface GlobePin {
@@ -69,11 +70,25 @@ function layoutOf(w: number, h: number): GlobeLayout {
 const still = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
 /** It arrives turning: this many degrees round to where it stops. */
 const ARRIVE = 110
-/** How fast it drifts when nobody touches it, degrees a second (the way the real Earth turns). */
-const DRIFT = 2.4
 const polar = (p: { lat: number }) => Math.abs(p.lat) > 85
-/** A finger has to travel this far before a tap becomes a turn. */
-const SLOP = 9
+
+// How the spin feels (the feel lab: #/world?view=map&feel=1). Shared, because the home screen belongs to no country:
+// the lab shows it while the globe is on screen.
+const FEEL_ID = 'homeGlobe'
+const FEEL = knobs(
+  FEEL_ID,
+  'The home globe',
+  'src/world/globe/Globe.tsx',
+  {
+    glide: { value: 1.7, min: 0.3, max: 6, step: 0.1, label: 'Slowing after a flick', unit: '/s', note: 'higher stops sooner; lower spins on and on', main: true },
+    top: { value: 520, min: 120, max: 1200, step: 10, label: 'Fastest flick', unit: '°/s', note: 'the fastest a flick can send it', main: true },
+    grip: { value: 1, min: 0.5, max: 2, step: 0.05, label: 'Turn per finger', note: '1: the ground stays under her finger', main: true },
+    drift: { value: 2.4, min: 0, max: 12, step: 0.1, label: 'Drift when left alone', unit: '°/s', note: 'the way the real Earth turns; 0 keeps it still', main: true },
+    rest: { value: 4, min: 0.5, max: 15, step: 0.5, label: 'Wait before drifting', unit: 's' },
+    slop: { value: 9, min: 2, max: 30, step: 1, label: 'Tap or turn', unit: 'px', note: 'how far a finger moves before a tap becomes a turn' },
+  },
+  { shared: true },
+)
 
 export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, startLon, held, onPin, onLand, onSea }, ref) {
   const box = useRef<HTMLDivElement>(null)
@@ -129,6 +144,9 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
     [],
   )
 
+  // The feel lab lists the spin's knobs while the globe is on screen.
+  useEffect(() => feelLab.claim(FEEL_ID), [])
+
   // The canvas covers the globe, its glow and the pins' stalks, at the screen's own sharpness (2x at most).
   const side = Math.ceil(lay.R * 2.7)
   useEffect(() => {
@@ -165,14 +183,14 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
       if (st.spin || st.tip) {
         st.view.lon += st.spin * dt
         st.view.lat = clamp(st.view.lat + st.tip * dt, TILT.min, TILT.max)
-        st.spin *= Math.exp(-dt * 1.7)
+        st.spin *= Math.exp(-dt * FEEL.glide)
         st.tip *= Math.exp(-dt * 5)
         if (Math.abs(st.spin) < 1.5) st.spin = 0
         if (Math.abs(st.tip) < 1.5) st.tip = 0
         st.idle = 0
         moving = true
       }
-      const drift = !still && !heldRef.current && !st.drag && st.idle > 4 ? -DRIFT : 0
+      const drift = !still && !heldRef.current && !st.drag && st.idle > FEEL.rest ? -FEEL.drift : 0
       st.drift += (drift - st.drift) * damp(dt, 1.2)
       if (Math.abs(st.drift) > 0.01) {
         st.view.lon += st.drift * dt
@@ -239,33 +257,6 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
     s.current.spin = s.current.tip = 0
     s.current.idle = 0
   }
-  const move = (e: PointerEvent) => {
-    const st = s.current
-    const d = st.drag
-    if (!d || d.id !== e.pointerId) return
-    const dx = e.clientX - d.x
-    const dy = e.clientY - d.y
-    if (!d.moved) {
-      if (Math.hypot(dx, dy) < SLOP) return
-      d.moved = true
-      st.turn = null
-      box.current?.setPointerCapture(e.pointerId)
-      sounds.pickup()
-    }
-    // The ground under her finger goes where her finger goes.
-    const R = layRef.current.R
-    const turned = (-dx / R) * TO_DEG
-    const tipped = (dy / R) * TO_DEG
-    st.view.lon += turned
-    st.view.lat = clamp(st.view.lat + tipped, TILT.min, TILT.max)
-    const now = performance.now()
-    const dt = Math.max(0.004, (now - d.at) / 1000)
-    st.spin = lerp(st.spin, turned / dt, 0.45)
-    st.tip = lerp(st.tip, tipped / dt, 0.45)
-    d.x = e.clientX
-    d.y = e.clientY
-    d.at = now
-  }
   const up = (e: PointerEvent) => {
     const st = s.current
     const d = st.drag
@@ -275,9 +266,38 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
     st.dragged = performance.now()
     // A finger that stopped before lifting put the globe down; a moving one flicked it.
     if (performance.now() - d.at > 90) st.spin = st.tip = 0
-    st.spin = clamp(st.spin, -520, 520)
+    st.spin = clamp(st.spin, -FEEL.top, FEEL.top)
     st.tip = clamp(st.tip, -120, 120)
     if (Math.abs(st.spin) > 120) sounds.whoosh()
+  }
+  const move = (e: PointerEvent) => {
+    const st = s.current
+    const d = st.drag
+    if (!d || d.id !== e.pointerId) return
+    // A mouse whose button came up somewhere we couldn't hear it (outside the box, before the turn began).
+    if (e.pointerType === 'mouse' && e.buttons === 0) return up(e)
+    const dx = e.clientX - d.x
+    const dy = e.clientY - d.y
+    if (!d.moved) {
+      if (Math.hypot(dx, dy) < FEEL.slop) return
+      d.moved = true
+      st.turn = null
+      box.current?.setPointerCapture(e.pointerId)
+      sounds.pickup()
+    }
+    // The ground under her finger goes where her finger goes.
+    const R = layRef.current.R
+    const turned = (-dx / R) * TO_DEG * FEEL.grip
+    const tipped = (dy / R) * TO_DEG * FEEL.grip
+    st.view.lon += turned
+    st.view.lat = clamp(st.view.lat + tipped, TILT.min, TILT.max)
+    const now = performance.now()
+    const dt = Math.max(0.004, (now - d.at) / 1000)
+    st.spin = lerp(st.spin, turned / dt, 0.45)
+    st.tip = lerp(st.tip, tipped / dt, 0.45)
+    d.x = e.clientX
+    d.y = e.clientY
+    d.at = now
   }
   const wasDrag = () => performance.now() - s.current.dragged < 400
 
@@ -304,6 +324,11 @@ export const Globe = forwardRef<GlobeHandle, Props>(function Globe({ pins, start
       onPointerMove={move}
       onPointerUp={up}
       onPointerCancel={up}
+      onPointerLeave={(e) => {
+        // A press that slid out of the box before it became a turn: its release won't reach us, so let it go now.
+        // (Once it is a turn the box has captured the pointer and hears the release wherever it happens.)
+        if (s.current.drag?.id === e.pointerId && !s.current.drag.moved) s.current.drag = null
+      }}
       onClickCapture={(e) => {
         // The click at the end of a turn isn't a tap.
         if (wasDrag()) e.stopPropagation()

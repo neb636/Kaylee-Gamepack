@@ -72,14 +72,19 @@ export function World({ place, activity, section, params = {} }: { place?: strin
     lab = params.cam !== undefined
     feel = params.feel !== undefined
     tab = lab ? 'camera' : feel ? 'feel' : undefined
-  } else if (params.feel !== undefined) {
+  } else if (params.feel !== undefined && params.view === undefined) {
     tab = 'feel'
     screen = (
       <Suspense fallback={null}>
         <FeelStart />
       </Suspense>
     )
-  } else screen = <WorldMap view={params.view} />
+  } else {
+    // The home screen. Its globe has feel knobs too (#/world?view=map&feel=1).
+    screen = <WorldMap view={params.view} />
+    feel = params.feel !== undefined
+    tab = feel ? 'feel' : undefined
+  }
   // In a lab the shared bar sits on top and the world (the game, or the lab's own page) fills the rest. The game's element
   // (`host`) stays the same element either way, so switching between the camera and feel labs never restarts it.
   return (
@@ -113,7 +118,7 @@ export function World({ place, activity, section, params = {} }: { place?: strin
         )}
         {feel && (
           <Suspense fallback={null}>
-            <FeelLab place={place!} />
+            <FeelLab place={place} />
           </Suspense>
         )}
       </div>

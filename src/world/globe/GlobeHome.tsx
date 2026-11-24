@@ -176,7 +176,8 @@ export function GlobeHome({ toggle, dock, halloween }: { toggle: ReactNode; dock
             className="globe-balloon-hit"
             aria-label="Sparkle"
             onClick={() => {
-              if (flight) return
+              // In flight a tap anywhere skips, the balloon too.
+              if (flight) return land()
               sounds.whoosh()
               void hop.start({ y: [0, -34, 0], rotate: [0, -5, 4, 0], transition: { duration: 0.8, ease: 'easeOut' } })
               void sparkle.current?.play('cheer')
