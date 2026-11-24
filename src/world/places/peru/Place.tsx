@@ -12,6 +12,7 @@ import { useStampFlow, type ActivityProps } from '../../kit/stampFlow'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
+import { MeadowScene } from './activities/fluffy/Meadow'
 import { PenguinCliff } from './activities/penguins/PenguinCliff'
 import { SwimRiver } from './activities/river/SwimRiver'
 import { Terraces } from './activities/terraces/Terraces'
@@ -164,7 +165,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
         <StoryBeat
           lines={L.intro}
           friend={<Alpaca kind="luna" height="100%" />}
-          bg={art.bgAndes}
+          scene={<MeadowScene />}
           onDone={() => {
             introSeen = true
             setIntro(false)
@@ -258,9 +259,10 @@ function BalloonSoon({ backToMap }: { backToMap: () => void }) {
     return () => clearTimeout(t)
   }, [])
   return (
-    <div style={{ position: 'absolute', inset: 0, background: `url(${art.bgAndes}) center / cover`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px calc(var(--safe-bottom) + var(--target) + 32px)' }}>
-      <div style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>🎈 {L.balloonSoon}</div>
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(20px, 3vw)' }}>
+    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px calc(var(--safe-bottom) + var(--target) + 32px)' }}>
+      <MeadowScene />
+      <div style={{ position: 'relative', background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>🎈 {L.balloonSoon}</div>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'flex-end', gap: 'min(20px, 3vw)' }}>
         <SparklePuppet ref={sparkle} height="min(300px, 34vh, 40vw)" lookToward={0.5} />
         <Alpaca ref={luna} kind="luna" height="min(300px, 34vh, 40vw)" onTap={() => void luna.current?.play('giggle')} label="Luna" />
       </div>

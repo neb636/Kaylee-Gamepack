@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 200" width="100" height="200">
+  <title>A fence post</title>
+  <ellipse cx="52" cy="194" rx="34" ry="5" fill="#4b3a8c" opacity="0.14"/>
+  <!-- the post -->
+  <path d="M34 34H66V196H34Z" fill="#c99266"/>
+  <path d="M54 34H66V196H54Z" fill="#a46e4b"/>
+  <path d="M39 44V186" fill="none" stroke="#e5b78f" stroke-width="5" stroke-linecap="round"/>
+  <path d="M47 70Q51 82 47 96M49 128Q53 140 49 152" fill="none" stroke="#a46e4b" stroke-width="3" stroke-linecap="round"/>
+  <!-- a rounded cap -->
+  <path d="M28 40Q28 10 50 10Q72 10 72 40Z" fill="#8a5b3d"/>
+  <path d="M50 10Q72 10 72 40H58Q62 22 50 10Z" fill="#6b432e"/>
+  <path d="M36 32Q36 20 46 17" fill="none" stroke="#b17d56" stroke-width="5" stroke-linecap="round"/>
+  <rect x="26" y="38" width="48" height="9" rx="4.5" fill="#6b432e"/>
+  <!-- grass at its foot -->
+  <path d="M30 196l-7 -16M32 196l1 -20M70 196l8 -15M68 196l-1 -19" fill="none" stroke="#48a96c" stroke-width="5" stroke-linecap="round"/>
+</svg>

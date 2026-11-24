@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 160" width="300" height="160">
+  <title>Round fleece clippers</title>
+  <defs><clipPath id="body"><path d="M84 36Q84 22 100 22L236 34Q286 40 286 80Q286 120 236 126L100 138Q84 138 84 124Z"/></clipPath></defs>
+  <!-- the comb: rounded safe teeth on the left -->
+  <path d="M30 34H92V126H30Q8 126 8 108V52Q8 34 30 34Z" fill="#dedaf0"/>
+  <path d="M30 96H92V126H30Q8 126 8 108Z" fill="#bcb6d6"/>
+  <path d="M8 52H54M8 66H54M8 80H54M8 94H54M8 108H54" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+  <path d="M8 59H50M8 73H50M8 87H50M8 101H50" fill="none" stroke="#9790ba" stroke-width="4" stroke-linecap="round"/>
+  <!-- the body she holds -->
+  <path d="M84 36Q84 22 100 22L236 34Q286 40 286 80Q286 120 236 126L100 138Q84 138 84 124Z" fill="#b9a6f5"/>
+  <g clip-path="url(#body)"><path d="M70 104Q190 122 300 92V150H70Z" fill="#937ee0"/><path d="M236 20Q300 80 236 140H300V20Z" fill="#937ee0" opacity="0.5"/></g>
+  <path d="M106 44Q170 46 226 54" fill="none" stroke="#ddd2ff" stroke-width="9" stroke-linecap="round"/>
+  <rect x="84" y="24" width="16" height="112" rx="6" fill="#8b78e6"/>
+  <!-- the button -->
+  <ellipse cx="178" cy="82" rx="27" ry="16" fill="#d8367f"/>
+  <ellipse cx="178" cy="78" rx="27" ry="16" fill="#ff4f9a"/>
+  <ellipse cx="170" cy="73" rx="10" ry="4" fill="#ff8fc0"/>
+</svg>

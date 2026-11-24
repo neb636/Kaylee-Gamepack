@@ -9,6 +9,7 @@
 import { forwardRef, useId, useRef } from 'react'
 import { bell, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
 import { INK } from './Alpaca'
+import { fluff, ring } from './fleece'
 
 export const TIKA_ACTIONS = { hop: 0.9, munch: 1.7, cheer: 1.2, giggle: 1.1, nod: 0.7, smug: 1.6, dance: 1.8, spit: 0.9 }
 export type TikaPose = 'grin' | 'tongue' | 'wink' | 'tilt' | 'peek'
@@ -42,39 +43,18 @@ export const LLAMA_COATS: Record<'tika' | 'brown' | 'grey' | 'cria', LlamaCoat> 
   cria: { wool: '#FFC9A8', shade: '#F0A27F', light: '#FFE2D4', face: '#FFDCC6', muzzle: '#FFF8EE', sock: '#FFF8EE', hoof: '#A46E4B', earIn: '#FF9DBF', baby: true },
 }
 
-/** A woolly outline: arcs that bulge outward between points listed clockwise (on screen). */
-function fluff(pts: [number, number][], bulge = 1.05) {
-  let d = `M${pts[0][0]} ${pts[0][1]}`
-  for (let i = 1; i <= pts.length; i++) {
-    const [x0, y0] = pts[i - 1]
-    const [x1, y1] = pts[i % pts.length]
-    const r = Math.hypot(x1 - x0, y1 - y0) * bulge
-    d += `A${r.toFixed(1)} ${r.toFixed(1)} 0 0 1 ${x1} ${y1}`
-  }
-  return d + 'Z'
-}
-
-/** Points around an ellipse, clockwise on screen. */
-function ring(cx: number, cy: number, rx: number, ry: number, n: number, turn = 0): [number, number][] {
-  const out: [number, number][] = []
-  for (let i = 0; i < n; i++) {
-    const a = ((turn + (360 * i) / n) * Math.PI) / 180
-    out.push([Math.round(cx + Math.cos(a) * rx), Math.round(cy + Math.sin(a) * ry)])
-  }
-  return out
-}
-
 const BODY = fluff(ring(400, 770, 300, 190, 20, 9), 0.9)
 const TAIL = fluff(ring(106, 690, 66, 62, 8), 0.8)
 const NECK = fluff([[514, 700], [502, 615], [506, 530], [522, 455], [572, 428], [650, 428], [700, 455], [714, 530], [716, 615], [706, 700], [660, 782], [560, 784]], 0.85)
-const HEAD = fluff(ring(610, 300, 176, 160, 16, 11), 0.82)
-const FACE = 'M478 304C478 226 536 204 610 206C684 204 742 226 742 304C742 388 692 446 610 450C528 446 478 388 478 304Z'
+/** Her head, face and ears: Luna's alpaca family wear the same ones (Alpaca.tsx). */
+export const HEAD = fluff(ring(610, 300, 176, 160, 16, 11), 0.82)
+export const FACE = 'M478 304C478 226 536 204 610 206C684 204 742 226 742 304C742 388 692 446 610 450C528 446 478 388 478 304Z'
 const TOPKNOT = fluff([[536, 196], [548, 140], [602, 108], [662, 122], [690, 172], [676, 222], [612, 240], [556, 232]], 0.8)
 const BLANKET = 'M176 716Q168 690 196 680Q350 622 500 650Q528 656 530 684L538 868Q540 896 512 900Q352 924 198 896Q172 892 172 866Z'
 
 const PIVOT = { neck: [608, 780], head: [610, 446], earL: [500, 204], earR: [720, 204], tasselL: [446, 96], tasselR: [774, 96], tail: [150, 712], fringe: [352, 705] } as const
 const FEET = TIKA_VIEW.feetY
-const EYE_Y = 312
+export const EYE_Y = 312
 
 const LEGS = {
   farBack: { x: 318, w: 86 },
@@ -377,7 +357,7 @@ export const Tika = forwardRef<PuppetHandle, TikaProps>(function Tika(props, ref
 })
 
 /** Her mouth, under the split lip; opens downward (0 closed .. 1 wide). `dx` shifts it for chewing. */
-function mouthPath(open: number, dx: number) {
+export function mouthPath(open: number, dx: number) {
   const x = (v: number) => (v + dx).toFixed(1)
   const o = Math.max(0, open - 0.04)
   const w = 22 + o * 16

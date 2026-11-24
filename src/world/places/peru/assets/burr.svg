@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <title>A prickly burr</title>
+  <defs><clipPath id="ball"><circle cx="50" cy="50" r="27"/></clipPath></defs>
+  <!-- prickles all round -->
+  <path d="M50 4L56 26L72 10L70 32L92 26L78 44L98 54L77 60L88 80L67 72L64 94L50 76L36 94L33 72L12 80L23 60L2 54L22 44L8 26L30 32L28 10L44 26Z" fill="#8fae52"/>
+  <path d="M98 54L77 60L88 80L67 72L64 94L50 76L50 50L78 44Z" fill="#6f8f3d"/>
+  <circle cx="50" cy="50" r="27" fill="#a9c46a"/>
+  <g clip-path="url(#ball)"><path d="M62 16Q92 50 56 84H90V16Z" fill="#8fae52"/></g>
+  <path d="M33 42Q36 32 46 29" fill="none" stroke="#d6e6a3" stroke-width="5" stroke-linecap="round"/>
+  <path d="M42 54l-4 -5M56 46l-4 -5M52 64l-4 -5M64 58l-4 -5" fill="none" stroke="#6f8f3d" stroke-width="3" stroke-linecap="round"/>
+</svg>

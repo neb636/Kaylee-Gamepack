@@ -21,10 +21,11 @@ import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
 import { L } from '../../lines'
 import type { ActivityProps } from '../../Place'
-import { Alpaca, HAT_COLORS, HatShape, INK, LOOKS, type AlpacaRig, type StuckItem } from '../../puppets/Alpaca'
+import { Alpaca, HAT_COLORS, HatShape, LOOKS, type AlpacaRig, type StuckItem } from '../../puppets/Alpaca'
 import { HAT_SPOT, isMain, VIEW } from '../../puppets/fleece'
 import { boxHeight, boxTop, FAMILY, onStage, pickLayout, type Spot, type StageLayout, type Who } from './layout'
 import { Cactus, Cloud, Hummingbird, Peak, Pond, Post, Wall, Wind, type BugState } from './Scene'
+import { Meadow, MeadowScene, MEADOW } from './Meadow'
 import { fsfx } from './sfx'
 import { Basket, Particles, type BasketHandle, type ParticlesHandle } from './Wool'
 
@@ -33,15 +34,13 @@ const F = L.fluffy
 const TOTAL = 6
 /** Share of the main fleece that counts as "a haircut". */
 const CLIPPED = 0.7
-const SKY = { wide: '#8ED2FD', tall: '#7ECAFD' }
-const MEADOW = '#8FE4C4'
 const HATS = ['pink', 'hotpink', 'cream', 'brown']
 export const HATS_KEY = 'peru:alpaca-hats'
 const ITEMS = ['burr', 'twig', 'dandelion', 'bird', 'beetle'] as const
 type ItemKind = (typeof ITEMS)[number]
 /** Each tool's picture (width / height) and its working edge (shares of its box): the brush's bristles, the clippers'
  *  teeth. That spot sits right under her finger. */
-const TOOLS = { brush: { aspect: 512 / 342, at: [0.5, 0.92] }, clippers: { aspect: 512 / 271, at: [0.07, 0.5] } } as const
+const TOOLS = { brush: { aspect: 300 / 200, at: [0.5, 0.92] }, clippers: { aspect: 300 / 160, at: [0.05, 0.5] } } as const
 const ITEM_IMG: Record<ItemKind, string> = { burr: art.burr, twig: art.twig, dandelion: art.dandelion, bird: art.bird, beetle: art.beetle }
 
 type Phase = 'story' | 'brush' | 'clip' | 'mirror' | 'arrive' | 'family' | 'yarn' | 'hats' | 'photo' | 'done'
@@ -530,7 +529,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
           const at = onStage(spot, p.x, p.y)
           const to = basket.current?.mouth() ?? { x: 0, y: 0 }
           const color = LOOKS[who].fleece
-          particles.current?.wool(at.x + dx, at.y, p.r * spot.k * 1.4, color, to, () => basket.current?.add(color))
+          particles.current?.wool(at.x + dx, at.y, p.r * spot.k * 1.4, color, LOOKS[who].shade, to, () => basket.current?.add(color))
         }
       }
       if (phase === 'brush' && items) {
@@ -833,20 +832,10 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
   }, [phase, yarn, hats, size.W, items])
 
   const toolOn = phase === 'brush' || phase === 'clip' || phase === 'family'
-  const sky = S?.tall ? SKY.tall : SKY.wide
-  const groundPx = S ? oy + S.ground * scale : 0
-  // Thin side bands: stretch the painting a little to cover them. Wide ones (phones held sideways): fade its edges
-  // into the painting's own flat sky and meadow colors.
-  const band = S ? ox / scale : 0
-  const bgFit =
-    band < (S?.w ?? 0) * 0.06
-      ? { left: -band, width: (S?.w ?? 0) + band * 2 }
-      : { left: 0, width: '100%', WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)', maskImage: 'linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)' }
-
   return (
     <div
       ref={root}
-      style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: S ? `linear-gradient(${sky} 0, ${sky} ${groundPx}px, ${MEADOW} ${groundPx}px)` : sky, touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}
+      style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: MEADOW, touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}
     >
       {S && (
         <div
@@ -857,12 +846,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
           onPointerCancel={onUp}
           style={{ position: 'absolute', left: ox, top: oy, width: S.w, height: S.h, transform: `scale(${scale})`, transformOrigin: '0 0' }}
         >
-          <img
-            src={S.tall ? art.bgAndesTall : art.bgAndes}
-            alt=""
-            draggable={false}
-            style={{ position: 'absolute', top: 0, height: '100%', pointerEvents: 'none', ...bgFit }}
-          />
+          <Meadow w={S.w} h={S.h} ground={S.ground} rise={S.rise} />
           {/* Far away: clouds, a snowy peak, the stone wall, the post with Luna's satchel. */}
           <Peak x={S.peak.x} y={S.peak.y} />
           {S.clouds.map((c, i) => (
@@ -938,7 +922,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
           <Cactus {...S.cactus} glow={glow === 'cactus'} bug={bug} onTap={() => (phase === 'yarn' ? void dye() : (setBug('peek'), sounds.pop(), timers.later(() => alive() && setBug('hide'), 1600)))} />
 
           {/* The tray: the tool rests here; later, the hats. */}
-          <div style={{ position: 'absolute', left: S.tray.x, top: S.tray.y, width: S.tray.w, height: S.tray.h, borderRadius: 36, background: 'rgba(255,247,240,.82)', border: `5px solid ${INK}`, boxShadow: '0 8px 0 rgba(43,35,48,.15)', zIndex: 10, display: 'flex', flexDirection: S.tall ? 'row' : 'column', alignItems: 'center', justifyContent: 'space-evenly', opacity: toolOn || phase === 'hats' ? 1 : 0.4, transition: 'opacity .4s' }}>
+          <div style={{ position: 'absolute', left: S.tray.x, top: S.tray.y, width: S.tray.w, height: S.tray.h, borderRadius: 40, background: 'rgba(255,255,255,.78)', border: '6px solid #fff', boxShadow: '0 10px 0 rgba(75,58,140,.14)', zIndex: 10, display: 'flex', flexDirection: S.tall ? 'row' : 'column', alignItems: 'center', justifyContent: 'space-evenly', opacity: toolOn || phase === 'hats' ? 1 : 0.4, transition: 'opacity .4s' }}>
             {phase === 'hats' &&
               tray.map((c) => (
                 <div
@@ -947,9 +931,10 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
                   ref={(el) => void hatEls.current.set(c, el)}
                   aria-label={`${c} hat`}
                   className={glow === 'hats' ? 'world-glow' : undefined}
-                  style={{ width: S.tall ? S.tray.w / 4 - 6 : S.tray.w - 16, height: S.tall ? S.tray.h - 16 : S.tray.h / 4 - 6, borderRadius: 28, display: 'grid', placeItems: 'center', cursor: 'grab', touchAction: 'none', zIndex: 21, position: 'relative' }}
+                  style={{ width: S.tall ? S.tray.w / 4 - 6 : S.tray.w - 16, height: S.tall ? S.tray.h - 16 : S.tray.h / 4 - 6, borderRadius: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'grab', touchAction: 'none', zIndex: 21, position: 'relative' }}
                 >
-                  <svg viewBox="-60 -78 120 168" style={{ width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible' }}>
+                  {/* As big as the tray allows: stacked hats may overlap by the length of their tassels, no more. */}
+                  <svg viewBox="-60 -78 120 168" style={{ ...(S.tall ? { width: '100%' } : { height: '122%' }), flexShrink: 0, pointerEvents: 'none', overflow: 'visible' }}>
                     <HatShape color={c} />
                   </svg>
                 </div>
@@ -979,8 +964,9 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
           {pinkDrop && (
             <div ref={dropEl} data-drop aria-label="pink drop" className="world-glow" style={{ position: 'absolute', left: dropHome().x - 50, top: dropHome().y - 55, width: 100, height: 110, borderRadius: '50%', zIndex: 19, touchAction: 'none', cursor: 'grab', display: 'grid', placeItems: 'center' }}>
               <svg viewBox="-22 -32 44 56" style={{ width: 66, height: 84, pointerEvents: 'none' }}>
-                <path d="M0 -28Q18 -2 18 8A18 18 0 0 1 -18 8Q-18 -2 0 -28Z" fill="#FF4F9A" stroke={INK} strokeWidth="4" />
-                <circle cx="-6" cy="6" r="4" fill="#FFF7F0" />
+                <path d="M0 -28Q18 -2 18 8A18 18 0 0 1 -18 8Q-18 -2 0 -28Z" fill="#FF4F9A" />
+                <path d="M6 -19Q18 -2 18 8A18 18 0 0 1 0 26Q14 14 6 -19Z" fill="#D8367F" />
+                <ellipse cx="-7" cy="6" rx="4" ry="6" fill="#FF8FC0" />
               </svg>
             </div>
           )}
@@ -1013,8 +999,9 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
               style={{ position: 'absolute', left: 0, top: 0, width: 44, height: 56, zIndex: 17, pointerEvents: 'none' }}
             >
               <svg viewBox="-22 -32 44 56" style={{ width: '100%', height: '100%' }}>
-                <path d="M0 -28Q18 -2 18 8A18 18 0 0 1 -18 8Q-18 -2 0 -28Z" fill="#FF4F9A" stroke={INK} strokeWidth="4" />
-                <circle cx="-6" cy="6" r="4" fill="#FFF7F0" />
+                <path d="M0 -28Q18 -2 18 8A18 18 0 0 1 -18 8Q-18 -2 0 -28Z" fill="#FF4F9A" />
+                <path d="M6 -19Q18 -2 18 8A18 18 0 0 1 0 26Q14 14 6 -19Z" fill="#D8367F" />
+                <ellipse cx="-7" cy="6" rx="4" ry="6" fill="#FF8FC0" />
               </svg>
             </motion.div>
           )}
@@ -1033,7 +1020,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
 
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.9 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 26 }} />}</AnimatePresence>
 
-      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={F.story} bg={art.bgAndes} friend={<Alpaca kind="luna" height="100%" bangs />} onDone={startPlay} />}
+      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={F.story} scene={<MeadowScene />} friend={<Alpaca kind="luna" height="100%" bangs />} onDone={startPlay} />}
     </div>
   )
 }
@@ -1041,14 +1028,22 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
 /** The basket's wool spun into a ball of yarn (cream, then cochineal pink). */
 function Yarn({ cx, y, pink }: { cx: number; y: number; pink: boolean }) {
   const c = pink ? HAT_COLORS.pink.main : '#FFF7F0'
-  const d = pink ? HAT_COLORS.hotpink.main : '#E8D9C8'
+  const d = pink ? HAT_COLORS.pink.shade : '#EFDCCD'
   return (
     <motion.div key={String(pink)} initial={{ scale: 0, y: 40 }} animate={{ scale: [0, 1.25, 1], y: 0 }} transition={{ duration: 0.6 }} style={{ position: 'absolute', left: cx - 70, top: y - 70, width: 140, height: 140, zIndex: 12, pointerEvents: 'none' }}>
       <svg viewBox="-60 -60 120 120" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-        <circle r="52" fill={c} stroke={INK} strokeWidth="6" />
-        <path d="M-40 -30Q0 -10 30 -42M-50 0Q0 16 48 -16M-44 26Q0 36 40 24M-20 -48Q-8 0 -24 46M12 -50Q26 0 14 50" fill="none" stroke={d} strokeWidth="6" strokeLinecap="round" />
-        <path d="M44 28Q66 40 58 58" fill="none" stroke={INK} strokeWidth="6" strokeLinecap="round" />
-        <path d="M44 28Q66 40 58 58" fill="none" stroke={c} strokeWidth="3" strokeLinecap="round" />
+        <defs>
+          <clipPath id={`peru-yarn-${pink}`}>
+            <circle r="52" />
+          </clipPath>
+        </defs>
+        <path d="M44 28Q66 40 58 58" fill="none" stroke={d} strokeWidth="6" strokeLinecap="round" />
+        <circle r="52" fill={c} />
+        <g clipPath={`url(#peru-yarn-${pink})`}>
+          <path d="M18 -60Q70 0 14 60H70V-60Z" fill={d} opacity=".55" />
+          <path d="M-40 -30Q0 -10 30 -42M-50 0Q0 16 48 -16M-44 26Q0 36 40 24M-20 -48Q-8 0 -24 46M12 -50Q26 0 14 50" fill="none" stroke={d} strokeWidth="6" strokeLinecap="round" />
+        </g>
+        <path d="M-34 -22Q-28 -36 -14 -40" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" opacity=".7" />
       </svg>
     </motion.div>
   )

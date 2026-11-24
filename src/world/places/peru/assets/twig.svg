@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <title>A twig with two leaves</title>
+  <!-- the twig -->
+  <path d="M8 84Q40 70 62 44Q70 34 74 22" fill="none" stroke="#8a5b3d" stroke-width="9" stroke-linecap="round"/>
+  <path d="M44 66Q58 68 70 62" fill="none" stroke="#8a5b3d" stroke-width="7" stroke-linecap="round"/>
+  <path d="M12 80Q36 70 54 50" fill="none" stroke="#b17d56" stroke-width="3" stroke-linecap="round"/>
+  <!-- leaves -->
+  <path d="M72 26C58 14 60 0 78 2C96 4 96 22 72 26Z" fill="#73cf86"/><path d="M72 26C86 22 94 12 78 2C90 12 84 20 72 26Z" fill="#48a96c"/>
+  <path d="M72 26Q76 12 78 6" fill="none" stroke="#aee8b7" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M68 62C80 48 96 52 96 66C94 80 76 78 68 62Z" fill="#73cf86"/><path d="M68 62C80 68 92 72 96 66C94 80 76 78 68 62Z" fill="#48a96c"/>
+  <path d="M70 62Q82 60 92 64" fill="none" stroke="#aee8b7" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

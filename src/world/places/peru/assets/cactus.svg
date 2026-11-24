@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 250" width="200" height="250">
+  <title>A prickly pear cactus</title>
+  <defs>
+    <clipPath id="p1"><ellipse cx="100" cy="186" rx="50" ry="58"/></clipPath>
+    <clipPath id="p2"><ellipse cx="46" cy="118" rx="36" ry="46" transform="rotate(-24 46 118)"/></clipPath>
+    <clipPath id="p3"><ellipse cx="156" cy="124" rx="34" ry="44" transform="rotate(26 156 124)"/></clipPath>
+    <clipPath id="p4"><ellipse cx="106" cy="82" rx="38" ry="46" transform="rotate(6 106 82)"/></clipPath>
+  </defs>
+  <ellipse cx="102" cy="243" rx="62" ry="6" fill="#4b3a8c" opacity="0.14"/>
+  <!-- pink fruit on the back pads -->
+  <ellipse cx="22" cy="72" rx="13" ry="15" transform="rotate(-24 22 72)" fill="#ff4f9a"/><ellipse cx="18" cy="66" rx="4" ry="5" fill="#ff8fc0"/>
+  <ellipse cx="178" cy="78" rx="13" ry="15" transform="rotate(26 178 78)" fill="#ff4f9a"/><ellipse cx="174" cy="72" rx="4" ry="5" fill="#ff8fc0"/>
+  <ellipse cx="122" cy="32" rx="12" ry="14" transform="rotate(12 122 32)" fill="#ff4f9a"/><ellipse cx="118" cy="27" rx="4" ry="5" fill="#ff8fc0"/>
+  <!-- side pads -->
+  <ellipse cx="46" cy="118" rx="36" ry="46" transform="rotate(-24 46 118)" fill="#73cf86"/>
+  <g clip-path="url(#p2)"><path d="M52 60Q96 120 40 180H110V60Z" fill="#48a96c"/></g>
+  <path d="M26 92Q30 78 42 74" fill="none" stroke="#aee8b7" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="156" cy="124" rx="34" ry="44" transform="rotate(26 156 124)" fill="#73cf86"/>
+  <g clip-path="url(#p3)"><path d="M172 70Q204 130 150 180H220V70Z" fill="#48a96c"/></g>
+  <path d="M146 96Q152 86 162 84" fill="none" stroke="#aee8b7" stroke-width="7" stroke-linecap="round"/>
+  <!-- the top pad (the dye bug lives here) -->
+  <ellipse cx="106" cy="82" rx="38" ry="46" transform="rotate(6 106 82)" fill="#73cf86"/>
+  <g clip-path="url(#p4)"><path d="M122 30Q164 84 112 134H170V30Z" fill="#48a96c"/></g>
+  <path d="M82 62Q88 46 102 42" fill="none" stroke="#aee8b7" stroke-width="7" stroke-linecap="round"/>
+  <!-- the big pad in front -->
+  <ellipse cx="100" cy="186" rx="50" ry="58" fill="#73cf86"/>
+  <g clip-path="url(#p1)"><path d="M122 120Q176 186 110 250H180V120Z" fill="#48a96c"/><path d="M40 226Q100 250 160 222V250H40Z" fill="#48a96c" opacity="0.6"/></g>
+  <path d="M66 160Q72 142 88 136" fill="none" stroke="#aee8b7" stroke-width="8" stroke-linecap="round"/>
+  <!-- soft little prickles -->
+  <path d="M84 176l-4 -6M84 176l5 -5M112 204l-4 -6M112 204l5 -5M74 212l-4 -6M74 212l5 -5M124 166l-4 -6M124 166l5 -5M100 232l-4 -6M100 232l5 -5M40 130l-4 -6M40 130l5 -5M58 104l-4 -6M58 104l5 -5M154 138l-4 -6M154 138l5 -5M166 110l-4 -6M166 110l5 -5M96 102l-4 -6M96 102l5 -5M120 76l-4 -6M120 76l5 -5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+</svg>

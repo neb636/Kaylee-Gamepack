@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <title>A friendly beetle</title>
+  <defs><clipPath id="shell"><ellipse cx="44" cy="54" rx="34" ry="28"/></clipPath></defs>
+  <!-- little legs and feelers -->
+  <path d="M24 74l-6 14M42 80l-2 14M60 78l4 14M78 44q8 -14 16 -12M72 40q2 -16 10 -18" fill="none" stroke="#2b2330" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- head -->
+  <circle cx="74" cy="56" r="18" fill="#6a57c7"/>
+  <!-- shell -->
+  <ellipse cx="44" cy="54" rx="34" ry="28" fill="#3fc1cf"/>
+  <g clip-path="url(#shell)"><path d="M0 66Q44 90 90 62V90H0Z" fill="#1f9cb3"/><path d="M44 20V90" fill="none" stroke="#1f9cb3" stroke-width="3"/></g>
+  <circle cx="28" cy="48" r="6" fill="#1f9cb3"/><circle cx="56" cy="44" r="5.5" fill="#1f9cb3"/><circle cx="34" cy="66" r="4.5" fill="#167f93"/><circle cx="58" cy="64" r="5" fill="#167f93"/>
+  <path d="M20 40Q26 30 38 28" fill="none" stroke="#8fe3ea" stroke-width="5" stroke-linecap="round"/>
+  <!-- face -->
+  <ellipse cx="78" cy="52" rx="4.5" ry="5.5" fill="#fff"/><circle cx="79" cy="53" r="3" fill="#2b2330"/><circle cx="80" cy="51.5" r="1.2" fill="#fff"/>
+  <path d="M76 64Q82 68 87 63" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="70" cy="62" rx="4" ry="2.5" fill="#ff8fb8" opacity="0.7"/>
+</svg>

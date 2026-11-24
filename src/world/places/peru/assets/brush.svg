@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <title>A fleece brush</title>
+  <defs><clipPath id="back"><rect x="22" y="78" width="256" height="62" rx="26"/></clipPath></defs>
+  <!-- the handle: an arch she holds -->
+  <path d="M62 96C62 30 96 12 150 12C204 12 238 30 238 96H204C204 58 186 46 150 46C114 46 96 58 96 96Z" fill="#ff4f9a"/>
+  <path d="M204 96C204 58 186 46 150 46V34C196 34 218 52 218 96Z" fill="#d8367f"/>
+  <path d="M82 80C84 46 104 28 140 25" fill="none" stroke="#ff8fc0" stroke-width="9" stroke-linecap="round"/>
+  <!-- bristles: soft cream, a little scalloped at the tips -->
+  <path d="M38 128H262V176Q255 190 248 176Q241 190 234 176Q227 190 220 176Q213 190 206 176Q199 190 192 176Q185 190 178 176Q171 190 164 176Q157 190 150 176Q143 190 136 176Q129 190 122 176Q115 190 108 176Q101 190 94 176Q87 190 80 176Q73 190 66 176Q59 190 52 176Q45 190 38 176Z" fill="#fff7f0"/>
+  <path d="M206 128H262V176Q255 190 248 176Q241 190 234 176Q227 190 220 176Q213 190 206 176Z" fill="#efdccd"/>
+  <path d="M66 140V172M94 140V172M122 140V172M150 140V172M178 140V172" fill="none" stroke="#efdccd" stroke-width="4" stroke-linecap="round"/>
+  <!-- the back of the brush -->
+  <rect x="22" y="78" width="256" height="62" rx="26" fill="#ff8fb8"/>
+  <g clip-path="url(#back)"><path d="M22 118H278V140H22Z" fill="#e7699c"/><path d="M214 70Q250 104 216 150H290V70Z" fill="#e7699c" opacity="0.6"/></g>
+  <path d="M48 96Q90 88 150 90" fill="none" stroke="#ffc4da" stroke-width="9" stroke-linecap="round"/>
+  <!-- a little heart -->
+  <path d="M222 100C222 93 232 92 234 99C236 92 246 93 246 100C246 108 234 116 234 116C234 116 222 108 222 100Z" fill="#fff7f0"/>
+</svg>
