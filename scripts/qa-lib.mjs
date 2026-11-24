@@ -242,10 +242,11 @@ export const around = (n, y) => Array.from({ length: n }, (_, i) => [Math.cos(i 
 
 /**
  * The `screens`, `pacing` or `motion` lists of every src/world/places/<id>/qa.mjs and every activity's own qa.mjs, in
- * folder order. Each is an array of the same shape the script's own central list uses.
+ * folder order (and the home globe's, src/world/globe/qa.mjs). Each is an array of the same shape the script's own
+ * central list uses.
  */
 export async function loadScenarios(kind) {
-  const files = globSync('src/world/places/**/qa.mjs', { cwd: root }).sort()
+  const files = globSync(['src/world/globe/qa.mjs', 'src/world/places/**/qa.mjs'], { cwd: root }).sort()
   const all = []
   for (const f of files) all.push(...((await import(pathToFileURL(path.join(root, f)).href))[kind] ?? []))
   return all

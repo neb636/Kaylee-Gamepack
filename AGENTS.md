@@ -1,8 +1,8 @@
 # Kaylee's Gamepack: how we build it
 
 This is a learning app for **Kaylee, age 5**. She plays it on an iPad (saved to the home screen). Its heart is
-**Around the World** (`#/world`): a world map she explores in Sparkle's hot-air balloon, one country at a time, each
-with a friend who needs her help, a handful of activities, passport stamps, stickers and a finale.
+**Around the World** (`#/world`): a globe she spins and flies around in Sparkle's hot-air balloon, one country at a
+time, each with a friend who needs her help, a handful of activities, passport stamps, stickers and a finale.
 
 **Thailand is where the app is going.** It's the family's country, built in 3D with three.js: Kaylee walks around
 Agong's shophouse as a unicorn, the whole family are animal characters who talk in their own voices, and the places

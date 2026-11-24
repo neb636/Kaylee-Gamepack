@@ -117,4 +117,7 @@ is sky, below is foreground ground or water, and both may be cut.
   boat, an animal, flowers, sparkles).
 - **One landmark or idea** per place, known at a glance (the karst islands and a longtail boat for Krabi), plus two or
   three supporting things. Leave calm areas: it sits behind a title and a row of icons.
+- **A country's banner is also its pin on the home globe**: a circle cut from it (`WINDOWS` in
+  `src/world/globe/Medallion.tsx`: the circle's center and radius in the banner's units). Give a new country its line
+  there, around its landmark and its friend, and look at it on the globe (`#/world?view=map`).
 - Skies: day `#9fd4fa` to `#e4f4ff`; the app's dreamy sky `#a9b4f7` to `#f7d6ee`; dusk `#b7a6f2` to `#ffc9b8`.

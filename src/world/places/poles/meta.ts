@@ -32,8 +32,8 @@ const meta: PlaceMeta = {
   name: 'The Poles',
   emoji: '🐧',
   flag: 'poles',
-  // On Antarctica, the white strip along the bottom of the map.
-  mapPos: { x: 50, y: 91 },
+  // On top of the world: the North Pole's pin is in view whichever way the globe is turned.
+  globe: { lon: 0, lat: 90 },
   friend: { name: 'Pola the polar bear cub', img: art.friend },
   trophyTitle: 'Polar Explorer',
   // The ending is the last chapter (its stamp brings the trophy), not a separate party screen.

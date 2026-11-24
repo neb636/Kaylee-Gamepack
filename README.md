@@ -17,7 +17,7 @@ each activity's `sections.ts` by `npm run sections-readme`.
 and a saved shortlist with notes and export. Documentation is available online and is not included in game downloads.
 
 **The world map** comes in two views (the two buttons in its top bar; she keeps the one she used last):
-- [The map](https://neb636.github.io/Kaylee-Gamepack/#/world?view=map)
+- [The globe](https://neb636.github.io/Kaylee-Gamepack/#/world?view=map) (spin it, tap a country's pin and Sparkle's balloon flies there; tap the land to hear its continent)
 - [The game shelf](https://neb636.github.io/Kaylee-Gamepack/#/world?view=list) (every game as a picture card, a row per country and per Thailand trip; ❤️ favorites, 🎁 surprise)
 
 **The lab** (development tools, one bar with a tab for each lab below: Characters, Camera, Feel, Dialogue; each tab keeps
