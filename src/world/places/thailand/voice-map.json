@@ -8260,11 +8260,32 @@
     "file": "9dcd4df5abaa.mp3"
   },
   {
-    "text": "Now dance with me!",
+    "text": "Chok!",
     "voice": "coach",
     "sig": "88ce04f1f6",
-    "ms": 1570,
-    "file": "06ef0cef9430.mp3"
+    "ms": 552,
+    "file": "71bfcb884181.mp3"
+  },
+  {
+    "text": "Nueng!",
+    "voice": "coach",
+    "sig": "88ce04f1f6",
+    "ms": 672,
+    "file": "3601c0ef102c.mp3"
+  },
+  {
+    "text": "Song!",
+    "voice": "coach",
+    "sig": "88ce04f1f6",
+    "ms": 696,
+    "file": "e74c79e93ae2.mp3"
+  },
+  {
+    "text": "Saam!",
+    "voice": "coach",
+    "sig": "88ce04f1f6",
+    "ms": 768,
+    "file": "ace72a634106.mp3"
   },
   {
     "text": "Yes! Again!",
@@ -8281,25 +8302,32 @@
     "file": "0b2b555d8a1e.mp3"
   },
   {
-    "text": "Punch to the drum!",
+    "text": "Tap Dad to punch!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1648,
-    "file": "097d9e42d439.mp3"
+    "ms": 1752,
+    "file": "6fa6535bba02.mp3"
   },
   {
-    "text": "Punch when it's gold!",
+    "text": "Click Dad to punch!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1523,
-    "file": "bb7e4ebaaad2.mp3"
+    "ms": 2184,
+    "file": "926f2a0fa200.mp3"
   },
   {
-    "text": "Follow Dad's pad!",
+    "text": "Gold gloves! Super punch!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1968,
-    "file": "8d183f9c4ad3.mp3"
+    "ms": 3048,
+    "file": "f0fb59fb9318.mp3"
+  },
+  {
+    "text": "Punch his big glove!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1632,
+    "file": "be86bbdb0d95.mp3"
   },
   {
     "text": "Big kick!",
@@ -8323,6 +8351,27 @@
     "file": "2d80bc3677d8.mp3"
   },
   {
+    "text": "Uh oh!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 720,
+    "file": "4234c1bb4405.mp3"
+  },
+  {
+    "text": "Gotcha!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 648,
+    "file": "6ad405e93013.mp3"
+  },
+  {
+    "text": "Whoa, I'm dizzy!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2520,
+    "file": "0ae0b2bd5de3.mp3"
+  },
+  {
     "text": "Up high! Down low!",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -8330,11 +8379,11 @@
     "file": "edba5dd97002.mp3"
   },
   {
-    "text": "Hit the pad!",
+    "text": "One more round!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 1038,
-    "file": "42033d849b03.mp3"
+    "ms": 1104,
+    "file": "8b53f7b744f9.mp3"
   },
   {
     "text": "Tap your gloves!",
@@ -8351,25 +8400,18 @@
     "file": "9d458074ae1d.mp3"
   },
   {
-    "text": "Punch the bag!",
+    "text": "Punch Dad!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1603,
-    "file": "4e3ffbdd1eb6.mp3"
+    "ms": 1200,
+    "file": "503d37f081b6.mp3"
   },
   {
-    "text": "Punch Dad's pad!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1728,
-    "file": "193e719b01cb.mp3"
-  },
-  {
-    "text": "The wai kru dance says thank you to your teacher!",
+    "text": "Before a fight, a boxer bows to say thank you to the teacher!",
     "voice": "coach",
     "sig": "88ce04f1f6",
-    "ms": 4159,
-    "file": "7037e518bbb5.mp3"
+    "ms": 5088,
+    "file": "cc01d48e3b38.mp3"
   },
   {
     "text": "Muay Thai is Thailand's own sport!",
