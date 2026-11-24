@@ -53,11 +53,11 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 
 <h2>Your call</h2><ol><li><p>New Tika: keep her?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
 <li><p>I took &quot;landing page&quot; to mean this level's opening screen. Is that the one you meant?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>The Peru map and its other three games still use generated pictures. Redraw those next?</p><textarea rows="2" data-q="2" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<li><p>The Peru map, Luna's Fluffy Day and the penguin cliff still use generated pictures. Redraw those next?</p><textarea rows="2" data-q="2" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
 <h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/peru/machu-picchu">Play it</a> <a class="pill" href="../#/world/peru/machu-picchu/photo">The summit photo</a> <a class="pill" href="../#/world/puppets/tika">Tika and her friends in the puppet lab</a></p>
 </main>
 <script>
-const qs=["New Tika: keep her?","I took \"landing page\" to mean this level's opening screen. Is that the one you meant?","The Peru map and its other three games still use generated pictures. Redraw those next?"],titles=[]
+const qs=["New Tika: keep her?","I took \"landing page\" to mean this level's opening screen. Is that the one you meant?","The Peru map, Luna's Fluffy Day and the penguin cliff still use generated pictures. Redraw those next?"],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
