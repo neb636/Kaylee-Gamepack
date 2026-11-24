@@ -328,8 +328,8 @@ export const L = {
     kits: maple('Three little raccoons! Where is your mama?'),
     // Statues: Roxy sneaks toward the marshmallow bag whenever the light is off her (Sparkle; and her hint).
     sneak: 'Roxy is sneaking! Shine the light and she stops!',
-    // Her statues (one each time she's caught in the beam): the tree, the rock, the whistle, the stretch.
-    statues: [roxy("I'm a tree."), roxy("I'm a rock."), roxy('Nobody here!'), roxy('Just stretching!')],
+    // Her statues (one each time she's caught in the beam): the tree, the whistle, the stretch.
+    statues: [roxy("I'm a tree."), roxy('Nobody here!'), roxy('Just stretching!')],
     // She reaches the bag.
     yoink: roxy('Yoink!'),
     // She has fallen over laughing three times: she gives up.

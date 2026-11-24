@@ -188,7 +188,7 @@ export const screens = [
     },
   },
   // (?statue= also holds the close-up's own camera on her, so the screen is what the close-up shows.)
-  ...['tree', 'rock', 'whistling', 'ballerina'].map((p) => ({ name: `canada-campfire-statue-${p}`, hash: `#/world/canada/campfire/roast?statue=${p}`, reset: true, wait: 2500 })),
+  ...['tree', 'whistling', 'ballerina'].map((p) => ({ name: `canada-campfire-statue-${p}`, hash: `#/world/canada/campfire/roast?statue=${p}`, reset: true, wait: 2500 })),
   // Each thing close, from the front, the side and behind (?look=<thing>&yaw=<degrees round it>, everyone lit), to
   // check it's put together right from every side.
   ...['owl', 'bat', 'deer', 'porcupine', 'frog', 'tent', 'fire', 'log', 'den', 'stick'].flatMap((id) =>
