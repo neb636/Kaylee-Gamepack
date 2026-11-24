@@ -135,7 +135,7 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
     rings: pool<Leap>(3, () => ({ on: false, wx: 0, y: 0, t: 0 })),
     wake: pool<Leap>(14, () => ({ on: false, wx: 0, y: 0, t: 0 })),
     clouds: CLOUDS.map((c) => c.x),
-    farm: { on: false, wx: 0, water: 0, steps: 0, done: false, angle: 0, spin: 0, tick: 0 },
+    farm: { on: false, wx: 0, water: 0, steps: 0, done: false, angle: 0, spin: 0 },
     /** The farm before this one, still green and turning, until it has slid off the screen (a wide screen shows both). */
     past: { on: false, wx: 0 },
     hippo: { state: 'hidden' as 'hidden' | 'bubbles' | 'up' | 'diving' | 'party', x: 0, y: 0, t: 0, wait: 1.6, lotus: false, since: 0, greeted: false, bumped: false },
@@ -173,6 +173,8 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
   useEffect(() => setProgress(stars, LEGS * 2), [stars, setProgress])
   const section: SectionId = phase === 'sail' ? (leg === 0 ? 'sail-1' : 'sail-2') : phase === 'farm' ? (leg === 0 ? 'farm-1' : 'farm-2') : phase
   useEffect(() => enter(section), [section, enter])
+  // The river's bed (water, breeze, far-off birds) under everything until she leaves.
+  useEffect(() => nsfx.river(), [])
 
   const prompt: Line | undefined = phase === 'sail' ? (leg === 0 ? N.steer : N.more) : phase === 'farm' ? N.wheel : undefined
   const promptRef = useRef(prompt)
@@ -362,6 +364,9 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
 
     // Wake behind the stern while the boat moves through the water.
     g.wakeIn -= dt
+    // ...and the swish of the water along the hull, louder the faster she sails.
+    const through = Math.hypot(g.speed + B.vx, B.vy)
+    if (playing && through > 5) nsfx.wake(clamp((through - 5) / 50))
     if (g.wakeIn <= 0 && g.speed + B.vx > 5) {
       g.wakeIn = 0.16
       const w = g.wake.find((x) => !x.on)
@@ -555,12 +560,7 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
           F.water = Math.min(1, F.water + dt * FARM.fill)
           F.spin = 200
           g.idle = 0
-          F.tick -= dt
-          if (F.tick <= 0) {
-            F.tick = 0.36
-            nsfx.creak()
-            nsfx.trickle()
-          }
+          nsfx.wheel()
         } else g.idle += dt
         const steps = Math.floor(F.water * CROP_COUNT + 1e-6)
         if (steps !== F.steps) {
