@@ -43,14 +43,23 @@ export interface Look {
     kind: Outfit
     color: string
     shorts?: string
+    /** A roomy tee over real shorts (Dad's): short sleeves with a hem, a crew neck, a leg each with a turned-up cuff. */
+    cut?: 'roomy'
     /** A scalloped lace collar in this color and a pleated front (Joy's white blouse). */
     lace?: string
     /** Flowers printed all over, in these colors, with green leaves and an open camp collar (Bird's party shirt). */
     print?: string[]
   }
   /** The real person's hair on their animal (Dad's photos, 2026-10-24), so Kaylee knows who's who: a straight cut to the
-   *  shoulders parted in the middle (Joy), or short thick hair that sticks up in spikes (Bird). */
-  hairdo?: { style: 'bob' | 'spiky'; color: string }
+   *  shoulders parted in the middle (Joy), short thick hair that sticks up in spikes (Bird), or short messy hair in
+   *  tufts with a fringe (Dad, a unicorn: it takes the place of his mane). */
+  hairdo?: { style: 'bob' | 'spiky' | 'tousled'; color: string }
+  /** Round eyes with a white and an iris in this color (Dad's blue eyes), instead of the usual all-dark ones. */
+  eyes?: string
+  /** Thick eyebrows in this color. */
+  brows?: string
+  /** A unicorn's tail when it isn't the color of its hair. */
+  tail?: string[]
   /** A big smile showing the top teeth (Joy): it stretches when they talk. */
   smile?: 'teeth'
   /** A fox's cheeks as flatter, smaller mounds on the face, this big (Joy 0.8); without it, the usual round fluffy ones. */

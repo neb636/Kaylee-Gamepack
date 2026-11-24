@@ -177,7 +177,7 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
 - The user picked Tripo's generation 2 (`characters/models/mom.glb`; `mom-rig.blend` and the other generations are in
   the planning repo's `models/mom/`). Tripo made the head, arms, legs, ears, brows and tail separate pieces, so nothing
   was cut: only pivots were added.
-- `characters/mom-model.ts`: like Dad's earlier try, only the meshes scale (1.55 m); pivots stay in meters. The code
+- `characters/mom-model.ts`: only the meshes scale (1.55 m); pivots stay in meters. The code
   draws her smile (ink beads on the muzzle), the open mouth `FaceLife` grows with her voice, and cream lids for the
   blink (a flat cap over each painted eye). `Member` takes the rig as its 5th argument and seats any rig with legs on its
   hips.
@@ -221,23 +221,6 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
 - **QA:** `node scripts/qa-mom.mjs` (after a build) opens every Thailand section, finds her (`userData.family`, set
   by `familyRig`), and saves a sheet per section: the screen with her outlined and three close-ups drawn from the
   game's own scene. `--who=nick` shoots anyone else, `--hashes=a|b` any links.
-
-## Dad 5 in the character lab
-
-- You picked Dad 5. Compare him with the game’s code-built Dad in the character lab at
-  `#/world/characters/dad-5?lineup=nick,dad-5`. The game still uses `LOOKS.nick`.
-- Dad 5’s skinned GLB includes a 1.5-second Blender wave. The lab preserves the original arm hierarchy so the collarbone,
-  upper arm and forearm move together. Other poses use the family controls. A small sleeve fold remains at the deepest bend.
-- The previous trials used rigid pieces, which pulled away at the shoulder on fused meshes. The current skin weights let
-  the sleeves bend with the arms. `scripts/blender/split-dad.py` produced the measurements used by the shared face code.
-- **His ink follows his face** (2026-11-18): the hull is his whole skinned mesh, so where the face folds inward it drew
-  lines that didn't match it (a squiggle under the nose, rims round the eye sockets). `scripts/blender/ink-dad.py`
-  writes an `_INK` weight per vertex into the GLB (0 on the eye domes, lashes and brows; fading out round the nose and
-  in the head's inward folds) and `hullOf` drops the 0 triangles and thins the line by it. Rerun it on a new GLB.
-  `minted()` blurs how green each texel is before moving it to mint, so the muzzle's cream fades into the mint at
-  his chin instead of speckling.
-- Before an in-game swap, check the remaining gestures and fit the gear Dad uses in the trips. The barber needs separate
-  hair and the tail needs its own joint to swing. Issue #481 tracks the texture work.
 
 ## Open questions
 

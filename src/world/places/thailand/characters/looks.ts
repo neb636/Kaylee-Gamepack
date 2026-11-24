@@ -44,7 +44,10 @@ const PENGUIN = { species: 'penguin' as const, fur: '#3F365F', light: '#FFF6EC',
 export const LOOKS: Record<string, Look> = {
   // Not a toy any more: the size the game's hats, glasses and costumes are built at (avatar.ts, closet/, model-wear.ts).
   kaylee: { species: 'unicorn', height: 1.0, fur: '#CDB9F6', light: '#F4EDFF', dark: '#A88EE8', ear: '#FFB3D1', mane: ['#FF6FAE', '#FBE27A', '#8FE3C8', '#8EC9F5'], hair: 'medium', outfit: { kind: 'dress', color: '#FF5FA2' }, lashes: true },
-  nick: { species: 'unicorn', height: 1.7, fur: '#A9EBD6', light: '#E2FAF1', dark: '#9C86DA', ear: '#FFB3C7', mane: ['#8EC9F5', '#B9A6F5'], hair: 'short', outfit: { kind: 'polo', color: '#FBE78A' }, open: true },
+  // Dad, from the user's reference picture (2026-11-23): short messy brown hair and brown brows, blue eyes, a little
+  // pink nose on a cream muzzle, round ears, a purple curl of a tail, a t-shirt (yellow: the user's pick) and tan shorts.
+  // `mane` is his hair's browns (the barber's strands and snips start out in them).
+  nick: { species: 'unicorn', height: 1.7, fur: '#B4EBCF', light: '#F6F6E6', dark: '#A980D6', ear: '#F9A9BE', mane: ['#9C5F40', '#8A5136', '#AD6E4A'], tail: ['#B08CDD', '#A980D6'], hairdo: { style: 'tousled', color: '#9C5F40' }, eyes: '#4F7FB8', brows: '#8A5136', outfit: { kind: 'tee', color: '#FBE78A', shorts: '#D8C3A2', cut: 'roomy' } },
   agong: { species: 'panda', height: 1.45, fur: '#FFF6EE', light: '#FFFDF8', dark: '#4A3F4F', ear: '#FFB3C7', outfit: { kind: 'shirt', color: '#FFF0DA' }, extras: ['glasses', 'moustache', 'cane'] },
   jum: { species: 'elephant', height: 1.5, chub: 1.25, fur: '#FFB3CF', light: '#FFE3EE', dark: '#F28CB3', ear: '#FF94BC', outfit: { kind: 'blouse', color: '#A7EBD0' }, lashes: true },
   // Joy and Bird look a little like themselves (Dad's photos, 2026-10-24): Joy's straight brown hair to her shoulders,

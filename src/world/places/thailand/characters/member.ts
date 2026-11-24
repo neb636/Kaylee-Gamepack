@@ -57,12 +57,11 @@ export class Member implements Character {
   private phoneWaving = -1
   private wind = new Wind()
 
-  /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs, and
-   *  `rig` a toy to use instead of the usual one. Mom is the modelled vinyl toy (mom-model.ts, loaded before Thailand's
+  /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs. Mom is the modelled vinyl toy (mom-model.ts, loaded before Thailand's
    *  scenes build). */
-  constructor(readonly member: FamilyMember, bag: Bag, look?: Look, voice: string | undefined = member.id, rig?: Rig) {
+  constructor(readonly member: FamilyMember, bag: Bag, look?: Look, voice: string | undefined = member.id) {
     this.id = member.id
-    this.chibi = rig ?? familyRig(member.id, bag, look)
+    this.chibi = familyRig(member.id, bag, look)
     this.root = this.chibi.root
     this.height = this.chibi.height
     // (The big cousins also talk at the game table, in a cheerful voice of their own: cast.json's bbplay, ganplay, kenplay.)
@@ -224,8 +223,7 @@ export class Member implements Character {
       this.waving += dt / 1.5
       const p = Math.min(1, this.waving)
       const up = span(p, 0, 0.15) * (1 - span(p, 0.8, 1))
-      if (this.chibi.wave) this.chibi.wave(p)
-      else armR.rotation.z = up * (2.5 + Math.sin(p * Math.PI * 7) * 0.35)
+      armR.rotation.z = up * (2.5 + Math.sin(p * Math.PI * 7) * 0.35)
       if (p >= 1) {
         armR.rotation.z = 0
         this.waving = -1
