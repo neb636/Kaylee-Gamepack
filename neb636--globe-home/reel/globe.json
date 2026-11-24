@@ -12,14 +12,14 @@
       "name": "globe-spin",
       "where": "globe-spin",
       "seconds": 9,
-      "fps": 9.1,
+      "fps": 9.7,
       "status": "ok"
     },
     {
       "name": "globe-fly",
       "where": "globe-fly",
       "seconds": 3.4,
-      "fps": 13.9,
+      "fps": 13.6,
       "status": "ok"
     }
   ]

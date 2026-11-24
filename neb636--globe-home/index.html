@@ -37,24 +37,25 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 </style></head><body><main>
 <span class="chip">Check-in 3 of 4: play it</span>
 <h1>The home screen: a globe to spin</h1>
-<p class="kaylee">The old map is now a toy globe she spins with her finger. Every country is a little window on it, and Sparkle's balloon flies down to the one she taps.</p>
+<p class="kaylee">The old map is now a toy globe she spins with her finger. Every country is a pin with one big friendly thing on it (a moose, a pizza, a panda, an elephant), and Sparkle's balloon flies down to the one she taps.</p>
 
 <h2>Watch</h2><figure><video src="reel/globe.mp4" poster="" controls playsinline muted autoplay loop></video>
 <figcaption>Globe · 16 s</figcaption></figure>
-<h2>Before and after</h2><div class="pics"><figure class="pair"><div><img src="pics/ipad-before.jpg" alt="Before: iPad" loading="lazy"><span>Before</span></div><div><img src="pics/ipad-after.jpg" alt="After: iPad" loading="lazy"><span>After</span></div>
-<figcaption><b>iPad</b>: The pins are circles cut from each country's shelf banner, with its flag. No generated art, no emoji.</figcaption></figure>
+<h2>Before and after</h2><div class="pics"><figure class="solo"><img src="pics/pins.jpg" alt="The pins" loading="lazy">
+<figcaption><b>The pins</b>: Your notes are in: a pizza for Italy, the elephant for Thailand, a bigger panda, polar bear and alpaca, and a moose for Canada. Egypt is as it was.</figcaption></figure>
+<figure class="pair"><div><img src="pics/ipad-before.jpg" alt="Before: iPad" loading="lazy"><span>Before</span></div><div><img src="pics/ipad-after.jpg" alt="After: iPad" loading="lazy"><span>After</span></div>
+<figcaption><b>iPad</b>: Hand-drawn like the shelf, with each country's flag. No generated art, no emoji.</figcaption></figure>
 <figure class="pair"><div><img src="pics/ipad-tall-before.jpg" alt="Before: iPad, upright" loading="lazy"><span>Before</span></div><div><img src="pics/ipad-tall-after.jpg" alt="After: iPad, upright" loading="lazy"><span>After</span></div>
 <figcaption><b>iPad, upright</b>: A globe is round, so it fills either way up. The map left half the screen empty.</figcaption></figure>
 <figure class="pair"><div><img src="pics/iphone-before.jpg" alt="Before: iPhone" loading="lazy"><span>Before</span></div><div><img src="pics/iphone-after.jpg" alt="After: iPhone" loading="lazy"><span>After</span></div>
 <figcaption><b>iPhone</b>: Pins stay a full finger wide (64px here, 88px or more on the iPad).</figcaption></figure></div>
 
 
-<h2>Your call</h2><ol><li><p>Canada's pin shows Maple in her canoe. Keep it, or bring the moose back?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>Thailand's pin shows Krabi (the elephant and the islands). Or should it be Agong's house?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+
 <h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world?view=map">Play it: the globe</a> <a class="pill" href="../#/world?view=map&amp;feel=1">Tune the spin (feel lab)</a> <a class="pill" href="../#/world?view=map&amp;device=mouse">The same with a mouse's words</a></p>
 </main>
 <script>
-const qs=["Canada's pin shows Maple in her canoe. Keep it, or bring the moose back?","Thailand's pin shows Krabi (the elephant and the islands). Or should it be Agong's house?"],titles=[]
+const qs=[],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
