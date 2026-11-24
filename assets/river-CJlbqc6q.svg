@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Swim with Rosa</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddf7ee"/><stop offset="1" stop-color="#a9e8d2"/></linearGradient>
+    <radialGradient id="glow" cx="0.55" cy="0.42" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="river" x1="0" y1="84" x2="0" y2="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6fd6d9"/><stop offset="1" stop-color="#1f9cb3"/></linearGradient>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="64" cy="52" r="50" fill="url(#glow)"/>
+
+  <!-- a branch with a fruit to leap for -->
+  <path d="M122 16C104 14 88 18 76 16" fill="none" stroke="#a46e4b" stroke-width="7" stroke-linecap="round"/>
+  <path d="M122 14C104 12 88 16 78 14" fill="none" stroke="#c99266" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M98 17C97 22 99 26 98 30" fill="none" stroke="#48a96c" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="98" cy="38" r="9" fill="#ff9c57"/><path d="M90.500 43C95 48 102 48 106 42C104 47 99 49 95 47.500C93 47 91.500 45 90.500 43Z" fill="#e57a35"/><circle cx="95" cy="35" r="3" fill="#ffc595"/>
+
+  <!-- the flooded forest's river -->
+  <rect y="86" width="120" height="34" fill="url(#river)"/>
+  <g fill="#fff" opacity="0.5"><rect x="66" y="98" width="24" height="3" rx="1.5"/><rect x="82" y="109" width="18" height="3" rx="1.5"/><rect x="12" y="106" width="16" height="3" rx="1.5"/></g>
+
+  <!-- Rosa the pink river dolphin, leaping -->
+  <g transform="translate(58 60) rotate(-30) scale(0.42)">
+    <path d="M-90 6C-106 -4 -120 -24 -138 -28C-134 -10 -126 0 -114 8C-126 16 -134 30 -138 46C-120 40 -102 24 -88 14Z" fill="#e7699c"/>
+    <path d="M12 22C8 46 -8 62 -28 66C-22 50 -16 36 -14 20Z" fill="#e7699c"/>
+    <path d="M-97 8C-74 -30 -15 -50 36 -42C64 -37 84 -20 84 0C84 24 50 42 0 40C-40 38 -76 24 -97 8Z" fill="#ff8fb8"/>
+    <path d="M-80 17C-40 36 20 44 60 24C76 16 82 6 84 0C84 24 50 42 0 40C-34 38 -62 28 -80 17Z" fill="#ffdce8"/>
+    <path d="M-38 -33C-30 -50 -12 -52 -2 -42Z" fill="#e7699c"/>
+    <rect x="66" y="-4" width="58" height="15" rx="7.5" fill="#ff8fb8"/>
+    <path d="M80 6.5Q102 11 120 4.5" fill="none" stroke="#c2447e" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M-52 -22C-22 -38 18 -40 46 -30" fill="none" stroke="#ffc4da" stroke-width="6" stroke-linecap="round"/>
+    <ellipse cx="57" cy="-11" rx="5.4" ry="6.4" fill="#2b2330"/><circle cx="59" cy="-13.5" r="2.1" fill="#fff"/>
+    <ellipse cx="50" cy="6" rx="10" ry="5.5" fill="#ff4f9a" opacity="0.45"/>
+  </g>
+
+  <!-- the splash where her tail leaves the water -->
+  <path d="M8 90C10 80 15 76 19 84C21 75 28 73 30 83C33 77 39 79 42 90Z" fill="#fff" opacity="0.94"/>
+  <g fill="#fff"><circle cx="8" cy="76" r="2.2"/><circle cx="16" cy="68" r="1.7"/><circle cx="38" cy="72" r="1.9"/></g>
+
+  <!-- jungle leaves at the banks -->
+  <path d="M-2 92C8 86 18 88 22 98C14 98 6 100 -2 106Z" fill="#2b7a5f"/>
+  <path d="M122 70C110 68 102 74 100 84C108 82 116 84 122 90Z" fill="#3e9e78"/>
+  <path d="M122 92C112 88 104 92 102 102C110 100 116 102 122 106Z" fill="#2b7a5f"/>
+  <path d="M120 78C113 75 107 77 103 81" fill="none" stroke="#69c19a" stroke-width="1.8" stroke-linecap="round"/>
+</svg>
