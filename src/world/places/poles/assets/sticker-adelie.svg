@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Adelie penguin</title>
+  <defs>
+    <clipPath id="round"><circle cx="60" cy="60" r="60"/></clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe1ee"/><stop offset="1" stop-color="#ffbcd8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <path id="bodyShape" d="M60 17C73 17 82 26.500 82 38C82 42.500 81 46 79.500 49C85 56 88 65 88 75C88 91 77 101 60 101C43 101 32 91 32 75C32 65 35 56 40.500 49C39 46 38 42.500 38 38C38 26.500 47 17 60 17Z"/>
+    <clipPath id="body"><use href="#bodyShape"/></clipPath>
+    <clipPath id="tummy"><path d="M60 50C72 50 80 61 80 76C80 90 72 99 60 99C48 99 40 90 40 76C40 61 48 50 60 50Z"/></clipPath>
+    <path id="flake" d="M0-5V5M-4.300-2.500L4.300 2.500M-4.300 2.500L4.300-2.500"/>
+  </defs>
+  <!-- a round sticker: everything sits inside the circle -->
+  <g clip-path="url(#round)">
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="54" r="50" fill="url(#glow)"/>
+  <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+    <use href="#flake" transform="translate(20 34)"/>
+    <use href="#flake" transform="translate(101 50) scale(0.8)"/>
+  </g>
+  <g fill="#fff"><circle cx="30" cy="18" r="1.800"/><circle cx="92" cy="20" r="2"/><circle cx="12" cy="56" r="1.600"/><circle cx="107" cy="72" r="1.500"/></g>
+
+  <!-- the snow -->
+  <path d="M0 96C20 90 42 91 60 93.500C80 96 100 91 120 93V120H0Z" fill="#fff"/>
+  <path d="M0 110C24 106 52 108 74 111C92 113.500 108 110 120 107.500V120H0Z" fill="#f0e3f7"/>
+  <ellipse cx="61" cy="103" rx="32" ry="4.500" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- feet -->
+  <ellipse cx="48.500" cy="101.500" rx="10" ry="4.800" fill="#ffc2a8"/>
+  <ellipse cx="71.500" cy="101.500" rx="10" ry="4.800" fill="#f09d80"/>
+
+  <!-- flippers: the left one down, the right one up, waving -->
+  <path d="M36 58C27 63 22 73 23 84C30 82 36 76 39.500 68Z" fill="#4a4470"/>
+  <path d="M83 58C91 53 97 45 98.500 35C91 36 84.500 41.500 81 49Z" fill="#2b2742"/>
+
+  <!-- body: one soft dark shape, lit top-left, shaded right -->
+  <g clip-path="url(#body)">
+    <rect x="30" y="15" width="60" height="88" fill="#2b2742"/>
+    <use href="#bodyShape" transform="translate(-4 -3)" fill="#3d3760"/>
+    <path d="M44.500 31C47 25.500 52 22 58 21.500" fill="none" stroke="#6a628f" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <!-- white tummy with a lavender shade on the right -->
+  <g clip-path="url(#tummy)">
+    <rect x="38" y="48" width="44" height="54" fill="#e4ddf6"/>
+    <path d="M60 50C72 50 80 61 80 76C80 90 72 99 60 99C48 99 40 90 40 76C40 61 48 50 60 50Z" transform="translate(-4 -2)" fill="#fff"/>
+  </g>
+
+  <!-- the Adelie's white eye rings, eyes, beak, blush -->
+  <circle cx="50" cy="38" r="6.200" fill="#fff"/>
+  <circle cx="70" cy="38" r="6.200" fill="#fff"/>
+  <ellipse cx="50.500" cy="38.300" rx="3.300" ry="3.900" fill="#2b2330"/>
+  <ellipse cx="69.500" cy="38.300" rx="3.300" ry="3.900" fill="#2b2330"/>
+  <circle cx="51.700" cy="36.800" r="1.300" fill="#fff"/>
+  <circle cx="70.700" cy="36.800" r="1.300" fill="#fff"/>
+  <path d="M54.500 44.500Q60 41.500 65.500 44.500Q63.500 50.500 60 51.500Q56.500 50.500 54.500 44.500Z" fill="#ff9c57"/>
+  <path d="M55.500 46.500Q60 48.500 64.500 46.500Q63 50.300 60 51.500Q57 50.300 55.500 46.500Z" fill="#e57a35"/>
+  <ellipse cx="43.500" cy="47" rx="4" ry="2.400" fill="#ff8fb8" opacity="0.7"/>
+  <ellipse cx="76.500" cy="47" rx="4" ry="2.400" fill="#ff8fb8" opacity="0.7"/>
+
+  <!-- a pebble for the nest -->
+  <ellipse cx="93" cy="101" rx="7.500" ry="5" fill="#9790ba"/>
+  <ellipse cx="92" cy="100" rx="6.500" ry="4.200" fill="#bcb6d6"/>
+  <ellipse cx="90" cy="98.500" rx="2.500" ry="1.200" fill="#dedaf0"/>
+  </g>
+</svg>

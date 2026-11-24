@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Emperor chick</title>
+  <defs>
+    <clipPath id="round"><circle cx="60" cy="60" r="60"/></clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff5d1"/><stop offset="1" stop-color="#ffe08f"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <path id="bodyShape" d="M60 52C78 52 89 67 88 84C87.500 90 85.500 94.500 82.500 97C81 99.500 78 100 76 98.500C74 101 70.500 101.500 68 99.500C65.500 102 62 102.500 60 100.500C58 102.500 54.500 102 52 99.500C49.500 101.500 46 101 44 98.500C42 100 39 99.500 37.500 97C34.500 94.500 32.500 90 32 84C31 67 42 52 60 52Z"/>
+    <clipPath id="body"><use href="#bodyShape"/></clipPath>
+    <clipPath id="head"><circle cx="60" cy="40" r="22.500"/></clipPath>
+  </defs>
+  <!-- a round sticker: everything sits inside the circle -->
+  <g clip-path="url(#round)">
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="54" r="50" fill="url(#glow)"/>
+  <g fill="#fff"><circle cx="18" cy="40" r="2"/><circle cx="27" cy="22" r="1.500"/><circle cx="104" cy="56" r="1.800"/><circle cx="12" cy="66" r="1.400"/></g>
+
+  <!-- the snow -->
+  <path d="M0 97C20 91 42 92 60 94.500C80 97 100 92 120 94V120H0Z" fill="#fff"/>
+  <path d="M0 111C24 107 52 109 74 112C92 114.500 108 111 120 108.500V120H0Z" fill="#f3ead2"/>
+  <ellipse cx="61" cy="103.500" rx="31" ry="4.500" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- little dark feet -->
+  <ellipse cx="50.500" cy="102" rx="7.500" ry="3.800" fill="#5a5480"/>
+  <ellipse cx="69.500" cy="102" rx="7.500" ry="3.800" fill="#3d3760"/>
+
+  <!-- stubby wings: the left one out, the right one up -->
+  <path d="M36 66C28 69 23 77 23.500 86C30 85.500 36 81 39 74Z" fill="#bcb6d6"/>
+  <path d="M84 66C91 62 96 55 96.500 46.500C90 47.500 84.500 52 81.500 59Z" fill="#9790ba"/>
+
+  <!-- body: soft grey down with a scruffy hem, shaded right, a pale chest -->
+  <g clip-path="url(#body)">
+    <rect x="30" y="50" width="60" height="54" fill="#9790ba"/>
+    <use href="#bodyShape" transform="translate(-4 -3)" fill="#bcb6d6"/>
+    <ellipse cx="57" cy="80" rx="16" ry="17" fill="#dedaf0"/>
+  </g>
+  <path d="M51 76q2.500 2.500 5 0M60 82q2.500 2.500 5 0M50 88q2.500 2.500 5 0" fill="none" stroke="#bcb6d6" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- head: a dark cap over a white mask -->
+  <g clip-path="url(#head)">
+    <rect x="36" y="16" width="48" height="48" fill="#2b2742"/>
+    <circle cx="56.500" cy="37" r="22.500" fill="#3d3760"/>
+    <circle cx="49" cy="44" r="12.500" fill="#fff"/>
+    <circle cx="71" cy="44" r="12.500" fill="#fff"/>
+    <ellipse cx="60" cy="54" rx="17" ry="10" fill="#fff"/>
+  </g>
+  <path d="M45.500 27.500C48 23.500 52 21 57 20.500" fill="none" stroke="#6a628f" stroke-width="3" stroke-linecap="round"/>
+  <!-- a tuft of down on top -->
+  <path d="M57 19C56 14.500 58 11.500 61 10.500C61 13 62 14.500 64.500 13.500C65 16.500 63.500 18.500 61.500 19.500Z" fill="#3d3760"/>
+
+  <!-- eyes, beak, blush -->
+  <ellipse cx="50" cy="43" rx="3.500" ry="4.200" fill="#2b2330"/>
+  <ellipse cx="70" cy="43" rx="3.500" ry="4.200" fill="#2b2330"/>
+  <circle cx="51.300" cy="41.400" r="1.400" fill="#fff"/>
+  <circle cx="71.300" cy="41.400" r="1.400" fill="#fff"/>
+  <path d="M55.500 47.500Q60 45 64.500 47.500Q62.800 52.500 60 53.300Q57.200 52.500 55.500 47.500Z" fill="#3d3760"/>
+  <ellipse cx="58.600" cy="47.800" rx="1.400" ry="0.700" fill="#6a628f"/>
+  <ellipse cx="43" cy="51.500" rx="4.200" ry="2.500" fill="#ff8fb8" opacity="0.65"/>
+  <ellipse cx="77" cy="51.500" rx="4.200" ry="2.500" fill="#ff8fb8" opacity="0.65"/>
+
+  <!-- a little heart -->
+  <path d="M95 27.500C93.500 24.500 89 25.500 89.500 29C90 32 93 33.800 95 36C97 33.800 100 32 100.500 29C101 25.500 96.500 24.500 95 27.500Z" fill="#ff4f9a"/>
+  <ellipse cx="92.300" cy="28.300" rx="1.200" ry="0.800" fill="#ff8fc0"/>
+  </g>
+</svg>
