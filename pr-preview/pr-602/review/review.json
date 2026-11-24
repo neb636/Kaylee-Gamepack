@@ -1,0 +1,19 @@
+{
+  "title": "The home screen: a globe to spin",
+  "checkIn": "3 of 4: play it",
+  "kaylee": "The old map is now a toy globe she spins with her finger. Every country is a little window on it, and Sparkle's balloon flies down to the one she taps.",
+  "questions": [
+    "Canada's pin shows Maple in her canoe. Keep it, or bring the moose back?",
+    "Thailand's pin shows Krabi (the elephant and the islands). Or should it be Agong's house?"
+  ],
+  "reels": [{ "name": "globe", "moments": ["globe"] }],
+  "links": [
+    { "label": "Play it: the globe", "hash": "#/world?view=map" },
+    { "label": "The same with a mouse's words", "hash": "#/world?view=map&device=mouse" }
+  ],
+  "pictures": [
+    { "title": "iPad", "before": "pics/ipad-before.jpg", "after": "pics/ipad-after.jpg", "caption": "The pins are circles cut from each country's shelf banner, with its flag. No generated art, no emoji." },
+    { "title": "iPad, upright", "before": "pics/ipad-tall-before.jpg", "after": "pics/ipad-tall-after.jpg", "caption": "A globe is round, so it fills either way up. The map left half the screen empty." },
+    { "title": "iPhone", "before": "pics/iphone-before.jpg", "after": "pics/iphone-after.jpg", "caption": "Pins stay a full finger wide (64px here, 88px or more on the iPad)." }
+  ]
+}
