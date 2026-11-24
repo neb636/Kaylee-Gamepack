@@ -1,10 +1,10 @@
 {
   "title": "Joy: a fox that looks like Joy",
   "checkIn": "fix",
-  "kaylee": "Aunt Joy at Agong's house is a proper fox now, with Joy's long hair, big smile and lace blouse.",
+  "kaylee": "Aunt Joy at Agong's house is a proper fox now, with Joy's long hair, big smile and lace blouse. Since your notes: no white beard (only her snout is white), and smaller, all-orange ears.",
   "questions": [
-    "Does she look like Joy to you?",
-    "Her paws and ear tips are brown now, like the reference foxes. Keep them, or back to cream?"
+    "Does she look like Joy to you now?",
+    "Inside her ears is a paler orange so they still read as ears. Good, or plain orange all through?"
   ],
   "pictures": [
     {
@@ -16,13 +16,13 @@
       "title": "From the front",
       "before": "pics/joy-front-before.jpg",
       "after": "pics/joy-front-after.jpg",
-      "caption": "Tall dark-tipped ears, cheek fluff, a snout, long parted hair with lighter strands, a collar of lace roses"
+      "caption": "Smaller orange ears, a white snout only, long parted hair with lighter strands, a collar of lace roses"
     },
     {
       "title": "Her face",
       "before": "pics/joy-face-before.jpg",
       "after": "pics/joy-face-after.jpg",
-      "caption": "Soft brows, blush on white cheeks, the same big smile"
+      "caption": "Soft brows, blush on her cheeks, the same big smile, no white beard"
     },
     {
       "title": "Three-quarter",
