@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Italy: a slice of pizza</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9de"/><stop offset="1" stop-color="#ffc3a8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <path id="leaf" d="M0 0C3-6 11-7.5 16-3.5C12 2 4 3.5 0 0Z"/>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="62" cy="106" rx="22" ry="4.5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the slice: its point down, tipped a little, the crust across the top -->
+  <g transform="rotate(-9 60 62)">
+    <!-- the sauce's edge and its shade -->
+    <path d="M24 44.5H99L64.5 107Q61.5 111.5 58.5 107Z" fill="#d9485e"/>
+    <path d="M22 42H98L63 104.500Q60 109 57 104.500Z" fill="#ff6b6b"/>
+    <!-- melted mozzarella, with one drip off the point -->
+    <path d="M28.5 44H91.500L62 96.500Q60 99.5 58 96.500Z" fill="#ffe189"/>
+    <path d="M57 92H63V106A3 3 0 0 1 57 106Z" fill="#ffe189"/>
+    <path d="M33 47H52L44.5 53.500Q40 56 37 53Z" fill="#fff6cc"/>
+    <!-- tomato rounds -->
+    <circle cx="46.5" cy="59" r="8" fill="#d9485e"/><circle cx="46" cy="58" r="8" fill="#ff6b6b"/><circle cx="43.5" cy="55.5" r="2.5" fill="#ffa3a3"/>
+    <circle cx="72.5" cy="57" r="7.5" fill="#d9485e"/><circle cx="72" cy="56" r="7.5" fill="#ff6b6b"/><circle cx="69.5" cy="53.5" r="2.5" fill="#ffa3a3"/>
+    <circle cx="60.5" cy="77" r="7" fill="#d9485e"/><circle cx="60" cy="76" r="7" fill="#ff6b6b"/><circle cx="58" cy="73.5" r="2" fill="#ffa3a3"/>
+    <!-- basil -->
+    <use href="#leaf" transform="translate(52 68) rotate(-25)" fill="#48a96c"/>
+    <use href="#leaf" transform="translate(78 67) rotate(115)" fill="#73cf86"/>
+    <use href="#leaf" transform="translate(55 50) rotate(-5) scale(0.8)" fill="#73cf86"/>
+    <!-- the crust: a fat golden roll, its shade under it, a light along the top left -->
+    <path d="M23 43.500Q60 25.5 97 43.5" fill="none" stroke="#d9954a" stroke-width="13" stroke-linecap="round"/>
+    <path d="M23 41Q60 23 97 41" fill="none" stroke="#f2b765" stroke-width="13" stroke-linecap="round"/>
+    <path d="M26 37Q39 30.5 53 28.5" fill="none" stroke="#ffd99a" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- steam -->
+  <path d="M40 9q4 3.5 0 7t0 7M57 5q4 3.5 0 7t0 7" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+</svg>
