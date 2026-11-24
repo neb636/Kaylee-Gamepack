@@ -1,4 +1,4 @@
-// Pa Kluea's story at Bo Kluea's salt hut: "No Salt for the Soup!" (planning/around-the-world/thailand/nan-salt-story.md;
+// Pa Kluea's story at Bo Kluea's salt hut: "No Salt for the Soup!" (nan-salt-story.md in git history;
 // docs/films.md, how films work). It gives the salt a reason: the village dinner is tonight, and nobody has any salt.
 //
 //   the way in (film `intro`, salt?round=story): Pa Kluea says hello; the three cooks come running, each tastes their

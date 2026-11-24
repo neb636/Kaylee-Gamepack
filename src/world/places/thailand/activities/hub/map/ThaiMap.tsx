@@ -1,4 +1,4 @@
-// The Thailand map (plan: planning/around-the-world/thailand/thailand-map.md): where Kaylee lands in Thailand. A toy
+// The Thailand map (plan: thailand-map.md in git history): where Kaylee lands in Thailand. A toy
 // map in 3D (world.ts): Thailand stands up out of the sea, with a little model of each place she can go and a bobbing
 // pin over it. Tap one and it opens. Bangkok is the Bangkok map (bangkok/: the house, ICONSIAM). Krabi is the boat trip
 // and the elephants, Nan the road trip, Koh Samet the island: each goes straight there, no packing or plane ride

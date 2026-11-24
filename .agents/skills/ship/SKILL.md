@@ -29,6 +29,11 @@ below. Never paste fifteen links or a page of prose at them.
    `reel` skill). Then open `review/index.html` at phone width and look at it: does it make sense in ten seconds?
 3. `node scripts/review.mjs --publish` (to the `review-pages` branch, never into main), **then** push your branch.
    The PR preview copies the page to `<preview>/review/` and adds the script sheet of any lines the PR changes.
+   Publishing again once the PR is open (a fix, a new reel) puts the page up by itself in a minute or two; no push
+   needed. A merged or closed PR's page comes off `review-pages` by itself.
+4. **Before you tell the user it's ready, see it live:**
+   `curl -so /dev/null -w '%{http_code}' https://neb636.github.io/Kaylee-Gamepack/pr-preview/pr-<n>/review/` → `200`
+   (a minute or two after publishing). If the run warns the page didn't build, fix it and publish again. Never hand the user a link that 404s.
 
 ## 3. The PR body
 
@@ -72,9 +77,12 @@ the top line says what changed since the user played it (check-in 3). A fix's to
 
 ## 4. Codex's review (handle it; the user never sees it)
 
-Codex reviews every PR on open and on each push. Right after a push, watch it once in the background (it's silent
-until it prints and stops by itself after 7 minutes): `node scripts/watch-codex-review.mjs --pr <n>`. It prints
-`CLEAN`, `FINDINGS` (one block per comment), `NOREVIEW`, `TIMEOUT` or `CLOSED`. For each finding:
+Codex reviews every PR on open and on each push. This works the same whether you are Claude Code or the Codex CLI.
+Right after a push, run `node scripts/watch-codex-review.mjs --pr <n>`. It prints nothing while it waits, then one
+result, and stops by itself after 7 minutes. Claude Code: run it in the background (Monitor, or Bash with
+`run_in_background`) and carry on until it wakes you. Codex CLI: run it as an ordinary command and wait for it; give
+the command a timeout of at least 8 minutes. It prints `CLEAN`, `FINDINGS` (one block per comment), `NOREVIEW`,
+`TIMEOUT` or `CLOSED`. For each finding:
 
 1. **Verify first**: read the code and reproduce the claim before you change anything.
 2. Reply on its thread (`gh api repos/neb636/Kaylee-Gamepack/pulls/<n>/comments/<id>/replies -f body=...`):
@@ -87,7 +95,12 @@ until it prints and stops by itself after 7 minutes): `node scripts/watch-codex-
      growing leak) is never nitpicky.
    - **Needs your input** (art, family, what a toy does): say so in one line on the review page's next version, not in a
      thread they have to find.
-3. One round only: after a pushed fix, comment `@codex review` once with a line on what changed. Then stop.
+3. **Repeat until Codex is clean.** After pushing your fixes, comment `@codex review` with a line on what changed
+   (`gh pr comment <n> --body "@codex review: <what changed>"`). Then run the watcher again and handle the new
+   findings the same way. Keep going until the watcher prints `CLEAN`. The loop also ends when a round's findings
+   are all answered `Not an issue` or `Not worth it`, because there's nothing new to push. Don't ask for another
+   review in that case: Codex would only repeat itself. On `TIMEOUT`, ask once more with `@codex review` and watch
+   again. On `NOREVIEW` or `CLOSED`, stop.
 
 ## 5. Small rules
 

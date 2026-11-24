@@ -1,14 +1,14 @@
-// The canoe chapter's two films (planning/around-the-world/canada.md): `canoe-in` before Red Canoe, `canoe-out` after
+// The canoe chapter's two films: `canoe-in` before Red Canoe, `canoe-out` after
 // it (before the stamp). Lines: lines.ts `L.canoe.filmIn` and `L.canoe.filmOut`, in play order. The set is the game's own
 // lake (story/sets/canoe.ts): the dock at the south end (+z), the glacier at the north end (-z). The canoe is red, in
 // the films as on the map.
 //
 // In: Maple in the red canoe at the dock. Every big game starts with a song... and across the lake a loon calls (the
-// whole lake for a breath, no words; then Lulu herself by the glacier, head thrown back). "That's Lulu!" Off they
-// paddle. About 11 s.
+// whole lake for a breath, no words; then Lulu herself by the glacier, looking all round: "Baby? Where are you?"). Her
+// chick has paddled off, and no baby, no song: off they paddle to find it (the game). About 12 s.
 // Out: under the glacier, Lulu on the water with her chick on her back, Maple in the canoe beside her. The ask, the yes,
-// the song (her head thrown back, the long call), the chick's tiny squeak in a close-up of its own (a hop, its bill
-// wide open), the giggle, the scarf. About 14 s.
+// the chick's tiny squeak in a close-up of its own (a hop, its bill wide open), the giggle, the scarf. (Her song is in
+// the game now: she sings when Kaylee taps her and the glacier sings it back.) About 11 s.
 import { Vector3 } from 'three'
 import { cam, close } from '../../../../engine3d/shots'
 import { snd } from '../../activities/canoe/sounds'
@@ -57,11 +57,14 @@ export const CANOE_IN: StoryFilm = {
         },
       },
       {
-        // There she is, by the glacier: Lulu, her head thrown back, singing.
+        // There she is, by the glacier: Lulu, looking this way and that for her chick, calling for it.
         id: 'far',
         shot: { ...close(lulu, 0.35, 1.5, 0.05), tall: { fov: 44 } },
-        dur: 1.7,
-        tick: (_k, t) => (lulu.calling = t < 1.3 ? Math.min(1, t * 4) : Math.max(0, 1 - (t - 1.3) * 3)),
+        say: X.call,
+        sayAt: 0.2,
+        hold: 0.25,
+        start: () => lulu.pull('sad'),
+        tick: (_k, t) => (lulu.headTurn = Math.sin(t * 3.2) * 0.7),
       },
       {
         // Maple's ears go up: she knows that voice. Off they go: she paddles out toward the glacier.
@@ -71,7 +74,8 @@ export const CANOE_IN: StoryFilm = {
         sayAt: 0.25,
         hold: 0.2,
         start: () => {
-          lulu.calling = 0
+          lulu.headTurn = 0
+          lulu.cheer()
           lulu.hide()
           b.look = null
           set.canoe.cheer()
@@ -138,26 +142,12 @@ export const CANOE_OUT: StoryFilm = {
         start: () => lulu.pull('happy'),
       },
       {
-        // The song: head thrown back, the long call echoing off the glacier (from her side, so the head going back and
-        // the chick on her back both show).
-        id: 'song',
-        shot: cam([LX + 1.0, 0.55, LZ + 1.45], [LX + 0.05, 0.5, LZ], { eye: [LX + 0.9, 0.52, LZ + 1.3] }, { fov: 38, tall: { fov: 48 } }),
-        dur: 2.1,
-        start: () => {
-          s.sfx.loon()
-          s.sparkle(LX, 0.9, LZ, 6)
-        },
-        tick: (_k, t) => (lulu.calling = t < 1.6 ? Math.min(1, t * 3) : Math.max(0, 1 - (t - 1.6) * 4)),
-        cues: [[1.0, () => s.sparkle(LX, 1.1, LZ, 6)]],
-      },
-      {
         // Her chick tries too, right up close: a hop, and a tiny squeak with its bill wide open.
         id: 'squeak',
         // (From beside Lulu's head, the chick turned to us; the camera stays put so its hop shows.)
         shot: { eye: () => sqEye, look: () => sqLook, fov: 34, tall: { fov: 44 } },
         dur: 1.35,
         start: () => {
-          lulu.calling = 0
           chick.headTurn = -1.0
           chick.head(sqLook).y += 0.04
           sqEye.copy(sqLook).add(new Vector3(-0.3, 0.06, 0.62))

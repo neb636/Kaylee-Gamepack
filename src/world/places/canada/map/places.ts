@@ -357,7 +357,7 @@ export function buildMountain(bag: Bag): PlaceToy {
 export interface Camp {
   place: PlaceToy
   flames: Group
-  /** Where Roxy peeks out round the tent. */
+  /** Where Roxy stands beside the tent, and where she sidles out to (both clear of it, the fire and the trees). */
   peek: { hide: Vector3; out: Vector3 }
 }
 
@@ -379,8 +379,9 @@ export function buildCamp(bag: Bag): Camp {
     // A log to sit on, dark spruces round the back.
     P.cyl(0.05, 0.05, 0.36, WOOD, { at: [0.48, 0.07, 0.62], rot: [0, 0.2, Math.PI / 2] }, 8),
     ...spruceParts(-0.68, 0.02, -0.25, 0.62, true),
-    ...spruceParts(0.25, 0.02, -0.42, 0.7, true),
-    ...spruceParts(0.66, 0.02, -0.12, 0.5, true),
+    // (Clear of the grass right of the tent, where Roxy stands.)
+    ...spruceParts(-0.12, 0.02, -0.6, 0.7, true),
+    ...spruceParts(0.74, 0.02, -0.42, 0.5, true),
     ...spruceParts(-0.62, 0.02, 0.32, 0.4, true),
   ]
   place.root.add(solid(merge(parts), bag, 1.5))
@@ -395,7 +396,7 @@ export function buildCamp(bag: Bag): Camp {
     flames.rotation.y = t * 0.8
     flutter(place, t)
   }
-  return { place, flames, peek: { hide: new Vector3(0.12, 0.04, -0.3), out: new Vector3(0.28, 0.04, -0.05) } }
+  return { place, flames, peek: { hide: new Vector3(0.38, 0.04, -0.2), out: new Vector3(0.5, 0.04, -0.08) } }
 }
 
 // ---------------------------------------------------------------- Banff: the turquoise lake

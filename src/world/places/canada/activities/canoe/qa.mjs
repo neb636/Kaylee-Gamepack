@@ -23,18 +23,30 @@ async function aim(page) {
   return { s, x: Math.max(30, Math.min(vp.width - 30, s.canoe.x + dx * vp.width * 0.3)), y: Math.max(110, s.canoe.y - vp.height * 0.32) }
 }
 
-/** Holds the water where the canoe should go, following the story's goal, for `ms` or until the payoff. */
+/** Taps Lulu until she has sung her songs (the try-out at the glacier), for at most `ms`. */
+async function sing(page, ms) {
+  const t0 = Date.now()
+  while (Date.now() - t0 < ms && !(await state(page)).done) {
+    await tapAnchor(page, 'loon')
+    // (A song is about 5.4 s: her call and the glacier's echo.)
+    await page.waitForTimeout(5600)
+  }
+}
+
+/** Holds the water where the canoe should go, following the story's goal, for `ms` or until Lulu is home (then taps her
+ *  to sing). */
 async function paddle(page, ms) {
   const t0 = Date.now()
   let p = await aim(page)
   await page.mouse.move(p.x, p.y)
   await page.mouse.down()
-  while (Date.now() - t0 < ms && !p.s.done) {
+  while (Date.now() - t0 < ms && !p.s.done && p.s.loon !== 'family') {
     await page.waitForTimeout(150)
     p = await aim(page)
     await page.mouse.move(p.x, p.y, { steps: 2 })
   }
   await page.mouse.up()
+  if (p.s.loon === 'family') await sing(page, ms - (Date.now() - t0))
 }
 
 const filmReady = async (page, base, id) => {
@@ -65,15 +77,34 @@ export const pacing = [
 /** Filmed moments: the core verb, driven the way a child would. */
 export const motion = [
   {
-    // The whole crossing, a finger on the water: from the dock to the milky water, then the bubbles to Lulu, to the
-    // glacier. It should never stick on a shore.
+    // The whole crossing, a finger on the water: from the dock to the chick in the milky water, then the bubbles to Lulu,
+    // to the glacier, and three taps on Lulu for her song. It should never stick on a shore.
     name: 'canada-canoe-cross',
-    seconds: 60,
+    seconds: 75,
     setup: async (page, base) => {
       await ready(page, base, '#/world/canada/canoe/glide')
       await page.waitForTimeout(1500)
     },
-    act: (page) => paddle(page, 58000),
+    act: (page) => paddle(page, 73000),
+  },
+  {
+    // The try-out from its link: Lulu home with her chick, three taps and she sings, the glacier singing back.
+    name: 'canada-canoe-sing',
+    seconds: 22,
+    setup: async (page, base) => {
+      await ready(page, base, '#/world/canada/canoe/glacier')
+      await page.waitForTimeout(2500)
+    },
+    act: (page) => sing(page, 20000),
+  },
+  {
+    // A child who doesn't tap Lulu: she sings by herself, and the game still ends.
+    name: 'canada-canoe-sing-idle',
+    seconds: 60,
+    setup: async (page, base) => {
+      await ready(page, base, '#/world/canada/canoe/glacier')
+    },
+    act: (page) => page.waitForFunction(() => window.__canadaCanoeQA?.().done, null, { timeout: 60000 }),
   },
   {
     // A child who only taps: tap tap tap toward where she's going (each tap paddles a short way).

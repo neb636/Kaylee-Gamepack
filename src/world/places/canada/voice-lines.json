@@ -534,8 +534,7 @@
     "text": "Let's roast more!",
     "voice": "maple"
   },
-  "Hold the marshmallow near the fire.",
-  "Click and hold the marshmallow near the fire.",
+  "Put a marshmallow on the stick! Toast it like the picture.",
   "It's on fire! Tap it to blow it out!",
   "It's on fire! Click it to blow it out!",
   "Who wants that one?",
@@ -607,52 +606,62 @@
     "voice": "maple"
   },
   {
-    "text": "That's Lulu the loon!",
+    "text": "Baby? Where are you?",
+    "voice": "loon"
+  },
+  {
+    "text": "That's Lulu! Her baby swam away.",
     "voice": "maple"
   },
   {
-    "text": "She lives by the glacier. Let's paddle!",
+    "text": "No baby, no song! Let's go find it!",
     "voice": "maple"
   },
   {
-    "text": "Bonjour! Hop in, we go to find Lulu!",
+    "text": "Bonjour! Hop in, we go to find Lulu's baby!",
     "voice": "maple"
   },
   "Hold the water, and Maple paddles there!",
   "Click and hold the water, and Maple paddles there!",
   "Touch the water in front of the canoe!",
   "Click the water in front of the canoe!",
-  "Paddle to the milky water by the glacier stream!",
+  "Listen! A little peep, by the milky water!",
   {
-    "text": "Ooh! What is that milky water?",
+    "text": "Peep peep! Is that the baby?",
     "voice": "maple"
   },
   "Follow the sparkles to the milky water.",
-  "Rock flour from the glacier makes the lake so blue!",
   {
-    "text": "We found the blue!",
+    "text": "There you are! Hop on, little one!",
     "voice": "maple"
   },
-  "Bubbles! Follow them to find Lulu.",
+  "Rock flour from the glacier makes the lake so blue!",
+  "Bubbles! Take the baby to Lulu.",
   "Paddle to the bubbles!",
   {
-    "text": "There she is!",
+    "text": "Lulu! Over here!",
     "voice": "maple"
   },
   {
-    "text": "Found you, Lulu!",
+    "text": "Lulu! We have your baby!",
     "voice": "maple"
   },
   {
-    "text": "Peekaboo, Lulu!",
+    "text": "My baby! Thank you!",
+    "voice": "loon"
+  },
+  {
+    "text": "A big hug! Hee hee!",
+    "voice": "maple"
+  },
+  "Tap Lulu, and she sings!",
+  "Click Lulu, and she sings!",
+  {
+    "text": "Listen! The glacier sings back!",
     "voice": "maple"
   },
   {
-    "text": "Look! A baby loon on her back!",
-    "voice": "maple"
-  },
-  {
-    "text": "Lulu and her baby! We found them!",
+    "text": "What a song! Bravo, Lulu!",
     "voice": "maple"
   },
   "A glacier is a river of ice. It moves very slowly.",
@@ -792,10 +801,6 @@
   },
   {
     "text": "Hi hi!",
-    "voice": "otter"
-  },
-  {
-    "text": "Yum, a clam!",
     "voice": "otter"
   },
   {

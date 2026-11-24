@@ -1,4 +1,4 @@
-// Carnival Snowballs (plan: planning/around-the-world/canada.md): a snowy park below Quebec City's castle hotel, at
+// Carnival Snowballs: a snowy park below Quebec City's castle hotel, at
 // the Winter Carnival. The carnival needs snowmen for its parade; Kaylee rolls snowballs that grow, stacks them
 // and dresses them (the first is Tuque, in his red tuque and the carnival's woven sash; the others each get their own
 // hat and scarf: blue, yellow, green, a top hat), and they march off in the parade.
@@ -37,7 +37,7 @@ import type { World3D } from '../../../../engine3d/View3D'
 import { meet } from '../../book/met'
 import { L } from '../../lines'
 import { Carriage, Fox, Geese, honk, Trumpet, whinny, yip } from './critters'
-import { BIG_R, BOX_HALF, CASTLE, CLIFF_Y, CLIMB_R, DRUM, HAT_BOX, HUGE_R, keepIn, lineX, MAPLE_START, MOOSE, PARADE_END_X, PARK, PATH_Z, SASH_BOX, SNOWMAN_RS, START, TREE_R } from './park'
+import { BIG_R, BOX_HALF, CASTLE, CLIFF_Y, CLIMB_R, DRUM, HAT_BOX, HUGE_R, keepIn, LINE_X0, lineX, MAPLE_START, MOOSE, PARADE_END_X, PARK, PATH_Z, SASH_BOX, SNOWMAN_RS, START, TREE_R } from './park'
 import { Maple } from './maple'
 import { Box, buildPark, Drum, LOOKS, makeHat, makeSash, makeScarf, Owl, Sled, SKY, snowShadow, Trail, type Park } from './props'
 import { snowSfx } from './sounds'
@@ -1094,6 +1094,11 @@ export class CarnivalSnowballs implements World3D {
   // ---------------------------------------------------------------- dressing
 
   /** Does a snowman still need this? */
+  /** Everyone made is dressed and in the line, so the drum is next (the hint points at it, the camera shows it). */
+  private get drumTime() {
+    return this.paradeT < 0 && this.lines > 0 && this.drum.root.visible && !this.piles.some((p) => p.state === 'done' || p.state === 'walk' || p.state === 'hop')
+  }
+
   private needs(kind: 'hat' | 'sash') {
     return this.piles.some((p) => p.state === 'done' && p.wakeT < 0 && !(kind === 'hat' ? p.hat : p.sash) && !this.flights.some((f) => f.to === p && f.kind === kind))
   }
@@ -1634,6 +1639,13 @@ export class CarnivalSnowballs implements World3D {
       const mx = m.length ? m.reduce((a, p) => a + p.x, 0) / m.length : 0
       return { center: new Vector3(clamp(mx, -6, 6), 2.8, PATH_Z), half: tall ? new Vector3(4.8, 3.6, 3) : new Vector3(8, 3.2, 2.6), yaw: 0, pitch: 9 }
     }
+    if ((this.section === 'dress' || this.section === 'parade') && !this.grab && !this.flights.length && this.drumTime) {
+      // The drum's turn: it stands at the path's right end, out past the sash box, so bring it in with the front of the
+      // line (a tall phone is too narrow for both the hat box and the drum, so there it's the drum and the trumpet).
+      return tall
+        ? { center: new Vector3(DRUM.x - 3.2, 1.6, (DRUM.z + PATH_Z) / 2 + 1), half: new Vector3(4.2, 2.4, 3.2), yaw: 0, pitch: 34 }
+        : { center: new Vector3((DRUM.x + LINE_X0) / 2, 1.6, (DRUM.z + PATH_Z) / 2 + 1), half: new Vector3(7.8, 2.2, 3.2), yaw: 0, pitch: 32 }
+    }
     if (this.section === 'dress') {
       // Wide enough for the boxes, the snowman she's dressing and the line behind.
       const cx = f.x * 0.45
@@ -1908,7 +1920,7 @@ export class CarnivalSnowballs implements World3D {
       const loose = this.loose
       const ball = loose.reduce<Pile | null>((a, b) => (!a || b.balls[0].r < a.balls[0].r ? b : a), null)
       const box = this.needs('hat') ? this.hatBox : this.needs('sash') ? this.sashBox : null
-      if (this.lines && this.drum.root.visible && !box && !this.piles.some((p) => p.state === 'done' || p.state === 'walk')) {
+      if (this.drumTime && !box) {
         // Everyone's dressed: the drum.
         from = tmp.set(DRUM.x, 1.6, DRUM.z)
         press = true

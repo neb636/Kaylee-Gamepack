@@ -2,7 +2,7 @@
 // (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.) Plain strings are Sparkle, the guide;
 // the friends talk in their own voices from cast.json.
 //
-// Canada is one story, "Maple's Team" (planning/around-the-world/canada.md): Maple the beaver wants to win the Maple
+// Canada is one story, "Maple's Team": Maple the beaver wants to win the Maple
 // Cup, the hockey game on Ottawa's frozen canal that the geese win every year, and she can't win alone. Her friends
 // live all across Canada, and every chapter brings one home to the team. The films' lines are here in play order:
 // `story` (the way in, the big game's films), and each chapter's `filmIn` (before its game) and `filmOut` (after it,
@@ -304,7 +304,7 @@ export const L = {
       // A little grey paw comes out of the dark and takes a marshmallow. Then another.
       hey: maple("Hey! My marshmallow! Who's out there?"),
     },
-    // ---- The game, Flashlight Statues (planning/around-the-world/canada-round-2.md, part 2): her finger is the
+    // ---- The game, Flashlight Statues (canada-round-2.md in git history, part 2): her finger is the
     // flashlight. From a link or a replay Maple says hello first; after the film it starts at Sparkle's instruction.
     story: maple('Shh! Somebody is watching us from the dark.'),
     // Sparkle: the game opens (the line at the bottom plays it again), and her hint when nothing new has been lit for 8 s.
@@ -335,13 +335,14 @@ export const L = {
     // She has fallen over laughing three times: she gives up.
     sorry: roxy("Oops, sorry! Let's share."),
     // The roast: the flashlight is put away, the camera comes close to the fire, and everyone shows which marshmallow
-    // they want in a wish bubble (a picture: squishy, golden, burnt, Monty's giant one). Maple, then Sparkle; on fire
-    // (Sparkle); her hint with a toasted one and nobody given it.
+    // they want in a wish bubble (a picture: squishy, golden, burnt, Monty's giant one). A stick is propped over the
+    // fire; a marshmallow from the bag toasts on it by itself. Maple, then Sparkle; on fire (Sparkle); her hint when
+    // it looks like somebody's picture and is still on the stick.
     roast: maple("Let's roast more!"),
-    marshmallow: onDevice('Hold the marshmallow near the fire.', 'Click and hold the marshmallow near the fire.'),
+    marshmallow: 'Put a marshmallow on the stick! Toast it like the picture.',
     onFire: onDevice("It's on fire! Tap it to blow it out!", "It's on fire! Click it to blow it out!"),
     marshmallowHint: 'Who wants that one?',
-    // Who gets it: Maple wants golden, a kit squishy, Roxy and a kit burnt, Monty the giant one (he eats the stick).
+    // Who gets it: Maple wants golden, a kit squishy (white, straight out of the bag), Roxy and a kit burnt, Monty the giant one (he eats the stick).
     golden: maple('Golden! Yummy!'),
     kitSquishy: roxy('Squishy! Yay!'),
     burntYum: roxy('Crunchy! My favorite!'),
@@ -374,27 +375,36 @@ export const L = {
     // The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.
     filmIn: {
       song: maple('Every big game starts with a song.'),
-      // A loon calls, far across the water, and the mountains answer (a beat with no line). Maple's ears go up.
-      lulu: maple("That's Lulu the loon!"),
-      across: maple("She lives by the glacier. Let's paddle!"),
+      // A loon calls, far across the water, and the mountains answer (a beat with no line). Then Lulu herself by the
+      // glacier, looking all round: her chick has paddled off.
+      call: lulu('Baby? Where are you?'),
+      // Maple's ears go up.
+      lulu: maple("That's Lulu! Her baby swam away."),
+      across: maple("No baby, no song! Let's go find it!"),
     },
     // The game's hello, from a link or a replay (after the film it starts on the water with Sparkle's line).
-    story: maple('Bonjour! Hop in, we go to find Lulu!'),
+    story: maple("Bonjour! Hop in, we go to find Lulu's baby!"),
     // Sparkle: how to paddle, and the hint when she hasn't paddled for a while (the hand shows it too).
     go: onDevice('Hold the water, and Maple paddles there!', 'Click and hold the water, and Maple paddles there!'),
     hint: onDevice('Touch the water in front of the canoe!', 'Click the water in front of the canoe!'),
-    // Where the blue comes from.
-    stream: 'Paddle to the milky water by the glacier stream!',
-    streamMaple: maple('Ooh! What is that milky water?'),
+    // Find the chick: a tiny peep from the milky water by the glacier stream (louder as she nears).
+    stream: 'Listen! A little peep, by the milky water!',
+    streamMaple: maple('Peep peep! Is that the baby?'),
     streamHint: 'Follow the sparkles to the milky water.',
+    chickFound: maple('There you are! Hop on, little one!'),
+    // Tap-to-hear: the first time she pokes the milky water.
     found: 'Rock flour from the glacier makes the lake so blue!',
-    foundMaple: maple('We found the blue!'),
-    // Follow Lulu: she dives and pops up nearer the glacier each time.
-    loon: 'Bubbles! Follow them to find Lulu.',
+    // Take the chick to Lulu: she dives to look for her baby and pops up nearer the glacier each time.
+    loon: 'Bubbles! Take the baby to Lulu.',
     loonHint: 'Paddle to the bubbles!',
-    loonFound: [maple('There she is!'), maple('Found you, Lulu!'), maple('Peekaboo, Lulu!')],
-    chick: maple('Look! A baby loon on her back!'),
-    family: maple('Lulu and her baby! We found them!'),
+    loonFound: [maple('Lulu! Over here!'), maple('Lulu! We have your baby!')],
+    // The third time she sees her chick: it hops onto her back.
+    home: lulu('My baby! Thank you!'),
+    chick: maple('A big hug! Hee hee!'),
+    // The try-out: tap Lulu and she sings; the glacier sings it back.
+    sing: onDevice('Tap Lulu, and she sings!', 'Click Lulu, and she sings!'),
+    echo: maple('Listen! The glacier sings back!'),
+    family: maple('What a song! Bravo, Lulu!'),
     // Tap-to-hear facts (the first time she pokes the glacier, the second time Lulu).
     glacier: 'A glacier is a river of ice. It moves very slowly.',
     loonie: "The loon is on Canada's dollar coin. It's called a loonie!",
@@ -405,18 +415,18 @@ export const L = {
     pokeMaple: [maple('Paddle, paddle!'), maple('Splish, splash!'), maple('I love my red canoe!')],
     beaver: maple('Allo, cousin beaver!'),
     moose: by('moose')('Mmm. Tasty lake weeds.'),
-    // The film out: under the glacier, Lulu with her chick on her back.
+    // The film out: under the glacier, Lulu with her chick on her back. (She sang in the game: the film is the ask.)
     filmOut: {
       ask: maple('Lulu! Will you sing at our big game?'),
       yes: lulu('A big game? I will sing my best song!'),
-      // She calls, long and lovely, head thrown back. Her chick tries too: a tiny squeak (beats with no line).
+      // Her chick tries too: a tiny squeak (a beat with no line).
       chick: maple('Hee hee! The littlest singer!'),
       // The pink scarf goes round Lulu's neck.
       team: maple("You're on the team!"),
     },
   },
   whales: {
-    // Whale Peek-a-Boo (activities/whales/; planning/around-the-world/canada-round-2.md, section 3): a whale's spout
+    // Whale Peek-a-Boo (activities/whales/; canada-round-2.md in git history, section 3): a whale's spout
     // blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out.
     // The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.
     filmIn: {
@@ -457,10 +467,9 @@ export const L = {
     grandma: maple('The grandma leads the family!'),
     gotIt: ollie('Got it! Thank you, whales!'),
     finale: maple(`They all jumped together! Merci!`),
-    // Pokes: Maple's boat (its horn), Ollie on the rope.
+    // Pokes: Maple's boat (its horn), Ollie in the bow.
     toot: maple('Toot toot!'),
     otterHi: by('otter')('Hi hi!'),
-    otterClack: by('otter')('Yum, a clam!'),
     // The film out: Ollie on her back in the kelp, juggling her rock while they talk.
     filmOut: {
       ask: maple('Ollie! Come and play hockey with us!'),
@@ -472,7 +481,7 @@ export const L = {
       team: maple("Splash! You're on the team!"),
     },
   },
-  // Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear
+  // Misty's Bubble Bath (activities/bath/; canada-round-2.md in git history): she rubs a muddy spirit bear
   // clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.
   bath: {
     // The film in (story/films/bath.ts): the rainforest river, giant cedars, soft rain.

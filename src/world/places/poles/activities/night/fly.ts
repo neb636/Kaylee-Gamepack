@@ -1,4 +1,4 @@
-// Act 1 of the Poles' new ending, Hold to Fly (planning/around-the-world/poles-ending.md): she's the balloon's pilot,
+// Act 1 of the Poles' new ending, Hold to Fly (poles-ending.md in git history): she's the balloon's pilot,
 // flying Pola and Pebble down the world from the Arctic to the long southern night.
 //
 // The toy (core verb): hold a finger down anywhere (click and hold on a Mac) and the burner roars, the air heats and

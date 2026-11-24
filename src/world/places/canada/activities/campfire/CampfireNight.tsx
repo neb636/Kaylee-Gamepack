@@ -1,4 +1,4 @@
-// Campfire Night, in 3D: Flashlight Statues (plan: planning/around-the-world/canada-round-2.md, part 2). The clearing
+// Campfire Night, in 3D: Flashlight Statues (plan: canada-round-2.md in git history, part 2). The clearing
 // at night where her finger is the flashlight (world.ts is the world; it also does the talking: Maple's hello, Sparkle's
 // one line per part and her help when Kaylee is stuck, everybody's reactions). After the chapter's way-in film
 // (`filmed`) it starts at Sparkle's instruction; from a link or a replay Maple says her hello first. The address bar
@@ -139,7 +139,7 @@ export function CampfireNight({ onDone, setProgress, filmed, stamps }: CanadaAct
       {stars && !film && (
         <div className="camp-stars" aria-label={`${stars.done} of ${stars.of} stars`} style={{ position: 'absolute', display: 'flex', gap: 4, padding: '6px 14px', borderRadius: 999, background: 'rgba(255,255,255,.88)', boxShadow: 'var(--shadow)', zIndex: 20, pointerEvents: 'none' }}>
           {Array.from({ length: stars.of }, (_, i) => (
-            <motion.svg key={i} viewBox="0 0 24 24" width="clamp(26px, 4.4vmin, 40px)" height="clamp(26px, 4.4vmin, 40px)" animate={i < stars.done ? { scale: [1, 1.5, 1] } : { scale: 1 }} transition={{ duration: 0.45 }}>
+            <motion.svg key={i} viewBox="0 0 24 24" style={{ width: 'clamp(26px, 4.4vmin, 40px)', height: 'clamp(26px, 4.4vmin, 40px)' }} animate={i < stars.done ? { scale: [1, 1.5, 1] } : { scale: 1 }} transition={{ duration: 0.45 }}>
               <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" fill={i < stars.done ? '#FFD447' : '#E4DFF0'} stroke={i < stars.done ? '#C98A1A' : '#BDB5D6'} strokeWidth="1.4" strokeLinejoin="round" />
             </motion.svg>
           ))}

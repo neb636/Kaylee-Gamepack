@@ -20,6 +20,7 @@ export { ChoiceCards, type Choice, type ChoiceCardsProps } from './components/Ch
 export { DragArea, Draggable, DropZone, type DraggableProps } from './components/Drag'
 export { Mascot, type MascotPose } from './components/Mascot'
 export { StarProgress } from './components/StarProgress'
+export { HUD_ICONS, HudGlyph, type HudIcon } from './components/HudIcons'
 export { SayButton } from './components/SayButton'
 export { Trophy } from './components/Trophy'
 

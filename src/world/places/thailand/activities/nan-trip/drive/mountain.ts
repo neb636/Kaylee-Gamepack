@@ -1,4 +1,4 @@
-// The mountain road (section `drive`, plan: thailand/nan-trip.md, "The mountain road"; built: steps 1, 8 and 9, the
+// The mountain road (section `drive`, plan: nan-trip.md in git history, "The mountain road"; built: steps 1, 8 and 9, the
 // road, its look and its voices). Mom drives the big silver Pajero and Kaylee steers it: it always rolls forward
 // (Mom's foot), and she steers it like a sled: her finger goes down anywhere, a steering wheel appears under it, and
 // pushing it left or right turns the wheel and slides the Pajero that way across the road (further = faster). Let go and

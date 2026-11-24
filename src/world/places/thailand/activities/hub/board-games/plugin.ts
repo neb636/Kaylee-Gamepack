@@ -1,4 +1,4 @@
-// The game table in Kaylee's room (planning/around-the-world/thailand/game-table.md): a house plugin, like her
+// The game table in Kaylee's room (game-table.md in git history): a house plugin, like her
 // wardrobe. Tap the table and she walks over and sits on her stool; then the screen fades and the game is out on a
 // floating board (stage.ts): a little island in a pastel sky, no characters in sight. The picker opens over it (a game,
 // a cousin with BB first, Play; the island shows the picked game's board and props as she picks). On Play the cousin

@@ -3,7 +3,7 @@
 A film is a short cutscene that tells a story inside a 3D world: a friend explains why they need help, remembers
 something that happened, or the camera follows a character somewhere new. The first one is Lung Kham's story on the
 Nan rice farm, **Jip and the hat mix-up** (`src/world/places/thailand/activities/nan-trip/rice/story.ts`, planned in
-`planning/around-the-world/thailand/nan-rice.md`). Copy it when you write the next one.
+a plan now in git history). Copy it when you write the next one.
 
 ## What the user asked for (2026-11-12)
 

@@ -1,6 +1,6 @@
-// Whale Peek-a-Boo (planning/around-the-world/canada-round-2.md, section 3; the whales chapter of Maple's Team): a
-// whale's spout blew Ollie's lucky rock out to sea off Tofino. Maple's little boat is out on the Pacific with Ollie on
-// the rope behind it; bubbles come up near the boat, she touches them and a whale comes up right there (peek-a-boo!),
+// Whale Peek-a-Boo (canada-round-2.md in git history, section 3; the whales chapter of Maple's Team): a
+// whale's spout blew Ollie's lucky rock out to sea off Tofino. Maple's little boat is out on the Pacific with Ollie
+// riding in it, on her back across the bow; bubbles come up near the boat, she touches them and a whale comes up right there (peek-a-boo!),
 // and then the whale is the toy. Sparkle gives the few instructions (events.say; WhaleWatch.tsx speaks them), Maple
 // and Ollie react in their own voices (lines.ts, L.whales). Every animal she pokes goes into Maple's book (book/met.ts).
 //
@@ -19,8 +19,8 @@
 // The boat still goes where she holds the water (engine3d/drive.ts, the canoe's control), but nothing is far away and
 // nothing needs steering: left alone (about 6 s), each whale comes to her, and the camera pulls back to hold the boat
 // and the whale together. It never fails: every tap and hold does something; the baby's pops only get easier, and
-// when she leaves the last one alone it swims to the boat and boops it. Ollie rides on the rope from the first second
-// and spins at every splash. Feel numbers are knobs (`?feel=1`): hold time to jump height, wave size, the pops,
+// when she leaves the last one alone it swims to the boat and boops it. Ollie rides in the bow from the first second
+// (her tummy empty: the rock only comes back from the baby orca) and spins at every splash. Feel numbers are knobs (`?feel=1`): hold time to jump height, wave size, the pops,
 // bubble distance.
 //
 // Built for engine3d/View3D.tsx; nothing here comes from Thailand. The sea is the shared engine3d/water.ts and the coast
@@ -297,8 +297,8 @@ export class WhaleWatch implements World3D {
     this.marker.visible = false
     scene.add(this.marker)
 
-    // ---- Ollie on the rope from the first second (the film put her there); her rock is gone until the baby orca
-    // gives it back.
+    // ---- Ollie in the boat's bow from the first second (the film put her there); her rock is gone until the baby orca
+    // gives it back, and nothing else sits on her tummy in the meantime.
     this.ollie = new Ollie(bag, 1.3)
     scene.add(this.ollie.root)
     this.juggle = new Juggle(this.ollie.actor, bag)
@@ -356,8 +356,8 @@ export class WhaleWatch implements World3D {
     this.films = new FilmPlayer({ line: (l) => this.events.filmLine(l), state: (s) => this.events.film(s) })
 
     // ---- Where the link starts (on the first frame: the screen's shape decides where the bubbles come up).
-    this.placeOllie(0, true)
     this.placeBoat(0)
+    this.placeOllie(0, true)
     this.begin = () => {
       if (start.lab) this.startLab(start.lab)
       else if (start.section === 'story' && !start.filmed) this.startStory()
@@ -439,7 +439,7 @@ export class WhaleWatch implements World3D {
     this.phaseT = 0
   }
 
-  /** From a link or a replay (no film): Ollie on the rope says what happened, then the bubbles. */
+  /** From a link or a replay (no film): Ollie in the bow says what happened, then the bubbles. */
   private startStory() {
     this.section = 'story'
     this.setPhase('story')
@@ -881,7 +881,7 @@ export class WhaleWatch implements World3D {
     this.ollie.actor.cheer()
     this.ollie.actor.pull('happy')
     const p = this.ollie.root.position
-    this.sparkle.burst(p.x, 0.8, p.z, 30, 2, 2.6, 0.18)
+    this.sparkle.burst(p.x, p.y + 0.6, p.z, 30, 2, 2.6, 0.18)
     sounds.correct()
     this.talk(L.whales.gotIt, { force: true })
     this.timers.later(() => {
@@ -1497,37 +1497,25 @@ export class WhaleWatch implements World3D {
     }
   }
 
-  /** Ollie on the rope behind the stern, toes back toward the camera; her rock on her tummy once it's back. */
+  /** Ollie on her back across the boat's bow (turned and tipped with it, so she rides the waves and the whale's back
+   *  with it), toes toward the camera; her rock on her tummy once it's back, nothing there before. */
   private placeOllie(dt: number, snap = false) {
-    const d = this.d
     const o = this.ollie
-    const sx = Math.sin(d.heading)
-    const sz = Math.cos(d.heading)
-    let rx = d.x - sx * (BOAT_LEN * 0.5 + 1.6)
-    let rz = d.z - sz * (BOAT_LEN * 0.5 + 1.6)
-    if (this.phase === 'ride') {
-      // (Riding along beside the whale on her rope, clear of its tail.)
-      const h = this.hump
-      const at = h.body.localToWorld(tA.set(this.camSide(h) * 2.6, 0, -1.2))
-      rx = at.x
-      rz = at.z
-    }
+    const b = this.boat
+    b.seatAt(o.root.position)
+    b.body.getWorldQuaternion(o.root.quaternion)
     const p = o.root.position
-    if (snap) p.set(rx, 0, rz)
-    p.x += (rx - p.x) * damp(dt, 3)
-    p.z += (rz - p.z) * damp(dt, 3)
-    p.y = swell(p.x, p.z, this.time) * 0.6
-    // (Toes toward the camera, so her face shows over them; turned a little toward what she's watching.)
+    // (Toes toward the camera, so her face shows over them; turned a little toward what she's watching. Her `face` is
+    // in the boat's frame, so the boat's heading comes off it.)
     const cam = this.rig.camera.position
     let face = Math.atan2(cam.x - p.x, cam.z - p.z)
     const look = this.whale?.visible ? this.whale.root.position : this.spot ? tA.set(this.spot.x, 0, this.spot.z) : null
     if (look) face += clamp(wrapAngle(Math.atan2(look.x - p.x, look.z - p.z) - face), -0.6, 0.6)
+    face = wrapAngle(face - this.d.heading)
     o.float.face += wrapAngle(face - o.float.face) * damp(dt, snap ? 100 : 1.5)
     o.update(dt, this.time)
     this.juggle.update(dt, this.time, this.rig.camera)
-    o.clam.visible = this.juggle.gone
     if (this.juggle.caught) whaleSfx.tick()
-    this.boat.rope(o.actor.at(0.42, tB))
   }
 
   /** Something splashy: Ollie spins on her back and giggles. */
@@ -1536,7 +1524,7 @@ export class WhaleWatch implements World3D {
     this.ollie.spin()
     whaleSfx.giggle()
     const p = this.ollie.root.position
-    this.spray.burst(p.x, 0.2, p.z, 10, 1.8, 2.6, 0.18)
+    this.spray.burst(p.x, p.y + 0.2, p.z, 10, 1.8, 2.6, 0.18)
   }
 
   private swimOrcas(dt: number) {
@@ -1591,7 +1579,7 @@ export class WhaleWatch implements World3D {
     const tall = this.tall
     if (this.phase === 'lab' && this.lab) return this.labShot()
     // The box, in the camera's own terms (across the screen and away into it, so it fits snugly whichever way things
-    // lie): the boat, Ollie on her rope, and whatever's up (the whale from nose to flukes, the bubbles, the orcas).
+    // lie): the boat with Ollie in its bow, and whatever's up (the whale from nose to flukes, the bubbles, the orcas).
     const yaw = CAM_YAW * (Math.PI / 180)
     const rx = Math.cos(yaw)
     const rz = -Math.sin(yaw)
@@ -1779,7 +1767,7 @@ export class WhaleWatch implements World3D {
     if (id === 'ollie') {
       this.ollieSpins(true)
       if (this.juggle.on) this.juggle.height = this.juggle.height > 0.7 ? 0.35 : this.juggle.height + 0.2
-      this.talk(Math.random() < 0.5 ? L.whales.otterHi : L.whales.otterClack, { cool: 6 })
+      this.talk(L.whales.otterHi, { cool: 6 })
       this.met('sea-otter')
       return
     }

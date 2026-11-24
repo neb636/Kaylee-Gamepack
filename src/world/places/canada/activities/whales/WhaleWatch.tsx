@@ -1,4 +1,4 @@
-// Whale Peek-a-Boo (planning/around-the-world/canada-round-2.md, section 3): bubbles come up by Maple's boat, she
+// Whale Peek-a-Boo (canada-round-2.md in git history, section 3): bubbles come up by Maple's boat, she
 // touches them and a whale comes up right there, and plays with it: the grey whale, the humpback, then the orca family
 // whose baby has Ollie's lucky rock (watch.ts is the world). After the chapter's film in (`filmed`) Sparkle's one
 // instruction comes at once; from a link or a replay Ollie first says what happened (tap anywhere skips). Sparkle

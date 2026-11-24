@@ -17,6 +17,7 @@ import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointer
 import { BigButton, burst, Buddy, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
+import { HudButton } from '../../../../kit/Hud'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -992,7 +993,8 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           )
         })}
 
-        {/* Sparkle, the guide, in the corner of the foreground. */}
+        {/* Sparkle, the guide, in the corner of the foreground. For the photo she stands bottom left, the guide's corner,
+            so the done button bottom right never covers her (docs/hud.md). */}
         <motion.button
           aria-label="Sparkle"
           whileTap={{ scale: 0.92 }}
@@ -1001,9 +1003,9 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
             sounds.pop()
             say1([T.puzzle, T.potatoes, T.carry, L.facts.machuPicchu][g.current.facts++ % 4])
           }}
-          style={{ position: 'absolute', left: mx(S.sparkle.cx) - S.sparkle.h * 0.45, top: S.sparkle.bottom - S.sparkle.h, width: S.sparkle.h * 0.9, height: S.sparkle.h, padding: 0, background: 'none', border: 'none', zIndex: 15, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
+          style={{ position: 'absolute', left: (phase === 'photo' ? S.sparkle.cx : mx(S.sparkle.cx)) - S.sparkle.h * 0.45, top: S.sparkle.bottom - S.sparkle.h, width: S.sparkle.h * 0.9, height: S.sparkle.h, padding: 0, background: 'none', border: 'none', zIndex: 15, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
         >
-          <SparklePuppet ref={sparkle} height={`${S.sparkle.h}px`} lookToward={side > 0 ? 0.7 : 0.3} />
+          <SparklePuppet ref={sparkle} height={`${S.sparkle.h}px`} lookToward={phase === 'photo' || side > 0 ? 0.7 : 0.3} />
         </motion.button>
 
         {/* Seed bags over the new terrace. */}
@@ -1065,15 +1067,15 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           <BigButton onClick={() => void snap()} ariaLabel="Take a picture" size="lg">
             📷
           </BigButton>
-          {photos.length > 0 && (
-            <BigButton onClick={() => void finish()} ariaLabel="Done" color="mint">
-              📔 ✓
-            </BigButton>
-          )}
         </div>
       )}
+      {/* Done, bottom right like every game's (docs/hud.md); the camera stays in the middle. */}
+      {phase === 'photo' && photos.length > 0 && (
+        <HudButton role="done" icon="check" label="Done" slot="bottom-right" style={{ zIndex: 27 }} onClick={() => void finish()} />
+      )}
       {photos.length > 0 && phase === 'photo' && (
-        <div aria-hidden style={{ position: 'absolute', right: 'max(16px, var(--safe-right, 0px))', bottom: 'calc(var(--safe-bottom) + 16px)', width: 'min(130px, 18vw)', height: 'min(150px, 21vw)', zIndex: 26 }}>
+        // The pile of pictures sits just above the done button, so the two read as one: her photos, then done.
+        <div aria-hidden style={{ position: 'absolute', right: 'max(16px, var(--safe-right, 0px))', bottom: 'calc(var(--safe-bottom) + var(--target) + 30px)', width: 'min(130px, 18vw)', height: 'min(150px, 21vw)', zIndex: 26 }}>
           {photos.map((p, i) => (
             <motion.div key={i} initial={{ scale: 1.6, opacity: 0, rotate: 0 }} animate={{ scale: 1, opacity: 1, rotate: ((i * 37) % 17) - 8 }} style={{ position: 'absolute', inset: 0, background: '#FFF7F0', border: `4px solid ${INK}`, borderRadius: 10, padding: '8% 8% 24%', boxShadow: '0 6px 0 rgba(43,35,48,.2)' }}>
               <div style={{ width: '100%', height: '100%', background: `url(${art.bgMp}) 60% 60% / cover`, borderRadius: 4, overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>

@@ -1,4 +1,4 @@
-// The Koh Samet trip's QA scenarios (notes: planning/around-the-world/thailand/samet-story.md). Here: getting there
+// The Koh Samet trip's QA scenarios (notes: samet-story.md in git history). Here: getting there
 // (packing, the speedboat's cutscene), the island between the stops and its story (the way-in film at Na Dan pier
 // watched to the end and skipped, the pictures of the beaches, a ride by the pictures, a firefly flying in, all four),
 // and each stop's play rounds (the jet ski, the sandcastle, the snorkel, lunch, hide and seek, the sunset and the fire

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Buddy, burst, say, sounds, useAlive, wait, useTimers } from '../../../../sdk'
 import { ColoringPage } from '../../../kit/ColoringPage'
+import { HudButton } from '../../../kit/Hud'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
 import { useSections } from '../../../kit/sections'
@@ -57,17 +58,9 @@ export function Postcard({ onDone, setProgress }: ActivityProps) {
                 onFill={setFills}
                 action={
                   fills >= ENOUGH && (
-                    <motion.button
-                      aria-label="Send"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: [1, 1.08, 1] }}
-                      transition={{ scale: { repeat: Infinity, duration: 1.2 } }}
-                      onClick={() => void send()}
-                      className="world-glow"
-                      style={{ minHeight: 'calc(var(--target) * 0.8)', padding: '0 22px', borderRadius: 999, background: 'var(--hotpink)', color: '#fff', fontWeight: 700, fontSize: 'calc(var(--target) * 0.34)', boxShadow: 'var(--shadow)', whiteSpace: 'nowrap' }}
-                    >
-                      📮 Send!
-                    </motion.button>
+                    // The way on (docs/hud.md), at the end of the crayons where the page keeps it a space, so it never
+                    // covers the picture. The page's --target is a crayon's size here, and the action row is 1.4 crayons tall.
+                    <HudButton role="go" icon="play" label="Send" pulse pop={false} onClick={() => void send()} style={{ ['--hud-size' as string]: 'calc(var(--target) * 1.4)' }} />
                   )
                 }
               />

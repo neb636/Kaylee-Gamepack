@@ -1,4 +1,4 @@
-// The four lost fireflies of Koh Samet (plan: planning/around-the-world/thailand/samet-story.md): the story that
+// The four lost fireflies of Koh Samet (plan: samet-story.md in git history): the story that
 // holds the trip together. Each is a little glowing bug with a round face, two fluttering wings and a soft halo in its
 // own color, and each is hiding at the stop whose game it loves: Zoom (pink, fast: the jet ski), Sandy (gold, the
 // sandcastle), Bubbles (blue, the snorkel) and Peekaboo (green, hide and seek). Every stage of the trip uses these:

@@ -1,4 +1,4 @@
-// Snow Coats (plan: planning/around-the-world/poles.md): Arctic animals change coats with the seasons.
+// Snow Coats: Arctic animals change coats with the seasons.
 // One verb, rub with her finger, that gets richer three times:
 //   fox    one Arctic fox, brown in late summer. Snow starts to fall; where her finger goes the coat turns white (and
 //          fluffier at the edges). The ground slowly goes white by itself, and she can rub snow onto it too.
@@ -17,10 +17,10 @@
 // pokes an animal. The summer all brown: the stamp. The brush and the coats are knobs (?feel=1). 2D only: SVG written
 // to every frame, no three.js.
 import { getStroke } from 'perfect-freehand'
-import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, burst, firstTime, sounds, useAlive, useElementSize, type Line, useTimers, Timers } from '../../../../../sdk'
+import { burst, firstTime, sounds, useAlive, useElementSize, type Line, useTimers, Timers } from '../../../../../sdk'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
+import { HudButton } from '../../../../kit/Hud'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
@@ -1088,7 +1088,7 @@ export function SnowCoats({ onDone }: ActivityProps) {
   const guide = useRef<GuideHandle>(null)
   const alive = useAlive()
   const talk = useRef({ ran: -99, owl: -99 })
-  /** The summer payoff's stamp, waiting for the cheer; 🔁 cancels it. */
+  /** The summer payoff's stamp, waiting for the cheer; again cancels it. */
   const stampTimer = useRef<number>(undefined)
   const box = useRef<HTMLDivElement>(null)
   const svg = useRef<SVGSVGElement>(null)
@@ -1308,22 +1308,13 @@ export function SnowCoats({ onDone }: ActivityProps) {
           </text>
         </g>
       </svg>
-      <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
-        {phase === 'dusk' && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={CORNER}>
-            <BigButton onClick={toSummer} ariaLabel="Bring the summer back">
-              ☀️ ▶
-            </BigButton>
-          </motion.div>
-        )}
-        {phase === 'end' && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={CORNER}>
-            <BigButton onClick={again} ariaLabel="Again">
-              🔁 ❄️
-            </BigButton>
-          </motion.div>
-        )}
-      </div>
+      {/* The way on and again, bottom right like every game's (docs/hud.md). A sun, not a ▶: it brings the summer. */}
+      {phase === 'dusk' && (
+        <HudButton role="go" label="Bring the summer back" slot="bottom-right" pulse delay={2.5} onClick={toSummer}>
+          ☀️
+        </HudButton>
+      )}
+      {phase === 'end' && <HudButton role="again" icon="again" label="Again" slot="bottom-right" delay={2.5} onClick={again} />}
       <Guide ref={guide} hint={phase === 'play' ? HINT[section] : phase === 'dusk' ? L.coats.hide.dusk : null} quiet={phase === 'bear' || phase === 'end'} />
     </div>
   )
@@ -1360,5 +1351,3 @@ const CSS = `
 @keyframes coats-hint { 0%,100% { transform: scale(1) } 50% { transform: scale(1.15) } }
 `
 
-/** The ☀️ and 🔁 buttons wait in the sky's corner, clear of the animals on the snow. */
-const CORNER = { position: 'fixed' as const, right: 'calc(var(--safe-right, 0px) + 20px)', top: 'calc(var(--top-clear) + 12px)', pointerEvents: 'auto' as const }

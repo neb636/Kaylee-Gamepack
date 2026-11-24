@@ -1,4 +1,4 @@
-// The sandcastle at Ao Hin Khok (the trip's story: planning/around-the-world/thailand/samet-story.md; the stop's first
+// The sandcastle at Ao Hin Khok (the trip's story: samet-story.md in git history; the stop's first
 // plan: samet-trip.md (retired; in git history)), on the island's real beach (island/layout.ts FRAMES.hinkhok), close and steep over the sand
 // with the sea at the top of the screen.
 //

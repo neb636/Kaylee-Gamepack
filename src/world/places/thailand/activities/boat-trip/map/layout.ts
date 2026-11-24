@@ -1,4 +1,4 @@
-// The Krabi map (section `map`; notes: planning/around-the-world/thailand/krabi-map.md), in meters: a toy diorama of
+// The Krabi map (section `map`; notes: krabi-map.md in git history), in meters: a toy diorama of
 // Krabi and Phang Nga Bay floating in the sky. Where everything stands: the places, the pins over them, the limestone
 // towers and the few things in the sea. It's kept calm on purpose (2026-11-14: the first Krabi board was too busy):
 // open water between a few groups of rocks, a few palms, a handful of toys. No roads: this is a map of sea, rock and

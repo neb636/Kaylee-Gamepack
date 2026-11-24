@@ -1,4 +1,4 @@
-// The Lost Fireflies at the fire show (planning/around-the-world/thailand/samet-story.md; docs/films.md, how films
+// The Lost Fireflies at the fire show (samet-story.md in git history; docs/films.md, how films
 // work): the story's payoff. The gecko fire dancers Tuk and Kae lost the four fireflies that light their show; she
 // found them, so the show she twirls in is the one she saved.
 //

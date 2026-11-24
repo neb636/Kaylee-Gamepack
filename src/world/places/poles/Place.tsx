@@ -1,4 +1,4 @@
-// The Poles (plan: planning/around-the-world/poles.md): the top and the bottom of the world in one place, told as one
+// The Poles: the top and the bottom of the world in one place, told as one
 // story, "Pebble's Long Way Home". A penguin chick wakes up at the North Pole; Pola the polar bear cub, Terry the tern
 // and Sparkle's balloon take him home to Papa at the South Pole. The home base is the 3D globe (activities/hub/,
 // globe/) with the story's pictures along the way down it. Each picture is a chapter: a film (story/, on its own film

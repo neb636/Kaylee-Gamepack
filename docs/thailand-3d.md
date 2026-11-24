@@ -3,10 +3,10 @@
 Thailand is where the app is going: the family's own country, built in 3D with three.js. This is the builder's
 reference for it. The look, the engine, the hub, the trip kit and the labs are below.
 
-Read `planning/around-the-world/thailand.md` (the family, the house), then the notes of the trip you're working on in
-`planning/around-the-world/thailand/` (`nan-trip.md` is the road trip and the road kit, `samet-story.md` the
-island). The finished boat and mall trips (and Baan Chang) have no notes left; read their code in `trip/` and
-`activities/`. `thailand/known-issues.md` lists small things QA found, with links and code paths.
+Read `planning/around-the-world/thailand.md` (the family, the house, where each place lives). The finished trips
+and toys (boat, mall, Nan, Koh Samet, the Thailand, Krabi and Nan maps, the wardrobe, the game table) have no notes left; read their code in
+`trip/` and `activities/`, and their plans in git history. The Bangkok map still has notes:
+`planning/around-the-world/thailand/bangkok-map.md`. `thailand/known-issues.md` lists small things QA found, with links and code paths.
 
 - **The look:** flat pastel 3D. Toon shading in a few flat bands with lavender shadows, screen-space ink outlines like
   the 2D art, blob shadows, no post-processing (`engine3d/toon.ts`, `engine3d/outline.ts`).
@@ -20,7 +20,7 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
 - **The hub is a toy:** tap the floor and Kaylee walks there; tap a thing and it reacts at once, then she uses it; tap
   someone and they hop and say hello. Sacred things (the altar, the spirit house) never wobble: they glow, a bell rings,
   she does a wai.
-- **The Thailand map** (`activities/hub/map/`, 3D, plan `thailand/thailand-map.md`) is where she lands: a toy board
+- **The Thailand map** (`activities/hub/map/`, 3D) is where she lands: a toy board
   with Thailand standing up out of the sea (its real coastline, `land.ts`, written by `scripts/thailand-map-land.mjs`
   from Natural Earth), a little model and a bobbing pin for each place, and animals, boats and clouds that answer a
   poke. A drag swings the board round, a pinch brings it closer. Tapping a pin opens that place. `field.ts` works out
@@ -49,7 +49,7 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   the game's), and a drag on something of the board's own (Nan's car) returns true from `roamGrabbed()`.
 - **The trip kit** (`trip/`): packing, the goodbye, the vehicles, the airport, the window seat, the photo wall. Reuse it
   for a new trip instead of building travel again.
-- **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap,
+- **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap, `?perf=1` shows a frame-time overlay with a copyable slow-frame log (`engine3d/perf.ts`), `?dpr=N` fixes the pixel ratio (no slow-device drop),
   `window.__thaiHouseQA()` is read-only state for tests (no jump hooks: tests open section links).
 - **The camera lab:** `?cam=1` on any 3D section link opens it (`src/world/labs/camera/`): the real game in an iPad
   or iPhone frame, a panel that nudges the game's camera or locks one of your own (`CameraRig.setOverride`, so no game code

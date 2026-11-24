@@ -1,4 +1,4 @@
-// The Nan map (section `map`, plan: thailand/nan-trip.md, "The Nan map"): the trip's hub, a toy diorama of Nan
+// The Nan map (section `map`, plan: nan-trip.md in git history, "The Nan map"): the trip's hub, a toy diorama of Nan
 // floating in the sky like the Thailand map (diorama.ts; the sky, the tray and the entrance are trip/sky.ts), seen from
 // above at a slant. It opens like the Thailand map too: the camera is already moving behind the loading cover, then
 // settles lower and closer (NAN_CAM, ?feel=1) (north up the screen; on a tall screen the camera swings round to the

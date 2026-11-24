@@ -1,4 +1,4 @@
-// The team's skate hut beside the canal at the rink (planning/around-the-world/canada-round-2.md, "The Team Cabin"):
+// The team's skate hut beside the canal at the rink (canada-round-2.md in git history, "The Team Cabin"):
 // tap it and the Team Cabin opens, where she dresses the friends who have joined. A little log cabin on a snowy pad: a
 // pitched roof with snow on it, a stone chimney that puffs smoke, a door that swings open on a warm light, a window
 // whose light flickers, pink-and-white bunting under the eaves, a red maple leaf on the gable, the team's pink scarf on

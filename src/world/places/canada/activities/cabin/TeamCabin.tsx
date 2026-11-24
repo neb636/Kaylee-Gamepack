@@ -1,4 +1,4 @@
-// The Team Cabin (planning/around-the-world/canada-round-2.md, part 4): the skate hut beside the canal, where she
+// The Team Cabin (canada-round-2.md in git history, part 4): the skate hut beside the canal, where she
 // dresses the team (cabin.ts is the world). A toy on the map with no stamp and no end: the map's 🗺 button takes her
 // back. Sparkle, in the corner, says the one instruction the first time she comes in (and again if she's stuck); tap
 // her to hear it again. The mirror's team photo pops up over the room for a moment, then it's pinned on the wall.

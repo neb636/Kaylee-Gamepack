@@ -1,7 +1,7 @@
 // Captain Kaylee's boat trip (plan: planning/around-the-world/thailand/boat-trip.md (retired; in git history)), as deep-linkable sections:
 // #/world/thailand/boat-trip/<section>?packed=<what's in the suitcase>&ribbons=...&stops=...&photos=...&found=...
 // The trip there (step 4): Mom asks if she's ready, packing, the goodbye and Aunty Sri's van, the airport and the
-// window seat; then the Krabi map (map?been=..., notes: thailand/krabi-map.md), the trip's hub: a toy diorama of Krabi
+// window seat; then the Krabi map (map?been=..., notes: krabi-map.md in git history), the trip's hub: a toy diorama of Krabi
 // and Phang Nga Bay where she taps a pin to go to Baan Chang or the pier, in any order, and back to it after
 // each (its stamp lands there); then Phang Nga Bay (step 3): the pier and its ribbons, open water, the village, the
 // cave and the hong, the boat race through the rainbow gate (its own lagoon: three laps, then the podium and the

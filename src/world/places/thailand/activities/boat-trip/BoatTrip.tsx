@@ -6,7 +6,7 @@
 //                           the goodbye at the shutter and Aunty Sri's van
 //   airport                 the van pulls away and they're at the airport: the x-ray belt (trip/legs/airport.ts)
 //   takeoff, fly, land      the window seat (trip/legs/plane.ts), down into Krabi, then
-//   map                     the Krabi map (map/, notes: thailand/krabi-map.md), the trip's hub: a toy diorama of
+//   map                     the Krabi map (map/, notes: krabi-map.md in git history), the trip's hub: a toy diorama of
 //                           Krabi and Phang Nga Bay in the sky. She taps a pin to go to Baan Chang or the
 //                           pier (either first), comes back to the map after each (its stamp lands), and after one the
 //                           airport opens: the tiny plane takes off for home (endTrip). Away from the map, the top-left

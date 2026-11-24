@@ -1,4 +1,4 @@
-// Canada's film stage (docs/films.md; the story: planning/around-the-world/canada.md, "Maple's Team"): one small 3D
+// Canada's film stage (docs/films.md): one small 3D
 // world that only plays films. The games stay games: Place.tsx plays a film here before and after each one, so every
 // chapter gets its cutscenes without film code inside a game's world, and each chapter's films and set live in files
 // of their own (story/films/<chapter>.ts, story/sets/<chapter>.ts).

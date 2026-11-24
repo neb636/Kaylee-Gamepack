@@ -20,7 +20,7 @@ export const L = {
   trophyWin: `You did it! You won the Polar Explorer trophy!`,
   trophyRoom: `Polar Explorer! From The Poles.`,
   passport: 'These are the Poles! The top and the bottom of the world.',
-  // The passport's tap-to-hear facts (planning/around-the-world/poles.md, "Passport facts").
+  // The passport's tap-to-hear facts.
   facts: {
     ocean: 'The North Pole is a frozen ocean. The South Pole is a frozen land.',
     neverMeet: 'Polar bears live in the north, and penguins live in the south. They never meet!',
@@ -423,7 +423,7 @@ export const L = {
     },
   },
 
-  // ---- The new ending, The Longest Night (planning/around-the-world/poles-ending.md; activities/night/). ----
+  // ---- The new ending, The Longest Night (poles-ending.md in git history; activities/night/). ----
   // One chapter in three acts and five films, and the whole of it is here in play order, so its table read is the
   // ending as she hears it. It replaces Emperor Huddle and the finale (the blocks above) once it's built; until then
   // those still play. Lines marked ♻️ are already recorded under another key (the same words in the same voice share

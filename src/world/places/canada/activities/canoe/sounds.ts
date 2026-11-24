@@ -2,7 +2,7 @@
 // plays until the clip is made (kit/clips.ts). The game (paddle.ts) and the chapter's films (story/films/canoe.ts) use
 // them. No three.js here.
 import { sounds } from '../../../../../sdk'
-import { bed, clip, held } from '../../../../kit/clips'
+import { bed, clip, held, playClip } from '../../../../kit/clips'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import { url } from '../../sfx'
 
@@ -15,6 +15,9 @@ function synthLaugh(wail = false) {
   }
   for (let i = 0; i < 9; i++) tone(i % 2 ? 1080 : 940, i % 2 ? 1000 : 1020, 0.075, 0.045, 'sine', d + i * 0.09)
 }
+
+/** The chick's squeak, as a synth (`vol` 0..1). */
+const synthChick = (vol: number) => [0, 0.13].forEach((d, i) => tone(2600 + i * 400, 3300 + i * 300, 0.08, 0.05 * vol, 'sine', d))
 
 const laugh = clip(url('canoe-loon'), () => synthLaugh(false))
 
@@ -37,7 +40,19 @@ export const snd = {
   /** Lulu's laugh: the loon's quick tremolo. `wail` adds her long call first (the recorded one: story/sounds.ts loon). */
   laugh: (wail = false) => (wail ? synthLaugh(true) : laugh()),
   /** Her chick tries to sing too: a tiny squeak. */
-  chick: clip(url('canoe-chick'), () => [0, 0.13].forEach((d, i) => tone(2600 + i * 400, 3300 + i * 300, 0.08, 0.05, 'sine', d))),
+  chick: clip(url('canoe-chick'), () => synthChick(1)),
+  /** The lost chick peeping from the milky water: quiet far away, louder as the canoe comes near (0 far .. 1 close). */
+  peep: (near: number) => {
+    const vol = 0.12 + 0.88 * near * near
+    if (!playClip(url('canoe-chick'), { vol, rate: 1.05 + Math.random() * 0.1 })) synthChick(vol)
+  },
+  /** Lulu's song, long and lovely (the films' recorded call). */
+  song: clip(url('story-loon'), () => synthLaugh(true), { jitter: 0.02 }),
+  /** The glacier sings it back: the same call, fainter and a little lower. (Play it from the game's own timers, so it
+   *  never sounds after she has left.) */
+  echo: (vol: number) => {
+    if (!playClip(url('story-loon'), { vol, rate: 0.96 })) tone(620, 860, 0.5, 0.06 * vol, 'sine')
+  },
   /** The glacier stream tumbling into the lake (when she finds the milky water). */
   stream: clip(url('canoe-stream'), () => noise(1.2, 0.06, 'bandpass', 1400, 900, 0, 0.8)),
   /** The creek and its waterfall, louder the nearer the canoe is (call it every frame while it can be heard: 0 far,

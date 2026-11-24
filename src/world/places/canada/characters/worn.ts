@@ -18,6 +18,7 @@
 // Both dressers take off whatever they put on last time first, so they can be called again with a new Worn.
 import { Color, Euler, Group, Matrix4, Mesh, SphereGeometry, Vector3, type BufferAttribute, type BufferGeometry, type Intersection, type Object3D } from 'three'
 import type { FilmActor } from '../../../engine3d/characters/actor'
+import { RACCOON_HEAD } from '../../../engine3d/characters/raccoon'
 import { Bag } from '../../../engine3d/dispose'
 import { bake, loft, merge, P, solid, solidMix, type LoftRing, type V3 } from '../../../engine3d/geo'
 import { BERRIES, mistyLook, WEAR_COLORS, type TeamId, type Worn } from '../looks'
@@ -26,10 +27,13 @@ import { mistyCoat } from './mistyLook'
 import type { ToyActor } from './toy'
 import { cheekParts, crestGeo, hatParts, WHITE, type HatId } from './wear'
 
+/** The name of anything on a toy's head that a hat goes on instead of (Lulu's flick of feathers): hidden under a hat. */
+export const UNDER_HAT = 'under-hat'
 /** The name of the team's pink scarf group on anyone who wears it (story/cast.ts, tuque.ts, lulu.ts). */
 export const TEAM_SCARF = 'team-scarf'
 
-/** Where the cabin's things sit on a hand-built toy: `hat` at the middle of the head (userData.R its radius), `neck` at
+/** Where the cabin's things sit on a hand-built toy: `hat` at the middle of the head (userData.R its radius; userData.cheeks, if her
+ *  head isn't a ball, how much wider and deeper it is where a cheek stamp goes), `neck` at
  *  the middle of the ring a scarf goes round (userData.r), `belly` at the middle of the body a jersey goes over (Tuque's
  *  middle ball: userData.r, sx, sy; Lulu's body: rx, ry, rz), her `wings` (a jersey's sleeves), Tuque's floppy `flop`. */
 export interface ToySpots {
@@ -63,7 +67,7 @@ type Fit = { base: HatFit } & Partial<Record<HatId, Partial<HatFit>>>
 const HAT_FIT: Record<string, Fit> = {
   beaver: { base: { y: 0.56, tilt: -0.14 }, crown: { y: 0.64 }, chef: { y: 0.62 }, flowers: { y: 0.52 }, antlers: { y: 0.5 } },
   moose: { base: { y: 0.74, tilt: -0.1 }, crown: { y: 0.82 }, flowers: { y: 0.8 }, antlers: { y: 0.72 }, chef: { y: 0.8 } },
-  raccoon: { base: { y: 0.62, tilt: 0.08 }, crown: { y: 0.7 }, helmet: { y: 0.6, grow: 1.1 }, antlers: { y: 0.55, tilt: 0.05 } },
+  raccoon: { base: { y: 0.62, tilt: 0.08 }, crown: { y: 0.7 }, helmet: { y: 0.66, grow: 1.1 }, antlers: { y: 0.55, tilt: 0.05 } },
   'sea-otter': { base: { y: 0.52, tilt: -0.1 }, flowers: { y: 0.48 }, antlers: { y: 0.45 } },
   bear: { base: { y: 0.6, tilt: -0.12 }, crown: { y: 0.66 }, antlers: { y: 0.52 } },
   tuque: { base: { y: 0.64, tilt: -0.06, roll: -0.16 }, flowers: { y: 0.68 }, crown: { y: 0.68 } },
@@ -72,7 +76,7 @@ const HAT_FIT: Record<string, Fit> = {
 }
 
 /** How a rig species' head ball is squashed (engine3d/characters/animal.ts builds it this way). */
-const HEAD_SCALE: Record<string, V3> = { beaver: [1.08, 1, 1], moose: [0.94, 1.04, 1], raccoon: [1.1, 0.98, 1], 'sea-otter': [1.12, 0.96, 1], bear: [1.08, 1, 1] }
+const HEAD_SCALE: Record<string, V3> = { beaver: [1.08, 1, 1], moose: [0.94, 1.04, 1], raccoon: RACCOON_HEAD, 'sea-otter': [1.12, 0.96, 1], bear: [1.08, 1, 1] }
 
 /** Where a cheek stamp goes on each head (across, up, on the unit head ball before it's squashed). */
 const CHEEK_AT: Record<string, [number, number]> = { beaver: [0.6, -0.2], moose: [0.72, -0.08], raccoon: [0.62, -0.34], 'sea-otter': [0.69, -0.14], bear: [0.62, -0.22], tuque: [0.55, -0.2], lulu: [0.6, -0.16] }
@@ -328,6 +332,11 @@ export function dressToy(actor: ToyActor, who: TeamId, worn: Worn, bag: Bag): vo
     hat.name = 'cabin-hat'
     spots.hat.add(hat)
     d.added.push(hat)
+    const under = actor.root.getObjectByName(UNDER_HAT)
+    if (under) {
+      under.visible = false
+      d.undo.push(() => (under.visible = true))
+    }
     const flop = spots.flop
     if (flop) {
       const was = flop.rotation.z
@@ -336,7 +345,7 @@ export function dressToy(actor: ToyActor, who: TeamId, worn: Worn, bag: Bag): vo
     }
   }
   if (worn.cheek && CHEEK_AT[who]) {
-    const cheek = placeCheek(worn.cheek, new Vector3(), R, [1, 1, 1], CHEEK_AT[who], d.bag)
+    const cheek = placeCheek(worn.cheek, new Vector3(), R, (spots.hat.userData.cheeks as V3 | undefined) ?? [1, 1, 1], CHEEK_AT[who], d.bag)
     cheek.name = 'cabin-cheek'
     spots.hat.add(cheek)
     d.added.push(cheek)

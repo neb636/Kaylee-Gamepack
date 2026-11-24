@@ -382,23 +382,16 @@ export class House implements World3D {
   // ---------------------------------------------------------------- Roblox controls (engine3d/roam.ts)
 
   /** The pad and the camera turn are hers whenever she's free to walk around (not in the arrival, the family photo, a
-   *  ride, or a plugin's own camera like the wardrobe mirror). */
+   *  ride, or a plugin's own camera like the wardrobe mirror). Stools, the mattress and the stairs hop her up on
+   *  their own. */
   roam(): RoamState | null {
     if (this.arriving || this.photo || this.plugin?.shot?.() || this.kaylee.root.parent !== this.scene) return null
-    return { walk: true, jump: true }
+    return { walk: true }
   }
   roamStick(x: number, y: number) {
     this.stickIn.x = x
     this.stickIn.y = y
     if (!x && !y) this.stickIn.wait = false
-  }
-  roamJump() {
-    if (!this.roam() || this.climbing) return
-    const k = this.kaylee
-    if (k.jump(ROAM.jumpHeight, ROAM.jumpTime, ROAM.jumpReach, (x, z) => this.nav[k.floor].free(x, z))) {
-      this.using = undefined
-      sfx.boing()
-    }
   }
   /** Every frame: the stick walks her the way it pushes, as the camera faces now; pushing into the stairs climbs them. */
   private steer() {

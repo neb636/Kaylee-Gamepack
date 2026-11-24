@@ -1,0 +1,85 @@
+name: Review page
+
+# An agent publishes a PR's review page to the review-pages branch (`node scripts/review.mjs --publish`). The PR
+# preview picks it up only when the PR is pushed, so a page published after that push (or republished after a fix)
+# used to wait for a push that might never come. This puts it straight into <preview>/review/ for the branch's open PR,
+# without rebuilding the game. `--publish` starts it (a push to review-pages can't: that branch has no workflows).
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: The branch whose review page was published (its PR's head)
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The same lane as the previews and main's deploy, which also write to gh-pages.
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 1
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      # Loading a place's lines.ts (for the changed lines' script sheet) can import packages.
+      - run: npm ci --ignore-scripts
+      - name: Build and put up each open PR's review page
+        id: put
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ inputs.branch }}
+        run: |
+          # main's copies of the scripts: a PR made before they existed doesn't have them.
+          ci="$RUNNER_TEMP/ci" && mkdir -p "$ci" && cp scripts/ci-*.sh "$ci/"
+          . "$ci/ci-lib.sh"
+          slugs=$(slug_of "$BRANCH")
+          # Open PRs from this repo, as "<number> <branch>".
+          prs=$(gh pr list --repo "$REPO" --state open --limit 300 --json number,headRefName,isCrossRepository \
+            --jq '.[] | select(.isCrossRepository | not) | "\(.number) \(.headRefName)"')
+          ready=() failed=()
+          pages="$RUNNER_TEMP/gh-pages"
+          cloned=false
+          while read -r pr branch; do
+            [ -n "$pr" ] || continue
+            grep -qxF "$(slug_of "$branch")" <<< "$slugs" || continue
+            echo "::group::PR #$pr ($branch)"
+            # The PR's merge commit and its base, as the preview builds it (the base finds the changed lines).
+            if ! { git fetch -q --depth=2 origin "refs/pull/$pr/merge" && git checkout -q --detach FETCH_HEAD; }; then
+              echo "::warning::PR #$pr has no merge commit (a conflict with main?)"
+              failed+=("$pr"); echo "::endgroup::"; continue
+            fi
+            out="$RUNNER_TEMP/review-$pr"
+            res=$(GITHUB_OUTPUT= "$ci/ci-review-page.sh" "$branch" "$out" "$pr")
+            echo "$res"
+            status=$(sed -n 's/^status=//p' <<< "$res")
+            if [ "$status" = failed ]; then failed+=("$pr"); echo "::endgroup::"; continue; fi
+            [ "$status" = ready ] || { echo "::endgroup::"; continue; }
+            if ! $cloned; then
+              sparse_clone gh-pages "$pages" || { echo "::error::Couldn't download gh-pages"; exit 1; }
+              cloned=true
+            fi
+            dest="pr-preview/pr-$pr/review"
+            cigit -C "$pages" sparse-checkout add "$dest"
+            rm -rf "${pages:?}/$dest" && mkdir -p "$pages/$dest" && cp -R "$out/." "$pages/$dest/"
+            cigit -C "$pages" add --sparse -A "$dest"
+            ready+=("$pr")
+            echo "::endgroup::"
+          done <<< "$prs"
+          if $cloned && ! cigit -C "$pages" diff --cached --quiet; then
+            cigit -C "$pages" commit -q -m "Review pages for PR ${ready[*]}"
+            push_retry "$pages" gh-pages || { echo "::error::Couldn't push to gh-pages"; exit 1; }
+          fi
+          [ ${#failed[@]} -eq 0 ] || { echo "::warning::No review page for PR ${failed[*]}"; exit 1; }
+

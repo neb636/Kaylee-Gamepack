@@ -1,4 +1,4 @@
-// Statues (planning/around-the-world/canada-round-2.md, Flashlight Statues): Roxy the raccoon, caught in the
+// Statues (canada-round-2.md in git history, Flashlight Statues): Roxy the raccoon, caught in the
 // flashlight's beam, freezes in a ridiculous pose with a silly face ("I'm a tree." "I'm a rock." "Nobody here!"). A
 // small library of poses for any rig actor (engine3d/characters/actor.ts FilmActor): the campfire game uses it, her
 // kits strike one when they're caught, and the big game reuses it (a goose Roxy robs freezes like a statue).
