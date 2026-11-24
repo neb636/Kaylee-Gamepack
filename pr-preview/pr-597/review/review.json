@@ -1,0 +1,147 @@
+{
+ "title": "Muay Thai: a real bout with Dad",
+ "checkIn": "3 of 4: play it",
+ "kaylee": "Dad puts on the sparring mitts and she punches him round the ring: combos, gold gloves, a slow-motion super punch that sends him into the ropes, and a tap keeps him bouncing in the air while the coach counts him out.",
+ "questions": [
+  "Is punching Dad round the ring funny, or too rough for her?",
+  "When his balloon mitt bops her on the head: funny or annoying?",
+  "Is the bout too short, about right, or too long?"
+ ],
+ "tableReads": [
+  [
+   "thailand",
+   "mall.boxing"
+  ]
+ ],
+ "reels": [
+  {
+   "name": "boxing",
+   "moments": [
+    "boxing-punch",
+    "boxing-mitt",
+    "boxing-bop",
+    "boxing-kick"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "label": "Play it: the bow, then round 1",
+   "hash": "#/world/thailand/mall-trip/boxing"
+  },
+  {
+   "label": "Round 2: Dad swings back (pop his big mitt)",
+   "hash": "#/world/thailand/mall-trip/boxing?round=2"
+  },
+  {
+   "label": "Round 3: his guard, the big kick, the belt",
+   "hash": "#/world/thailand/mall-trip/boxing?round=3"
+  },
+  {
+   "label": "Tune the feel (punch speed, push back, his wind-up)",
+   "hash": "#/world/thailand/mall-trip/boxing?round=2&feel=1"
+  },
+  {
+   "label": "The Mac's words (click, not tap)",
+   "hash": "#/world/thailand/mall-trip/boxing?device=mouse"
+  }
+ ],
+ "listens": [
+  {
+   "title": "Muay Thai: the bout",
+   "audio": "sfx/boxing.mp3",
+   "items": [
+    {
+     "text": "A punch on Dad's tummy pad",
+     "at": 0,
+     "end": 0.48
+    },
+    {
+     "text": "A punch on his mitts",
+     "at": 1.18,
+     "end": 1.66
+    },
+    {
+     "text": "A glove going out",
+     "at": 2.36,
+     "end": 2.84
+    },
+    {
+     "text": "A big hit (every fifth of a combo)",
+     "at": 3.54,
+     "end": 4.34
+    },
+    {
+     "text": "Dad's big mitt swelling up",
+     "at": 5.04,
+     "end": 6.8
+    },
+    {
+     "text": "She pops the big mitt",
+     "at": 7.5,
+     "end": 8.98
+    },
+    {
+     "text": "His mitt bops her on the head",
+     "at": 9.68,
+     "end": 10.28
+    },
+    {
+     "text": "Her gloves turn gold",
+     "at": 10.98,
+     "end": 12.18
+    },
+    {
+     "text": "The super punch winding up",
+     "at": 12.88,
+     "end": 14.08
+    },
+    {
+     "text": "The super punch lands",
+     "at": 14.78,
+     "end": 16.06
+    },
+    {
+     "text": "The ropes",
+     "at": 16.76,
+     "end": 17.76
+    },
+    {
+     "text": "A tap bounces Dad in the air",
+     "at": 18.46,
+     "end": 19.06
+    },
+    {
+     "text": "Dad lands on his bottom",
+     "at": 19.76,
+     "end": 20.64
+    },
+    {
+     "text": "The ring bell",
+     "at": 21.34,
+     "end": 22.54
+    },
+    {
+     "text": "The coach's drum",
+     "at": 23.24,
+     "end": 23.84
+    },
+    {
+     "text": "The little cymbals",
+     "at": 24.54,
+     "end": 25.22
+    },
+    {
+     "text": "The water bottle",
+     "at": 25.92,
+     "end": 26.72
+    },
+    {
+     "text": "The play hall (ambience)",
+     "at": 27.42,
+     "end": 33.42
+    }
+   ]
+  }
+ ]
+}

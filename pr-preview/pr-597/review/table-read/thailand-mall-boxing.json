@@ -5,7 +5,7 @@
   "title": "Thailand › Mall › Boxing",
   "intro": "Muay Thai (games/boxing/): a bout with Dad.",
   "page": "thailand-mall-boxing.html",
-  "audio": null,
+  "audio": "thailand-mall-boxing.mp3",
   "lines": 27,
   "seconds": 45,
   "missing": 0,
@@ -17,105 +17,6 @@
       "flags": [
         "long"
       ]
-    },
-    {
-      "key": "mall.boxing.chok",
-      "text": "Chok!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.count.0",
-      "text": "Nueng!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.count.1",
-      "text": "Song!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.count.2",
-      "text": "Saam!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.punch.touch",
-      "text": "Tap Dad to punch!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.punch.mouse",
-      "text": "Click Dad to punch!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.super",
-      "text": "Super punch!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.glove",
-      "text": "Punch his big glove!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.uhOh",
-      "text": "Uh oh!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.gotcha",
-      "text": "Gotcha!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.dizzy",
-      "text": "Whoa, I'm dizzy!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.more",
-      "text": "One more round!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.hint.dad",
-      "text": "Punch Dad!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "mall.boxing.waiKru",
-      "text": "A boxer bows to thank the teacher!",
-      "flags": [
-        "changed"
-      ],
-      "was": "The wai kru dance says thank you to your teacher!"
     },
     {
       "key": "mall.boxing.sport",
@@ -140,6 +41,10 @@
       "ms": 4128,
       "flags": [
         "long"
+      ],
+      "span": [
+        0,
+        4.07
       ]
     },
     {
@@ -155,7 +60,11 @@
       "part": "mall › boxing › bow",
       "when": "",
       "ms": 2214,
-      "flags": []
+      "flags": [],
+      "span": [
+        5.69,
+        7.91
+      ]
     },
     {
       "path": [
@@ -170,7 +79,11 @@
       "part": "mall › boxing › bow",
       "when": "",
       "ms": 1800,
-      "flags": []
+      "flags": [],
+      "span": [
+        8.26,
+        10
+      ]
     },
     {
       "path": [
@@ -184,8 +97,10 @@
       "part": "mall › boxing",
       "when": "The coach: the bell (the referee's \"fight!\"), the count over a knocked-down Dad, after a round, the gold belt.",
       "ms": 552,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        11.62,
+        12.12
       ]
     },
     {
@@ -201,8 +116,10 @@
       "part": "mall › boxing › count",
       "when": "",
       "ms": 672,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        13.74,
+        14.35
       ]
     },
     {
@@ -218,8 +135,10 @@
       "part": "mall › boxing › count",
       "when": "",
       "ms": 696,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        14.7,
+        15.34
       ]
     },
     {
@@ -235,8 +154,10 @@
       "part": "mall › boxing › count",
       "when": "",
       "ms": 768,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        15.69,
+        16.4
       ]
     },
     {
@@ -251,7 +172,11 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 1685,
-      "flags": []
+      "flags": [],
+      "span": [
+        18.02,
+        19.71
+      ]
     },
     {
       "path": [
@@ -265,7 +190,11 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 960,
-      "flags": []
+      "flags": [],
+      "span": [
+        20.06,
+        20.95
+      ]
     },
     {
       "path": [
@@ -280,8 +209,10 @@
       "part": "mall › boxing › punch",
       "when": "Sparkle: something new (how to punch, her gold gloves, Dad's big mitt going up, the kick).",
       "ms": 1752,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        22.57,
+        24.26
       ]
     },
     {
@@ -297,8 +228,10 @@
       "part": "mall › boxing › punch",
       "when": "",
       "ms": 2184,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        24.61,
+        26.73
       ]
     },
     {
@@ -313,8 +246,10 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 1368,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        28.35,
+        29.67
       ]
     },
     {
@@ -329,8 +264,10 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 1632,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        30.02,
+        31.58
       ]
     },
     {
@@ -345,7 +282,11 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 904,
-      "flags": []
+      "flags": [],
+      "span": [
+        31.93,
+        32.84
+      ]
     },
     {
       "path": [
@@ -359,7 +300,11 @@
       "part": "mall › boxing",
       "when": "Dad, now and then: a big hit, her gloves gone gold, his mitt landing on her, popped and dizzy, his guard going up and down, into the ropes, up again.",
       "ms": 1922,
-      "flags": []
+      "flags": [],
+      "span": [
+        33.19,
+        35.11
+      ]
     },
     {
       "path": [
@@ -373,7 +318,11 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 2064,
-      "flags": []
+      "flags": [],
+      "span": [
+        35.46,
+        37.46
+      ]
     },
     {
       "path": [
@@ -387,8 +336,10 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 720,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        37.81,
+        38.47
       ]
     },
     {
@@ -403,8 +354,10 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 648,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        38.82,
+        39.4
       ]
     },
     {
@@ -419,8 +372,10 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 2520,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        39.75,
+        42.21
       ]
     },
     {
@@ -435,7 +390,11 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 1768,
-      "flags": []
+      "flags": [],
+      "span": [
+        42.56,
+        44.33
+      ]
     },
     {
       "path": [
@@ -449,7 +408,11 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 1994,
-      "flags": []
+      "flags": [],
+      "span": [
+        44.68,
+        46.67
+      ]
     },
     {
       "path": [
@@ -463,8 +426,10 @@
       "part": "mall › boxing",
       "when": "",
       "ms": 1104,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        47.02,
+        48.05
       ]
     },
     {
@@ -481,7 +446,11 @@
       "part": "mall › boxing › hint › gloves",
       "when": "Sparkle, when the finger shows after a while with nothing touched.",
       "ms": 1445,
-      "flags": []
+      "flags": [],
+      "span": [
+        49.67,
+        51.12
+      ]
     },
     {
       "path": [
@@ -497,7 +466,11 @@
       "part": "mall › boxing › hint › gloves",
       "when": "",
       "ms": 1704,
-      "flags": []
+      "flags": [],
+      "span": [
+        51.47,
+        53.12
+      ]
     },
     {
       "path": [
@@ -512,8 +485,10 @@
       "part": "mall › boxing › hint",
       "when": "Sparkle, when the finger shows after a while with nothing touched.",
       "ms": 1200,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        54.74,
+        55.88
       ]
     },
     {
@@ -528,10 +503,11 @@
       "part": "mall › boxing",
       "when": "The facts: the first time she pokes the coach, and the star board.",
       "ms": 2784,
-      "flags": [
-        "changed"
-      ],
-      "was": "The wai kru dance says thank you to your teacher!"
+      "flags": [],
+      "span": [
+        57.5,
+        60.23
+      ]
     },
     {
       "path": [
@@ -547,6 +523,10 @@
       "ms": 3674,
       "flags": [
         "long"
+      ],
+      "span": [
+        60.58,
+        64.25
       ]
     }
   ]
