@@ -1,0 +1,71 @@
+[
+ {
+  "id": "nile-river",
+  "label": "The river (bed)",
+  "prompt": "Calm wide river ambience on a warm sunny afternoon: gentle water lapping against a small wooden boat, soft breeze through reeds, a few distant songbirds. Peaceful and soft. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "nile-wake",
+  "label": "The boat sailing",
+  "prompt": "A small wooden sailboat gliding through calm water, soft steady swish and gurgle of water along the hull, sail gently flapping now and then. Seamless loop, no music, no voices.",
+  "seconds": 5,
+  "loop": true
+ },
+ {
+  "id": "nile-catch",
+  "label": "A flower hops aboard",
+  "prompt": "One soft cute pop, like a little flower bud popping off a stem and landing on wood. Tiny, bright, toy-like. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "nile-splash",
+  "label": "Splash",
+  "prompt": "A friendly medium splash of water, something round bobbing up out of a calm river. Soft, playful, close. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "nile-plop",
+  "label": "A fish plops",
+  "prompt": "A small fish leaps out of calm water and plops back in, one tiny cute plop with a few droplets. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "nile-quack",
+  "label": "A duck quacks",
+  "prompt": "One friendly duck quacking twice, quack quack, close and clear, outdoors near water. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "nile-rustle",
+  "label": "Through the papyrus",
+  "prompt": "A small boat pushing through tall papyrus reeds, soft swishing and rustling of stalks brushing a wooden hull. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "nile-wheel",
+  "label": "The water wheel turning",
+  "prompt": "An old wooden water wheel turning slowly by a river, gentle rhythmic wooden creaks while water pours and splashes from its little pots into a channel. Soft and pleasant. Seamless loop, no music, no voices.",
+  "seconds": 5,
+  "loop": true
+ },
+ {
+  "id": "nile-whee",
+  "label": "The hippo's fountain",
+  "prompt": "A playful water fountain spouting up, a bubbly whoosh of water rising into the air and sprinkling down like rain. Cartoon-soft, cheerful. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "nile-bubbles",
+  "label": "The hippo's bubbles",
+  "prompt": "A few big round bubbles rising up and bloop-popping at the surface of calm water, something hiding underneath. Cute and soft. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "nile-puff",
+  "label": "A soft puff",
+  "prompt": "One very soft airy puff, like blowing gently on a dandelion. Short and light. No music, no voices.",
+  "seconds": 0.5
+ }
+]

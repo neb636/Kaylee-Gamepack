@@ -308,46 +308,18 @@
     "file": "735db5fb276b.mp3"
   },
   {
-    "text": "Catch the lotus flowers!",
+    "text": "Drag the boat to the lotus flowers!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1785,
-    "file": "84c03767676a.mp3"
+    "ms": 3192,
+    "file": "1357e72048de.mp3"
   },
   {
-    "text": "Bump! Hee hee, hello!",
-    "voice": "hippo",
-    "sig": "cb61c1d477",
-    "ms": 3758,
-    "file": "985ff06c7063.mp3"
-  },
-  {
-    "text": "Pull the bucket three times!",
+    "text": "Sail to the water wheel!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2276,
-    "file": "73cc636e1ea9.mp3"
-  },
-  {
-    "text": "Now pull it five times!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2538,
-    "file": "56eff35b3745.mp3"
-  },
-  {
-    "text": "Four!",
-    "voice": "miu",
-    "sig": "e1570748b7",
-    "ms": 618,
-    "file": "139d02290716.mp3"
-  },
-  {
-    "text": "Five!",
-    "voice": "miu",
-    "sig": "e1570748b7",
-    "ms": 664,
-    "file": "34fcccf414f7.mp3"
+    "ms": 1968,
+    "file": "6678ec5f1365.mp3"
   },
   {
     "text": "Look! The water makes the plants grow!",
@@ -357,18 +329,46 @@
     "file": "0ea60dab0f5c.mp3"
   },
   {
+    "text": "The hippo has more flowers!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2424,
+    "file": "427222add06c.mp3"
+  },
+  {
+    "text": "Ahlan! A flower for you!",
+    "voice": "hippo",
+    "sig": "cb61c1d477",
+    "ms": 2232,
+    "file": "506e5befe62b.mp3"
+  },
+  {
+    "text": "Bump! Hee hee, hello!",
+    "voice": "hippo",
+    "sig": "cb61c1d477",
+    "ms": 3758,
+    "file": "985ff06c7063.mp3"
+  },
+  {
+    "text": "A lotus crown for you!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 1512,
+    "file": "bb9eaee43e57.mp3"
+  },
+  {
+    "text": "Shukran! I love it!",
+    "voice": "hippo",
+    "sig": "cb61c1d477",
+    "ms": 1872,
+    "file": "f302a9f32a90.mp3"
+  },
+  {
     "text": "Egypt is mostly sandy desert. The Nile makes it green!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 4933,
     "file": "030c9f823f79.mp3"
-  },
-  {
-    "text": "The Nile is one of the longest rivers in the world!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3729,
-    "file": "3fa8dc3c5f9e.mp3"
   },
   {
     "text": "Oh no! Someone is buried in the sand!",

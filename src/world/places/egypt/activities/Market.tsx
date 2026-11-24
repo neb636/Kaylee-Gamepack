@@ -14,6 +14,7 @@ import SECTIONS from './Market.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
+import { Hippo } from '../puppets/Hippo'
 import { Jamal } from '../puppets/Jamal'
 import { Miu } from '../puppets/Miu'
 
@@ -91,7 +92,7 @@ export function Market({ onDone, setProgress }: ActivityProps) {
 
   if (story) return <StoryBeat lines={[L.market.story]} friend={<Miu height="100%" />} bg={art.bgMarket} onDone={() => setStory(false)} />
 
-  const who = kind === 'koshari' ? <Jamal ref={customer} height="100%" /> : <Buddy ref={customer} img={kind === 'onions' ? art.fennec : art.hippo} voice={kind === 'onions' ? 'fennec' : 'hippo'} height="100%" />
+  const who = kind === 'koshari' ? <Jamal ref={customer} height="100%" /> : kind === 'onions' ? <Buddy ref={customer} img={art.fennec} voice="fennec" height="100%" /> : <Hippo ref={customer} height="100%" />
   return (
     <Stage bg={art.bgMarket} style={{ backgroundPosition: 'center bottom' }}>
       <MarketLife />
