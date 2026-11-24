@@ -6,15 +6,15 @@
 // cedars and the falls where a salmon jumps; Tofino's kelp out on the Pacific and a whale that spouts. Built at map
 // scale (a friend is about a unit tall), every one a toy: one merged mesh for what stands still, small groups for what
 // moves. Each knows how to bounce when tapped.
-import { Group, Vector3 } from 'three'
+import { BufferGeometry, Float32BufferAttribute, Group, Vector3 } from 'three'
 import { bell, clamp } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
-import { blobShadow, merge, P, solid } from '../../../engine3d/geo'
+import { bake, blobShadow, merge, P, solid } from '../../../engine3d/geo'
 import { CANADA_COLORS } from '../characters/looks'
 import { makeCup } from '../story/props'
 import { buildHut, type Hut } from './hut'
 import type { PlaceId } from './shape'
-import { peakParts, spruceParts } from './terrain'
+import { peakParts, snowCap, spruceParts } from './terrain'
 
 const SNOW = '#FFFFFF'
 const SNOW_SHADE = '#EEF1FF'
@@ -185,37 +185,94 @@ export interface CastlePlace {
   heap: Group
 }
 
+/** A hipped roof `w` (x) by `d` (z) and `h` tall, standing on `at`: four steep slopes up to a ridge along the longer
+ *  side (a point when it's square), like the château's copper roofs. Flat-shaded, so each slope reads in the toon light. */
+function hipRoof(w: number, d: number, h: number, c: string, at: [number, number, number]) {
+  const [hw, hd] = [w / 2, d / 2]
+  const along = w >= d
+  const r = Math.max(0, (along ? hw - hd : hd - hw) * 0.9)
+  const [A, B, C, D] = [[-hw, 0, -hd], [hw, 0, -hd], [hw, 0, hd], [-hw, 0, hd]]
+  const [R1, R2] = along ? [[-r, h, 0], [r, h, 0]] : [[0, h, -r], [0, h, r]]
+  // Front, back, right, left (wound to face out).
+  const tris = along ? [D, C, R2, D, R2, R1, B, A, R1, B, R1, R2, C, B, R2, A, D, R1] : [D, C, R2, B, A, R1, C, B, R1, C, R1, R2, A, D, R2, A, R2, R1]
+  const g = new BufferGeometry()
+  g.setAttribute('position', new Float32BufferAttribute(tris.flat(), 3))
+  g.computeVertexNormals()
+  return bake(g, c, { at })
+}
+
 export function buildCastle(bag: Bag): CastlePlace {
-  const place = base('snowman', bag, { hw: 0.75, hd: 0.55, h: 1.25 }, new Vector3(0.45, 0.05, 0.35))
-  const BRICK = '#F0B9A2'
-  const BRICK_DARK = '#DE9F88'
+  const place = base('snowman', bag, { hw: 0.75, hd: 0.55, h: 1.35 }, new Vector3(0.45, 0.05, 0.35))
+  const BRICK = '#F2BCA6'
+  const BRICK_DARK = '#E2A38C'
+  const STONE = '#FFF1DF'
   const COPPER = '#7FD3B4'
-  const COPPER_DARK = '#5FBF9E'
+  const COPPER_DARK = '#62C09F'
   const WIN = '#FFE9A8'
-  const roof = (w: number, d: number, h: number, at: [number, number, number]) => P.cone(Math.max(w, d) * 0.72, h, COPPER, { at, rot: [0, Math.PI / 4, 0], scale: [w / Math.max(w, d), 1, d / Math.max(w, d)] }, 4)
+  const G = 0.21
+  // A dormer on a roof's front slope: a little copper gable with a lit window.
+  const dormer = (x: number, y: number, z: number, k = 1) => [
+    P.box(0.07 * k, 0.07 * k, 0.08 * k, COPPER_DARK, { at: [x, y, z] }),
+    P.box(0.04 * k, 0.045 * k, 0.01, WIN, { at: [x, y - 0.005 * k, z + 0.041 * k] }),
+    P.prism([[-0.045 * k, 0], [0.045 * k, 0], [0, 0.05 * k]], 0.09 * k, COPPER, { at: [x, y + 0.035 * k, z] }),
+  ]
+  const windows = (xs: number[], ys: number[], z: number, w = 0.045, h = 0.065) => ys.flatMap((y) => xs.flatMap((x) => [P.box(w + 0.014, 0.012, 0.012, STONE, { at: [x, y - h / 2 - 0.004, z + 0.002] }), P.box(w, h, 0.01, WIN, { at: [x, y, z] })]))
   const parts = [
-    // A snowy cliff above the river.
+    // A snowy cliff above the river, with lavender rock showing on its face.
     P.rbox(1.45, 0.16, 1.05, 0.08, SNOW, { at: [0, 0.06, 0] }),
     P.rbox(1.3, 0.1, 0.9, 0.05, SNOW_SHADE, { at: [0, 0.16, -0.05] }),
-    // The wings, the big tower in the middle, two turrets.
-    P.rbox(1.0, 0.36, 0.32, 0.03, BRICK, { at: [0, 0.39, -0.12] }),
-    roof(1.0, 0.32, 0.26, [0, 0.7, -0.12]),
-    P.rbox(0.34, 0.66, 0.34, 0.03, BRICK_DARK, { at: [0, 0.54, -0.1] }),
-    roof(0.36, 0.36, 0.42, [0, 1.08, -0.1]),
-    ...[-1, 1].flatMap((s) => [P.cyl(0.08, 0.08, 0.5, BRICK, { at: [s * 0.5, 0.46, -0.02] }, 10), P.cone(0.1, 0.3, COPPER_DARK, { at: [s * 0.5, 0.86, -0.02] }, 10)]),
-    // Rows of warm windows.
-    ...[0, 1].flatMap((row) => [-0.38, -0.27, 0.27, 0.38].map((x) => P.box(0.05, 0.07, 0.01, WIN, { at: [x, 0.33 + row * 0.14, 0.045] }))),
-    ...[0, 1, 2].map((row) => P.box(0.06, 0.08, 0.01, WIN, { at: [0, 0.4 + row * 0.16, 0.075] })),
-    // A big snowman's carnival lantern post and snowy spruces.
-    ...spruceParts(-0.6, 0.12, 0.3, 0.36),
-    ...spruceParts(0.66, 0.12, -0.3, 0.34),
+    P.rbox(1.38, 0.08, 0.2, 0.04, '#D6CDEB', { at: [0, 0.04, 0.45] }),
+    // The long front wing on its cream stone base, a cream band between the floors, its steep copper roof.
+    P.rbox(1.04, 0.05, 0.34, 0.015, STONE, { at: [0, G + 0.025, -0.12] }),
+    P.rbox(1.0, 0.34, 0.3, 0.02, BRICK, { at: [0, G + 0.17, -0.12] }),
+    P.rbox(1.02, 0.02, 0.32, 0.008, STONE, { at: [0, G + 0.19, -0.12] }),
+    hipRoof(1.08, 0.38, 0.26, COPPER, [0, G + 0.34, -0.12]),
+    // Two wings stepping back behind it, so the roofs pile up like the real château's.
+    P.rbox(0.3, 0.3, 0.3, 0.02, BRICK_DARK, { at: [-0.34, G + 0.15, -0.36] }),
+    hipRoof(0.34, 0.34, 0.24, COPPER_DARK, [-0.34, G + 0.3, -0.36]),
+    P.rbox(0.28, 0.4, 0.28, 0.02, BRICK_DARK, { at: [0.36, G + 0.2, -0.38] }),
+    hipRoof(0.32, 0.32, 0.26, COPPER_DARK, [0.36, G + 0.4, -0.38]),
+    // The big tower in the middle, a little in front of the wing: tall, with the steepest roof and a gold spire.
+    P.rbox(0.32, 0.05, 0.32, 0.015, STONE, { at: [0, G + 0.025, -0.06] }),
+    P.rbox(0.3, 0.64, 0.3, 0.02, BRICK, { at: [0, G + 0.32, -0.06] }),
+    P.rbox(0.32, 0.03, 0.32, 0.01, STONE, { at: [0, G + 0.63, -0.06] }),
+    hipRoof(0.38, 0.38, 0.4, COPPER, [0, G + 0.645, -0.06]),
+    P.cyl(0.006, 0.01, 0.12, '#F2C14E', { at: [0, G + 1.1, -0.06] }, 6),
+    P.sphere(0.018, '#F2C14E', { at: [0, G + 1.17, -0.06] }, 8),
+    // The arched door at the tower's foot.
+    P.rbox(0.1, 0.13, 0.02, 0.03, STONE, { at: [0, G + 0.065, 0.095] }),
+    P.rbox(0.07, 0.11, 0.02, 0.03, '#8A5A3C', { at: [0, G + 0.055, 0.1] }),
+    // The corner turrets with their witch-hat roofs.
+    ...[-1, 1].flatMap((s) => [
+      P.cyl(0.085, 0.09, 0.48, BRICK, { at: [s * 0.5, G + 0.24, 0.0] }, 12),
+      P.cyl(0.1, 0.1, 0.025, STONE, { at: [s * 0.5, G + 0.48, 0.0] }, 12),
+      P.cone(0.115, 0.3, COPPER_DARK, { at: [s * 0.5, G + 0.64, 0.0] }, 12),
+      ...windows([s * 0.5], [G + 0.12, G + 0.3], 0.085, 0.035, 0.06),
+    ]),
+    // Rows of warm windows on the wing and the tower, dormers on the roofs, chimneys.
+    ...windows([-0.38, -0.27, 0.27, 0.38], [G + 0.1, G + 0.26], 0.035),
+    ...windows([-0.06, 0.06], [G + 0.22, G + 0.36, G + 0.5], 0.095, 0.04, 0.06),
+    ...[-0.32, 0.32].flatMap((x) => dormer(x, G + 0.42, -0.01)),
+    ...dormer(0, G + 0.76, 0.03, 0.9),
+    ...[-0.2, 0.2].map((x) => P.box(0.045, 0.12, 0.045, BRICK_DARK, { at: [x, G + 0.5, -0.2] })),
+    // The boardwalk terrace along the cliff's edge, its lamp posts and a little green kiosk.
+    P.rbox(0.62, 0.025, 0.16, 0.01, '#E7C79E', { at: [-0.32, G - 0.005, 0.36] }),
+    P.rbox(0.62, 0.015, 0.015, 0.005, SNOW, { at: [-0.32, G + 0.06, 0.435] }),
+    ...[-0.6, -0.44, -0.28, -0.12].map((x) => P.cyl(0.008, 0.008, 0.06, SNOW, { at: [x, G + 0.03, 0.435] }, 4)),
+    ...[-0.52, -0.14].flatMap((x) => [P.cyl(0.007, 0.009, 0.2, '#3A3340', { at: [x, G + 0.1, 0.33] }, 6), P.sphere(0.022, WIN, { at: [x, G + 0.21, 0.33] }, 8)]),
+    ...[-1, 1].flatMap((s) => [-1, 1].map((t) => P.cyl(0.006, 0.006, 0.1, SNOW, { at: [-0.33 + s * 0.04, G + 0.05, 0.33 + t * 0.04] }, 4))),
+    P.cone(0.075, 0.08, COPPER, { at: [-0.33, G + 0.14, 0.33] }, 8),
+    // Snowy spruces round the back.
+    ...spruceParts(-0.64, 0.12, -0.3, 0.36, false, true, 0.4),
+    ...spruceParts(0.66, 0.12, -0.18, 0.34, true, true, 1.3),
+    ...spruceParts(0.62, 0.12, 0.1, 0.24, false, true, 2.2),
   ]
   place.root.add(solid(merge(parts), bag, 1.5))
   // Flags on the turrets.
   const flags: Group[] = []
   for (const s of [-1, 1]) {
     const f = solid(merge([P.cyl(0.006, 0.006, 0.14, '#3A3340', { at: [0, 0.07, 0] }, 4), P.prism([[0, 0.14], [0.1, 0.115], [0, 0.09]], 0.008, s < 0 ? '#4F8FE8' : RED)]), bag, 1)
-    f.position.set(s * 0.5, 1.0, -0.02)
+    f.position.set(s * 0.5, 0.99, 0.0)
     place.root.add(f)
     flags.push(f)
   }
@@ -233,7 +290,7 @@ export function buildCastle(bag: Bag): CastlePlace {
     1.5,
   )
   place.root.add(heap)
-  place.flag.position.set(-0.55, 0.12, 0.42)
+  place.flag.position.set(-0.6, 0.2, 0.3)
   place.update = (_dt, t) => {
     flags.forEach((f, i) => (f.rotation.y = Math.sin(t * 2 + i) * 0.4))
     heap.rotation.z = place.t >= 0 ? Math.sin(place.t * 18) * 0.05 * (1 - clamp(place.t / 0.6, 0, 1)) : 0
@@ -253,7 +310,7 @@ export function buildMountain(bag: Bag): PlaceToy {
     // The mountain: a big round green cone with a snowy top.
     P.cone(0.85, 1.25, GREEN, { at: [-0.05, 0.6, -0.22] }, 9),
     P.cone(0.62, 0.42, GREEN_DARK, { at: [0.55, 0.2, -0.2] }, 8),
-    P.cone(0.24, 0.32, SNOW, { at: [-0.05, 1.08, -0.22] }, 9),
+    snowCap(0.85, 1.25, 0.27, 18, SNOW, [-0.05, -0.025, -0.22], 0),
     // The bike trail zigzagging down its front: stepping-stone dots, like the trails on the other maps.
     ...Array.from({ length: 16 }, (_, i) => {
       const y = 0.98 - i * 0.058
@@ -300,7 +357,7 @@ export function buildMountain(bag: Bag): PlaceToy {
 export interface Camp {
   place: PlaceToy
   flames: Group
-  /** Where Roxy peeks out round the tent. */
+  /** Where Roxy stands beside the tent, and where she sidles out to (both clear of it, the fire and the trees). */
   peek: { hide: Vector3; out: Vector3 }
 }
 
@@ -322,8 +379,9 @@ export function buildCamp(bag: Bag): Camp {
     // A log to sit on, dark spruces round the back.
     P.cyl(0.05, 0.05, 0.36, WOOD, { at: [0.48, 0.07, 0.62], rot: [0, 0.2, Math.PI / 2] }, 8),
     ...spruceParts(-0.68, 0.02, -0.25, 0.62, true),
-    ...spruceParts(0.25, 0.02, -0.42, 0.7, true),
-    ...spruceParts(0.66, 0.02, -0.12, 0.5, true),
+    // (Clear of the grass right of the tent, where Roxy stands.)
+    ...spruceParts(-0.12, 0.02, -0.6, 0.7, true),
+    ...spruceParts(0.74, 0.02, -0.42, 0.5, true),
     ...spruceParts(-0.62, 0.02, 0.32, 0.4, true),
   ]
   place.root.add(solid(merge(parts), bag, 1.5))
@@ -338,7 +396,7 @@ export function buildCamp(bag: Bag): Camp {
     flames.rotation.y = t * 0.8
     flutter(place, t)
   }
-  return { place, flames, peek: { hide: new Vector3(0.12, 0.04, -0.3), out: new Vector3(0.28, 0.04, -0.05) } }
+  return { place, flames, peek: { hide: new Vector3(0.38, 0.04, -0.2), out: new Vector3(0.5, 0.04, -0.08) } }
 }
 
 // ---------------------------------------------------------------- Banff: the turquoise lake

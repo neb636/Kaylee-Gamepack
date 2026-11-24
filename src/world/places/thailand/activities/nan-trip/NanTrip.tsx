@@ -1,4 +1,4 @@
-// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.md), Thailand's third trip (meta.ts
+// The Nan road trip (plan: nan-trip.md in git history), Thailand's third trip (meta.ts
 // `activities`), with its look and voices. The whole trip:
 //   the way there and home (Loop.tsx, the trip kit's legs): Mom asks where to (invite, 🏔️🚙), packing for the
 //   mountains (pack), the goodbye and Aunty Sri's van (goodbye), the x-ray belt (airport), the window seat north to Nan
@@ -14,7 +14,7 @@
 //   stop) drives the same 3 road to the same viewpoint (`three?to=lookout`): Mom's photo, then 🔁 or 🗺️ back to the
 //   map, no ✈️🏠. The trips start on the Thailand map: the first of a session packs and goes down
 //   the stairs straight to the window seat; later ones open straight on the Nan map.
-//   The Nan Mountain Cup (cup/, plan: thailand/nan-cup.md; rules in cup/rules.ts): the
+//   The Nan Mountain Cup (cup/, plan: nan-cup.md in git history; rules in cup/rules.ts): the
 //   city road ends at its race ground (section cup: the board), a kart race on each of three tracks (race), a podium
 //   after each (podium), the Cup ceremony after the third (cup-win), and its stamp on Nan town (stop `cup`). The Cup's
 //   record and the rolled loss ride along in the link (`cup`, `lose`) and are saved with the trip.

@@ -1,4 +1,4 @@
-// Act 2 of the Poles' new ending, Sing in the Dark (planning/around-the-world/poles-ending.md). The balloon is down
+// Act 2 of the Poles' new ending, Sing in the Dark (poles-ending.md in git history). The balloon is down
 // in the blizzard, it's dark, and Pebble's peep is too small for Papa to hear across Antarctica. So everyone sings it.
 //
 // The toy (core verb): hold Pebble, riding on Pola's back, and he sings Papa's song (party/sounds.ts TUNES[0]). The
@@ -47,17 +47,17 @@ const FILE = 'src/world/places/poles/activities/night/chorus.ts'
 /** The song ring (live in the feel lab: ?feel=1). */
 const RING = knobs('chorus', 'Sing in the Dark: the ring', FILE, {
   tap: { value: 0.22, min: 0.05, max: 0.6, step: 0.01, label: 'A tap, up to', unit: 's', note: 'a touch shorter than this is a peep (a little ring); longer is a hold' },
-  peep: { value: 1.3, min: 0.5, max: 5, step: 0.1, label: 'Peep ring', unit: 'm', note: 'how far a quick tap reaches' },
+  peep: { value: 1.3, min: 0.5, max: 5, step: 0.1, label: 'Peep ring', unit: 'm', note: 'how far a quick tap reaches', main: true },
   small: { value: 1.7, min: 0.5, max: 6, step: 0.1, label: 'Smallest hold', unit: 'm', note: 'the ring of a hold let go straight away' },
-  max: { value: 8, min: 3, max: 16, step: 0.5, label: 'Biggest ring', unit: 'm', note: 'the ring of a full hold' },
-  grow: { value: 2, min: 0.5, max: 6, step: 0.1, label: 'Hold to full', unit: 's', note: 'how long a hold takes to reach the biggest ring' },
+  max: { value: 8, min: 3, max: 16, step: 0.5, label: 'Biggest ring', unit: 'm', note: 'the ring of a full hold', main: true },
+  grow: { value: 2, min: 0.5, max: 6, step: 0.1, label: 'Hold to full', unit: 's', note: 'how long a hold takes to reach the biggest ring', main: true },
   curve: { value: 0.7, min: 0.3, max: 2, step: 0.05, label: 'Growth curve', note: 'under 1: it grows fast at first, then slows; over 1: slow, then fast' },
-  speed: { value: 4.5, min: 1, max: 20, step: 0.5, label: 'Ring speed', unit: 'm/s', note: 'how fast a ring rolls across the snow' },
+  speed: { value: 4.5, min: 1, max: 20, step: 0.5, label: 'Ring speed', unit: 'm/s', note: 'how fast a ring rolls across the snow', main: true },
   width: { value: 0.75, min: 0.3, max: 3, step: 0.1, label: 'Ring width', unit: 'm', note: 'how wide the band of color is' },
   glow: { value: 1.2, min: 0.3, max: 4, step: 0.1, label: 'Glow time', unit: 's', note: 'how long something stays lit after the ring passes it' },
   pity: { value: 3, min: 1, max: 8, step: 1, label: 'Answers after', note: 'rings that miss a hidden friend before it answers any ring (it glimmers brighter each miss)' },
-  big: { value: 2.2, min: 0.6, max: 6, step: 0.1, label: 'The big song', unit: 's', note: 'the hold the last song needs to reach the colony (halved after two short tries)' },
-})
+  big: { value: 2.2, min: 0.6, max: 6, step: 0.1, label: 'The big song', unit: 's', note: 'the hold the last song needs to reach the colony (halved after two short tries)', main: true },
+}, { sections: ['whiteout', 'edge', 'together'] })
 
 /** What Sparkle and the friends say (L.night.chorus, and the southern lights' fact from the hub). */
 export type ChorusTalk = 'start' | 'lights' | 'camo' | 'hat' | 'terry' | 'weddell' | 'adelies' | 'whale' | 'grr' | 'together' | 'long' | 'papa' | 'terryPoke' | 'pola' | 'skyFact'

@@ -10,14 +10,16 @@ The reference pictures in `art/source/mascot/` are exported from that puppet. Se
 **In 3D (Thailand):** the characters are built from code, not generated pictures, except Kaylee herself: she is a
 modelled vinyl toy made with Tripo3D and split in Blender into the same rig (`characters/model.ts`; the next family
 members follow `docs/3d-characters.md`). `characters/looks.ts` describes each
-family member (the user picked them from `planning/around-the-world/thailand/lineup.webp`). The shared
+family member (the user picked them from a lineup of concepts, 2026-10-17). The shared
 `src/world/engine3d/characters/animal.ts` builds the chibi rig from any `Look` (body, head, arms, tail on their own pivots;
 any 3D country's friends use it too), and `engine3d/characters/face.ts` blinks, looks at her and opens the
 mouth with the character's voice. They wave, hop, sit, lie down, do a wai: ease into each pose (lean, settle), never
 jump between poses in one frame. See them all at `#/world/thailand/hub/family` (`?who=<id>` for one on a turntable), or inspect any of them in the
 **character lab** `#/world/characters/<id>` (`thailand/lab/`): poses, actions in slow motion with a filmstrip, every line
-in their voice, Kaylee's outfits, lineups, light, lens and a PNG export, all kept in the URL. A new 3D character or
-Look goes in `lab/catalog.ts` so it shows up there.
+in their voice, Kaylee's outfits, lineups, light, lens and a PNG export, all kept in the URL. It holds every 3D country
+(a country switcher at the top of the cast, `?country=thailand|poles|canada`, All by default). A new 3D character or
+Look goes in `lab/catalog.ts` so it shows up there; a hand-built one (no `Look`: an elephant, a goose, a snowman) gets a
+small wrapper in `lab/toys.ts`.
 
 **In 2D:** a character is a **puppet**: layered SVG whose parts (ears, eyes, mouth, arms, tail) are separate `<g>` groups
 that `usePuppet` moves every frame:

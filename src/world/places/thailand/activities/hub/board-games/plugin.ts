@@ -1,4 +1,4 @@
-// The game table in Kaylee's room (planning/around-the-world/thailand/game-table.md): a house plugin, like her
+// The game table in Kaylee's room (game-table.md in git history): a house plugin, like her
 // wardrobe. Tap the table and she walks over and sits on her stool; then the screen fades and the game is out on a
 // floating board (stage.ts): a little island in a pastel sky, no characters in sight. The picker opens over it (a game,
 // a cousin with BB first, Play; the island shows the picked game's board and props as she picks). On Play the cousin
@@ -29,7 +29,7 @@ import { UnicornBoard } from './boards/unicorn'
 import { CardDeck } from './deck'
 import { Die } from './die'
 import { cousinFace, kayleeFace, pieceFace } from './faces'
-import { COUSINS, cousinUnicorn, GAMES, UNICORNS, type CousinId, type GameId, type UnicornColor } from './list'
+import { COUSINS, cousinUnicorn, GAMES, UNICORNS, type CousinId, type GameId, type UnicornColor, TABLE_SECTIONS } from './list'
 import { pawnParts, Piece, unicornParts } from './pieces'
 import { FloatingStage, onStage, STAGE_LAYER } from './stage'
 import { CANDY_FINISH, candyDraw, cardToken, newDeck, parseCard, type Card, type Deck } from './rules/candy'
@@ -43,9 +43,9 @@ const FINISH: Record<GameId, number> = { unicorn: UNICORN_END, candy: CANDY_FINI
 
 const FILE = 'src/world/places/thailand/activities/hub/board-games/plugin.ts'
 const FEEL = knobs('gameTable', 'Game table', FILE, {
-  rollTime: { value: 0.9, min: 0.4, max: 2, step: 0.05, label: 'Die roll', unit: 's', note: 'from her tap until the die settles' },
-  hopTime: { value: 0.22, min: 0.1, max: 0.6, step: 0.01, label: 'Hop per space', unit: 's', note: 'how long each hop to the next space takes' },
-  hopArc: { value: 0.045, min: 0.01, max: 0.12, step: 0.005, label: 'Hop height', unit: 'm' },
+  rollTime: { value: 0.9, min: 0.4, max: 2, step: 0.05, label: 'Die roll', unit: 's', note: 'from her tap until the die settles', main: true },
+  hopTime: { value: 0.22, min: 0.1, max: 0.6, step: 0.01, label: 'Hop per space', unit: 's', note: 'how long each hop to the next space takes', main: true },
+  hopArc: { value: 0.045, min: 0.01, max: 0.12, step: 0.005, label: 'Hop height', unit: 'm', main: true },
   cousinWait: { value: 0.6, min: 0, max: 2, step: 0.05, label: "Cousin's wait", unit: 's', note: 'a little anticipation before the cousin rolls' },
   passPause: { value: 0.45, min: 0, max: 1.5, step: 0.05, label: 'Pass pause', unit: 's', note: 'between one turn and the next' },
   restTime: { value: 1.05, min: 0.4, max: 2.5, step: 0.05, label: 'Rest on a 4', unit: 's', note: 'how long the unicorn naps' },
@@ -58,9 +58,9 @@ const FEEL = knobs('gameTable', 'Game table', FILE, {
   cardShow: { value: 0.6, min: 0.2, max: 1.6, step: 0.05, label: 'Card shown', unit: 's', note: 'Candy Land: how long the card and the glowing space show before the piece goes' },
   climbTime: { value: 1.1, min: 0.4, max: 3, step: 0.05, label: 'Ladder climb', unit: 's', note: 'Chutes and Ladders: rung by rung to the top' },
   slideTime: { value: 0.9, min: 0.3, max: 3, step: 0.05, label: 'Slide down', unit: 's', note: 'Chutes and Ladders: whee, down the slide' },
-  pieceSize: { value: 1.3, min: 0.8, max: 1.8, step: 0.05, label: 'Piece size', note: 'the unicorns and pawns (1: the greybox size)' },
-  candyHop: { value: 0.17, min: 0.08, max: 0.5, step: 0.01, label: 'Candy hop per space', unit: 's', note: 'Candy Land moves further, so a bit quicker' },
-})
+  pieceSize: { value: 1.3, min: 0.8, max: 1.8, step: 0.05, label: 'Piece size', note: 'the unicorns and pawns (1: the greybox size)', main: true },
+  candyHop: { value: 0.17, min: 0.08, max: 0.5, step: 0.01, label: 'Candy hop per space', unit: 's', note: 'Candy Land moves further, so a bit quicker', main: true },
+}, { sections: [...TABLE_SECTIONS] })
 
 export type Phase = 'off' | 'picking' | 'awaiting' | 'rolling' | 'moving' | 'special' | 'passing' | 'cousin' | 'finished'
 

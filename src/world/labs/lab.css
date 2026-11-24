@@ -949,7 +949,7 @@
   top: calc(var(--safe-top, 0px) + 8px);
   right: calc(var(--safe-right, 0px) + 8px);
   bottom: calc(var(--safe-bottom, 0px) + 8px);
-  width: min(320px, 42vw);
+  width: min(320px, calc(100% - 16px));
   z-index: 300;
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 20px 60px rgba(20, 20, 30, 0.22);
@@ -1063,4 +1063,44 @@
   .feel-graph canvas {
     height: 80px;
   }
+}
+/* The feel lab's groups: a fold per group, its main knobs, the rest under "More". */
+.feel-group-head {
+  align-items: center;
+}
+.feel-fold {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+.feel-caret {
+  width: 12px;
+  color: var(--muted);
+}
+.feel-badge {
+  margin-left: auto;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--pinkish);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.feel-more {
+  margin-top: 4px;
+  min-height: 30px;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 12px;
+}
+.feel-elsewhere {
+  margin-top: 8px;
 }

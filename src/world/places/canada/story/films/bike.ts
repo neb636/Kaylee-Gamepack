@@ -1,4 +1,4 @@
-// The bike chapter's two films (planning/around-the-world/canada.md), on Mont-Sainte-Anne (story/sets/bike.ts: the
+// The bike chapter's two films, on Mont-Sainte-Anne (story/sets/bike.ts: the
 // game's own mountain). Lines: lines.ts `L.bike.filmIn` and `L.bike.filmOut`, in play order.
 //
 // In (about 12 s): at the top of the trail by the gondola, Maple with her bike tells us about Monty, the biggest moose
@@ -268,7 +268,7 @@ export const BIKE_OUT: StoryFilm = {
         hold: 0.35,
         start: () => {
           // (It hangs right over his bare antler.)
-          const a = monty.rig.head.localToWorld(tmp.set(1.12 * monty.rig.face.R, monty.rig.face.headY + 1.3 * monty.rig.face.R, 0))
+          const a = monty.rig.head.localToWorld(tmp.set(1.12 * monty.rig.face.R, monty.rig.face.headY + 1.39 * monty.rig.face.R, -0.30 * monty.rig.face.R))
           set.cone.position.set(a.x, set.coneAt.y, a.z)
           set.cone.userData.hit = a.y
           bikeSfx.pinecone()

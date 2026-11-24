@@ -1,4 +1,4 @@
-// The sunset at the driftwood tree on Ao Prao (planning/around-the-world/thailand/samet-story.md; the first plan:
+// The sunset at the driftwood tree on Ao Prao (samet-story.md in git history; the first plan:
 // samet-trip.md (retired; in git history), step 9, the finale's first beat), on the island's real sunset beach (island/layout.ts FRAMES.prao)
 // once all four fireflies are found.
 //
@@ -43,20 +43,22 @@ const FILE = 'src/world/places/thailand/activities/samet-trip/finale/sunset.ts'
 const S = LINES.samet.finale.sunset
 /** How far Mom swings her phone arm up for the selfie (radians). */
 const SELFIE_LIFT = 2.5
+/** The section its knobs show in (the feel lab). */
+const SUNSET = ['sunset']
 const SUN = knobs('sunsetSun', 'Pulling the sun down', FILE, {
   start: { value: 9, min: 4, max: 25, step: 0.5, label: 'It starts this high', unit: '°' },
-  grab: { value: 150, min: 60, max: 300, step: 10, label: 'Grab it within', unit: 'px', note: 'her finger this close to the sun picks it up' },
-  follow: { value: 10, min: 2, max: 30, step: 0.5, label: 'It follows her finger', unit: '/s' },
+  grab: { value: 150, min: 60, max: 300, step: 10, label: 'Grab it within', unit: 'px', note: 'her finger this close to the sun picks it up', main: true },
+  follow: { value: 10, min: 2, max: 30, step: 0.5, label: 'It follows her finger', unit: '/s', main: true },
   alone: { value: 22, min: 8, max: 90, step: 1, label: 'Left alone it sets in', unit: 's', note: 'it sinks by itself while she doesn’t hold it, so an idle sunset never drags on (QA 2026-11-08: 75 s)' },
   hint: { value: 2.5, min: 0, max: 10, step: 0.5, label: 'The finger shows the pull after', unit: 's', note: 'until she has grabbed it once; then after 6 s with nothing done' },
   dusk: { value: 3, min: 1, max: 8, step: 0.25, label: 'Night falls in', unit: 's', note: 'after it touches the sea' },
-  size: { value: 9, min: 4, max: 20, step: 0.5, label: 'Sun size', unit: 'm', note: 'its radius, 260 m out to sea' },
-})
+  size: { value: 9, min: 4, max: 20, step: 0.5, label: 'Sun size', unit: 'm', note: 'its radius, 260 m out to sea', main: true },
+}, { sections: SUNSET })
 const CAM = knobs('sunsetCam', 'The sunset camera', FILE, {
   pitch: { value: 9, min: 0, max: 40, step: 1, label: 'Looks down', unit: '°' },
   box: { value: 4.2, min: 2, max: 12, step: 0.1, label: 'Shows across', unit: 'm' },
   tallBox: { value: 3.4, min: 2, max: 10, step: 0.1, label: '…on a tall screen', unit: 'm' },
-})
+}, { sections: SUNSET })
 
 export interface SunsetStart {
   flags: StopId[]

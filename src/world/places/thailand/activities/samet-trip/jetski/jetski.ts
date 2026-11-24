@@ -1,4 +1,4 @@
-// The jet ski at Hat Sai Kaew (the trip's story: planning/around-the-world/thailand/samet-story.md; the first plan:
+// The jet ski at Hat Sai Kaew (the trip's story: samet-story.md in git history; the first plan:
 // samet-trip.md (retired; in git history)): Kaylee steers, Dad sits behind her, in the island's real coordinates (island/layout.ts), so the bay
 // is the island's own bay.
 //
@@ -65,17 +65,19 @@ import { FIREFLIES } from '../story/firefly'
 import { TO_DEG, damp, wrapAngle } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/jetski/jetski.ts'
+/** The section its knobs show in (the feel lab). */
+const JET_SKIING = ['jetski']
 /** Steering: the drive control's feel (engine3d/drive.ts), zippier than the boats. */
 const HELM = knobs('jetHelm', 'Steering the jet ski', FILE, {
-  top: { value: 9.5, min: 4, max: 18, step: 0.25, label: 'Top speed', unit: 'm/s', note: 'cruising speed with her finger far ahead' },
+  top: { value: 9.5, min: 4, max: 18, step: 0.25, label: 'Top speed', unit: 'm/s', note: 'cruising speed with her finger far ahead', main: true },
   accel: { value: 7, min: 1, max: 16, step: 0.25, label: 'Speeding up', unit: 'm/s²', note: 'how quickly it gets going (slowing down is a little quicker)' },
   coast: { value: 0.55, min: 0.05, max: 2, step: 0.05, label: 'Gliding drag', unit: '/s', note: 'how fast it slows when she lets go (lower = glides further)' },
-  turn: { value: 2.0, min: 0.5, max: 4, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast it swings round at speed (slow, it turns half as fast)' },
-  grip: { value: 2.0, min: 0.4, max: 10, step: 0.1, label: 'Grip', note: 'how quickly a sideways slide dies out (low = it slides round tight turns)' },
+  turn: { value: 2.0, min: 0.5, max: 4, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast it swings round at speed (slow, it turns half as fast)', main: true },
+  grip: { value: 2.0, min: 0.4, max: 10, step: 0.1, label: 'Grip', note: 'how quickly a sideways slide dies out (low = it slides round tight turns)', main: true },
   near: { value: 2.5, min: 1, max: 8, step: 0.25, label: 'Crawl when this close', unit: 'm', note: 'her finger this close to the jet ski = a crawl' },
   far: { value: 18, min: 6, max: 40, step: 0.5, label: 'Full speed from', unit: 'm', note: 'her finger this far ahead = full speed' },
   dead: { value: 0.12, min: 0, max: 0.5, step: 0.01, label: 'Straight-ahead zone', unit: 'rad', note: 'a finger this close to straight ahead goes straight' },
-  gain: { value: 3, min: 1, max: 10, step: 0.25, label: 'Turn eagerness', unit: '×', note: 'how hard a finger off to one side asks it to turn (higher = the screen edge is a full turn, even on a phone)' },
+  gain: { value: 3, min: 1, max: 10, step: 0.25, label: 'Turn eagerness', unit: '×', note: 'how hard a finger off to one side asks it to turn (higher = the screen edge is a full turn, even on a phone)', main: true },
   spread: { value: 2.5, min: 1, max: 5, step: 0.1, label: 'Portrait turn width', unit: '×', note: 'on a tall screen a finger at the edge is only a little off the nose: this widens it, so the edge is a full turn in portrait too' },
   square: { value: 1, min: 0, max: 1, step: 0.05, label: 'Finger squares with the camera', note: '1 = straight up the screen is straight ahead, though the camera sits to the side; 0 = it pulls toward the camera side' },
   lean: { value: 0.34, min: 0, max: 0.7, step: 0.01, label: 'Lean into turns', unit: 'rad', note: 'how far it tips into a turn at full speed' },
@@ -84,7 +86,7 @@ const HELM = knobs('jetHelm', 'Steering the jet ski', FILE, {
   pitch: { value: 29, min: 10, max: 60, step: 1, label: 'Camera height', unit: '°', note: 'how far down the chase camera looks (higher shows your unicorn past Dad)' },
   side: { value: 16, min: -40, max: 40, step: 1, label: 'Camera to the side', unit: '°', note: 'how far round to one side of the jet ski the chase camera sits' },
   ahead: { value: 4, min: 0, max: 12, step: 0.25, label: 'Camera looks ahead', unit: 'm', note: 'how far ahead of the jet ski the camera looks at full speed' },
-})
+}, { sections: JET_SKIING })
 /** The waves and the jumps. */
 const WAVES = knobs('jetWaves', 'Waves and jumps', FILE, {
   ride: { value: 0.14, min: 0, max: 1, step: 0.01, label: 'Waves: ride', unit: 'm', note: 'crest height in the calm ride round' },
@@ -93,13 +95,13 @@ const WAVES = knobs('jetWaves', 'Waves and jumps', FILE, {
   length: { value: 17, min: 6, max: 40, step: 0.5, label: 'Between crests', unit: 'm' },
   speed: { value: 4.5, min: 0, max: 10, step: 0.25, label: 'Waves roll in at', unit: 'm/s' },
   hopFrom: { value: 0.9, min: 0.1, max: 4, step: 0.05, label: 'Jumps from', unit: 'm/s', note: 'how fast the water must lift it before a crest throws it in the air' },
-  hop: { value: 1.35, min: 0.5, max: 4, step: 0.05, label: 'Jump', unit: '×', note: 'how hard a crest throws it (times how fast the wave lifted it)' },
+  hop: { value: 1.35, min: 0.5, max: 4, step: 0.05, label: 'Jump', unit: '×', note: 'how hard a crest throws it (times how fast the wave lifted it)', main: true },
   spin: { value: 7.6, min: 3, max: 14, step: 0.1, label: 'Spins from', unit: 'm/s', note: 'a throw this hard spins it round in the air' },
   squash: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Squash on landing', unit: '×' },
   stars: { value: 10, min: 2, max: 30, step: 1, label: 'Stars to catch', note: 'the waves round moves on to the race after this many stars' },
   reach: { value: 4.5, min: 2, max: 9, step: 0.25, label: 'Star catch width', unit: 'm', note: 'how close she has to steer to catch a star' },
   drift: { value: 8, min: 3, max: 20, step: 0.5, label: 'Stars come to her after', unit: 's', note: 'a star she has not caught by then drifts toward her and sinks low' },
-})
+}, { sections: JET_SKIING })
 /** The rope, the sand, the silly things. */
 const SILLY = knobs('jetSilly', 'The rope, the sand, the silly things', FILE, {
   rope: { value: 7, min: 1, max: 20, step: 0.25, label: 'Rope springiness', unit: '/s²', note: 'how hard the stretched rope pulls her back' },
@@ -113,10 +115,10 @@ const SILLY = knobs('jetSilly', 'The rope, the sand, the silly things', FILE, {
   decent: { value: 10, min: 0, max: 60, step: 1, label: 'A decent ride', unit: 's', note: 'while Zoom is still to be found, the pink ring opens after this much riding, once Zoom has come alongside (she does when the jet ski is fast, or after a few seconds of riding anyway)' },
   wedge: { value: 0.7, min: 0.2, max: 3, step: 0.05, label: 'Pops off the rocks after', unit: 's', note: 'stuck against the rocks or sand this long and it bounces free' },
   pop: { value: 8, min: 3, max: 14, step: 0.25, label: 'Pops off at', unit: 'm/s', note: 'how hard it bounces free' },
-})
+}, { sections: JET_SKIING })
 /** The race. */
 const RACEK = knobs('jetRace', 'Racing the jet ski man', FILE, {
-  rival: { value: 0.9, min: 0.5, max: 1.3, step: 0.01, label: 'His speed', unit: '× hers', note: 'his top speed as a share of hers' },
+  rival: { value: 0.9, min: 0.5, max: 1.3, step: 0.01, label: 'His speed', unit: '× hers', note: 'his top speed as a share of hers', main: true },
   ahead: { value: 0.7, min: 0.3, max: 1, step: 0.01, label: 'Slows when ahead', unit: '×', note: 'his speed while he is ahead of her' },
   catchUp: { value: 1.08, min: 1, max: 1.4, step: 0.01, label: 'Catches up', unit: '×', note: 'his speed while she is far ahead (so it stays close)' },
   ease: { value: 0.08, min: 0, max: 0.3, step: 0.01, label: 'Easier after a loss', unit: '×', note: 'how much slower he goes after each race she loses' },
@@ -124,7 +126,7 @@ const RACEK = knobs('jetRace', 'Racing the jet ski man', FILE, {
   waitAt: { value: 0.85, min: 0.6, max: 0.95, step: 0.01, label: 'He waits at', note: 'how far round the course he stops to wait (0.5 is the buoy, 1 the line)' },
   waitGap: { value: 0.05, min: 0, max: 0.3, step: 0.01, label: 'Goes again when she is this close', note: 'he sets off again once she is this close behind him (0.05 is about 12 m)' },
   wide: { value: 9, min: 0, max: 25, step: 0.5, label: 'His wide turn', unit: 'm', note: 'how wide he swings round the buoy' },
-})
+}, { sections: JET_SKIING })
 
 export type JetSection = 'jetski'
 export type { JetRound } from './story'

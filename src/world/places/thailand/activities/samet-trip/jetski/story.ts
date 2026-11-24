@@ -1,4 +1,4 @@
-// Zoom, the pink firefly of the jet ski stop (the trip's story: planning/around-the-world/thailand/samet-story.md;
+// Zoom, the pink firefly of the jet ski stop (the trip's story: samet-story.md in git history;
 // how films work: docs/films.md). She loves to go fast: all night she has zoomed round the jet ski man's buoys, and
 // she only stops for someone fast.
 //

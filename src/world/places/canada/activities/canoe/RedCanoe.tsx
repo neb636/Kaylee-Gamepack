@@ -1,9 +1,10 @@
-// Red Canoe: Kaylee paddles Maple's red canoe across the turquoise lake to find Lulu the loon by the glacier (paddle.ts
+// Red Canoe: Kaylee paddles Maple's red canoe across the turquoise lake to find Lulu the loon's lost chick and take it
+// home to her by the glacier, and then Lulu sings for her (paddle.ts
 // is the world; it also does the talking: Maple's hello, Sparkle's one line per part and her help when she's stuck,
 // Maple's and the animals' reactions). After the chapter's way-in film (`filmed`) it starts on the water with Sparkle's
 // line; from a link or a replay Maple says hello at the dock first. The address bar follows her from part to part
 // (sections.ts). The bubble at the bottom shows what Sparkle said (tap it to hear it again). The stars fill part by part;
-// with Lulu and her chick at the glacier the celebration plays, then onDone (the film out and the stamp), and "again"
+// when Lulu has sung by the glacier the celebration plays, then onDone (the film out and the stamp), and "again"
 // sets off from the dock once more.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
@@ -21,11 +22,11 @@ import CANOE_SECTIONS, { type CanoeSection } from './sections'
 const SAY: Record<CanoeSection, { icon: string; line: Line }> = {
   story: { icon: '🦫', line: L.canoe.story },
   glide: { icon: '🛶', line: L.canoe.go },
-  stream: { icon: '✨', line: L.canoe.stream },
+  stream: { icon: '🐣', line: L.canoe.stream },
   loon: { icon: '🫧', line: L.canoe.loon },
-  glacier: { icon: '💙', line: L.canoe.family },
+  glacier: { icon: '🎵', line: L.canoe.sing },
 }
-const FOUND = { icon: '🏔️', line: L.canoe.found }
+const FOUND = { icon: '🐣', line: L.canoe.chickFound }
 
 export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
   const timers = useTimers()
@@ -36,6 +37,9 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
   const [found, setFound] = useState(false)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [done, setDone] = useState(false)
+  // The "again" button waits for the stamp: the first time through, the stamp takes over a few seconds after Lulu sings,
+  // so a button shown before it would only flash (empty, mid-pop) and vanish.
+  const [again, setAgain] = useState(false)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const finished = useRef(false)
@@ -57,11 +61,15 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
     done: () => {
       setDone(true)
       burst()
-      // The celebration plays (the loon family round the canoe, Maple cheering), then the stamp, the first time.
+      // Lulu has sung: the celebration plays (the loon family round the canoe, Maple cheering), then the stamp, the
+      // first time.
       if (!finished.current) {
         finished.current = true
-        stampTimer.current = timers.later(() => props.current.onDone(), DONE_S * 1000)
-      }
+        stampTimer.current = timers.later(() => {
+          props.current.onDone()
+          setAgain(true)
+        }, DONE_S * 1000)
+      } else setAgain(true)
     },
   })
 
@@ -72,6 +80,7 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
   }
   const restart = (s: CanoeSection) => {
     setDone(false)
+    setAgain(false)
     setFound(false)
     setSection(s)
     setRun((r) => ({ section: s, n: r.n + 1 }))
@@ -109,8 +118,8 @@ export function RedCanoe({ onDone, setProgress, filmed }: CanadaActivityProps) {
         </button>
       )}
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
-        {done && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 4, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
+        {done && again && (
+          <motion.div initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 4, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
             <BigButton onClick={() => restart('glide')} ariaLabel="Paddle again">
               🔁 🛶
             </BigButton>

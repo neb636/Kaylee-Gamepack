@@ -1,4 +1,4 @@
-// Misty's Bubble Bath (planning/around-the-world/canada-round-2.md): Misty the spirit bear is covered in mud; she rubs
+// Misty's Bubble Bath (canada-round-2.md in git history): Misty the spirit bear is covered in mud; she rubs
 // her clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.
 // #/world/canada/bath/<section>?look=... A section link sets the bath up as if she had played to there: the wash and
 // the story start muddy, the fluff clean and wet, the colors fluffy, the mirror in a finished look with the pool

@@ -1,5 +1,5 @@
 // Thailand: Kaylee's family's country, in 3D (plan: planning/around-the-world/thailand.md). She lands on the Thailand
-// map (activities/hub/map/, plan: thailand/thailand-map.md) and taps Bangkok, Krabi, Nan or Koh Samet. Bangkok
+// map (activities/hub/map/, plan: thailand-map.md in git history) and taps Bangkok, Krabi, Nan or Koh Samet. Bangkok
 // opens the Bangkok map (activities/hub/bangkok/, notes: thailand/bangkok-map.md): the house (activities/hub/, where
 // she walks around, meets her family and pokes everything) and ICONSIAM (the mall day) each have a pin there. The places the family
 // loves become activities, four of them, all built and on for Kaylee: the boat trip in Krabi (activities/boat-trip/: the

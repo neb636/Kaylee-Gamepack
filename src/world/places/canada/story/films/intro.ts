@@ -1,4 +1,4 @@
-// The way in to Maple's Team (planning/around-the-world/canada.md; docs/films.md, how films work): on Ottawa's
+// The way in to Maple's Team (docs/films.md, how films work): on Ottawa's
 // frozen canal Maple skates alone. There is the Maple Cup; here come the geese, who win it every year. Last winter
 // (the storybook look) she played all by herself: six geese, one beaver. She can't win alone. She needs a team, and
 // her friends live all across Canada. About 40 seconds. Lines: lines.ts `L.story.intro`, in this order.

@@ -1,4 +1,4 @@
-// Act 1 of the Poles' new ending, Hold to Fly (planning/around-the-world/poles-ending.md): she's the balloon's pilot,
+// Act 1 of the Poles' new ending, Hold to Fly (poles-ending.md in git history): she's the balloon's pilot,
 // flying Pola and Pebble down the world from the Arctic to the long southern night.
 //
 // The toy (core verb): hold a finger down anywhere (click and hold on a Mac) and the burner roars, the air heats and
@@ -51,22 +51,22 @@ import { flySfx } from './sounds'
 const FILE = 'src/world/places/poles/activities/night/fly.ts'
 /** How the balloon flies (live in the feel lab: ?feel=1). Heights are the middle of the balloon over the sea. */
 const FLY = knobs('balloon', 'Hold to Fly: the balloon', FILE, {
-  lift: { value: 3.6, min: 0.5, max: 10, step: 0.1, label: 'Rise', unit: 'm/s', note: 'how fast the balloon climbs while she holds' },
-  sink: { value: 1.5, min: 0.3, max: 6, step: 0.1, label: 'Sink', unit: 'm/s', note: 'how fast it sinks when she lets go' },
-  ease: { value: 2.2, min: 0.5, max: 10, step: 0.1, label: 'Response', unit: '/s', note: 'how quickly it starts rising or sinking (low = heavy and floaty)' },
-  pink: { value: 7.5, min: 2, max: 20, step: 0.5, label: 'Pink wind (south)', unit: 'm/s', note: 'how fast the high pink wind carries it south' },
+  lift: { value: 3.6, min: 0.5, max: 10, step: 0.1, label: 'Rise', unit: 'm/s', note: 'how fast the balloon climbs while she holds', main: true },
+  sink: { value: 1.5, min: 0.3, max: 6, step: 0.1, label: 'Sink', unit: 'm/s', note: 'how fast it sinks when she lets go', main: true },
+  ease: { value: 2.2, min: 0.5, max: 10, step: 0.1, label: 'Response', unit: '/s', note: 'how quickly it starts rising or sinking (low = heavy and floaty)', main: true },
+  pink: { value: 7.5, min: 2, max: 20, step: 0.5, label: 'Pink wind (south)', unit: 'm/s', note: 'how fast the high pink wind carries it south', main: true },
   blue: { value: 1.6, min: 0, max: 6, step: 0.1, label: 'Blue wind (north)', unit: 'm/s', note: 'how fast the low blue streaks blow back north (drawn; the balloon still creeps south)' },
   crawl: { value: 1.4, min: 0.3, max: 5, step: 0.1, label: 'Slowest drift', unit: 'm/s', note: 'out of the pink wind it still creeps south this fast (it never stops)' },
   pinkLow: { value: 11, min: 6, max: 16, step: 0.25, label: 'Pink wind from', unit: 'm', note: 'the bottom of the pink wind' },
   pinkHigh: { value: 15, min: 8, max: 18, step: 0.25, label: 'Pink wind to', unit: 'm', note: 'the top of the pink wind' },
   blueLow: { value: 4.5, min: 3.5, max: 9, step: 0.25, label: 'Blue wind from', unit: 'm' },
   blueHigh: { value: 8.5, min: 5, max: 12, step: 0.25, label: 'Blue wind to', unit: 'm' },
-  widen: { value: 1, min: 0, max: 3, step: 0.1, label: 'Help: pink widens', unit: 'm', note: 'after a slow stretch the pink wind grows this much wider downward (twice at most)' },
+  widen: { value: 1, min: 0, max: 3, step: 0.1, label: 'Help: pink widens', unit: 'm', note: 'after a slow stretch the pink wind grows this much wider downward (twice at most)', main: true },
   gust: { value: 3.2, min: 0, max: 8, step: 0.1, label: 'Blizzard gusts', unit: 'm/s', note: 'how hard a gust pushes the balloon down in the storm' },
   gustEvery: { value: 2.6, min: 0.8, max: 8, step: 0.1, label: 'Gust every', unit: 's' },
   takeover: { value: 2.5, min: 0.5, max: 10, step: 0.25, label: 'Pink wind, then the film', unit: 's', note: 'how long she rides the pink wind herself before the wind takes over and the rest plays like a film' },
   cruise: { value: 18, min: 6, max: 40, step: 0.5, label: 'Film speed south', unit: 'm/s', note: 'how fast the balloon races south once the wind has taken over (the whole way is 735 m)' },
-})
+}, { sections: ['fly'] })
 
 export type FlyLeg = 'north' | 'warm' | 'south'
 export interface FlyStart {

@@ -164,6 +164,13 @@
   "loop": true
  },
  {
+  "id": "bike-carve",
+  "label": "Tires carving through leaves (loop)",
+  "prompt": "A kids' mountain bike carving a hard turn on a dirt forest trail: the tires slide and swish through dry crunchy autumn leaves and loose dirt, a soft continuous skidding hiss. Even, gentle, not harsh. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
   "id": "bike-bell",
   "label": "The bike bell",
   "prompt": "A bright little bicycle bell, two cheerful dings, clear and sweet, not shrill.",
@@ -399,6 +406,24 @@
   "label": "An enormous splash",
   "prompt": "A huge, funny cartoon splash: a big bear's paw slapping into a river pool, a deep whoomp of water and a shower of drops falling back down. Soft, not scary.",
   "seconds": 1.6
+ },
+ {
+  "id": "salmon-mudslide",
+  "label": "Bottom-slide down the muddy bank",
+  "prompt": "A cartoon bear sliding down a wet muddy bank on its bottom: a long squelchy, slippery mud slide getting faster, soft squishes and a few wet flicks. Funny and soft, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "salmon-bubbles",
+  "label": "Bubbles under the water",
+  "prompt": "Big bubbles coming up from under a pool of water: a few soft, round blub-blub-blub bubble pops at the surface, cute and gentle.",
+  "seconds": 1
+ },
+ {
+  "id": "salmon-popup",
+  "label": "Pops up out of the pool",
+  "prompt": "Something bobbing up out of a pool of water: a round watery sploosh upward and water streaming and dripping off, soft and funny.",
+  "seconds": 0.9
  },
  {
   "id": "salmon-swing",
@@ -738,6 +763,13 @@
   "loop": true
  },
  {
+  "id": "canoe-creek",
+  "label": "The glacier creek and its waterfall (near it)",
+  "prompt": "A lively little mountain creek: a small waterfall splashing into a rocky pool and clear water bubbling and rushing over pebbles. Bright, gentle, steady, close. Seamless loop, no voices, no music.",
+  "seconds": 6,
+  "loop": true
+ },
+ {
   "id": "hub-hoot",
   "label": "The snowy owl hoots",
   "prompt": "A soft, round, friendly cartoon owl hooting twice, hoo hoo, gentle and cozy, a little sleepy and sweet.",
@@ -959,6 +991,42 @@
   "label": "The northern lights shimmer",
   "prompt": "A soft airy shimmering swell of glassy chimes and gentle wind high in the sky, magical and calm, slowly rising and fading, no melody.",
   "seconds": 4
+ },
+ {
+  "id": "campfire-wish",
+  "label": "A wish bubble pops up (what they want)",
+  "prompt": "A soft cute bubbly pop with a tiny rising sparkle, like a thought bubble appearing over a cartoon character's head, gentle and light, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "campfire-ready",
+  "label": "Just the right marshmallow: now!",
+  "prompt": "A bright cheerful three-note glockenspiel chime going up, quick and twinkly, like a cartoon 'ding, it's ready!', soft and sweet, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-star",
+  "label": "Given right: a gold star",
+  "prompt": "A happy magical sparkle ta-da: a shimmering twinkle swirl rising up with a soft chime at the end, like a gold star appearing in a children's game, gentle, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "campfire-bag",
+  "label": "A marshmallow out of the bag",
+  "prompt": "A small paper bag crinkling softly as a paw reaches in, then a tiny soft squishy pop as a marshmallow is pulled out, light and cute, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-skewer",
+  "label": "A marshmallow onto the stick",
+  "prompt": "A soft squishy cartoon squelch-plop as a marshmallow is pushed onto a wooden stick, short, light and funny, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "campfire-branch",
+  "label": "Monty eats the branch",
+  "prompt": "A big gentle cartoon moose crunching and munching a dry wooden stick: three loud woody crunches, funny and friendly, no voices.",
+  "seconds": 1.4
  },
  {
   "id": "whales-bubbles",

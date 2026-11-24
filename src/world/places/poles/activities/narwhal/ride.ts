@@ -38,30 +38,32 @@ import type { NarwhalSection } from './sections'
 import { rideSfx } from './sounds'
 
 const FILE = 'src/world/places/poles/activities/narwhal/ride.ts'
+/** Where she steers Nari: the sections these knobs tune. */
+const SWIMMING = ['open', 'bergs', 'under', 'glacier']
 /** The finger wheel: the numbers tuned by hand for the Nan drive and the Penguin Slide's swim, as the start for a narwhal. */
 const STEER = knobs('nari', 'Steering Nari', FILE, {
-  slide: { value: 6, min: 1, max: 12, step: 0.1, label: 'Sideways speed', unit: 'm/s', note: 'how fast a full push swims her across the channel' },
-  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
+  slide: { value: 6, min: 1, max: 12, step: 0.1, label: 'Sideways speed', unit: 'm/s', note: 'how fast a full push swims her across the channel', main: true },
+  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)', main: true },
   dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
   curve: { value: 1.3, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
   ease: { value: 0.08, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
   aim: { value: 10, min: 3, max: 24, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'the nearest point she steers toward: closer = sharper, but she swings back and forth' },
   pull: { value: 1.2, min: 0, max: 4, step: 0.1, label: 'Aim closer when far off', note: 'per meter she is from where the finger steers: a full push swerves more' },
-  turn: { value: 0.6, min: 0.2, max: 1.2, step: 0.02, label: 'Sharpest swerve', unit: 'rad', note: 'how steeply she can cut across the channel' },
+  turn: { value: 0.6, min: 0.2, max: 1.2, step: 0.02, label: 'Sharpest swerve', unit: 'rad', note: 'how steeply she can cut across the channel', main: true },
   back: { value: 1.6, min: 0.3, max: 4, step: 0.1, label: 'Back to the middle', unit: 's', note: 'how slowly she drifts back to the middle of the channel after the finger lets go' },
-})
+}, { sections: SWIMMING })
 /** The ride itself. */
 const RIDE = knobs('nariRide', 'The ride', FILE, {
-  speed: { value: 12, min: 3, max: 20, step: 0.25, label: 'Swim speed', unit: 'm/s', note: 'among the icebergs and by the glacier' },
+  speed: { value: 12, min: 3, max: 20, step: 0.25, label: 'Swim speed', unit: 'm/s', note: 'among the icebergs and by the glacier', main: true },
   calm: { value: 0.88, min: 0.4, max: 1, step: 0.02, label: 'Open water', unit: '×', note: 'swim speed on the first stretch, as a share' },
   under: { value: 0.82, min: 0.4, max: 1, step: 0.02, label: 'Under the ice', unit: '×', note: 'swim speed under the sea ice, as a share' },
-  pop: { value: 5.6, min: 2, max: 10, step: 0.2, label: 'Pop off a ramp', unit: 'm/s', note: 'how hard a ramp of ice throws her up' },
+  pop: { value: 5.6, min: 2, max: 10, step: 0.2, label: 'Pop off a ramp', unit: 'm/s', note: 'how hard a ramp of ice throws her up', main: true },
   gravity: { value: 13, min: 5, max: 30, step: 0.5, label: 'Gravity in the air', unit: 'm/s²', note: 'lower = floatier jumps' },
-  magnet: { value: 1.8, min: 0.6, max: 4, step: 0.1, label: 'Fish come to her', unit: 'm', note: 'a school this close is scooped up' },
+  magnet: { value: 1.8, min: 0.6, max: 4, step: 0.1, label: 'Fish come to her', unit: 'm', note: 'a school this close is scooped up', main: true },
   bounce: { value: 4.5, min: 0, max: 10, step: 0.25, label: 'Boing off the ice', unit: 'm/s', note: 'how hard a floe or an iceberg bounces her aside' },
   lean: { value: 0.9, min: 0, max: 2, step: 0.05, label: 'Lean into turns', unit: '×', note: 'how far she rolls when she swerves' },
   wave: { value: 2.2, min: 0, max: 5, step: 0.1, label: 'Lift off a wave', unit: '×', note: "how hard a rolling wave's crest throws her up" },
-})
+}, { sections: SWIMMING })
 
 export interface RideStart {
   section: NarwhalSection

@@ -1,4 +1,4 @@
-// The Poles' film stage (docs/films.md; the story: planning/around-the-world/poles.md): one small 3D world that
+// The Poles' film stage (docs/films.md): one small 3D world that
 // only plays films. It has the story's sets (the Arctic's floating ice, the autumn tundra, Antarctica by day and in
 // its long night, and the little globe the red ship sails up), its whole cast as actors (story/actor.ts) and its
 // props (story/props.ts). A film (story/films.ts) picks a set, puts the actors on their marks and tells them what to

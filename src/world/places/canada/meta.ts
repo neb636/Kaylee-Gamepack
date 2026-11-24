@@ -1,4 +1,3 @@
-import { FLAGS } from '../../../flags'
 import colorMaple from './assets/bg-color-maple.webp'
 import colorMoose from './assets/bg-color-moose.webp'
 import colorParade from './assets/bg-color-parade.webp'
@@ -16,7 +15,7 @@ import puzzleOrcas from './assets/scene-puzzle-orcas.webp'
 import type { PlaceMeta } from '../../types'
 import { L } from './lines'
 
-// Canada is one story, "Maple's Team" (planning/around-the-world/canada.md): Maple the beaver wants to win the Maple
+// Canada is one story, "Maple's Team": Maple the beaver wants to win the Maple
 // Cup, the hockey game on Ottawa's frozen canal, and her friends live all across Canada. The hub is a 3D toy map of
 // the country with each friend standing where they live; each of the six chapters (a film, the game, a film) brings
 // one friend home to the team, and with all six stamps the big game opens in Ottawa: its win is the Canada Champion
@@ -78,7 +77,5 @@ const meta: PlaceMeta = {
   ],
   passportLine: L.passport,
   createdAt: '2026-10-27',
-  // Maple's Team is on her map only when this PostHog flag is on: testers only until it's played (src/flags.ts).
-  featureFlag: FLAGS.newCanadaPin,
 }
 export default meta

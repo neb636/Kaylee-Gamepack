@@ -1,4 +1,4 @@
-// Koh Samet, the island between the stops (notes: planning/around-the-world/thailand/samet-story.md): the north half
+// Koh Samet, the island between the stops (notes: samet-story.md in git history): the north half
 // of the island at 1:10 (layout.ts, from OpenStreetMap). It was built as one open world to roam; now it is where the
 // story happens between the stops, and she never has to cross it on foot.
 //
@@ -78,21 +78,23 @@ import { cleanSfx } from '../book/sounds'
 import { TO_DEG, damp, smoothstep, wrapAngle } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/island/island.ts'
+/** The section its knobs show in (the feel lab). */
+const ON_THE_ISLAND = ['island']
 /** Leading Kaylee (and the floatie). */
 const WALK = knobs('sametWalk', 'Leading your unicorn round the island', FILE, {
-  trot: { value: 2.3, min: 0.8, max: 5, step: 0.1, label: 'Trot', unit: 'm/s', note: 'her speed with the finger a little way ahead' },
-  gallop: { value: 4.6, min: 2, max: 9, step: 0.1, label: 'Gallop', unit: 'm/s', note: 'her speed with the finger far ahead' },
+  trot: { value: 2.3, min: 0.8, max: 5, step: 0.1, label: 'Trot', unit: 'm/s', note: 'her speed with the finger a little way ahead', main: true },
+  gallop: { value: 4.6, min: 2, max: 9, step: 0.1, label: 'Gallop', unit: 'm/s', note: 'her speed with the finger far ahead', main: true },
   gallopFrom: { value: 5.5, min: 2, max: 14, step: 0.25, label: 'Gallop from', unit: 'm', note: 'her finger this far ahead of her = full gallop' },
   stopNear: { value: 0.45, min: 0.1, max: 2, step: 0.05, label: 'Stop this close', unit: 'm', note: 'she stops when the finger is this close' },
   giveUp: { value: 1.5, min: 0.5, max: 5, step: 0.1, label: 'Gives up on a tap after', unit: 's', note: 'walking to a tapped spot and getting no closer for this long, she stops (no pacing back and forth by a rail)' },
-  swim: { value: 1.5, min: 0.5, max: 4, step: 0.1, label: 'Swim', unit: 'm/s', note: 'paddling in the floatie (slower than walking)' },
+  swim: { value: 1.5, min: 0.5, max: 4, step: 0.1, label: 'Swim', unit: 'm/s', note: 'paddling in the floatie (slower than walking)', main: true },
   deep: { value: 0.5, min: 0.2, max: 1.2, step: 0.05, label: 'Swims from', unit: 'm deep', note: 'shallower than this she wades' },
   far: { value: 26, min: 8, max: 60, step: 1, label: 'Swim out to', unit: 'm', note: 'how far from the shore she can paddle' },
   wave: { value: 0.42, min: 0, max: 1.2, step: 0.02, label: 'Wave height', unit: 'm', note: 'the swell rolling in to the beach she is near' },
   spin: { value: 0.78, min: 0.3, max: 1, step: 0.02, label: 'A wave spins her from', note: 'how high on a crest (0..1) before the floatie spins round' },
   holdLeads: { value: 0.22, min: 0.08, max: 0.6, step: 0.02, label: 'A held finger leads after', unit: 's', note: 'a finger held on an umbrella, a chair, a palm... starts leading her after this long' },
   tapUpTo: { value: 0.5, min: 0.2, max: 0.9, step: 0.02, label: 'Still a tap up to', unit: 's', note: 'let go sooner than this and the thing under her finger gets its poke' },
-})
+}, { sections: ON_THE_ISLAND })
 const CAM = knobs('sametCam', 'The island camera', FILE, {
   pitch: { value: 31, min: 15, max: 70, step: 1, label: 'Looks down', unit: '°' },
   box: { value: 5.2, min: 3, max: 16, step: 0.25, label: 'Shows round her', unit: 'm', note: 'half the width of ground that fits across the screen' },
@@ -101,15 +103,15 @@ const CAM = knobs('sametCam', 'The island camera', FILE, {
   lag: { value: 0.35, min: 0.05, max: 1.2, step: 0.05, label: 'Follows her', unit: 's' },
   far: { value: 95, min: 40, max: 400, step: 5, label: 'Draws plants out to', unit: 'm', note: 'further trees are left to the haze (fewer triangles on the iPad)' },
   forest: { value: 54, min: 25, max: 80, step: 1, label: 'Looks down in the forest', unit: '°', note: 'on the roads and paths through the trees the camera rises over them' },
-})
+}, { sections: ON_THE_ISLAND })
 const RIDE = knobs('sametRide', 'Her jet ski (and how close things answer a tap)', FILE, {
-  near: { value: 7, min: 3, max: 15, step: 0.5, label: 'Close enough from', unit: 'm', note: 'she can hop on a jet ski this close to it; the taxi glows, and a tapped thing farther than this has her walk over first' },
-  top: { value: 9.5, min: 4, max: 18, step: 0.25, label: 'Jet ski top speed', unit: 'm/s' },
+  near: { value: 7, min: 3, max: 15, step: 0.5, label: 'Close enough from', unit: 'm', note: 'she can hop on a jet ski this close to it; the taxi glows, and a tapped thing farther than this has her walk over first', main: true },
+  top: { value: 9.5, min: 4, max: 18, step: 0.25, label: 'Jet ski top speed', unit: 'm/s', main: true },
   accel: { value: 7, min: 1, max: 16, step: 0.25, label: 'Jet ski speeding up', unit: 'm/s²' },
-  turnRate: { value: 2, min: 0.5, max: 4, step: 0.05, label: 'Jet ski turn rate', unit: 'rad/s' },
+  turnRate: { value: 2, min: 0.5, max: 4, step: 0.05, label: 'Jet ski turn rate', unit: 'rad/s', main: true },
   grip: { value: 2, min: 0.4, max: 10, step: 0.1, label: 'Jet ski grip' },
   dock: { value: 4.5, min: 1, max: 10, step: 0.25, label: 'Lands on a beach below', unit: 'm/s', note: 'slower than this onto a beach and she hops off; faster and it bounces off' },
-})
+}, { sections: ON_THE_ISLAND })
 
 /** The beach puppy who shows her the way (#357 way-finding, card B). */
 const PUP = knobs('sametPuppy', 'The beach puppy', FILE, {
@@ -121,7 +123,7 @@ const PUP = knobs('sametPuppy', 'The beach puppy', FILE, {
   reach: { value: 45, min: 15, max: 120, step: 5, label: 'Leads her up to', unit: 'm', note: 'he runs ahead to a stop only when it is this close (on the beach she is on); the pictures take her to the others' },
   slide: { value: 2.4, min: 1, max: 5, step: 0.1, label: 'The sand slide takes', unit: 's' },
   frame: { value: 11, min: 4, max: 20, step: 0.5, label: 'Taxi in the picture within', unit: 'm', note: 'she is this close to the waiting taxi: the camera takes it in too' },
-})
+}, { sections: ON_THE_ISLAND })
 
 export type IslandFlag = StopId
 export interface IslandStart {

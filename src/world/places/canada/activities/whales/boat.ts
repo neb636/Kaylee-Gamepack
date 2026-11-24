@@ -1,7 +1,8 @@
 // Whale Watch's boat: a little Tofino whale-watching boat, the kind with fat pink tubes all round, a grey floor, a
 // console with a windscreen and a wheel in the middle, an outboard motor at the back, a little flag on a pole. Maple
 // (maple.ts, on the chibi rig) stands at the wheel in her life jacket and turns it as the boat turns. The yellow
-// underwater microphone sits on its reel by the stern and goes down on its cable when Kaylee listens.
+// underwater microphone sits on its reel by the stern and goes down on its cable when Kaylee listens. Ollie rides in the
+// bow, on her back across the cool box (`SEAT`).
 //
 // The world (watch.ts) moves and tips the whole boat (`root`, `body`) and tells Maple what to do.
 //
@@ -27,8 +28,8 @@ const WHEEL = new Vector3(0, 0.92, -0.5)
 /** The microphone's reel (on the boat's left, by the stern) and where the cable goes over the side. */
 const REEL = new Vector3(0.78, 0.72, -1.7)
 const OVER = new Vector3(1.25, 0.62, -1.7)
-/** Where the tow rope is tied (the stern, by the motor). */
-const STERN = new Vector3(0.35, 0.7, -2.55)
+/** Where Ollie rides: on her back across the bow, over the cool box (her middle; she lies from tube to tube). */
+export const SEAT = new Vector3(0, 0.79, 1.2)
 
 const Y = new Vector3(0, 1, 0)
 const tv = new Vector3()
@@ -74,7 +75,6 @@ export class Boat {
   private wheel = new Group()
   private flag = new Group()
   private cable: Bone
-  private towRope: Bone
 
   constructor(bag: Bag) {
     this.root.add(this.body)
@@ -146,16 +146,12 @@ export class Boat {
     this.mic.add(solid(merge([P.capsule(0.12, 0.22, MIC), P.sphere(0.1, '#4A4458', { at: [0, -0.22, 0] }), P.torus(0.13, 0.025, '#4A4458', { at: [0, 0.05, 0], rot: [Math.PI / 2, 0, 0] })]), bag, 2))
     this.body.add(this.mic)
     this.cable = new Bone(bag, 0.018, '#4A4458', this.body, 1)
-    this.towRope = new Bone(bag, 0.025, '#FFE9A8', this.body, 1)
-    this.towRope.g.visible = false
   }
 
-  /** The tow rope from the stern to a point in the world (Ollie's paws), or none. Call after the boat has moved. */
-  rope(to: Vector3 | null) {
-    this.towRope.g.visible = !!to
-    if (!to) return
+  /** Ollie's spot in the bow, in the world. Call after the boat has moved. */
+  seatAt(out: Vector3) {
     this.body.updateWorldMatrix(true, false)
-    this.towRope.set(STERN, this.body.worldToLocal(tv.copy(to)))
+    return this.body.localToWorld(out.copy(SEAT))
   }
 
   // ---- Maple's actions.

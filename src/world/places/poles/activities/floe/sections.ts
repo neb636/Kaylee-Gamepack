@@ -1,4 +1,4 @@
-// Ice Floe Hop (plan: planning/around-the-world/poles.md): fling Pola, with Pebble on her back, floe to floe to Mama
+// Ice Floe Hop: fling Pola, with Pebble on her back, floe to floe to Mama
 // Bear. (No opening section: the film before it, story/films.ts `floe-in`, tells why; the game starts on the big floes.)
 // #/world/poles/floe/<section>?layout=2. A section link starts Pola on that stage's first floe.
 // Loaded at startup by the section index (keep three.js out of this file).

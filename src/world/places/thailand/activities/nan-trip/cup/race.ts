@@ -1,4 +1,4 @@
-// The Nan Mountain Cup's race (section `race`, plan: planning/around-the-world/thailand/nan-cup.md; greybox 1: the
+// The Nan Mountain Cup's race (section `race`, plan: nan-cup.md in git history; greybox 1: the
 // kart toy, greybox 2: the other two tracks, step 4: the look). Kaylee drives her pink kart against Grandma
 // Taeng, Pao and Moon (toy animals on the chibi rig, riders.ts) from the start line to the finish, one run along a track (track.ts: `forest`, `steps`, `cloud`), not
 // laps.
@@ -66,11 +66,13 @@ import { smoothstep, wrapAngle } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/nan-trip/cup/race.ts'
 /** Her kart: how it drives under her finger. */
+/** The kart's groups belong to the race (section `race`) only. */
+const RACE = ['race']
 const KART = knobs('kart', 'Her kart', FILE, {
-  top: { value: 17.5, min: 6, max: 26, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Dad, 2026-11-09: 35% faster (was 13)' },
+  top: { value: 17.5, min: 6, max: 26, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Dad, 2026-11-09: 35% faster (was 13)', main: true },
   accel: { value: 12, min: 2, max: 25, step: 0.5, label: 'Speeding up', unit: 'm/s²' },
-  turn: { value: 2.4, min: 0.8, max: 5, step: 0.1, label: 'Turn toward her line', unit: 'rad/s', note: 'how hard it turns toward where she steers' },
-  grip: { value: 4, min: 0.5, max: 12, step: 0.1, label: 'Grip', unit: '1/s', note: 'low = it slides wide through the bends' },
+  turn: { value: 2.4, min: 0.8, max: 5, step: 0.1, label: 'Turn toward her line', unit: 'rad/s', note: 'how hard it turns toward where she steers', main: true },
+  grip: { value: 4, min: 0.5, max: 12, step: 0.1, label: 'Grip', unit: '1/s', note: 'low = it slides wide through the bends', main: true },
   near: { value: 9, min: 3, max: 20, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'how far up the road the kart aims for her line (plus a bit more when fast)' },
   offRoad: { value: 1.5, min: 0, max: 4, step: 0.1, label: 'Steer onto the grass, up to', unit: 'm past the road', note: 'a full push holds there and steers no further' },
   cruise: { value: 0.62, min: 0.2, max: 1, step: 0.02, label: 'No finger: cruising', unit: '× top' },
@@ -78,41 +80,41 @@ const KART = knobs('kart', 'Her kart', FILE, {
   coin: { value: 0.012, min: 0, max: 0.05, step: 0.002, label: 'Each coin', unit: '× top', note: 'up to ten coins' },
   pad: { value: 1.3, min: 0.3, max: 3, step: 0.1, label: 'Arrow pad', unit: 's of burst' },
   boost: { value: 1.6, min: 1, max: 2.5, step: 0.05, label: 'Burst speed', unit: '× top' },
-})
+}, { sections: RACE })
 /** Her finger wheel (sled style, engine3d/wheel.ts): the Nan drive's numbers (drive/mountain.ts STEER, Dad's, tuned
  *  by hand 2026-10-27), with a slide to suit the kart. */
 const WHEEL = knobs('wheel', 'Steering (the finger wheel)', FILE, {
-  slide: { value: 7, min: 1, max: 14, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the kart across the road' },
-  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
+  slide: { value: 7, min: 1, max: 14, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the kart across the road', main: true },
+  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)', main: true },
   dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
   curve: { value: 1.3, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
   ease: { value: 0.08, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
-})
+}, { sections: RACE })
 /** The bouncy mushrooms (the Driver's gravity is 18 m/s²: 8.5 m/s up is about 2 m high, 0.95 s in the air). */
 const BOUNCE = knobs('bounce', 'Bouncy mushrooms', FILE, {
-  up: { value: 8.5, min: 3, max: 16, step: 0.5, label: 'Bounce', unit: 'm/s up' },
+  up: { value: 8.5, min: 3, max: 16, step: 0.5, label: 'Bounce', unit: 'm/s up', main: true },
   big: { value: 11.5, min: 4, max: 20, step: 0.5, label: 'The big one', unit: 'm/s up' },
   launch: { value: 0.6, min: 0, max: 2, step: 0.05, label: 'Burst off the cap', unit: 's of burst', note: 'she flies on forward (the old slow motion up there felt like the kart stopped, 2026-11-13)' },
-})
+}, { sections: RACE })
 /** The rice steps' puddles and the waterfall. */
 const MUD = knobs('mud', 'Puddles and mud', FILE, {
   each: { value: 0.34, min: 0.1, max: 1, step: 0.02, label: 'Mud per puddle', unit: '× all muddy', note: 'about three puddles and the kart is as muddy as it gets' },
   fast: { value: 0.1, min: 0, max: 0.3, step: 0.01, label: 'All muddy: faster by', unit: '× top' },
   splash: { value: 0.35, min: 0, max: 1.5, step: 0.05, label: 'Splash slow motion', unit: 's' },
   wash: { value: 1.2, min: 0, max: 3, step: 0.1, label: 'The waterfall: burst', unit: 's of burst' },
-})
+}, { sections: RACE })
 /** The cloud on the climb, its lanterns and the blossom showers. */
 const CLOUD = knobs('cloud', 'The cloud and the blossoms', FILE, {
   see: { value: 40, min: 15, max: 150, step: 5, label: 'In the cloud she sees', unit: 'm', note: 'how far before everything is white (the lanterns glow through it)' },
   lantern: { value: 1.8, min: 0.8, max: 3.5, step: 0.1, label: 'Under a lantern within', unit: 'm across' },
   petals: { value: 1.1, min: 0.2, max: 3, step: 0.1, label: 'Through the blossoms', unit: 's of burst' },
-})
+}, { sections: RACE })
 /** The rivals' rubber band (trip/race/rubber.ts). */
 const BAND = knobs('rivals', "The rivals' rubber band", FILE, {
   gap: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Gap', unit: '× the story', note: 'how far ahead or behind her they want to be (0 = right beside her all race)' },
   pull: { value: 0.32, min: 0.05, max: 1.2, step: 0.01, label: 'Pull to the story', unit: 'm/s per m' },
   ease: { value: 120, min: 30, max: 300, step: 10, label: 'Ease off beside her from', unit: 'm before the line' },
-})
+}, { sections: RACE })
 
 export type { RacerId } from './rivals'
 export type KartHud = RaceHud<RacerId>

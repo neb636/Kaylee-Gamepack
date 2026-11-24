@@ -1,4 +1,4 @@
-// The Koh Samet trip (notes: planning/around-the-world/thailand/samet-story.md). One story runs through it, "The Lost
+// The Koh Samet trip (notes: samet-story.md in git history). One story runs through it, "The Lost
 // Fireflies": the gecko fire dancers' four fireflies were blown all over the island, and each stop finds one.
 //
 // How it runs: packing in Kaylee's room (the first trip of a session from the Thailand map's 🏝️ pin), the speedboat

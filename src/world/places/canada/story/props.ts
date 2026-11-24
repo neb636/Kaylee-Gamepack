@@ -1,8 +1,9 @@
-// Props the films, the map and the big game share: the Maple Cup, a puck, a hockey stick for a rig friend's hand, and
+// Props the films, the map and the big game share: the Maple Cup, a puck, a hockey stick for a rig friend's hand (and
+// the geese's wings, and the map), and
 // Sparkle's balloon. Each is a toy shape from engine3d/geo.ts parts (one mesh and one outline each).
-import { Group } from 'three'
+import { Group, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../engine3d/dispose'
-import { merge, P, solid } from '../../../engine3d/geo'
+import { merge, P, solid, type V3 } from '../../../engine3d/geo'
 import { PAL } from '../../../engine3d/toon'
 import { CANADA_COLORS } from '../characters/looks'
 
@@ -41,10 +42,77 @@ export function makeCup(bag: Bag, h = 0.7, stand = false) {
 /** A hockey puck, lying on y = 0. */
 export const makePuck = (bag: Bag, r = 0.12) => solid(P.cyl(r, r, r * 0.55, '#2E2A3A', { at: [0, r * 0.28, 0] }, 16), bag, 1.6)
 
+/** How a hockey stick sits in a hand (all in the holder's arm space): the shaft runs from the heel on the ice up
+ *  through the paw at `hand`, `len` long; the blade goes forward (+z) from the heel along the ice, `blade` long. */
+export interface StickFit {
+  hand: V3
+  heel: V3
+  len: number
+  /** The shaft's thickness (the blade, the tape and the knob follow it). */
+  w: number
+  blade: number
+  shaft: string
+  color: string
+}
+
+const TAPE = '#2E2A3A'
+const TAPE_WHITE = '#FFFFFF'
+
+/** A real-looking toy hockey stick: a flat rectangular shaft with a black tape knob at the top, a rounded heel, and a
+ *  wide, flat blade standing on its edge that curves a little toward the toe, white tape wrapped round its middle. */
+export function stickParts(f: StickFit): BufferGeometry[] {
+  const [hx, hy, hz] = f.heel
+  const up = new Vector3(f.hand[0] - hx, f.hand[1] - hy, f.hand[2] - hz).normalize()
+  // (The shaft only tips forward or back: a turn round x takes +y to `up`.)
+  const tilt = Math.atan2(up.z, up.y)
+  const w = f.w
+  const at = (d: number): V3 => [hx + up.x * d, hy + up.y * d, hz + up.z * d]
+  const parts = [
+    P.rbox(w, f.len, w * 0.7, w * 0.25, f.shaft, { at: at(f.len / 2 + w * 0.3), rot: [tilt, 0, 0] }),
+    // The knob: black tape round the top of the shaft, a little fatter.
+    P.rbox(w * 1.22, w * 2.6, w * 0.92, w * 0.4, TAPE, { at: at(f.len - w * 1.1), rot: [tilt, 0, 0] }),
+    // The heel: where the shaft bends into the blade.
+    P.rbox(w * 0.75, w * 1.6, w * 1.5, w * 0.35, f.color, { at: [hx, hy + w * 0.75, hz + w * 0.25], rot: [tilt * 0.5, 0, 0] }),
+  ]
+  // The blade: three flat pieces on edge, each turned a little more (the curve), its bottom on the ice.
+  const bh = w * 2.2
+  const seg = f.blade / 3
+  let x = hx
+  let z = hz + w * 0.5
+  for (let i = 0; i < 3; i++) {
+    const yaw = -0.1 - i * 0.14
+    const cx = x + Math.sin(yaw) * seg * 0.5
+    const cz = z + Math.cos(yaw) * seg * 0.5
+    const h = bh * (i === 2 ? 0.92 : 1)
+    parts.push(P.rbox(w * 0.5, h, seg * 1.12, w * 0.22, f.color, { at: [cx, hy + h / 2, cz], rot: [0, yaw, 0] }))
+    // White tape wrapped round the middle of the blade.
+    if (i === 1) parts.push(P.rbox(w * 0.62, h * 1.04, seg * 0.7, w * 0.2, TAPE_WHITE, { at: [cx, hy + h / 2, cz], rot: [0, yaw, 0] }))
+    x += Math.sin(yaw) * seg
+    z += Math.cos(yaw) * seg
+  }
+  return parts
+}
+
+/** How the team's stick sits in a rig friend's right paw (`rig.armR`), for one `H` meters tall. */
+export const stickFit = (H: number, color: string = CANADA_COLORS.scarf, thick = 1, shaft = '#E9C99A'): StickFit => ({
+  hand: [0.09 * H, -0.25 * H, 0.1 * H],
+  heel: [0.09 * H, -0.47 * H, 0.21 * H],
+  len: 0.5 * H,
+  w: 0.03 * H * thick,
+  blade: 0.21 * H,
+  shaft,
+  color,
+})
+
+/** The middle of the blade's toe half (arm space): where a puck or a pinecone sits to be hit. */
+export function stickBlade(f: StickFit, out = new Vector3()) {
+  return out.set(f.heel[0] - f.blade * 0.12, f.heel[1] + f.w, f.heel[2] + f.blade * 0.6)
+}
+
 /** A hockey stick for a rig friend `H` meters tall: add it to `rig.armR` (the blade rests on the ice by their right
  *  foot, pointing forward). The team's are pink; the geese's are blue (characters/goose.ts builds its own). */
 export function makeStick(H: number, bag: Bag, color: string = CANADA_COLORS.scarf) {
-  return solid(merge([P.cyl(0.016 * H, 0.016 * H, 0.5 * H, '#E9D3A6', { at: [0.09 * H, -0.25 * H, 0.1 * H], rot: [0.42, 0, 0] }, 6), P.rbox(0.04 * H, 0.035 * H, 0.2 * H, 0.01 * H, color, { at: [0.09 * H, -0.455 * H, 0.27 * H] })]), bag, 1.8)
+  return solid(merge(stickParts(stickFit(H, color))), bag, 1.8)
 }
 
 /** Sparkle's hot-air balloon: pink, lavender and cream stripes over a little basket. `root` is at the basket's floor. */

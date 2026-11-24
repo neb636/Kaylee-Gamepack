@@ -1,4 +1,4 @@
-// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.md), as deep-linkable sections:
+// The Nan road trip (plan: nan-trip.md in git history), as deep-linkable sections:
 // #/world/thailand/nan-trip/<section>?stops=<done so far>&... The trip loop (step 7): Mom asks where to (invite:
 // 🚤, 🛝🍕 or 🏔️🚙), packing for the mountains (pack?packed=...), the goodbye and Aunty Sri's van (goodbye), the x-ray
 // belt (airport), the window seat north to Nan (takeoff, fly, land), and home (home?photos=...: the flight home, Agong
@@ -13,7 +13,7 @@
 // till it boils down, scrape the salt into her basket; and the 3 from above (three, step 6): the "number 3" road
 // below, its bends popping one, two, three, then Mom's photo with the 3 behind them and ✈️🏠 (three?to=lookout: from the
 // lookout on the map, open from the start, 🔁 and 🗺️ instead). The fourth stop (plan:
-// thailand/nan-cup.md, the full loop; CUP_OPEN in cup/rules.ts): the Nan Mountain Cup at
+// nan-cup.md in git history, the full loop; CUP_OPEN in cup/rules.ts): the Nan Mountain Cup at
 // the end of the city road. The race ground and its board (cup?cup=<record>&lose=<track>): pick a track; the kart race
 // (race?track=forest|steps|cloud&result=win|lose), her pink kart against Grandma Taeng, Pao and Moon through the
 // Mushroom Forest, down the Rice Steps or up into the cloud, won by a nose or (the one race she loses) lost by one; the

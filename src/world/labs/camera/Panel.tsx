@@ -4,12 +4,11 @@ import { shareLab } from '../share'
 import { useEffect, useState } from 'react'
 import type { Vector3 } from 'three'
 import { worldLink } from '../../../router'
-import { HUB } from '../../kit/sections'
-import { findPlace, sectionsFor } from '../../registry'
+import { ScenePicker } from '../ScenePicker'
 import { camLab } from '../../engine3d/camLab'
 import { cinemaOn } from '../../engine3d/cinema'
 import { TUNE } from '../../engine3d/tune'
-import { IconButton, Section, Segmented, Select, Slider, Toggle, Field } from '../ui'
+import { IconButton, Section, Segmented, Slider, Toggle, Field } from '../ui'
 import { camParams, FRAMES, STATE_KEYS, frameById, freshCamera, GUIDES, untouched, withoutCam, type CamView } from './link'
 
 export interface PanelProps {
@@ -28,8 +27,6 @@ export interface PanelProps {
   screen: { w: number; h: number }
 }
 
-/** The Game list's map entries: `map:<activity>` (an activity id never has a colon). */
-const MAP = 'map:'
 const f = (n: number, d = 2) => String(+n.toFixed(d))
 const v3 = (v: Vector3) => `(${f(v.x)}, ${f(v.y)}, ${f(v.z)})`
 const signed = (n: number, d = 1) => `${n > 0 ? '+' : ''}${f(n, d)}`
@@ -47,20 +44,6 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
   const framed = world?.rig.framed() ?? null
   const gameLens = world?.rig.fov ?? TUNE.fov
   const here = window.__kayleeSection
-  const meta = findPlace(place)?.meta
-  const activities = meta
-    ? [...(sectionsFor(place, HUB) ? [{ id: HUB, name: 'Home base', icon: '🏠' }] : []), ...meta.activities, ...(meta.inTheWorks ?? [])].filter((a) => sectionsFor(place, a.id))
-    : []
-  const activity = here?.activity ?? activities[0]?.id
-  // The country's maps (a section called `map`: the Thailand map in Home base, the Nan map in the road trip) sit at
-  // the top of the Game list, so a map is one pick away instead of buried in its game's sections.
-  const maps = activities.flatMap((a) => {
-    const s = sectionsFor(place, a.id)?.sections.find((x) => x.id === 'map')
-    return s ? [{ id: `${MAP}${a.id}`, activity: a.id, name: s.name.split(':')[0] }] : []
-  })
-  const onMap = maps.find((m) => m.activity === activity && here?.id === 'map')
-  const games = [...maps.map((m) => ({ id: m.id, label: `🗺️ ${m.name}` })), ...activities.map((a) => ({ id: a.id, label: `${a.icon ?? ''} ${a.name}` }))]
-  const sections = activity ? (sectionsFor(place, activity)?.sections ?? []) : []
   const state = (() => {
     const qa = world?.qa() ?? {}
     return STATE_KEYS.filter((k) => ['string', 'number', 'boolean'].includes(typeof qa[k])).map((k) => `${k} ${qa[k]}`)
@@ -149,27 +132,9 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
         <IconButton icon="x" label="Close the camera lab" small onClick={() => (location.hash = withoutCam(location.hash))} />
       </div>
       <div className="cl-panel-scroll">
-        <Section title="Scene">
-          <Field label={<span className="cl-sub">Game</span>}>
-            <Select
-              value={onMap?.id ?? activity ?? ''}
-              options={games}
-              label={<span className="cm-ellipsis">{onMap ? `🗺️ ${onMap.name}` : (activities.find((a) => a.id === activity)?.name ?? 'Pick a game')}</span>}
-              align="right"
-              onChange={(id) => (id.startsWith(MAP) ? open(id.slice(MAP.length), 'map') : open(id, undefined))}
-            />
-          </Field>
-          <Field label={<span className="cl-sub">Section</span>}>
-            <Select
-              value={here?.id ?? ''}
-              options={sections.map((s, i) => ({ id: s.id, label: `${i + 1}. ${s.name}` }))}
-              label={<span className="cm-ellipsis">{sections.find((s) => s.id === here?.id)?.name ?? 'From the start'}</span>}
-              align="right"
-              onChange={(id) => activity && open(activity, id)}
-            />
-          </Field>
+        <ScenePicker place={place} open={open}>
           {state.length > 0 && <div className="cl-sub cm-mono">{state.join(' · ')}</div>}
-        </Section>
+        </ScenePicker>
 
         <Section title="Screen" aside={<span className="cl-sub">{`${screen.w} × ${screen.h} · ${tall ? 'tall' : 'wide'}`}</span>}>
           <div className="cm-frames">

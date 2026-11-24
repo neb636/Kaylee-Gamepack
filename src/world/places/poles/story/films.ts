@@ -1,4 +1,4 @@
-// The Poles' story films: "Pebble's Long Way Home" (planning/around-the-world/poles.md; docs/films.md, how films
+// The Poles' story films: "Pebble's Long Way Home" (docs/films.md, how films
 // work). Pebble the emperor chick fell asleep in a fish crate on the scientists' red ship and woke up at the top of the
 // world, where Pola the polar bear cub has never seen a penguin. Getting him home is the whole place: every game is a
 // leg of the trip (or what Papa is doing meanwhile, at the bottom of the world), and a film here opens and closes it.

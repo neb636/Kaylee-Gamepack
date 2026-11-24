@@ -8,8 +8,11 @@ import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid, solidMix, type V3 } from '../../../../engine3d/geo'
 import { BERRIES, type Berry, type Deco } from '../../looks'
 import { decoModel, mapleLeaf, SWEATER, SWEATER_RED } from '../../characters/mistyLook'
+import { berry as berry3d, leaf, type BerryParts, type BerryShape } from '../../story/sets/berries'
 
 const INK = '#2E2233'
+/** The inside of the sweater, seen through its neck. */
+const SWEATER_INSIDE = '#EADFD0'
 const MOSS = '#7DB563'
 const MOSS_DARK = '#5E9A4E'
 const BARK = '#9A5A44'
@@ -98,34 +101,40 @@ export function makeComb(bag: Bag): Prop {
   return wrap(g)
 }
 
-/** A squashed berry in her hand: a big round berry dripping its color (what she paints with). */
+/** Which real berry each paint color is: pink a raspberry, blue a blueberry, purple a blackberry. */
+const SHAPE: Record<Berry, BerryShape> = { pink: 'bumpy', blue: 'crown', purple: 'long' }
+
+/** A squashed berry in her hand: a big berry of its kind (story/sets/berries.ts) dripping its color (what she paints
+ *  with). */
 export function makeBerry(berry: Berry, bag: Bag): Prop {
   const c = BERRIES[berry]
   const g = new Group()
-  const seeds = Array.from({ length: 7 }, (_, i) => {
-    const a = i * 2.4
-    return P.sphere(0.012, '#FFFFFF', { at: [Math.cos(a) * 0.05, 0.02 + Math.sin(a) * 0.04, 0.07], scale: [1, 1, 0.4] }, 6)
-  })
-  g.add(solidMix([P.sphere(0.085, c, { scale: [1.1, 0.95, 1] }, 18), P.sphere(0.03, c, { at: [0.03, -0.1, 0.02], scale: [1, 1.4, 1] }, 10), P.cone(0.035, 0.05, '#5FB356', { at: [0, 0.1, 0], rot: [Math.PI, 0, 0] }, 8)], seeds, bag, 2.4))
+  const out: BerryParts = { lined: [], plain: [] }
+  berry3d(SHAPE[berry], c, 0.085, [0, 0, 0], out, 9)
+  out.lined.push(P.sphere(0.03, c, { at: [0.03, -0.1, 0.02], scale: [1, 1.4, 1] }, 10))
+  g.add(solidMix(out.lined, out.plain, bag, 2.4))
   return wrap(g)
 }
 
-/** A little berry bush for the log: round leaves and a crown of berries in one color. */
+/** A little berry bush for the log: a leafy mound with clusters of its berries hanging out the front. */
 export function makeBush(berry: Berry, bag: Bag): Prop {
   const c = BERRIES[berry]
-  const leaves = [
-    P.sphere(0.11, MOSS_DARK, { at: [0, 0.0, 0] }, 14),
-    P.sphere(0.085, '#4E8F4A', { at: [-0.09, -0.02, 0.02] }, 12),
-    P.sphere(0.085, '#4E8F4A', { at: [0.09, -0.02, 0.02] }, 12),
-  ]
-  const berries: BufferGeometry[] = []
-  for (let i = 0; i < 11; i++) {
-    const a = i * 2.39
-    const up = 0.2 + (i % 4) * 0.25
-    berries.push(P.sphere(0.03, c, { at: [Math.cos(a) * 0.1 * Math.cos(up), 0.02 + Math.sin(up) * 0.09, 0.05 + Math.sin(a) * 0.04] }, 10))
+  const out: BerryParts = {
+    lined: [P.sphere(0.11, MOSS_DARK, { at: [0, 0.0, 0] }, 14), P.sphere(0.085, '#4E8F4A', { at: [-0.09, -0.02, 0.02] }, 12), P.sphere(0.085, '#4E8F4A', { at: [0.09, -0.02, 0.02] }, 12)],
+    plain: [],
   }
+  // Leaves all over the mound, pointing out.
+  for (let i = 0; i < 14; i++) {
+    const a = i * 2.39
+    const up = 0.15 + (i % 4) * 0.32
+    const rr = 0.115
+    leaf(i % 2 ? '#5FB356' : '#4E9A45', 0.075, [Math.cos(a) * rr * Math.cos(up), 0.01 + Math.sin(up) * 0.1, Math.sin(a) * rr * Math.cos(up) * 0.8], -a, -0.35 - up * 0.3, out)
+  }
+  // Berries in clusters of two or three, out the front where they show.
+  const spots: [number, number, number][] = [[-0.1, 0.05, 0.07], [-0.085, 0.0, 0.1], [0.0, 0.08, 0.09], [0.03, 0.03, 0.12], [-0.03, 0.02, 0.12], [0.1, 0.05, 0.07], [0.085, -0.005, 0.1], [0.02, 0.12, 0.03]]
+  for (const at of spots) berry3d(SHAPE[berry], c, 0.03, at, out, 6)
   const g = new Group()
-  g.add(solidMix([...leaves, ...berries], [], bag, 2.2))
+  g.add(solidMix(out.lined, out.plain, bag, 2.2))
   return wrap(g)
 }
 
@@ -246,26 +255,42 @@ export function heldSweater(w: number, bag: Bag) {
   const root = new Group()
   const h = w * 1.05
   const d = w * 0.12
+  /** The crew neck: the scoop's half width and how far it dips at the front, and how wide the red rib is. */
+  const NECK_W = w * 0.2
+  const NECK_DIP = w * 0.17
+  const RIB = w * 0.042
+  /** The lower half of an oval `rx` by `ry` hanging from the top edge, left to right. */
+  const scoop = (rx: number, ry: number, n = 20) =>
+    Array.from({ length: n + 1 }, (_, i) => {
+      const a = Math.PI + (i / n) * Math.PI
+      return [Math.cos(a) * rx, Math.sin(a) * ry] as [number, number]
+    })
   const lined: BufferGeometry[] = [
     // The body, a soft rounded panel, and the sleeves out to each side, a little down.
     P.rbox(w, h, d, w * 0.14, SWEATER, { at: [0, -h / 2, 0] }),
     ...[-1, 1].map((s) => P.rbox(w * 0.5, w * 0.3, d * 0.9, w * 0.12, SWEATER, { at: [s * w * 0.62, -w * 0.2, 0], rot: [0, 0, s * -0.55] })),
-    P.torus(w * 0.17, w * 0.035, SWEATER_RED, { at: [0, -w * 0.02, d * 0.2], rot: [-0.2, 0, 0], scale: [1, 0.55, 1] }),
+    // The back of the collar: the rib stands a little proud of the top edge, between the shoulders.
+    P.rbox(NECK_W * 2, RIB * 1.4, d * 0.8, RIB * 0.5, SWEATER_RED, { at: [0, -RIB * 0.3, 0] }),
   ]
   const front = d / 2 + 0.002
   const plain: BufferGeometry[] = [
+    // The crew neck, flat on the front: the inside of the sweater showing in the opening (a shade darker), and the
+    // red rib round it, down the front scoop and across the back.
+    P.prism(scoop(NECK_W - RIB * 0.5, NECK_DIP - RIB * 0.5), 0.004, SWEATER_INSIDE, { at: [0, 0, front + 0.0005] }),
+    P.prism([...scoop(NECK_W, NECK_DIP), ...scoop(NECK_W - RIB, NECK_DIP - RIB).reverse()], 0.006, SWEATER_RED, { at: [0, 0, front + 0.002] }),
+    P.box(NECK_W * 2 - RIB, RIB * 0.5, 0.006, SWEATER_RED, { at: [0, -RIB * 0.25, front + 0.002] }),
     // Red stripes across the hem and round each cuff.
     P.box(w * 0.98, h * 0.06, 0.006, SWEATER_RED, { at: [0, -h * 0.86, front] }),
     P.box(w * 0.98, h * 0.03, 0.006, SWEATER_RED, { at: [0, -h * 0.78, front] }),
     ...[-1, 1].map((s) => P.box(w * 0.07, w * 0.3, 0.006, SWEATER_RED, { at: [s * w * 0.79, -w * 0.32, d * 0.47], rot: [0, 0, s * -0.55] })),
     // The red maple leaf on the chest.
     P.prism(
-      mapleLeaf(w * 0.42).map(([x, y]) => [x * 1.08, y * 1.08]),
+      mapleLeaf(w * 0.28).map(([x, y]) => [x * 1.08, y * 1.08]),
       0.004,
       '#B8302C',
-      { at: [0, -h * 0.32, front + 0.002] },
+      { at: [0, -h * 0.42, front + 0.002] },
     ),
-    P.prism(mapleLeaf(w * 0.42), 0.004, SWEATER_RED, { at: [0, -h * 0.32, front + 0.005] }),
+    P.prism(mapleLeaf(w * 0.28), 0.004, SWEATER_RED, { at: [0, -h * 0.42, front + 0.005] }),
   ]
   root.add(solidMix(lined, plain, bag, 2.4))
   /** Where her paw print goes (local), and the group it's built into. */

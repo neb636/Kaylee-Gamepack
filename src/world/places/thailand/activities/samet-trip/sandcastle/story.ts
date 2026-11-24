@@ -1,5 +1,5 @@
 // Sandy, the shy gold firefly of the sandcastle (the trip's story, "The Lost Fireflies":
-// planning/around-the-world/thailand/samet-story.md; docs/films.md, how films work). Last night's wind blew her to
+// samet-story.md in git history; docs/films.md, how films work). Last night's wind blew her to
 // Ao Hin Khok, and she is hiding down a crab hole in the sand. A castle of her own tempts her out.
 //
 //   the way in (film `intro`, sandcastle?round=story): on the bare beach a gold glow pulses under the sand. Dad spots

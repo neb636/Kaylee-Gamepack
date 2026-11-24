@@ -2,7 +2,7 @@
 // builds any of them in 3D. Thailand's family are Looks (places/thailand/characters/looks.ts), and so is any country's
 // 3D friend. Pure data (no three.js).
 
-export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey' | 'tortoise' | 'bear' | 'polarbear' | 'tern' | 'beaver' | 'moose' | 'raccoon' | 'otter' | 'pelican' | 'gecko' | 'hen'
+export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey' | 'tortoise' | 'bear' | 'polarbear' | 'tern' | 'beaver' | 'moose' | 'raccoon' | 'otter' | 'sea-otter' | 'pelican' | 'gecko' | 'hen'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
 /** What Kaylee can wear on a trip, from her suitcase (or Mom's spare sun hat if she packed none), or at HarborLand
  *  (the vet's blue scrubs and cap, the cafe's apron and chef's hat, the barber's smock, Muay Thai's boxing gloves and red
@@ -43,18 +43,20 @@ export interface Look {
     kind: Outfit
     color: string
     shorts?: string
-    /** A scalloped lace collar in this color and a pleated front (Joy's white blouse). */
+    /** A collar of lace roses in this color, trim on the sleeves and hem and a pleated front (Joy's white blouse). */
     lace?: string
     /** Flowers printed all over, in these colors, with green leaves and an open camp collar (Bird's party shirt). */
     print?: string[]
   }
-  /** The real person's hair on their animal (Dad's photos, 2026-10-24), so Kaylee knows who's who: a straight cut to the
-   *  shoulders parted in the middle (Joy), or short thick hair that sticks up in spikes (Bird). */
-  hairdo?: { style: 'bob' | 'spiky'; color: string }
+  /** The real person's hair on their animal (from the family's photos), so Kaylee knows who's who: long straight hair
+   *  past the shoulders, parted in the middle, with lighter strands (Joy: hair.ts), or short thick hair that sticks up
+   *  in spikes (Bird). */
+  hairdo?: { style: 'long' | 'spiky'; color: string }
   /** A big smile showing the top teeth (Joy): it stretches when they talk. */
   smile?: 'teeth'
-  /** A fox's cheeks as flatter, smaller mounds on the face, this big (Joy 0.8); without it, the usual round fluffy ones. */
-  cheeks?: number
+  /** A fox sculpted in more detail (Joy: fox.ts): cupped pointed ears, a white snout, puffy pink cheeks, brows, brown paws and
+   *  a big bushy tail. Without it, the plain fox. */
+  sculpted?: boolean
   extras?: Extra[]
   /** Lashes on the eyes. */
   lashes?: boolean

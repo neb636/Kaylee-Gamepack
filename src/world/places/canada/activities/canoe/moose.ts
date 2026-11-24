@@ -44,11 +44,12 @@ export class Moose {
   }
   /** His chin in the world (water drips from it). */
   chin(out: Vector3) {
-    return this.rig.head.localToWorld(out.set(0, this.rig.face.headY - this.rig.face.R * 0.95, this.rig.face.R * 0.6))
+    const { R, mouth } = this.rig.face
+    return this.rig.head.localToWorld(out.set(mouth[0], mouth[1] - 0.16 * R, mouth[2] - 0.13 * R))
   }
 
   update(dt: number, t: number) {
-    const { body, head, armL, armR, tail, mouth } = this.rig
+    const { body, head, armL, armR, tail } = this.rig
     const ease = (r: number) => 1 - Math.exp(-dt * r)
     this.life.update(dt)
     // Grazing: head down for a few seconds, up for a few (always while poked).
@@ -84,7 +85,6 @@ export class Moose {
     head.rotation.x += (0.85 * down - 0.35 * poke + chew - head.rotation.x) * ease(6)
     head.rotation.y += (yaw * this.up - head.rotation.y) * ease(3)
     head.rotation.z = shake
-    mouth.scale.y = 1 + chew * 8
     // His front legs (the rig's arms) shift as he leans; the little tail flicks.
     armL.rotation.x = -0.35 * down
     armR.rotation.x = -0.35 * down + Math.sin(t * 0.9) * 0.03

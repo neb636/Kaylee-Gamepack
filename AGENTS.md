@@ -64,7 +64,10 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
   verb works and every section has a link. If playing says the toy isn't fun, change the toy, not the decoration.
 - **Feel numbers are knobs.** When a verb's feel hangs on numbers (steering, dragging, a hop), declare them with
   `knobs()` and put a `?feel=1` link on the review page (`docs/thailand-3d.md`, the feel lab). A "Copy for agent" note
-  from the user gets baked into the knobs' values.
+  from the user gets baked into the knobs' values. Only expose what the user can judge with a finger: tag each group
+  with the `sections` it applies to, mark the 3-6 knobs per scene that change the feel `main` (the rest fold under
+  "More"), make engine-wide groups `shared` and claimed, delete knobs nothing reads, and leave framing to the camera
+  lab. `scripts/check-knobs.mjs` checks the ids, files and sections.
 - **The fix lane.** The user asks for a fix or a tweak: one small PR whose review page shows a before-and-after clip
   (`reel` skill) and one line on what changed. No questions unless one is truly their call.
 - **Every PR has a review page** (`ship` skill): `review/review.json` → `node scripts/review.mjs` → publish → push.
@@ -84,7 +87,7 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
 
 ## What Kaylee told us (follow it everywhere)
 
-- **Any order.** Every activity is open from the start and earns a passport stamp + animal sticker right away. (Exception: the Poles is one story, so its first time through goes in order; see `planning/around-the-world/poles.md`.)
+- **Any order.** Every activity is open from the start and earns a passport stamp + animal sticker right away. (Exception: the Poles is one story, so its first time through goes in order.)
   Collecting every stamp unlocks a short finale, then `onWin()` shows the shell's trophy ceremony (gold trophy displaying
   the country's `trophyTitle`). Don't build your own trophy screen.
 - **Talk short, play long.** What bored her was listening and forced easy rounds, never touching. At most 1-2 short
@@ -163,13 +166,14 @@ and `docs/3d-characters.md`.
 | Designing a toy | `docs/play-design.md` (the eight principles and the fun check), `planning/around-the-world/ACTIVITY-TEMPLATE.md` |
 | Building anything | `docs/building.md` (where things live, packages, the SDK, adding an activity end to end, deep links, screens, offline, commands) |
 | Picking an interaction | `docs/interactions.md` |
+| Adding a button (back, way on, again, skip, done) | `docs/hud.md` (the six places, `HudButton`, the drawn icons) |
 | Working in 3D or Thailand | `docs/thailand-3d.md` (engine, camera, cinema, labs) |
 | Telling a story or a cutscene | `docs/films.md` (films: beats, shots, memories, skipping; Jip and the hat mix-up is the first) |
 | Writing or recording lines | `docs/voices.md` (the cast, `lines.ts`, recording, the table read) |
 | Making art | `docs/art.md` (style, one camera per scene, white patches) |
 | Checking your work | `docs/qa.md` (robots, the fresh-eyes agent, the time budget) |
 | Finding out what she plays | `docs/play-data.md` (who's who in PostHog, the events, offline play, storage, queries) |
-| Continuing a country or trip | its notes: `planning/around-the-world/<country>.md`, or `<country>/<trip>.md` and `<country>/known-issues.md` (Thailand). Australia, Egypt, Italy, China and Peru are finished and have none: read their code |
+| Continuing a country or trip | its notes: `planning/around-the-world/<country>.md`, or `<country>/<trip>.md` and `<country>/known-issues.md` (Thailand). Australia, Egypt, Italy, China, Peru, Canada and the Poles are finished and have none: read their code |
 
 **Skills** (in `.agents/skills/`, shared by Claude Code and Codex): `pitch` (three pitch cards), `table-read` (hear a
 script), `reel` (film the game), `ship` (the review page and the PR, fixes too), `sfx` (ElevenLabs sound effects for
@@ -179,11 +183,15 @@ every new or changed game or level). **Agent:** `fresh-eyes` reviews a toy it ha
 
 - `npm run verify` must pass before every PR. It checks: the player-name rule (rule 5) and its own tests, every
   `voice-lines.json` matches its `lines.ts`, a voice clip for every line, heavy libraries (three, phaser) only inside a
-  country folder or the 3D engine, no raw `setTimeout`/`setInterval` in a game (next point), no file names that differ only in case, the generated `docs/game-sections.html` and
+  country folder or the 3D engine, no raw `setTimeout`/`setInterval` in a game (next point), the controls are one family (`docs/hud.md`), no file names that differ only in case, the generated `docs/game-sections.html` and
   `docs/code-map.md` (run `npm run sections-readme`), typecheck, build. This list is the one source; other docs link here.
   Changed lines? Push them: the PR records them for you: its preview workflow's voices job uses the `OPENAI_API_KEY` repository secret, commits the clips to your branch and re-runs CI. `git pull` to get the clips. With a key of your own you can record
   them first (`node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`); you don't need one.
 - Every section of every activity opens from a link, with its state in the URL (`tests/sections.spec.ts`).
+- **Controls are one family.** Back is the top-left button (`useTopLeft`), progress is the one pill (`setProgress`),
+  and every other control is a `<HudButton role slot />` with a drawn icon, never a hand-styled circle or a system
+  emoji (`docs/hud.md`). Countries move over one PR at a time; `scripts/check-hud.mjs` checks the ones done so far
+  (its `UPGRADED` list), and new code anywhere follows the rule now.
 - Ask the user before adding a package (`docs/building.md`, Dependencies).
 - **Reuse before you write.** Number helpers are `src/sdk/math.ts`, the sound context is `audio()` (`src/sdk/sounds.ts`),
   the stamp → video → map flow is `useStampFlow` (`src/world/kit/stampFlow.tsx`), and 3D has `engine3d/` (outlines,

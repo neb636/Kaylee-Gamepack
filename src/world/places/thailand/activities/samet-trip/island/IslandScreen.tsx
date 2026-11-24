@@ -1,4 +1,4 @@
-// The island between the stops, on screen (island.ts is the world; samet-story.md is the story): the 3D island with
+// The island between the stops, on screen (island.ts is the world; samet-story.md in git history is the story): the 3D island with
 // its tap targets; the story's films over it (FilmOverlay: their words, the memory's storybook look, the hold-to-skip
 // ⏭); the pictures of the beaches (Board.tsx) that come up after the way-in film, after each firefly found, from the
 // top-right button and from a tap on the green taxi; the ride (a little film on the island: the family hop into the

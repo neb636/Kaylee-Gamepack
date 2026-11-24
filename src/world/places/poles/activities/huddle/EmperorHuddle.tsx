@@ -7,9 +7,10 @@
 // Pebble is tucked back in). After Papa's song: the stamp (onDone).
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, say, type Line } from '../../../../../sdk'
+import { say, type Line } from '../../../../../sdk'
 import { onDevice } from '../../../../../sdk/device'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
+import { HudButton } from '../../../../kit/Hud'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
@@ -42,7 +43,7 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
   const worldRef = useRef<HuddleWorld | null>(null)
   const guide = useRef<GuideHandle>(null)
   const done = useRef(false)
-  /** Cancels the payoff's stamp while it waits for the talking to finish (🔁 or leaving drops it). */
+  /** Cancels the payoff's stamp while it waits for the talking to finish (again or leaving drops it). */
   const cancelStamp = useRef<(() => void) | null>(null)
   const thanks = useRef(0)
   // The same line twice in a row within a moment is one line (React mounts the world twice in development).
@@ -155,16 +156,10 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
         )}
       </div>
       {phase === 'end' && (
-        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }} style={CORNER}>
-          <BigButton onClick={again} ariaLabel="Again">
-            🔁 🐧
-          </BigButton>
-        </motion.div>
+        <HudButton role="again" icon="again" label="Again" slot="bottom-right" onClick={again} />
       )}
       <Guide ref={guide} hint={phase === 'end' ? null : hint} />
     </div>
   )
 }
 
-/** The 🔁 button waits in the corner, clear of the huddle. */
-const CORNER = { position: 'absolute' as const, right: 'calc(var(--safe-right, 0px) + 20px)', top: 'calc(var(--top-clear) + 12px)', zIndex: 25, pointerEvents: 'auto' as const }
