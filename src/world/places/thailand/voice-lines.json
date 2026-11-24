@@ -3185,7 +3185,7 @@
   },
   "Tap Dad to punch!",
   "Click Dad to punch!",
-  "Gold gloves! Super punch!",
+  "Super punch!",
   "Punch his big glove!",
   "Big kick!",
   {
@@ -3220,7 +3220,7 @@
   "Click your gloves!",
   "Punch Dad!",
   {
-    "text": "Before a fight, a boxer bows to say thank you to the teacher!",
+    "text": "A boxer bows to thank the teacher!",
     "voice": "coach"
   },
   "Muay Thai is Thailand's own sport!",

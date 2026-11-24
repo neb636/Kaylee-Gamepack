@@ -46,7 +46,7 @@ her flat for a moment; Dad sitting on the mat wiggles when poked; her gold glove
 slower after each one that lands (twice), and the first one of a visit is 0.6 s slower.
 
 **Story frame:** coach "Sawasdee krap! First we say thank you." / Sparkle "Tap your gloves to bow!" One tap, then the
-bell. Sparkle after that: "Tap Dad to punch!" (round 1), "Gold gloves! Super punch!" (first time), "Punch his big
+bell. Sparkle after that: "Tap Dad to punch!" (round 1), "Super punch!" (first time), "Punch his big
 glove!" (first wind-up), "Big kick!" (round 3), and the idle hint.
 
 **What it teaches, by doing:** the wai before a bout (she bows, they bow back); the referee's "Chok!"; counting in Thai

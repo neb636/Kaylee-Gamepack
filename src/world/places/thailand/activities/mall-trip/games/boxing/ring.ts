@@ -1343,8 +1343,8 @@ export class MuayThai extends Stage {
     // The super punch: in close on the two of them. A flying Dad: room over the ropes.
     if (this.phase === 'super') return { center: V(0.05, 0.85, 0.15), half: V(1.25, 0.95, 0.8), yaw: 6, pitch: 8, minDist: 4 }
     const up = this.flight ? 0.3 : 0
-    // (A tall screen comes in closer: the left side moves in, TALL_SHIFT, and the bell sits on the inside of its post.)
-    if (this.w < this.h) return { center: V(0.08, 1.0 + up, 0.25), half: V(1.85, 1.15 + up, 0.9), yaw: 0, pitch: 12, minDist: 5 }
+    // (A tall screen comes in closer: the left side moves in, TALL_SHIFT; it slides right to keep a flying Dad in.)
+    if (this.w < this.h) return { center: V(this.flight ? 0.5 : 0.08, 1.0 + up, 0.25), half: V(1.85, 1.15 + up, 0.9), yaw: 0, pitch: 12, minDist: 5 }
     return { center: V(0.08, 1.02 + up, 0.15), half: V(1.92, 1.12 + up, 1.0), yaw: 0, pitch: 9, minDist: 5 }
   }
 

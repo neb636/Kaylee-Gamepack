@@ -1473,7 +1473,7 @@ export const L = {
       champion: by('coach')(`Champion!`),
       // Sparkle: something new (how to punch, her gold gloves, Dad's big mitt going up, the kick).
       punch: onDevice('Tap Dad to punch!', 'Click Dad to punch!'),
-      super: 'Gold gloves! Super punch!',
+      super: 'Super punch!',
       glove: 'Punch his big glove!',
       kick: 'Big kick!',
       // Dad, now and then: a big hit, her gloves gone gold, his mitt landing on her, popped and dizzy, his guard going
@@ -1492,7 +1492,7 @@ export const L = {
         dad: 'Punch Dad!',
       },
       // The facts: the first time she pokes the coach, and the star board.
-      waiKru: by('coach')('Before a fight, a boxer bows to say thank you to the teacher!'),
+      waiKru: by('coach')('A boxer bows to thank the teacher!'),
       sport: "Muay Thai is Thailand's own sport!",
     },
 
