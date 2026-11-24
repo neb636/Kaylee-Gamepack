@@ -1,0 +1,56 @@
+{
+  "title": "Every fox like Joy",
+  "checkIn": "fix",
+  "kaylee": "Every other fox in the game now has Joy's new face: big cupped ears, a white snout, puffy cheeks, brows, brown paws and a big bushy tail.",
+  "questions": [
+    "The Arctic fox: Joy's look, or keep it plain since it's a wild animal?"
+  ],
+  "pictures": [
+    {
+      "title": "Pizza Co. server (the mall)",
+      "before": "pics/server-old.png",
+      "after": "pics/server-new.png",
+      "caption": "Her cap fits the new head"
+    },
+    {
+      "title": "Racer kid (the mall games hall)",
+      "before": "pics/hall-kid-3-old.png",
+      "after": "pics/hall-kid-3-new.png",
+      "caption": "White cheeks: a boy, like Gan and Ken"
+    },
+    {
+      "title": "Village kid (Koh Panyee, and in the boat race)",
+      "before": "pics/village-kid-2-old.png",
+      "after": "pics/village-kid-2-new.png"
+    },
+    {
+      "title": "Race crowd (Nan, Stop Time Cafe)",
+      "before": "pics/cup-crowd-2-old.png",
+      "after": "pics/cup-crowd-2-new.png"
+    },
+    {
+      "title": "Out on the water (Koh Samet)",
+      "before": "pics/sea-folk-5-old.png",
+      "after": "pics/sea-folk-5-new.png",
+      "caption": "Heart sunglasses sit over the new eyes"
+    },
+    {
+      "title": "Arctic fox, summer (the Poles story films)",
+      "before": "pics/arctic-fox-old.png",
+      "after": "pics/arctic-fox-new.png",
+      "caption": "Short low ears and paws in its own fur, no brown socks"
+    },
+    {
+      "title": "Arctic fox, winter (the Poles story films)",
+      "before": "pics/snow-fox-old.png",
+      "after": "pics/snow-fox-new.png",
+      "caption": "All white, with pink inside its ears"
+    }
+  ],
+  "links": [
+    {
+      "label": "The character lab",
+      "hash": "#/world/characters/server"
+    }
+  ]
+}
