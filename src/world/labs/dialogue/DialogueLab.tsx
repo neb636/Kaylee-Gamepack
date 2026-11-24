@@ -9,7 +9,7 @@ import { useTimers } from '../../../sdk/timers'
 import { go } from '../../../router'
 import { Icon, IconButton, Segmented, Select } from '../ui'
 import { shareLab } from '../share'
-import { humanize, linesOf, loadScript, scriptPlaces, WORLD, type Group, type Script, type ScriptLine, type Speaker } from './script'
+import { humanize, linesOf, loadScript, LOOSE, scriptPlaces, WORLD, type Group, type Script, type ScriptLine, type Speaker } from './script'
 import '../lab.css'
 
 const COLORS = ['#ff5fa2', '#7b61ff', '#18a0fb', '#14ae5c', '#f24822', '#ffa629', '#9747ff', '#0fa958', '#e2558f', '#5b8def']
@@ -228,6 +228,9 @@ export default function DialogueLab({ place = 'thailand', group }: { place?: str
 
 /** Where a country's lines live in the repo. */
 const fileOf = (place: string) => (place === WORLD ? 'src/world/lines.ts' : `src/world/places/${place}/lines.ts`)
+/** The line's key in lines.ts: the lab files the country's loose lines (trophy, passport...) under LOOSE, which isn't
+ *  in the file. */
+const keyOf = (l: ScriptLine) => (l.path[0] === LOOSE ? l.path.slice(1) : l.path).join('.')
 const quote = (t: string) => `"${t.replace(/"/g, '\\"')}"`
 
 /** One line, ready to paste to an agent with what you'd like instead. */
@@ -239,7 +242,7 @@ function lineNote(l: ScriptLine, script: Script, group: Group, place: string, pl
     `Mini-game: ${group.label}${part ? ` › ${part}` : ''}`,
     `Character: ${s?.name ?? humanize(l.speaker)} (OpenAI voice: ${s?.voice ?? 'none'})`,
     ...(l.note ? [`When it plays: ${l.note}`] : []),
-    `Where: ${fileOf(place)} → ${l.path.join('.')}`,
+    `Where: ${fileOf(place)} → ${keyOf(l)}`,
     `Line: ${quote(l.text)}`,
     `Change: `,
   ].join('\n')
@@ -254,7 +257,7 @@ function scriptNote(lines: ScriptLine[], script: Script, group: Group, place: st
     const s = script.speakers[l.speaker]
     const out = part !== last ? ['', `## ${part || group.label}`] : []
     last = part
-    out.push(`- ${s?.name ?? humanize(l.speaker)} (${s?.voice ?? 'no voice'}) · ${l.path.join('.')}: ${quote(l.text)}${l.note ? `  [when: ${l.note}]` : ''}`)
+    out.push(`- ${s?.name ?? humanize(l.speaker)} (${s?.voice ?? 'no voice'}) · ${keyOf(l)}: ${quote(l.text)}${l.note ? `  [when: ${l.note}]` : ''}`)
     return out
   })
   return [...head, ...body.slice(body[0] === '' ? 1 : 0), '', 'Changes: '].join('\n')

@@ -90,7 +90,7 @@ function sceneNow(place?: string, activity?: string): Scene | undefined {
 const liveParams = () => Object.fromEntries(new URLSearchParams(location.hash.split('?')[1] ?? ''))
 
 /** Games whose script blocks aren't named after the game (lines.ts keys): the boat trip speaks `trip` on the way, `bay`
- *  and `race` in Phang Nga Bay and `chang` at Baan Chang; Home base's game table speaks `games`. */
+ *  and `race` in Phang Nga Bay and `chang` at Baan Chang; Home base's game table and its board games speak `games`. */
 const SCRIPTS: Record<string, (section?: string) => string> = {
   'thailand/boat-trip': (s = '') =>
     ['invite'].includes(s)
@@ -108,11 +108,18 @@ const SCRIPTS: Record<string, (section?: string) => string> = {
                 : s
                   ? 'bay'
                   : 'trip',
-  'thailand/hub': (s) => (s === 'table' || s === 'colors' ? 'games' : (s ?? 'house')),
+  'thailand/hub': (s = '') =>
+    ['table', 'colors', 'unicorn', 'candy', 'chutes'].includes(s) ? 'games' : ['map', 'bangkok', 'wardrobe', 'family'].includes(s) ? s : 'house',
 }
 
 /** The scene's block in lines.ts: the table above, else a guess (`mall-trip` / `barber` → `mall.barber`; the dialogue
  *  lab falls back to `mall`, then to a block named like the section, then to the country's first). */
+/** Keep the game on screen (its live section and state), for the way back from another tab or #/world/lab. */
+function saveScene(place?: string, activity?: string) {
+  const s = sceneNow(place, activity)
+  if (s) remember({ scene: { ...s, params: gameState(liveParams()) } })
+}
+
 const groupFor = (s: Scene) => {
   const mapped = SCRIPTS[`${s.place}/${s.activity}`]
   if (mapped) return mapped(s.section)
@@ -162,15 +169,23 @@ export function LabBar({ active, place, activity, section }: { active: LabTab; p
         ...(activity ? { dialogue: { place: activity, group: section } } : {}),
       })
     else {
-      const s = sceneNow(place, activity)
-      remember({ tab: active, ...(s ? { scene: s } : {}) })
+      remember({ tab: active })
+      saveScene(place, activity)
     }
   }, [active, place, activity, section])
 
   const here = { place, activity }
   return (
     <header className="lab-bar">
-      <button className="lab-home" aria-label="Back to the world map" title="Back to the world map" onClick={() => go.world()}>
+      <button
+        className="lab-home"
+        aria-label="Back to the world map"
+        title="Back to the world map"
+        onClick={() => {
+          if (active === 'camera' || active === 'feel') saveScene(place, activity)
+          go.world()
+        }}
+      >
         <span aria-hidden="true">🌍</span>
       </button>
       <strong className="lab-name">Lab</strong>
@@ -189,10 +204,7 @@ export function LabBar({ active, place, activity, section }: { active: LabTab; p
               if (t.id === active) return
               // Leaving a game: keep the section she's in now (it moves on by replaceState, which re-renders nothing here),
               // so coming back to camera or feel opens where you left.
-              if (active === 'camera' || active === 'feel') {
-                const s = sceneNow(place, activity)
-                if (s) remember({ scene: { ...s, params: gameState(liveParams()) } })
-              }
+              if (active === 'camera' || active === 'feel') saveScene(place, activity)
               location.hash = labLink(t.id, here, active)
             }}
           >
