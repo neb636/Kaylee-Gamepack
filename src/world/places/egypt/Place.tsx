@@ -9,13 +9,14 @@ import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
 import { LightShow } from './activities/LightShow'
 import { Market } from './activities/Market'
-import { Nile } from './activities/Nile'
+import { Nile } from './activities/nile/Nile'
 import { Passage } from './activities/Passage'
 import { Pyramid } from './activities/Pyramid'
 import { Scribe } from './activities/Scribe'
 import { Sphinx } from './activities/Sphinx'
 import { art } from './art'
 import { L } from './lines'
+import { Hippo } from './puppets/Hippo'
 import { Jamal } from './puppets/Jamal'
 import { Miu } from './puppets/Miu'
 import { Sphinx as SphinxPuppet } from './puppets/Sphinx'
@@ -41,7 +42,7 @@ export const GUESTS: Record<string, Guest> = {
   pyramid: { img: art.jamal, line: L.show.jamal, name: 'Jamal', box: [1.1, 1.1], render: (ref, height) => createElement(Jamal, { ref, height }) },
   passage: { img: art.tutu, line: L.show.tutu, name: 'Tutu', box: [0.75, 1], render: (ref, height) => createElement(Tutu, { ref, height }) },
   sphinx: { img: art.sphinx, line: L.show.sphinx, name: 'The Sphinx', box: [1.5, 1], render: (ref, height) => createElement(SphinxPuppet, { ref, height }) },
-  nile: { img: art.hippo, line: L.show.hippo, name: 'Hippo', box: [1, 0.85], render: buddy(art.hippo, 'hippo') },
+  nile: { img: art.hippo, line: L.show.hippo, name: 'Hippo', box: [0.82, 0.9], render: (ref, height) => createElement(Hippo, { ref, height }) },
   scribe: { img: art.ibis, line: L.show.ibis, name: 'Ibis', box: [0.9, 1], render: buddy(art.ibis, 'ibis') },
   market: { img: art.fennec, line: L.show.fennec, name: 'Fennec', box: [0.85, 0.8], render: buddy(art.fennec, 'fennec') },
 }

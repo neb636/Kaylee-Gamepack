@@ -227,10 +227,6 @@
     "hash": "bb261e9be7cd",
     "note": "gold tip shine"
   },
-  "src/world/places/egypt/assets/felucca.webp": {
-    "hash": "b510a92961d9",
-    "note": "white sail"
-  },
   "src/world/places/egypt/assets/fennec.webp": {
     "hash": "bd1d191cc6e1",
     "note": "eye highlights"
@@ -238,10 +234,6 @@
   "src/world/places/egypt/assets/gold-mask.webp": {
     "hash": "5d6a3f591484",
     "note": "eye whites"
-  },
-  "src/world/places/egypt/assets/hippo.webp": {
-    "hash": "488411379b2f",
-    "note": "eye highlights"
   },
   "src/world/places/egypt/assets/ibis.webp": {
     "hash": "681ae819ad93",

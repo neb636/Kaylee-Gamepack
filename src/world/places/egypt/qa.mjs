@@ -3,6 +3,17 @@
 // sections no screen reaches get a plain screenshot anyway. Not part of the app: Node runs it, Vite never sees it.
 import { skip } from '../../../../scripts/qa-lib.mjs'
 
+/** The Nile's farm: wait for the wheel to arrive, then hold a finger on it (the boat sails there and turns it). */
+async function nileWheel(page) {
+  await page.waitForTimeout(5000)
+  const wheel = await page.locator('svg[data-nile="wheel"]').boundingBox()
+  if (!wheel) throw new Error('no water wheel found')
+  await page.mouse.move(wheel.x + wheel.width / 2, wheel.y + wheel.height * 0.8)
+  await page.mouse.down()
+  await page.waitForTimeout(2000)
+  await page.mouse.up()
+}
+
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
   // Egypt: open the exact section instead of replaying earlier rounds.
@@ -14,6 +25,8 @@ export const screens = [
   { name: 'sphinx-sand', hash: '#/world/egypt/sphinx/face' },
   { name: 'sphinx-rubbed', hash: '#/world/egypt/sphinx/paws' },
   { name: 'nile-sail', hash: '#/world/egypt/nile/sail-1', wait: 2500 },
+  { name: 'nile-wheel', hash: '#/world/egypt/nile/farm-1', act: nileWheel },
+  { name: 'nile-hippo', hash: '#/world/egypt/nile/sail-2', wait: 4500 },
   { name: 'scribe-stamps', hash: '#/world/egypt/scribe/k' },
   {
     name: 'market-koshari',
@@ -44,6 +57,34 @@ export const pacing = [
 
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
 export const motion = [
+  {
+    name: 'nile-steer',
+    seconds: 4,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/egypt/nile/sail-1`)
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      // A finger on the water: the felucca chases it up, down and across (it leans, bobs and leaves a wake).
+      const { width: w, height: h } = page.viewportSize()
+      await page.mouse.move(w * 0.6, h * 0.62)
+      await page.mouse.down()
+      for (const [x, y] of [[0.7, 0.8], [0.5, 0.55], [0.75, 0.6], [0.4, 0.85]]) {
+        await page.mouse.move(w * x, h * y, { steps: 12 })
+        await page.waitForTimeout(650)
+      }
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'nile-wheel',
+    seconds: 4,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/egypt/nile/farm-1`)
+      await page.waitForTimeout(500)
+    },
+    act: nileWheel,
+  },
   {
     name: 'passage-walk',
     seconds: 2.5,
