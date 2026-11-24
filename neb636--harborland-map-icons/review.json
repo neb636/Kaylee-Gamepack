@@ -1,0 +1,11 @@
+{
+  "title": "HarborLand map: the shelf's drawings",
+  "checkIn": "fix",
+  "kaylee": "The HarborLand map and her sticker band show the same hand-drawn pictures as the game shelf, not emoji.",
+  "questions": [],
+  "links": [{ "label": "The HarborLand map", "hash": "#/world/thailand/mall-trip/hall?map=1&games=vet,cafe,race&from=race" }],
+  "pictures": [
+    { "title": "The HarborLand map", "before": "pics/map-before.png", "after": "pics/map-after.png", "caption": "Each game is its shelf picture, name underneath; played ones keep the gold edge and star" },
+    { "title": "Held upright", "after": "pics/map-after-portrait.png", "caption": "The sticker band in the corner uses the same pictures" }
+  ]
+}
