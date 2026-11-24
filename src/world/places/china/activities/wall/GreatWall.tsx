@@ -7,7 +7,6 @@ import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 
 import { burst, Piece, PlayArea, say, shuffle, sounds, Target, useAlive, useElementSize, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
-import { HudButton } from '../../../../kit/Hud'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -607,20 +606,22 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
         </PlayArea>
       )}
 
-      {/* The way on: glides to Hou Hou's next spot (or points back at it), on the side it points to. */}
+      {/* Big arrow: glides to Hou Hou's next spot (or points back at it). */}
       {!story && phase.current !== 'fire' && (
-        <HudButton
-          role="go"
-          icon="play"
-          label="follow Hou Hou"
-          pulse={dir !== 0 || cue}
+        <motion.button
+          aria-label="follow Hou Hou"
           onClick={() => {
+            sounds.pop()
             setCue(false)
             void goToTarget()
           }}
-          className={dir < 0 ? 'hud-flip' : undefined}
-          style={{ position: 'absolute', top: g?.short ? '24%' : '36%', [dir < 0 ? 'left' : 'right']: 12, zIndex: 16, opacity: dir !== 0 || cue ? 1 : 0.85 }}
-        />
+          animate={dir !== 0 || cue ? { scale: [1, 1.15, 1] } : { scale: 1, opacity: 0.85 }}
+          transition={dir !== 0 || cue ? { repeat: Infinity, duration: 1 } : {}}
+          className={dir !== 0 || cue ? 'world-glow' : undefined}
+          style={{ position: 'absolute', top: g?.short ? '24%' : '36%', [dir < 0 ? 'left' : 'right']: 12, width: 'calc(var(--target) + 12px)', height: 'calc(var(--target) + 12px)', borderRadius: '50%', border: `5px solid ${INK}`, background: 'var(--hotpink)', color: '#fff', fontSize: 44, fontWeight: 700, zIndex: 16, display: 'grid', placeItems: 'center', boxShadow: 'var(--shadow)', transform: dir < 0 ? 'scaleX(-1)' : undefined }}
+        >
+          ▶
+        </motion.button>
       )}
 
       {/* A soft cream band behind the top bar so the stars show up on the pale sky. */}

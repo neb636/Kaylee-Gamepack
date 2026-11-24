@@ -634,7 +634,6 @@
   height: 56%;
   display: block;
 }
-.hud-flip > svg { transform: scaleX(-1); } /* an arrow pointing the other way (left) */
 .hud-sm { --hud-size: var(--btn); }
 .hud-lg { --hud-size: calc(var(--target) * 1.25); }
 .hud-leave { --hud-glyph: var(--lavender-dark); }
