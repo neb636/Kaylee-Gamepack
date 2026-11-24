@@ -216,7 +216,7 @@ export function HiKaylee({ fontSize, style }: { fontSize: string; style?: CSSPro
 
 const PILLS = {
   pink: { bg: 'var(--hotpink)', fg: '#fff', arrow: 'var(--hotpink)' },
-  gold: { bg: 'var(--butter)', fg: 'var(--ink)', arrow: 'var(--ink)' },
+  gold: { bg: 'var(--gold)', fg: '#fff', arrow: 'var(--gold)' },
 }
 
 /** The face of a chunky, flat pill button (put it inside a button). `arrow` adds a white ▶ circle at the end. */

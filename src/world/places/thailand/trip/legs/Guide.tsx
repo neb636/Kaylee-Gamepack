@@ -120,7 +120,9 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
       >
         <SparklePuppet ref={sparkle} height="100%" lookToward={0.4} />
       </button>
-      <AnimatePresence>
+      {/* popLayout: a line that cuts in takes the old bubble's place at once. In the default mode the old one stayed in
+          the row while it faded, so the new one opened squeezed off to its right, then jumped back beside Sparkle. */}
+      <AnimatePresence mode="popLayout" anchorY="bottom">
         {line && (
           <motion.div
             key={line.n}
@@ -128,15 +130,19 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, // Over the pose buttons (on a narrow phone they sit higher, above Sparkle).
-            marginBottom: raised ? (window.innerWidth < 600 ? 'calc(min(150px, 20vh, 30vw) + 96px)' : 'clamp(80px, 14vmin, 128px)') : corner && narrow ? corner.height : 'min(60px, 8vh)', background: 'rgba(255,255,255,0.95)', borderRadius: 'var(--radius)', padding: who ? '6px 14px 6px 6px' : '10px 16px', boxShadow: 'var(--shadow)', transformOrigin: 'bottom left' }}
+            // The gap under the bubble is padding, not margin: popLayout pins a fading bubble by its bottom, and a margin
+            // would lift it by that much as it goes.
+            // Over the pose buttons (on a narrow phone they sit higher, above Sparkle).
+            style={{ paddingBottom: raised ? (window.innerWidth < 600 ? 'calc(min(150px, 20vh, 30vw) + 96px)' : 'clamp(80px, 14vmin, 128px)') : corner && narrow ? corner.height : 'min(60px, 8vh)', transformOrigin: 'bottom left' }}
           >
-            {who && (
-              <span title={who.name} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 46, height: 46, borderRadius: 23, background: who.color, fontSize: 24, border: '3px solid #fff' }}>
-                {who.icon}
-              </span>
-            )}
-            <span style={{ fontSize: 'clamp(16px, min(3vw, 3.4vh), 26px)', fontWeight: 600, lineHeight: 1.15 }}>{lineText(line.l)}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.95)', borderRadius: 'var(--radius)', padding: who ? '6px 14px 6px 6px' : '10px 16px', boxShadow: 'var(--shadow)' }}>
+              {who && (
+                <span title={who.name} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 46, height: 46, borderRadius: 23, background: who.color, fontSize: 24, border: '3px solid #fff' }}>
+                  {who.icon}
+                </span>
+              )}
+              <span style={{ fontSize: 'clamp(16px, min(3vw, 3.4vh), 26px)', fontWeight: 600, lineHeight: 1.15 }}>{lineText(line.l)}</span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

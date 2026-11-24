@@ -29,7 +29,7 @@ the end card's way on), one white ring, one press lip. A small one still takes a
 | `go` | pink | the way on |
 | `done` | mint | finishing something she chose to do (the wardrobe, the album, the suitcase) |
 | `again` | lavender | one more round |
-| `open` | butter | opening something: a map, an album, the party, another road |
+| `open` | gold, white picture | opening something: a map, an album, the party, another road |
 | `skip` | quiet white, smaller | skipping a ride or a story |
 
 Pictures are drawn, in `src/sdk/components/HudIcons.tsx` (`HUD_ICONS`): back, map, play, check, again, skip, sound,

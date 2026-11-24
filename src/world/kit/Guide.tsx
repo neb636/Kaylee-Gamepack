@@ -152,16 +152,20 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
       >
         <SparklePuppet ref={sparkle} height="100%" lookToward={right ? -0.4 : 0.4} flip={right} />
       </button>
-      <AnimatePresence>
+      {/* popLayout: a line that cuts in takes the old bubble's place at once. In the default mode the old one stayed in
+          the row while it faded, so the new one opened squeezed off to its right, then jumped back beside Sparkle. */}
+      <AnimatePresence mode="popLayout" anchorX={right ? 'right' : 'left'} anchorY="bottom">
         {line && (
           <motion.div
             key={lineText(line)}
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            style={{ marginBottom: 'min(64px, 8vh)', background: 'rgba(255,255,255,0.95)', color: 'var(--ink)', borderRadius: 'var(--radius)', padding: '10px 16px', boxShadow: 'var(--shadow)', fontSize: 'clamp(16px, min(2.8vw, 3.2vh), 26px)', fontWeight: 600, lineHeight: 1.15, transformOrigin: right ? 'bottom right' : 'bottom left' }}
+            // The gap under the bubble is padding on a wrapper, not margin: popLayout pins a fading bubble by its bottom, and a
+            // margin would lift it by that much as it goes.
+            style={{ paddingBottom: 'min(64px, 8vh)', transformOrigin: right ? 'bottom right' : 'bottom left' }}
           >
-            {lineText(line)}
+            <div style={{ background: 'rgba(255,255,255,0.95)', color: 'var(--ink)', borderRadius: 'var(--radius)', padding: '10px 16px', boxShadow: 'var(--shadow)', fontSize: 'clamp(16px, min(2.8vw, 3.2vh), 26px)', fontWeight: 600, lineHeight: 1.15 }}>{lineText(line)}</div>
           </motion.div>
         )}
       </AnimatePresence>

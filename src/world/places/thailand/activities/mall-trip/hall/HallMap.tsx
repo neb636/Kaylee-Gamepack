@@ -68,7 +68,7 @@ export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick
             animate={nudge ? { scale: [1, 1.18, 1], rotate: [0, -8, 8, 0] } : { scale: 1, rotate: 0 }}
             transition={nudge ? { repeat: Infinity, duration: 0.9 } : { type: 'spring' }}
             onClick={() => onOpen(true)}
-            style={nudge ? { boxShadow: '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' } : undefined}
+            style={nudge ? { boxShadow: '0 var(--hud-lip) 0 var(--hud-shade), 0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' } : undefined}
           >
             {badge && (
               <span aria-hidden style={{ position: 'absolute', right: -8, top: -8, width: 'clamp(40px, 6vmin, 50px)', height: 'clamp(40px, 6vmin, 50px)', borderRadius: '50%', background: badge.color, border: '3px solid #fff', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
