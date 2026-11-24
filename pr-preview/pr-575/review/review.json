@@ -1,0 +1,15 @@
+{
+  "title": "One set of controls: Italy",
+  "checkIn": "fix",
+  "kaylee": "The three \"I'm done\" buttons in Italy (the mask shop, her own pizza's toppings, the pizza cutter) now show the game's own drawn tick instead of the iPad's emoji, like the other countries.",
+  "questions": [],
+  "pictures": [
+    { "title": "Her own pizza: done", "before": "pics/toppings-before.png", "after": "pics/toppings-after.png", "caption": "Same mint button, same corner; the green emoji box becomes the drawn tick. The cutter's done button is the same change." },
+    { "title": "Venice mask shop: done", "before": "pics/mask-before.png", "after": "pics/mask-after.png", "caption": "The text tick becomes the drawn one" }
+  ],
+  "links": [
+    { "label": "Her own pizza (toppings)", "hash": "#/world/italy/pizzeria/own?at=toppings" },
+    { "label": "Her own pizza (cutting)", "hash": "#/world/italy/pizzeria/own?at=cut" },
+    { "label": "The mask shop", "hash": "#/world/italy/venice/mask" }
+  ]
+}
