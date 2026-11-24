@@ -3,7 +3,7 @@
 // she likes it. Her mask is saved, and Sparkle wears it at the finale (MaskView).
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
-import { BigButton, say, sounds, SparklePuppet, type PuppetHandle, useTimers } from '../../../../../sdk'
+import { HudGlyph, BigButton, say, sounds, SparklePuppet, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { L } from '../../lines'
@@ -222,7 +222,7 @@ export function MaskShop({ onDone }: { onDone: (m: MaskData) => void }) {
               else onDone(data)
             }}
           >
-            ✓
+            <HudGlyph icon="check" />
           </BigButton>
           </motion.div>
         )}

@@ -5,7 +5,7 @@
 //   Cutter    drag the pizza wheel across: one cut = two halves, two cuts = four slices.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, say, sounds, StickerBoard, useAlive, useElementSize, wait, type Placed, useTimers } from '../../../../../sdk'
+import { HudGlyph, BigButton, say, sounds, StickerBoard, useAlive, useElementSize, wait, type Placed, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -337,7 +337,7 @@ export function Toppings({ pizza, order, kinds, onChange, onDone }: { pizza: Piz
       {order.free && extras >= 3 && (
         <div style={{ position: 'absolute', right: 0, bottom: 0, zIndex: 8 }}>
           <BigButton ariaLabel="My pizza is done" color="mint" onClick={onDone}>
-            ✅
+            <HudGlyph icon="check" />
           </BigButton>
         </div>
       )}
@@ -461,7 +461,7 @@ export function Cutter({ pizza, need, onCut, onDone }: { pizza: PizzaState; need
         {need === 'free' && cuts.length > 0 && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ position: 'absolute', right: '-2%', bottom: 0 }}>
             <BigButton ariaLabel="Done cutting" color="mint" onClick={onDone}>
-              ✅
+              <HudGlyph icon="check" />
             </BigButton>
           </motion.div>
         )}
