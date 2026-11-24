@@ -11,11 +11,13 @@ import { StoryBeat } from '../../../kit/StoryBeat'
 import { useLandscape } from '../../../../sdk'
 import { useSections } from '../../../kit/sections'
 import SECTIONS from './Sphinx.sections'
-import { art } from '../art'
+import { INK } from '../../../kit/ink'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
+import { Pot } from '../Pot'
 import { Miu } from '../puppets/Miu'
 import { SPHINX_BOX, SPHINX_REGIONS, Sphinx as SphinxPuppet } from '../puppets/Sphinx'
+import { GROUND, SphinxDesert } from './SphinxDesert'
 
 type Stage3 = 'face' | 'paws' | 'back'
 const STAGES: Stage3[] = ['face', 'paws', 'back']
@@ -26,7 +28,9 @@ const DONE_AT = 0.5 // share of a region she has to rub before the rest puffs aw
 const PAD_TOP = 0.12
 // ...and wider, so the heap slopes down to the ground on both sides.
 const PAD_X = 0.08
-const toSand = (r: RevealRegion): RevealRegion => ({ x: (PAD_X * 100 + r.x) / (1 + 2 * PAD_X), w: r.w / (1 + 2 * PAD_X), y: (PAD_TOP * 100 + r.y) / (1 + PAD_TOP), h: r.h / (1 + PAD_TOP) })
+// He lies a little above the bottom of the box (in % of it), so the sand's foot hides the ink line under his paws.
+const LIFT = 2
+const toSand = (r: RevealRegion): RevealRegion => ({ x: (PAD_X * 100 + r.x) / (1 + 2 * PAD_X), w: r.w / (1 + 2 * PAD_X), y: (PAD_TOP * 100 + r.y) / (1 + PAD_TOP) - LIFT, h: r.h / (1 + PAD_TOP) })
 const REGIONS = STAGES.map((s) => toSand(SPHINX_REGIONS[s]))
 // Pot pieces hidden under the sand on his back (in % of the Sphinx).
 const PIECE_SPOTS = [
@@ -44,39 +48,58 @@ const PIECES = [
   { top: 70, bottom: 0 },
 ]
 
-/** Paints the heap of sand: a big rounded dune with a few ripples and pebbles. */
+/** Paints the heap of sand in the scene's flat tones: a big rounded dune with the puppets' ink line along its top, a
+ *  lit crest, a few ripples and pebbles. Its foot is the ground's own color, so the heap grows out of the desert. */
 function paintSand(ctx: CanvasRenderingContext2D, w: number, h: number) {
   ctx.clearRect(0, 0, w, h)
   // A dune: it slopes down to the ground on both sides, and the very top of his headdress pokes out.
   const top = h * 0.2
+  const foot = h * 0.95
   const ridge = new Path2D()
-  ridge.moveTo(-w * 0.02, h * 1.01)
-  ridge.bezierCurveTo(w * 0.02, h * 0.62, w * 0.12, top, w * 0.4, top)
+  ridge.moveTo(w * 0.008, foot)
+  ridge.bezierCurveTo(w * 0.03, h * 0.6, w * 0.12, top, w * 0.4, top)
   ridge.bezierCurveTo(w * 0.56, top, w * 0.62, h * 0.28, w * 0.78, h * 0.32)
-  ridge.bezierCurveTo(w * 0.94, h * 0.36, w * 0.99, h * 0.7, w * 1.02, h * 1.01)
+  ridge.bezierCurveTo(w * 0.92, h * 0.355, w * 0.975, h * 0.6, w * 0.992, foot)
   const heap = new Path2D(ridge)
+  heap.lineTo(w * 0.992, h)
+  heap.lineTo(w * 0.008, h)
   heap.closePath()
-  ctx.fillStyle = '#F2C98E'
+  const sand = ctx.createLinearGradient(0, top, 0, h)
+  sand.addColorStop(0, '#FCE9C0')
+  sand.addColorStop(0.55, '#F9DFAE')
+  sand.addColorStop(0.9, GROUND)
+  ctx.fillStyle = sand
   ctx.fill(heap)
-  // Only the top of the dune gets a line; its feet melt into the ground.
-  ctx.lineWidth = Math.max(3, w * 0.006)
-  ctx.strokeStyle = '#C99B6A'
-  ctx.stroke(ridge)
-  ctx.fillStyle = '#F2C98E'
-  ctx.fillRect(0, h * 0.94, w, h * 0.06)
-  // Ripples
-  ctx.strokeStyle = '#E3B477'
+  ctx.save()
+  ctx.clip(heap)
+  // The shaded side, away from the sun.
+  ctx.fillStyle = 'rgba(234, 192, 132, 0.45)'
+  ctx.beginPath()
+  ctx.moveTo(w * 0.02, h)
+  ctx.bezierCurveTo(w * 0.06, h * 0.66, w * 0.14, h * 0.34, w * 0.34, h * 0.24)
+  ctx.bezierCurveTo(w * 0.2, h * 0.42, w * 0.16, h * 0.72, w * 0.2, h)
+  ctx.closePath()
+  ctx.fill()
+  // The lit crest, just under the line.
   ctx.lineCap = 'round'
-  ctx.lineWidth = Math.max(4, w * 0.008)
+  ctx.strokeStyle = '#FFF6DC'
+  ctx.lineWidth = Math.max(4, w * 0.012)
+  ctx.beginPath()
+  ctx.moveTo(w * 0.3, top + h * 0.045)
+  ctx.bezierCurveTo(w * 0.44, top + h * 0.02, w * 0.56, top + h * 0.05, w * 0.64, h * 0.3)
+  ctx.stroke()
+  // Ripples
+  ctx.strokeStyle = '#EFCB8E'
+  ctx.lineWidth = Math.max(4, w * 0.009)
   for (const [x, y, len] of [
-    [0.12, 0.5, 0.14],
-    [0.3, 0.3, 0.12],
-    [0.52, 0.46, 0.16],
-    [0.72, 0.52, 0.14],
-    [0.2, 0.78, 0.18],
-    [0.62, 0.84, 0.16],
+    [0.12, 0.52, 0.14],
+    [0.3, 0.36, 0.12],
+    [0.52, 0.48, 0.16],
+    [0.72, 0.54, 0.14],
+    [0.2, 0.76, 0.18],
+    [0.62, 0.8, 0.16],
     [0.42, 0.66, 0.12],
-    [0.86, 0.7, 0.1],
+    [0.84, 0.7, 0.09],
   ]) {
     ctx.beginPath()
     ctx.moveTo(w * x, h * y)
@@ -84,14 +107,27 @@ function paintSand(ctx: CanvasRenderingContext2D, w: number, h: number) {
     ctx.stroke()
   }
   // Pebbles
-  ctx.fillStyle = '#D9A876'
-  for (let i = 0; i < 26; i++) {
-    const x = ((i * 97) % 100) / 100
-    const y = 0.35 + (((i * 53) % 60) / 100)
+  ctx.fillStyle = '#E6BC80'
+  const rnd = (n: number) => {
+    const v = Math.sin(n * 12.9898) * 43758.5453
+    return v - Math.floor(v)
+  }
+  for (let i = 0; i < 16; i++) {
+    const x = 0.14 + rnd(i + 1) * 0.72
+    const y = 0.44 + rnd(i + 40) * 0.44
     ctx.beginPath()
-    ctx.ellipse(w * x, h * y, w * 0.006, w * 0.004, 0, 0, Math.PI * 2)
+    ctx.ellipse(w * x, h * y, w * 0.007, w * 0.005, 0, 0, Math.PI * 2)
     ctx.fill()
   }
+  ctx.restore()
+  // One ink line along the top, like everything she plays with; its ends sink into the ground.
+  ctx.lineCap = 'round'
+  ctx.lineJoin = 'round'
+  ctx.lineWidth = Math.max(3, w * 0.0085)
+  ctx.strokeStyle = INK
+  ctx.stroke(ridge)
+  ctx.fillStyle = GROUND
+  ctx.fillRect(0, foot, w, h - foot)
 }
 
 export function Sphinx({ onDone, setProgress }: ActivityProps) {
@@ -224,28 +260,32 @@ export function Sphinx({ onDone, setProgress }: ActivityProps) {
     if (start === 'end') void finishEnd()
   }, [])
 
-  if (phase === 'story') return <StoryBeat lines={[L.sphinx.story]} friend={<Miu height="100%" />} bg={art.bgSphinx} onDone={() => setPhase('face')} />
+  if (phase === 'story') return <StoryBeat lines={[L.sphinx.story]} friend={<Miu height="100%" />} scene={<SphinxDesert still />} onDone={() => setPhase('face')} />
 
   const prompt = stageIndex >= 0 ? PROMPTS[phase as Stage3] : phase === 'pot' ? L.sphinx.pieces : undefined
   const hintRegion = stageIndex >= 0 && !rubbed ? REGIONS[stageIndex] : null
   const aspect = (SPHINX_BOX[0] * (1 + 2 * PAD_X)) / (SPHINX_BOX[1] * (1 + PAD_TOP))
 
   return (
-    <Stage bg={art.bgSphinx} prompt={prompt} style={{ backgroundPosition: 'center bottom' }}>
+    <Stage scene={<SphinxDesert />} prompt={prompt}>
       <div style={{ position: 'absolute', inset: 0, containerType: 'size', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '3cqh' }}>
-        <div style={{ position: 'relative', width: `min(96cqw, calc(88cqh * ${aspect}))`, aspectRatio: String(aspect) }}>
+        <div style={{ position: 'relative', width: `min(96cqw, calc(88cqh * ${aspect}))`, aspectRatio: String(aspect), pointerEvents: 'auto' }}>
+          {/* his shadow on the sand */}
+          <div style={{ position: 'absolute', left: '9%', right: '5%', bottom: '0.5%', height: '7%', borderRadius: '50%', background: '#D9A766', opacity: 0.45 }} />
           {/* The Sphinx, the pot pieces hidden in the sand, then the sand on top. */}
           <div
             role="button"
             aria-label="Sphinx"
             onClick={() => phase === 'end' && !busy.current && (void sphinx.current?.play('smile'), void say(pick(L.tickle.sphinx)))}
-            style={{ position: 'absolute', left: `${(PAD_X * 100) / (1 + 2 * PAD_X)}%`, width: `${100 / (1 + 2 * PAD_X)}%`, bottom: 0, height: `${100 / (1 + PAD_TOP)}%` }}
+            style={{ position: 'absolute', left: `${(PAD_X * 100) / (1 + 2 * PAD_X)}%`, width: `${100 / (1 + 2 * PAD_X)}%`, bottom: `${LIFT}%`, height: `${100 / (1 + PAD_TOP)}%` }}
           >
             <SphinxPuppet ref={sphinx} height="100%" asleep={!awake} />
           </div>
           {phase !== 'pot' && phase !== 'end' &&
             PIECE_SPOTS.map((p, i) => (
-              <img key={i} src={art.pot} alt="" style={{ position: 'absolute', left: `${p.x}%`, top: `${p.y}%`, width: '13%', aspectRatio: '1', translate: '-50% -50%', rotate: `${(i - 1) * 25}deg`, objectFit: 'contain', clipPath: `inset(${PIECES[i].top}% 0 ${PIECES[i].bottom}% 0)`, pointerEvents: 'none' }} />
+              <div key={i} style={{ position: 'absolute', left: `${p.x}%`, top: `${p.y}%`, width: '13%', aspectRatio: '1', translate: '-50% -50%', rotate: `${(i - 1) * 25}deg`, clipPath: `inset(${PIECES[i].top}% 0 ${PIECES[i].bottom}% 0)`, pointerEvents: 'none' }}>
+                <Pot />
+              </div>
             ))}
           <ScratchReveal ref={sand} paint={seedSand} brush={5.5} regions={REGIONS} onProgress={progress} onRub={rub} disabled={stageIndex < 0} style={{ zIndex: 2 }} />
           {hintRegion && (
@@ -265,7 +305,7 @@ export function Sphinx({ onDone, setProgress }: ActivityProps) {
                   initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
                   animate={{ x: (k - 1) * 40 + (Math.random() - 0.5) * 30, y: [-10, -40 - k * 12, 10], opacity: 0, scale: 0.6 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
-                  style={{ position: 'absolute', left: `${g.x}%`, top: `${g.y}%`, width: 10, height: 10, borderRadius: '50%', background: '#E3B477', zIndex: 4, pointerEvents: 'none' }}
+                  style={{ position: 'absolute', left: `${g.x}%`, top: `${g.y}%`, width: 10, height: 10, borderRadius: '50%', background: '#EFCB8E', border: `2px solid ${INK}`, zIndex: 4, pointerEvents: 'none' }}
                 />
               )),
             )}
@@ -285,12 +325,12 @@ function PotPuzzle({ placed, onFit }: { placed: number[]; onFit: (i: number) => 
   const landscape = useLandscape()
   const pot = landscape ? 'min(46cqh, 30cqw)' : 'min(34cqh, 50cqw)'
   const [order] = useState(() => [1, 2, 0])
-  const piece = (i: number) => <img src={art.pot} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain', clipPath: `inset(${PIECES[i].top}% 0 ${PIECES[i].bottom}% 0)` }} />
+  const piece = (i: number) => <Pot style={{ clipPath: `inset(${PIECES[i].top}% 0 ${PIECES[i].bottom}% 0)` }} />
   return (
     <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} style={{ position: 'absolute', inset: 0, containerType: 'size', zIndex: 10, display: 'grid', placeItems: 'center', pointerEvents: 'none' }}>
       <DragArea style={{ display: 'flex', flexDirection: landscape ? 'row' : 'column', alignItems: 'center', gap: '4cqmin', background: 'rgba(255,247,240,0.92)', borderRadius: 36, padding: '3cqmin 5cqmin', boxShadow: 'var(--shadow)', pointerEvents: 'auto' }}>
         <DropZone id="pot" style={{ position: 'relative', height: pot, aspectRatio: '1' }}>
-          <img src={art.pot} alt="" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', filter: 'grayscale(1) brightness(1.6) opacity(0.35)' }} />
+          <Pot style={{ position: 'absolute', inset: 0, filter: 'grayscale(1) brightness(1.6) opacity(0.35)' }} />
           {placed.map((i) => (
             <motion.div key={i} initial={{ scale: 1.15 }} animate={{ scale: 1 }} style={{ position: 'absolute', inset: 0 }}>
               {piece(i)}
