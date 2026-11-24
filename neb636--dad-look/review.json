@@ -1,0 +1,16 @@
+{
+  "title": "Dad's new look",
+  "checkIn": "fix",
+  "kaylee": "Dad looks more like Dad: messy brown hair, blue eyes, a t-shirt and shorts, and a purple curl of a tail.",
+  "questions": ["Is the small smile right, or do you want his big open grin back?"],
+  "pictures": [
+    { "title": "Before and after", "before": "pics/dad-before.jpg", "after": "pics/dad-after.jpg", "caption": "Brown tousled hair and brows, blue eyes, pink nose on a cream muzzle, round ears, a twisted horn. The shirt stays yellow." },
+    { "title": "All the way round", "after": "pics/dad-round.jpg", "caption": "The curl of his tail swings out to one side, so it shows from the front too." },
+    { "title": "With the family", "after": "pics/dad-family.jpg", "caption": "Same height and build as before, so every scene still fits him." },
+    { "title": "At the barber", "after": "pics/dad-barber.jpg", "caption": "Her strands take the place of his hair, and start out brown. Here: long and red." }
+  ],
+  "links": [
+    { "label": "Dad in the character lab", "hash": "#/world/characters/nick" },
+    { "label": "The barber", "hash": "#/world/thailand/mall-trip/barber" }
+  ]
+}
