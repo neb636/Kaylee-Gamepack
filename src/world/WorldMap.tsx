@@ -10,7 +10,7 @@ import { firstTime as firstTimeHere, lineText, Mascot, say, sounds, useOnline, u
 import balloon from './assets/balloon.webp'
 import mapArt from './assets/bg-world-map.webp'
 import { DOCK, MapIcon, ShelfIcon } from './HomeIcons'
-import { FitBox } from './kit/Chrome'
+import { FitBox, tileFace } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
 import { places, useListed, type PlaceEntry } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
@@ -256,7 +256,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
 }
 
 function ViewButton({ icon, label, on, onClick }: { icon: (color: string) => ReactNode; label: string; on: boolean; onClick: () => void }) {
-  // Match the dock tiles in both views and every orientation; only the inactive icon shrinks.
+  // Match the dock buttons in both views and every orientation; only the inactive icon shrinks.
   const size = 'var(--dock-tile)'
   return (
     <motion.button
@@ -273,45 +273,26 @@ function ViewButton({ icon, label, on, onClick }: { icon: (color: string) => Rea
   )
 }
 
-/** One of the home dock's buttons: a matte colored tile with a white picture and its word under it (the word is for Dad). */
+/** One of the home dock's buttons: a round button from the one family (docs/hud.md) in its place's color, with a
+ *  white picture and its word under it (the word is for Dad). */
 function DockButton({ Icon, label, word, color, shade, onClick, badge }: { Icon: (p: { shade: string }) => ReactNode; label: string; word: string; color: string; shade: string; onClick: () => void; badge?: number }) {
   return (
     <motion.button
       aria-label={label}
       className="world-dock-tile"
-      whileTap={{ scale: 0.92, y: 4 }}
+      whileTap={{ scale: 0.9, y: 3 }}
       onClick={() => {
         sounds.pop()
         onClick()
       }}
-      style={{
-        // An explicit width and height: WebKit ignores aspect-ratio on a flex button and stretches it. The size (--tile)
-        // comes from world.css: smaller in the shelf's floating dock.
-        position: 'relative',
-        flex: '0 0 auto',
-        width: 'var(--tile)',
-        height: 'var(--tile)',
-        borderRadius: 'clamp(22px, 3.4vmin, 34px)',
-        background: color,
-        boxShadow: `0 6px 0 ${shade}`,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 'calc(var(--tile) * 0.04)',
-        padding: 0,
-        color: '#fff',
-      }}
     >
-      <span style={{ display: 'block', width: 'calc(var(--tile) * 0.56)', height: 'calc(var(--tile) * 0.56)' }}>
+      <span className="hud-btn hud-tile" style={tileFace({ color, shade })}>
         <Icon shade={shade} />
+        {badge !== undefined && badge > 0 && (
+          <span className="world-dock-badge" style={{ color: shade, boxShadow: `0 3px 0 ${shade}55` }}>{badge}</span>
+        )}
       </span>
-      <span className="world-dock-word" style={{ fontWeight: 700, fontSize: 'clamp(13px, 2.1vmin, 20px)', lineHeight: 1, letterSpacing: 0.3 }}>
-        {word}
-      </span>
-      {badge !== undefined && badge > 0 && (
-        <span style={{ position: 'absolute', top: -8, right: -8, background: '#fff', color: shade, borderRadius: 999, minWidth: 38, height: 38, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 21, boxShadow: `0 3px 0 ${shade}55`, padding: '0 8px' }}>{badge}</span>
-      )}
+      <span className="world-dock-word">{word}</span>
     </motion.button>
   )
 }

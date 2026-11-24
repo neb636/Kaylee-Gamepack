@@ -4,16 +4,16 @@ import { sounds } from '../../sdk'
 
 /**
  * Round back button + optional extras, floating over the top-left like the game shell's 🏠 bar.
- * `tile` turns the button into a colored dock-style tile with a press lip (the world-map globe), so it matches the
- * country's puzzle and theater tiles beside it.
+ * `tile` gives the round button a home place's color (the world-map globe), so it matches the country's puzzle and
+ * theater buttons beside it. Either way it is one of the round family (docs/hud.md).
  */
 export function TopBar({ icon, tile, label, onBack, children }: { icon: ReactNode; tile?: { color: string; shade: string }; label: string; onBack: () => void; children?: ReactNode }) {
   return (
     <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', left: 16, right: 16, display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 16px)', pointerEvents: 'none', zIndex: 'var(--z-bar)' }}>
       <motion.button
         aria-label={label}
-        className={tile ? undefined : 'hud-btn hud-leave hud-sm'}
-        whileTap={tile ? { scale: 0.88, y: 3 } : { scale: 0.85 }}
+        className={tile ? 'hud-btn hud-sm hud-tile' : 'hud-btn hud-leave hud-sm'}
+        whileTap={{ scale: 0.86, y: 3 }}
         onClick={() => {
           sounds.pop()
           onBack()
@@ -26,9 +26,7 @@ export function TopBar({ icon, tile, label, onBack, children }: { icon: ReactNod
           height: 'var(--btn)',
           display: 'grid',
           placeItems: 'center',
-          ...(tile
-            ? { borderRadius: 'calc(var(--btn) * 0.28)', background: tile.color, boxShadow: `0 5px 0 ${tile.shade}`, padding: 'calc(var(--btn) * 0.14)' }
-            : {}),
+          ...(tile ? tileFace(tile) : {}),
         }}
       >
         {icon}
@@ -37,6 +35,9 @@ export function TopBar({ icon, tile, label, onBack, children }: { icon: ReactNod
     </div>
   )
 }
+
+/** The face and press lip of a round button in a home place's color (with `hud-btn hud-tile`). */
+export const tileFace = (tile: { color: string; shade: string }) => ({ '--hud-face': tile.color, '--hud-shade': tile.shade }) as CSSProperties
 
 /** A pill that sits in the top bar (stamp counts, titles). */
 export function BarPill({ children, style }: { children: ReactNode; style?: CSSProperties }) {

@@ -112,14 +112,14 @@ export const DOCK = {
 } as const
 export type DockKind = keyof typeof DOCK
 
-/** The way back to the world map: a sky-blue tile with the globe, built like the dock's buttons so it sits with them. */
+/** The way back to the world map: a sky-blue button with the globe, built like the dock's buttons so it sits with them. */
 export const WORLD = { color: '#5ab4f0', shade: '#3893d6', Icon: GlobeIcon } as const
 
-/** A dock picture on its own little colored tile, sized to the text around it (for title pills and counts). */
+/** A dock picture on its own little colored dot, sized to the text around it (for title pills and counts). */
 export function DockGlyph({ kind, size = '1.25em' }: { kind: DockKind; size?: string }) {
   const { color, shade, Icon } = DOCK[kind]
   return (
-    <span aria-hidden style={{ display: 'inline-block', flex: '0 0 auto', width: size, height: size, borderRadius: '28%', background: color, padding: `calc(${size} * 0.08)`, boxSizing: 'border-box', verticalAlign: 'middle' }}>
+    <span aria-hidden style={{ display: 'inline-block', flex: '0 0 auto', width: size, height: size, borderRadius: '50%', background: color, padding: `calc(${size} * 0.17)`, boxSizing: 'border-box', verticalAlign: 'middle' }}>
       <Icon shade={shade} />
     </span>
   )

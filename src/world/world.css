@@ -293,7 +293,8 @@
 .world .world-list,
 .world .world-map {
   --dock-tile: clamp(64px, min(15vw, 8.5vh), 96px);
-  --dock-h: calc(var(--dock-tile) + 30px);
+  --dock-word: clamp(12px, 2.1vmin, 18px);
+  --dock-h: calc(var(--dock-tile) + var(--dock-word) + 40px);
   --dock-w: 0px;
   --tile: clamp(84px, 14vmin, 128px);
   --card-radius: clamp(24px, 3.4vmin, 36px);
@@ -542,9 +543,42 @@
   opacity: 0.78;
 }
 
-/* The home dock's tiles; on the shelf they float in a frosted bar. */
+/* The home dock's buttons: a round button (.hud-btn.hud-tile) with its word under it. The whole thing is the tap
+   target. On the shelf and the map they float in a frosted bar. */
 .world .world-dock-tile {
   --tile: clamp(88px, min(17vw, 12.5vh), 140px);
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  background: none;
+}
+.world .world-dock-tile > .hud-btn {
+  --hud-size: var(--tile);
+}
+.world .world-dock-word {
+  font-weight: 700;
+  font-size: var(--dock-word);
+  line-height: 1;
+  letter-spacing: 0.3px;
+  color: var(--ink);
+  opacity: 0.78;
+}
+.world .world-dock-badge {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  min-width: clamp(28px, calc(var(--tile) * 0.4), 38px);
+  height: clamp(28px, calc(var(--tile) * 0.4), 38px);
+  padding: 0 7px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #fff;
+  font-weight: 700;
+  font-size: clamp(16px, calc(var(--tile) * 0.22), 21px);
 }
 .world .shelf-dock {
   position: absolute;
@@ -554,8 +588,8 @@
   transform: translateX(-50%);
   display: flex;
   gap: 12px;
-  padding: 10px 12px 14px;
-  border-radius: calc(var(--dock-tile) * 0.3 + 12px);
+  padding: 10px 12px;
+  border-radius: calc(var(--dock-tile) * 0.5 + 12px);
   background: rgba(255, 255, 255, 0.72);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
@@ -641,6 +675,9 @@
 .hud-go { --hud-face: var(--hotpink); --hud-shade: #d4337b; }
 .hud-done { --hud-face: var(--mint); --hud-shade: #5fbfa0; --hud-glyph: var(--ink); }
 .hud-again { --hud-face: var(--lavender-dark); --hud-shade: #8f79d6; }
+/* A home place's own color (the dock, the globe, a country's puzzle and theater buttons): the face and lip come from
+   tileFace() (kit/Chrome.tsx), the picture is a white HomeIcons drawing. */
+.hud-tile > svg { width: 62%; height: 62%; }
 /* Gold with a white picture, like the pink and lavender buttons (a near-black picture on pale butter looked muddy). */
 .hud-open { --hud-face: var(--gold); --hud-shade: #e0a520; }
 .hud-skip { --hud-size: var(--btn); --hud-face: rgba(255, 255, 255, 0.92); --hud-glyph: var(--ink-soft); }

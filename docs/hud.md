@@ -32,6 +32,10 @@ the end card's way on), one white ring, one press lip. A small one still takes a
 | `open` | gold, white picture | opening something: a map, an album, the party, another road |
 | `skip` | quiet white, smaller | skipping a ride or a story |
 
+A home place's button (the dock's passport, coloring, puzzles and movies, the globe back to the world map, a
+country's puzzle and theater shortcuts) is the same round button in that place's own color: `hud-btn hud-tile` with
+`tileFace()` (`kit/Chrome.tsx`) and its white `HomeIcons` picture. The dock keeps each word under its button.
+
 Pictures are drawn, in `src/sdk/components/HudIcons.tsx` (`HUD_ICONS`): back, map, play, check, again, skip, sound,
 close, home, party, mirror, dice, album. Add one there when a control needs a new picture. **Never a system emoji
 for a control** (🔁 ↩️ ⏩ ⏭ 👋 ↻): they are Apple's art, not the game's, and differ on every device. A picture of the

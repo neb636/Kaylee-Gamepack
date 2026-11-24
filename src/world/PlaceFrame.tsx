@@ -6,7 +6,7 @@ import { motion } from 'motion/react'
 import { Mascot, sounds, StarProgress, stopSpeaking, useOnline } from '../sdk'
 import { WinCeremony, type TrophyWin } from '../shell/WinCeremony'
 import { DOCK, DockGlyph, MapIcon, ShelfIcon, worldBack, type DockKind } from './HomeIcons'
-import { BarPill, TopBar } from './kit/Chrome'
+import { BarPill, TopBar, tileFace } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { HUB, SectionLinkProvider, type SectionLink } from './kit/sections'
 import { Theater } from './kit/Theater'
@@ -29,17 +29,8 @@ const capture = (event: string, props: Record<string, unknown>) => {
   if (isPostHogEnabled) posthog.capture(event, props)
 }
 
-/** A country's top-bar shortcut to one of the home dock's places, drawn as a small copy of that dock tile. */
-const barTile = (kind: DockKind): CSSProperties => ({
-  pointerEvents: 'auto',
-  flex: '0 0 var(--btn)',
-  width: 'var(--btn)',
-  height: 'var(--btn)',
-  borderRadius: 'calc(var(--btn) * 0.28)',
-  background: DOCK[kind].color,
-  boxShadow: `0 5px 0 ${DOCK[kind].shade}`,
-  padding: 'calc(var(--btn) * 0.16)',
-})
+/** A country's top-bar shortcut to one of the home dock's places: a small copy of that dock button. */
+const barTile = (kind: DockKind): CSSProperties => ({ pointerEvents: 'auto', flex: '0 0 var(--btn)', ...tileFace(DOCK[kind]) })
 
 /** The shell's trophy ceremony: a country trophy only needs the name parts. */
 const trophyMeta = (meta: PlaceMeta): TrophyWin => ({ id: `world-${meta.id}`, title: meta.name, emoji: meta.emoji, trophyTitle: meta.trophyTitle })
@@ -162,13 +153,14 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
             </BarPill>
           )}
           {!!meta.puzzles?.length && (
-            <motion.button aria-label="Puzzle book" whileTap={{ scale: 0.88, y: 3 }}
+            <motion.button aria-label="Puzzle book" className="hud-btn hud-sm hud-tile" whileTap={{ scale: 0.86, y: 3 }}
               onClick={() => { sounds.pop(); go.world('puzzles', meta.id) }}
               style={barTile('puzzles')}><DOCK.puzzles.Icon shade={DOCK.puzzles.shade} /></motion.button>
           )}
           {!!meta.videos?.length && online && (
             <motion.button
               aria-label="Theater"
+              className="hud-btn hud-sm hud-tile"
               initial={{ scale: 0 }}
               animate={{ scale: 1, rotate: [-5, 5, -5] }}
               transition={{ scale: { type: 'spring', delay: 0.3 }, rotate: { repeat: Infinity, duration: 2.4, ease: 'easeInOut' } }}
