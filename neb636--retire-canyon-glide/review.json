@@ -1,8 +1,0 @@
-{
-  "title": "Peru: Coco's Canyon Glide removed",
-  "checkIn": "fix",
-  "kaylee": "Peru's map has four games now; the condor glide that was too hard and crashed the app is gone.",
-  "questions": [],
-  "links": [{ "label": "Peru's map", "hash": "#/world/peru" }],
-  "pictures": [{ "title": "Peru's map and Luna's journal", "before": "pics/peru-old.jpg", "after": "pics/peru-new.jpg", "caption": "No condor pin; the journal is four windows, 4/4 stamps" }]
-}
