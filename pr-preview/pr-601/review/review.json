@@ -1,16 +1,146 @@
 {
-  "title": "Swim with Rosa",
-  "checkIn": "2 of 4: hear the script",
-  "kaylee": "She holds Rosa the pink dolphin and swims her through the flooded forest: hello to the capybaras, a splash for the sleepy sloth, leaps for the monkeys' fruit, a race with the otters to the rainbow. Every picture is drawn by hand.",
-  "questions": [
-    "Is this the look you wanted for the level?",
-    "The otters say \"So close! Again?\" when they win: kind, or teasing?",
-    "Rosa says \"Oopsie! Bonk!\" when she bumps a log: funny, or too babyish?"
-  ],
-  "tableReads": [["peru", "river"]],
-  "reels": [{ "name": "swim-with-rosa", "moments": ["river-swim", "river-leap", "river-fruit", "river-race"] }],
-  "links": [
-    { "label": "Play it", "hash": "#/world/peru/river" },
-    { "label": "Tune how the swim and the leap feel", "hash": "#/world/peru/river/treetops?feel=1" }
+ "title": "Swim with Rosa",
+ "checkIn": "2 of 4: hear the script",
+ "kaylee": "She holds Rosa the pink dolphin and swims her through the flooded forest: hello to the capybaras, a splash for the sleepy sloth, leaps for the monkeys' fruit, a race with the otters to the rainbow. Every picture is drawn by hand.",
+ "questions": [
+  "Is this the look you wanted for the level?",
+  "The otters say \"So close! Again?\" when they win: kind, or teasing?",
+  "Rosa says \"Oopsie! Bonk!\" when she bumps a log: funny, or too babyish?"
+ ],
+ "tableReads": [
+  [
+   "peru",
+   "river"
   ]
+ ],
+ "reels": [
+  {
+   "name": "swim-with-rosa",
+   "moments": [
+    "river-swim",
+    "river-leap",
+    "river-fruit",
+    "river-race"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "label": "Play it",
+   "hash": "#/world/peru/river"
+  },
+  {
+   "label": "Tune how the swim and the leap feel",
+   "hash": "#/world/peru/river/treetops?feel=1"
+  }
+ ],
+ "listens": [
+  {
+   "title": "Rosa and the river",
+   "audio": "sfx/rosa.mp3",
+   "items": [
+    {
+     "text": "the forest all around",
+     "at": 0,
+     "end": 6
+    },
+    {
+     "text": "a small splash",
+     "at": 6.7,
+     "end": 7.7
+    },
+    {
+     "text": "Rosa lands from a leap",
+     "at": 8.4,
+     "end": 10
+    },
+    {
+     "text": "Rosa bursts out of the water",
+     "at": 10.7,
+     "end": 11.7
+    },
+    {
+     "text": "Rosa's spout",
+     "at": 12.4,
+     "end": 13.2
+    },
+    {
+     "text": "Rosa's happy whistle",
+     "at": 13.9,
+     "end": 15.1
+    },
+    {
+     "text": "her nose boops a fruit",
+     "at": 15.8,
+     "end": 16.4
+    },
+    {
+     "text": "a fruit plops in",
+     "at": 17.1,
+     "end": 17.9
+    },
+    {
+     "text": "the fish nibble",
+     "at": 18.6,
+     "end": 19.6
+    },
+    {
+     "text": "a vine lets down",
+     "at": 20.3,
+     "end": 21.18
+    },
+    {
+     "text": "a bump on a log",
+     "at": 21.88,
+     "end": 22.48
+    }
+   ]
+  },
+  {
+   "title": "The forest's animals",
+   "audio": "sfx/animals.mp3",
+   "items": [
+    {
+     "text": "the macaw",
+     "at": 0,
+     "end": 0.88
+    },
+    {
+     "text": "the toucan",
+     "at": 1.58,
+     "end": 2.56
+    },
+    {
+     "text": "the monkeys",
+     "at": 3.26,
+     "end": 4.46
+    },
+    {
+     "text": "the capybara",
+     "at": 5.16,
+     "end": 5.84
+    },
+    {
+     "text": "the sloth yawns",
+     "at": 6.54,
+     "end": 8.14
+    },
+    {
+     "text": "the frog",
+     "at": 8.84,
+     "end": 9.64
+    },
+    {
+     "text": "the otters",
+     "at": 10.34,
+     "end": 11.02
+    },
+    {
+     "text": "wings take off",
+     "at": 11.72,
+     "end": 12.4
+    }
+   ]
+  }
+ ]
 }
