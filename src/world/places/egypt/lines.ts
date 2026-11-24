@@ -59,15 +59,26 @@ export const L = {
     nap: tutu('I napped for thousands of years! Hee hee!'),
   },
   nile: {
+    // Miu, before the river (tap anywhere skips).
     story: miu("All aboard! Let's sail down the Nile River!"),
-    steer: 'Catch the lotus flowers!',
-    hippo: hippo('Bump! Hee hee, hello!'),
-    farm: 'Pull the bucket three times!',
-    farm5: 'Now pull it five times!',
-    count: COUNT.map(miu),
+    // Sparkle, as the first lotus flowers float by.
+    steer: 'Drag the boat to the lotus flowers!',
+    // Sparkle, when the garland's first five flowers are on and a dry farm comes along (and again at the second farm).
+    wheel: 'Sail to the water wheel!',
+    // Miu, when the first field has turned green.
     green: miu('Look! The water makes the plants grow!'),
+    // Sparkle, as the second sail starts.
+    more: 'The hippo has more flowers!',
+    // The hippo, the first time she pops up.
+    hello: hippo('Ahlan! A flower for you!'),
+    // The hippo, the first time the boat bumps her (after that she only giggles).
+    hippo: hippo('Bump! Hee hee, hello!'),
+    // Miu, at the end, as three flowers fly to the hippo's head.
+    crown: miu('A lotus crown for you!'),
+    // The hippo, wearing it.
+    thanks: hippo('Shukran! I love it!'),
+    // Sparkle, last of all.
     desert: 'Egypt is mostly sandy desert. The Nile makes it green!',
-    longest: 'The Nile is one of the longest rivers in the world!',
   },
   sphinx: {
     story: miu('Oh no! Someone is buried in the sand!'),

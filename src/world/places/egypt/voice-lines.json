@@ -124,27 +124,30 @@
     "text": "All aboard! Let's sail down the Nile River!",
     "voice": "miu"
   },
-  "Catch the lotus flowers!",
-  {
-    "text": "Bump! Hee hee, hello!",
-    "voice": "hippo"
-  },
-  "Pull the bucket three times!",
-  "Now pull it five times!",
-  {
-    "text": "Four!",
-    "voice": "miu"
-  },
-  {
-    "text": "Five!",
-    "voice": "miu"
-  },
+  "Drag the boat to the lotus flowers!",
+  "Sail to the water wheel!",
   {
     "text": "Look! The water makes the plants grow!",
     "voice": "miu"
   },
+  "The hippo has more flowers!",
+  {
+    "text": "Ahlan! A flower for you!",
+    "voice": "hippo"
+  },
+  {
+    "text": "Bump! Hee hee, hello!",
+    "voice": "hippo"
+  },
+  {
+    "text": "A lotus crown for you!",
+    "voice": "miu"
+  },
+  {
+    "text": "Shukran! I love it!",
+    "voice": "hippo"
+  },
   "Egypt is mostly sandy desert. The Nile makes it green!",
-  "The Nile is one of the longest rivers in the world!",
   {
     "text": "Oh no! Someone is buried in the sand!",
     "voice": "miu"

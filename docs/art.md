@@ -7,6 +7,10 @@ screens, stickers and character references.
 - **The Poles' stickers are drawn by hand too** (user feedback, 2026-11-24: the generated ones looked cheesy): round SVG
   badges in the shelf's look, `src/world/places/poles/assets/sticker-*.svg`. They are the pictures on the globe's trail,
   the stamp screen and the passport. Check them with `node scripts/shelf-sheet.mjs icons <files>`.
+- **Egypt's Nile is drawn by hand too** (user feedback, 2026-11-24: the generated felucca, lotus, hippo and palms looked
+  tacky): its river layers, boat, flowers and water wheel are SVG in `src/world/places/egypt/activities/nile/`, the
+  lotus is `egypt/Lotus.tsx`, and the hippo is a puppet (`puppets/Hippo.tsx`; her sticker `assets/hippo.svg` is a still
+  of it). Scenery has soft flat tones and no outlines; what she plays with has the puppets' ink line.
 - **Peru's Machu Picchu level is drawn by hand as well** (user feedback, 2026-11-24: the generated pictures looked
   cheesy and the drawn llama looked bad). The view behind (`bg-machu-picchu*.svg`), the critters, the crops and Tika's
   sticker are SVG files in the shelf's look (no dark outlines; a base, a shade and a light tone); the walls, the
