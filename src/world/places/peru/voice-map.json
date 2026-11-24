@@ -1099,60 +1099,25 @@
     "file": "11dba6a857df.mp3"
   },
   {
-    "text": "Hola! I want to visit my forest friends!",
+    "text": "The river is in the treetops! Swim with me!",
     "voice": "rosa",
     "sig": "795618f009",
-    "ms": 3245,
-    "file": "2bb37a69c93d.mp3"
+    "ms": 3048,
+    "file": "55ec50c5134e.mp3"
   },
   {
-    "text": "Squeeze the cloud to make rain!",
+    "text": "Hold Rosa and swim!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3190,
-    "file": "ac9dc60941d4.mp3"
+    "ms": 2256,
+    "file": "f94fb5a2a3f3.mp3"
   },
   {
-    "text": "Click and hold the cloud to make rain!",
+    "text": "Click and hold Rosa, then swim!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3168,
-    "file": "3cce64323160.mp3"
-  },
-  {
-    "text": "Hiiiiii...",
-    "voice": "sloth",
-    "sig": "1a6320a9e1",
-    "ms": 2558,
-    "file": "df0e38f0f6de.mp3"
-  },
-  {
-    "text": "Ooh... a shower...",
-    "voice": "sloth",
-    "sig": "1a6320a9e1",
-    "ms": 2629,
-    "file": "46f72f3f609b.mp3"
-  },
-  {
-    "text": "I'm all wet! Hee hee!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2023,
-    "file": "22f930c422fb.mp3"
-  },
-  {
-    "text": "Make it rain on the river!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1899,
-    "file": "01d9b3bc0471.mp3"
-  },
-  {
-    "text": "Wheee! More water!",
-    "voice": "rosa",
-    "sig": "795618f009",
-    "ms": 2354,
-    "file": "a9b2bd8dbbe9.mp3"
+    "ms": 3480,
+    "file": "a81b03647bcb.mp3"
   },
   {
     "text": "Hola, capybaras!",
@@ -1169,6 +1134,20 @@
     "file": "c13c0b018c6a.mp3"
   },
   {
+    "text": "Swim up fast, and Rosa leaps!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3408,
+    "file": "4ad5ae23d649.mp3"
+  },
+  {
+    "text": "Ooh... a shower...",
+    "voice": "sloth",
+    "sig": "1a6320a9e1",
+    "ms": 2629,
+    "file": "46f72f3f609b.mp3"
+  },
+  {
     "text": "Hola, sloth!",
     "voice": "rosa",
     "sig": "795618f009",
@@ -1176,18 +1155,11 @@
     "file": "07131f97c0b7.mp3"
   },
   {
-    "text": "Hiii, Rosa...",
-    "voice": "sloth",
-    "sig": "1a6320a9e1",
-    "ms": 1502,
-    "file": "e190d8cbf8ed.mp3"
-  },
-  {
-    "text": "Hola, monkeys!",
-    "voice": "rosa",
-    "sig": "795618f009",
-    "ms": 1671,
-    "file": "f0f36d2f7f3c.mp3"
+    "text": "Fruit! Leap for the fruit!",
+    "voice": "monkey",
+    "sig": "5eefd2db79",
+    "ms": 2112,
+    "file": "54ca49fcf8ef.mp3"
   },
   {
     "text": "Splash! Splash!",
@@ -1197,48 +1169,6 @@
     "file": "650d25941512.mp3"
   },
   {
-    "text": "The river grows into the forest!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3030,
-    "file": "d937a06963af.mp3"
-  },
-  {
-    "text": "Let's swim to the lagoon!",
-    "voice": "rosa",
-    "sig": "795618f009",
-    "ms": 1555,
-    "file": "fba5d9ca088b.mp3"
-  },
-  {
-    "text": "Rain on the lagoon!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1551,
-    "file": "f16bdd7ea297.mp3"
-  },
-  {
-    "text": "Rain on the lily buds!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2550,
-    "file": "1d05dc7f0d2f.mp3"
-  },
-  {
-    "text": "Lily pads! Help the friends hop on!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4058,
-    "file": "87e3b3985f88.mp3"
-  },
-  {
-    "text": "Hop, frog!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1260,
-    "file": "1a30cb1ec6db.mp3"
-  },
-  {
     "text": "Wheee!",
     "voice": "monkey",
     "sig": "5eefd2db79",
@@ -1246,39 +1176,74 @@
     "file": "c186dc222372.mp3"
   },
   {
-    "text": "Comfy!",
-    "voice": "capy",
-    "sig": "772878d955",
-    "ms": 685,
-    "file": "0ad99fc744ad.mp3"
+    "text": "You got it!",
+    "voice": "monkey",
+    "sig": "5eefd2db79",
+    "ms": 1224,
+    "file": "49821d836db4.mp3"
   },
   {
-    "text": "Flap, flap, macaw!",
+    "text": "Some fish eat fruit!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2407,
-    "file": "b8dfe53850db.mp3"
+    "ms": 2600,
+    "file": "7c731e4abe09.mp3"
   },
   {
-    "text": "Bye-bye, cloud! Hello, sun!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2388,
-    "file": "031864b9dce7.mp3"
+    "text": "Here! Lower!",
+    "voice": "monkey",
+    "sig": "5eefd2db79",
+    "ms": 1464,
+    "file": "fe2f65d39d4e.mp3"
   },
   {
-    "text": "A rainbow! Gracias!",
+    "text": "Race you to the rainbow!",
+    "voice": "otter",
+    "sig": "941e46c3b8",
+    "ms": 1920,
+    "file": "ae4a7b08d40f.mp3"
+  },
+  {
+    "text": "Ready... go!",
+    "voice": "otter",
+    "sig": "941e46c3b8",
+    "ms": 1920,
+    "file": "3974153a5ebd.mp3"
+  },
+  {
+    "text": "Come on, Rosa!",
+    "voice": "otter",
+    "sig": "941e46c3b8",
+    "ms": 1824,
+    "file": "0fe79d7150d3.mp3"
+  },
+  {
+    "text": "Oopsie! Bonk!",
     "voice": "rosa",
     "sig": "795618f009",
-    "ms": 2712,
-    "file": "f824c9207fac.mp3"
+    "ms": 1464,
+    "file": "728f0a4c8fab.mp3"
   },
   {
-    "text": "Click! A picture for Luna!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2138,
-    "file": "471637c6e1f9.mp3"
+    "text": "You win! So fast!",
+    "voice": "otter",
+    "sig": "941e46c3b8",
+    "ms": 2688,
+    "file": "a7ba65b502f5.mp3"
+  },
+  {
+    "text": "Wheee! Gracias!",
+    "voice": "rosa",
+    "sig": "795618f009",
+    "ms": 1944,
+    "file": "14bd5da00e11.mp3"
+  },
+  {
+    "text": "So close! Again?",
+    "voice": "otter",
+    "sig": "941e46c3b8",
+    "ms": 2472,
+    "file": "f6d30d1c9158.mp3"
   },
   {
     "text": "Hee hee!",
@@ -1309,6 +1274,13 @@
     "file": "db8a1dde10db.mp3"
   },
   {
+    "text": "Hiiiiii...",
+    "voice": "sloth",
+    "sig": "1a6320a9e1",
+    "ms": 2558,
+    "file": "df0e38f0f6de.mp3"
+  },
+  {
     "text": "This dolphin lives in a river!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1316,39 +1288,46 @@
     "file": "17c815be5384.mp3"
   },
   {
-    "text": "Some fish eat fruit!",
+    "text": "The river grows into the forest!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2600,
-    "file": "7c731e4abe09.mp3"
+    "ms": 3030,
+    "file": "d937a06963af.mp3"
   },
   {
-    "text": "Hold the cloud to make rain!",
+    "text": "Hold the water, and Rosa swims to you!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2538,
-    "file": "45885f9e936c.mp3"
+    "ms": 3984,
+    "file": "654209139265.mp3"
   },
   {
-    "text": "Drag the cloud over the river!",
+    "text": "Click and hold the water, and Rosa swims to you!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2718,
-    "file": "884064cdcbfe.mp3"
+    "ms": 4464,
+    "file": "7db44b6aad7a.mp3"
   },
   {
-    "text": "Drag the cloud over the lagoon!",
+    "text": "Splash the sleepy sloth!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2423,
-    "file": "ac547780388d.mp3"
+    "ms": 2880,
+    "file": "8ff63e85af34.mp3"
   },
   {
-    "text": "Drag a friend onto a lily pad!",
+    "text": "Leap up to the fruit!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2711,
-    "file": "495ad7babe29.mp3"
+    "ms": 1752,
+    "file": "8aff269cd749.mp3"
+  },
+  {
+    "text": "Swim to the rainbow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2112,
+    "file": "647d479d9ca8.mp3"
   },
   {
     "text": "Pink dolphin sticker! These dolphins live in rivers!",
