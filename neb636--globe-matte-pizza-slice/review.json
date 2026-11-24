@@ -1,0 +1,12 @@
+{
+  "title": "The home globe: a pizza slice for Italy, and a matte globe",
+  "checkIn": "fix",
+  "kaylee": "Italy's pin is now one big slice of pizza, and the globe looks like a soft painted ball instead of a shiny one.",
+  "questions": [],
+  "pictures": [
+    { "title": "The globe", "before": "pics/globe-old.jpg", "after": "pics/globe-new.jpg", "caption": "The shine spot is gone; the sea's glare, its white streaks and the bright rim are softer" },
+    { "title": "Italy's pin", "before": "pics/pin-old.jpg", "after": "pics/pin-new.jpg", "caption": "Just a slice: crust, cheese, tomato and basil" },
+    { "title": "On the iPhone", "before": "pics/phone-old.jpg", "after": "pics/phone-new.jpg", "caption": "The same, at the small pin size" }
+  ],
+  "links": [{ "label": "Spin the globe", "hash": "#/world?view=map" }]
+}
