@@ -245,7 +245,7 @@ Not every family member needs Tripo. Joy stayed code-built and got the detail in
 every pose, voice and wearable working untouched:
 
 - `Look.sculpted` picks the detailed fox (`engine3d/characters/fox.ts`): cupped pointed ears, a white snout shaped with
-  `sculpt` (`engine3d/geo.ts`), blush as a flush patch (the raccoon's `patch`), brows, brown paws and a big tail bent
+  `sculpt` (`engine3d/geo.ts`), low puffy pink cheeks (flattened balls sunk into the face), brows, brown paws and a big tail bent
   along a curve. (White cheeks, a white chin and cheek tufts read as a white beard, and brown ear tips were too much:
   the user had them removed.) The plain fox (Gan, Ken, the Arctic fox) is unchanged; add
   `sculpted: true` to a fox's look to move it over.

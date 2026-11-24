@@ -1,21 +1,19 @@
 // A fox sculpted in more detail for the shared chibi rig (`Look.sculpted`: Joy). The plain fox is a ball with two cones
 // and two cheek balls; this one has cupped pointed ears, a white snout that narrows to a little turned-up nose (only
-// the snout is white: white cheeks and chin read as a beard, 2026-11-23), blush, soft brows, and a big bushy tail that sweeps out to one side and up, so its white tip shows from the front.
+// the snout is white: white cheeks and chin read as a beard, 2026-11-23), low puffy pink cheeks, soft brows, and a big bushy tail that sweeps out to one side and up, so its white tip shows from the front.
 // Head coordinates are in head radii R, the tail's in body heights H.
 import { Color, Vector3, type BufferGeometry } from 'three'
 import { P, placeMatrix, sculpt, type PartOpts, type V3 } from '../geo'
 import type { Frame } from './animal'
 import type { Look } from './look'
-import { egg, patch } from './raccoon'
 
 /** How the head ball is squashed: a little wide (the same as the plain fox, so hats and glasses fit both). */
 const HEAD: V3 = [1.1, 1, 1]
 /** A fox's dark paws: warm brown, not black, so they stay soft beside the pastels. */
 export const FOX_SOCK = '#6A4234'
 const NOSE = '#3A2A33'
-const BLUSH = '#FF9DB8'
-/** Pink puffy cheeks: a softer pink than the blush, so they read as fur. */
-const CHEEK_PINK = '#FFB5C8'
+/** Her puffy cheeks: a softer pink than the cast's blush, so they read as fur. */
+const CHEEK = '#FFB5C8'
 
 /** A sculpted ball painted before it's placed: `tint` gives point `i` of the shaped ball another color (or null).
  *  (`shape` meets the points in the same order, so it can note things down for `tint`.) */
@@ -50,20 +48,14 @@ export function foxHead(look: Look, f: Frame, brow: string) {
     const lean: V3 = [-0.12, s * 0.3, -s * 0.34]
     outlined.push(sculpt(look.fur, 36, earShape, { at: at(s * 0.64, 0.9, -0.1), rot: lean, scale: [0.4 * R, 0.54 * R, 0.4 * R] }))
     plain.push(sculpt(inner, 28, earShape, { at: at(s * 0.628, 0.83, -0.02), rot: lean, scale: [0.23 * R, 0.36 * R, 0.24 * R] }))
-    // A soft arched brow over each eye, and blush on the cheek.
+    // A soft arched brow over each eye.
     const bx = s * (eyeX + 0.02 * R)
     plain.push(P.torus(0.2 * R, 0.02 * R, brow, { at: on(bx, eyeY + 0.18 * R, 0.004 * R), rot: [0, turnTo(bx)[1], Math.PI / 2 - 0.45 + s * 0.06], scale: [1, 1, 0.5] }, 0.9))
-    if (!look.cheeks) plain.push(patch(f, BLUSH, s, 0.63, -0.34, egg(0.13, 0.075, 0.2), 0.016, HEAD))
-    else {
-      // A puffy cheek: a low soft mound lying on the face beside the snout (turned to face out where it sits), much
-      // flatter than the plain fox's cheek balls. White ones carry the blush; pink ones are the blush.
-      const n: V3 = [s * 0.465, -0.429, 0.774]
-      const c: V3 = [s * 0.56, -0.43, 0.71]
-      const r = 0.25
-      const turn: V3 = [0.52, s * 0.54, 0]
-      outlined.push(P.sphere(r * R, look.cheeks === 'pink' ? CHEEK_PINK : look.light, { at: at(c[0] - n[0] * 0.2 * r, c[1] - n[1] * 0.2 * r, c[2] - n[2] * 0.2 * r), rot: turn, scale: [1.15, 0.95, 0.42] }, 32))
-      if (look.cheeks === 'white') plain.push(P.sphere(0.1 * R, BLUSH, { at: at(c[0] + s * 0.04 + n[0] * 0.035, c[1] + 0.02 + n[1] * 0.035, c[2] + n[2] * 0.035), rot: turn, scale: [1.25, 0.7, 0.3] }, 16))
-    }
+    // A puffy pink cheek: a low soft mound lying on the face (turned to face out where it sits), a little way out
+    // from the snout. Much flatter than the plain fox's cheek balls, and it is her blush too.
+    const n: V3 = [s * 0.5, -0.43, 0.75]
+    const r = 0.25
+    outlined.push(P.sphere(r * R, CHEEK, { at: at(s * 0.63 - n[0] * 0.2 * r, -0.43 - n[1] * 0.2 * r, 0.665 - n[2] * 0.2 * r), rot: [0.52, s * 0.6, 0], scale: [0.98, 0.95, 0.42] }, 32))
   }
   // The snout: it narrows toward the nose and tips up a little at the end.
   outlined.push(sculpt(look.light, 32, (p) => {

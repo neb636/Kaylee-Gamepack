@@ -109,10 +109,6 @@ const toy = (id: string, name: string, who: string, group: CastGroup, src: strin
 
 const person = (id: string, name: string, who: string, group: CastGroup, look: Look, src: string, voice?: string, set?: string): CastEntry => ({ id, name, who, group, kind: 'member', look, voice, src, color: look.fur, set })
 
-// For you to choose (PR #573): Joy with pink puffy cheeks beside the game's Joy, whose cheeks are white. The one not
-// picked goes, and this entry with it.
-const joyPink = person('joy-pink', 'Joy (pink cheeks)', 'To choose: pink puffy cheeks instead of white', 'family', { ...LOOKS.joy, cheeks: 'pink' }, 'characters/looks.ts', 'joy')
-
 const trip: CastEntry[] = [
   person('officer', 'Officer', 'Airport passport check', 'trip', OFFICER, 'trip/legs/airport.ts', 'officer'),
   person('attendant', 'Attendant', 'Flight attendant', 'trip', ATTENDANT, 'trip/legs/plane.ts', 'attendant'),
@@ -223,7 +219,7 @@ const folk: CastEntry[] = [
   ...SEA_FOLK.map((look, i) => person(`sea-folk-${i + 1}`, `Out on the water ${i + 1}`, `Koh Samet: a ${look.species} on a ferry, longtail or jet ski`, 'folk', look, 'activities/samet-trip/speedboat/boats.ts', undefined, 'sea-folk')),
 ]
 
-export const CAST: CastEntry[] = [...family, joyPink, ...trip, ...mall, ...nan, ...samet, ...critters, ...folk, ...poles, ...polesWild, ...canada, ...canadaWild]
+export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...samet, ...critters, ...folk, ...poles, ...polesWild, ...canada, ...canadaWild]
 /** Everyone in a country (`all`: everyone). */
 export const castIn = (country: Country | 'all') => (country === 'all' ? CAST : CAST.filter((c) => countryOf(c) === country))
 export const castById = (id: string | undefined) => CAST.find((c) => c.id === id)

@@ -14,9 +14,8 @@ const BLUSH = '#FF9DB8'
 const NOSE = '#3A2F40'
 
 /** A flat patch lying on the head: it spreads from (cx, cy) on the face out to `radius(angle)`, `off` above the fur.
- *  `side` -1 mirrors it onto the other half of the face. `S` is how the head ball is squashed (the raccoon's, or
- *  another animal's: the fox's). */
-export function patch({ R, headY }: Frame, color: string, side: number, cx: number, cy: number, radius: (a: number) => number, off: number, S: V3 = RACCOON_HEAD) {
+ *  `side` -1 mirrors it onto the other half of the face. */
+function patch({ R, headY }: Frame, color: string, side: number, cx: number, cy: number, radius: (a: number) => number, off: number) {
   const rings = 10
   const around = 44
   const pos: number[] = []
@@ -54,7 +53,7 @@ export function patch({ R, headY }: Frame, color: string, side: number, cx: numb
 }
 
 /** An egg lying at `turn` radians: `a` long (fatter by `egg` at its far end), `b` across. */
-export const egg = (a: number, b: number, turn: number, fat = 0) => (angle: number) => {
+const egg = (a: number, b: number, turn: number, fat = 0) => (angle: number) => {
   const p = angle - turn
   const across = b * (1 + fat * Math.cos(p))
   return 1 / Math.hypot(Math.cos(p) / a, Math.sin(p) / across)
