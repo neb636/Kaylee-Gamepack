@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 450" preserveAspectRatio="xMidYMid slice">
+  <title>Canada</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="306" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9fd4fa"/><stop offset="0.65" stop-color="#d4ecfc"/><stop offset="1" stop-color="#eef6ff"/></linearGradient>
+    <radialGradient id="sunglow" cx="300" cy="84" r="230" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff8dc" stop-opacity="0.95"/><stop offset="0.35" stop-color="#fff3d0" stop-opacity="0.45"/><stop offset="1" stop-color="#fff3d0" stop-opacity="0"/></radialGradient>
+    <linearGradient id="lake" x1="0" y1="304" x2="0" y2="450" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9fe6ee"/><stop offset="0.35" stop-color="#45c3d2"/><stop offset="1" stop-color="#1f9cb3"/></linearGradient>
+    <clipPath id="mtA"><path d="M400 298L490 192L520 202L600 88L654 170L686 160L810 298Z"/></clipPath>
+    <clipPath id="mtB"><path d="M280 298L360 210L384 216L438 138L478 196L496 190L572 298Z"/></clipPath>
+    <clipPath id="mtC"><path d="M640 298L712 222L738 228L806 116L856 188L880 178L1000 298Z"/></clipPath>
+    <clipPath id="maple"><circle cx="1064" cy="222" r="36"/><circle cx="1102" cy="188" r="46"/><circle cx="1144" cy="218" r="38"/><circle cx="1104" cy="246" r="34"/></clipPath>
+    <clipPath id="bhead"><circle cx="0" cy="-50" r="19"/></clipPath>
+    <!-- a pine standing at 0,0 -->
+    <g id="pine">
+      <rect x="-3.5" y="-12" width="7" height="13" rx="2" fill="#8a5b3d"/>
+      <path d="M0 -52L-26 -10Q0 -4 26 -10Z" fill="#3e9e78"/>
+      <path d="M0 -52L26 -10Q13 -7 0 -7Z" fill="#2b7a5f"/>
+      <path d="M0 -76L-20 -38Q0 -33 20 -38Z" fill="#3e9e78"/>
+      <path d="M0 -76L20 -38Q10 -35.5 0 -35.5Z" fill="#2b7a5f"/>
+      <path d="M0 -100L-14 -62Q0 -58 14 -62Z" fill="#3e9e78"/>
+      <path d="M0 -100L14 -62Q7 -60 0 -60Z" fill="#2b7a5f"/>
+      <path d="M-5 -88L-10 -72M-8 -64L-15 -48M-10 -40L-19 -22" stroke="#69c19a" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <!-- maple leaves: red and orange, the shaded half on the right -->
+    <path id="leaf" d="M0 -22L3.5 -14L8 -16L7 -7L17 -12L14 -4L19 -2L10 4L12 9L2 7L1.5 16H-1.5L-2 7L-12 9L-10 4L-19 -2L-14 -4L-17 -12L-7 -7L-8 -16L-3.5 -14Z"/>
+    <path id="leafHalf" d="M0 -22L3.5 -14L8 -16L7 -7L17 -12L14 -4L19 -2L10 4L12 9L2 7L1.5 16H0Z"/>
+    <g id="leafR"><use href="#leaf" fill="#ff6b6b"/><use href="#leafHalf" fill="#d9485e"/></g>
+    <g id="leafO"><use href="#leaf" fill="#ff9c57"/><use href="#leafHalf" fill="#e57a35"/></g>
+  </defs>
+
+  <!-- sky, sun, clouds, birds -->
+  <rect width="1200" height="320" fill="url(#sky)"/>
+  <circle cx="300" cy="84" r="230" fill="url(#sunglow)"/>
+  <circle cx="300" cy="84" r="42" fill="#fff6d2"/>
+  <g fill="#fff" opacity="0.88">
+    <circle cx="706" cy="66" r="16"/><circle cx="732" cy="52" r="24"/><circle cx="762" cy="62" r="18"/>
+    <rect x="690" y="62" width="90" height="18" rx="9"/>
+  </g>
+  <g fill="#fff" opacity="0.9">
+    <circle cx="916" cy="92" r="18"/><circle cx="946" cy="76" r="27"/><circle cx="980" cy="88" r="20"/><circle cx="1004" cy="100" r="12"/>
+    <rect x="898" y="90" width="118" height="20" rx="10"/>
+  </g>
+  <g fill="none" stroke="#8a86c4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M232 160q7-7 14 0q7-7 14 0"/>
+    <path d="M266 140q6-6 12 0q6-6 12 0"/>
+  </g>
+
+  <!-- far peaks in the haze -->
+  <path d="M0 300V256L52 228L92 242L156 188L206 232L248 218L330 268V300Z" fill="#d6d9f5"/>
+  <path d="M156 188L206 232L248 218L300 249.5V300H190Z" fill="#c6c9ef"/>
+  <path d="M156 188L174 204L166 202L158 210L150 201L144 206L137 204Z" fill="#fff" opacity="0.9"/>
+  <path d="M860 300V262L912 226L944 236L986 172L1030 214L1060 204L1110 236L1200 224V300Z" fill="#d6d9f5"/>
+  <path d="M986 172L1030 214L1060 204L1110 236L1200 224V300H1010Z" fill="#c6c9ef"/>
+  <path d="M986 172L1002 187L995 185L988 192L981 184L976 188Z" fill="#fff" opacity="0.9"/>
+
+  <!-- the snowy Rockies: the tall one in the middle, two in front of it -->
+  <g clip-path="url(#mtA)">
+    <rect x="396" y="84" width="420" height="216" fill="#9c9ed4"/>
+    <path d="M400 298L490 192L520 202L600 88L614 150L628 212L644 298Z" fill="#c8caef"/>
+    <path d="M548 178L528 214M574 172L560 224M506 218L488 248" stroke="#eceaff" stroke-width="5" stroke-linecap="round"/>
+    <path d="M660 200L676 238M700 226L716 262" stroke="#8b8dc6" stroke-width="5" stroke-linecap="round"/>
+    <path d="M530 80H690V162L676 168L662 160L648 174L634 162L622 178L608 164L596 176L584 156L572 166L560 148L546 156L530 150Z" fill="#fff"/>
+    <path d="M600 88L614 150L620 176L622 178L634 162L648 174L662 160L676 168L690 162V80Z" fill="#e4ddf6"/>
+  </g>
+  <g clip-path="url(#mtB)">
+    <rect x="276" y="132" width="300" height="168" fill="#9c9ed4"/>
+    <path d="M280 298L360 210L384 216L438 138L448 190L458 240L466 298Z" fill="#c8caef"/>
+    <path d="M404 206L388 236M424 200L414 238" stroke="#eceaff" stroke-width="5" stroke-linecap="round"/>
+    <path d="M488 228L500 258" stroke="#8b8dc6" stroke-width="5" stroke-linecap="round"/>
+    <path d="M396 130H524V190L508 196L494 188L482 200L470 186L458 198L448 186L436 194L424 178L412 186L400 176Z" fill="#fff"/>
+    <path d="M438 138L448 186L458 198L470 186L482 200L494 188L508 196L524 190V130Z" fill="#e4ddf6"/>
+  </g>
+  <g clip-path="url(#mtC)">
+    <rect x="636" y="110" width="370" height="190" fill="#9c9ed4"/>
+    <path d="M640 298L712 222L738 228L806 116L818 176L830 236L842 298Z" fill="#c8caef"/>
+    <path d="M760 200L744 232M782 196L770 238" stroke="#eceaff" stroke-width="5" stroke-linecap="round"/>
+    <path d="M866 222L882 256M910 240L922 268" stroke="#8b8dc6" stroke-width="5" stroke-linecap="round"/>
+    <path d="M756 106H904V184L888 190L874 182L860 194L846 182L834 196L820 182L810 192L798 174L786 182L774 166L760 172Z" fill="#fff"/>
+    <path d="M806 116L818 176L820 182L834 196L846 182L860 194L874 182L888 190L904 184V106Z" fill="#e4ddf6"/>
+  </g>
+
+  <!-- the pine forest along the far shore: a hazy row, then a richer one -->
+  <path d="M0 304V286L12 268L24 288L36 262L50 288L62 272L74 288L88 258L102 288L114 270L126 288L140 264L154 288L166 274L178 288L192 260L206 288L218 270L230 288L244 262L258 288L270 274L282 288L296 264L310 288L322 270L334 288L348 260L362 288L374 272L386 288L400 264L414 288L426 270L438 288L452 262L466 288L478 274L490 288L504 266L518 288L530 272L542 288L556 260L570 288L582 270L594 288L608 264L622 288L634 274L646 288L660 262L674 288L686 270L698 288L712 266L726 288L738 272L750 288L764 260L778 288L790 270L802 288L816 264L830 288L842 274L854 288L868 262L882 288L894 270L906 288L920 266L934 288L946 272L958 288L972 260L986 288L998 270L1010 288L1024 264L1038 288L1050 274L1062 288L1076 262L1090 288L1102 270L1114 288L1128 266L1142 288L1154 272L1166 288L1180 262L1194 288L1200 280V304Z" fill="#8cc5ad"/>
+  <path d="M0 308V296L14 276L28 298L42 282L56 298L72 270L88 298L102 284L116 298L132 274L148 298L162 286L176 298L192 272L208 298L222 282L236 298L252 276L268 298L282 286L296 298L312 272L328 298L342 284L356 298L372 276L388 298L402 286L416 298L432 272L448 298L462 282L476 298L492 274L508 298L522 286L536 298L552 270L568 298L582 284L596 298L612 276L628 298L642 286L656 298L672 272L688 298L702 282L716 298L732 274L748 298L762 286L776 298L792 270L808 298L822 284L836 298L852 276L868 298L882 286L896 298L912 272L928 298L942 282L956 298L972 274L988 298L1002 286L1016 298L1032 272L1048 298L1062 284L1076 298L1092 276L1108 298L1122 286L1136 298L1152 272L1168 298L1182 284L1196 298L1200 296V308Z" fill="#4fa583"/>
+
+  <!-- the turquoise lake, the mountains mirrored in it -->
+  <rect y="306" width="1200" height="144" fill="url(#lake)"/>
+  <path d="M270 306L280 309.5L360 349L384 346.5L438 381.5L478 355.5L496 358L508 351L520 353L600 404L654 367L686 371.5L745 342L806 391.5L856 359L880 363.5L1000 309.5L1010 306Z" fill="#c9f1f4" opacity="0.35"/>
+  <rect y="306" width="1200" height="3" fill="#effcff" opacity="0.7"/>
+  <g fill="#fff" opacity="0.6">
+    <rect x="640" y="352" width="96" height="4" rx="2"/><rect x="780" y="330" width="70" height="4" rx="2"/><rect x="860" y="372" width="110" height="4" rx="2"/>
+    <rect x="320" y="372" width="80" height="4" rx="2"/><rect x="560" y="396" width="90" height="4" rx="2"/><rect x="740" y="412" width="70" height="4" rx="2"/>
+  </g>
+  <path d="M760 340l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff"/>
+
+  <!-- a beaver in the red canoe -->
+  <g transform="translate(482 334) scale(1.15)">
+    <ellipse cx="0" cy="5" rx="104" ry="6" fill="#1f9cb3" opacity="0.4"/>
+    <ellipse cx="-30" cy="-24" rx="16" ry="8" fill="#6b432e" transform="rotate(-28 -30 -24)"/>
+    <path d="M-40 -20L-28 -30M-33 -15L-22 -25" stroke="#8a5b3d" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="0" cy="-22" rx="20" ry="18" fill="#a46e4b"/>
+    <ellipse cx="-3" cy="-25" rx="16" ry="15" fill="#c99266"/>
+    <ellipse cx="1" cy="-18" rx="10" ry="11" fill="#e5b78f"/>
+    <circle cx="-13" cy="-64" r="5.5" fill="#a46e4b"/><circle cx="13" cy="-64" r="5.5" fill="#8a5b3d"/>
+    <g clip-path="url(#bhead)">
+      <rect x="-20" y="-70" width="40" height="40" fill="#a46e4b"/>
+      <circle cx="-3" cy="-53" r="19" fill="#c99266"/>
+    </g>
+    <ellipse cx="1" cy="-41.5" rx="10.5" ry="8" fill="#f3d2ab"/>
+    <rect x="-3" y="-39" width="3.5" height="7" rx="1.5" fill="#fff"/>
+    <rect x="1.5" y="-39" width="3.5" height="7" rx="1.5" fill="#fff"/>
+    <path d="M-5 -40q3 2 6 0q3 2 6 0" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="1" cy="-46.5" rx="4.5" ry="3" fill="#2b2330"/>
+    <ellipse cx="-0.5" cy="-47.5" rx="1.5" ry="1" fill="#fff"/>
+    <ellipse cx="-6" cy="-53" rx="3" ry="3.5" fill="#2b2330"/><ellipse cx="8" cy="-53" rx="3" ry="3.5" fill="#2b2330"/>
+    <circle cx="-5" cy="-54.5" r="1" fill="#fff"/><circle cx="9" cy="-54.5" r="1" fill="#fff"/>
+    <ellipse cx="-11" cy="-44" rx="4" ry="2.5" fill="#ff8fb8" opacity="0.55"/><ellipse cx="13" cy="-44" rx="4" ry="2.5" fill="#ff8fb8" opacity="0.55"/>
+    <path d="M-96 -30C-88 -16 -72 -10 -50 -10H50C72 -10 88 -16 96 -30C92 -8 72 4 48 4H-48C-72 4 -92 -8 -96 -30Z" fill="#ff6b6b"/>
+    <path d="M-92 -16C-84 -6 -70 -2 -48 -2H48C70 -2 84 -6 92 -16C88 -4 70 4 48 4H-48C-70 4 -88 -4 -92 -16Z" fill="#d9485e"/>
+    <path d="M-90 -22C-82 -14 -68 -11 -50 -11H50C68 -11 82 -14 90 -22" fill="none" stroke="#ffa3a3" stroke-width="4" stroke-linecap="round"/>
+    <path d="M30 -36L-46 6" stroke="#c99266" stroke-width="4.5" stroke-linecap="round"/>
+    <ellipse cx="-51" cy="9" rx="5.5" ry="11" fill="#e5b78f" transform="rotate(61 -51 9)"/>
+    <ellipse cx="8" cy="-24" rx="5" ry="4" fill="#a46e4b"/><ellipse cx="-6" cy="-16.5" rx="5" ry="4" fill="#a46e4b"/>
+    <g fill="#fff" opacity="0.75"><rect x="-72" y="10" width="36" height="4" rx="2"/><rect x="88" y="0" width="30" height="4" rx="2"/><rect x="100" y="9" width="20" height="4" rx="2"/></g>
+  </g>
+
+  <!-- the near shore on the left: tall pines -->
+  <path d="M0 294C70 292 150 302 212 320C252 334 280 372 296 450H0Z" fill="#73cf86"/>
+  <path d="M0 382C90 378 190 388 268 404L282 450H0Z" fill="#5cbd78"/>
+  <path d="M214 322C254 336 282 374 296 450" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <path d="M236 356C240 344 254 340 266 346C274 352 274 362 268 366H238C234 364 233 360 236 356Z" fill="#bcb6d6"/>
+  <path d="M266 346C274 352 274 362 268 366H252C258 360 262 352 266 346Z" fill="#9790ba"/>
+  <use href="#pine" transform="translate(204 326) scale(0.8)"/>
+  <use href="#pine" transform="translate(158 314) scale(1.1)"/>
+  <use href="#pine" transform="translate(104 306) scale(1.4)"/>
+  <use href="#pine" transform="translate(38 302) scale(1.8)"/>
+
+  <!-- the near shore on the right: a red maple -->
+  <path d="M940 450C970 396 1030 360 1110 348C1150 342 1180 340 1200 340V450Z" fill="#73cf86"/>
+  <path d="M1040 450C1070 420 1130 404 1200 400V450Z" fill="#5cbd78"/>
+  <path d="M960 410C990 378 1030 360 1080 352" fill="none" stroke="#aee8b7" stroke-width="5" stroke-linecap="round"/>
+  <path d="M1094 349C1098 318 1098 288 1092 260L1106 258C1110 288 1110 320 1110 349Z" fill="#a46e4b"/>
+  <path d="M1102 349C1104 318 1104 288 1100 259L1106 258C1110 288 1110 320 1110 349Z" fill="#8a5b3d"/>
+  <path d="M1096 292C1084 282 1074 272 1068 258M1106 282C1120 272 1130 260 1134 248" fill="none" stroke="#a46e4b" stroke-width="6" stroke-linecap="round"/>
+  <g clip-path="url(#maple)">
+    <rect x="1020" y="136" width="170" height="150" fill="#d9485e"/>
+    <g fill="#ff6b6b"><circle cx="1057" cy="215" r="36"/><circle cx="1095" cy="181" r="46"/><circle cx="1137" cy="211" r="38"/><circle cx="1097" cy="239" r="34"/></g>
+    <path d="M1042 212a28 28 0 0 1 18 -18M1070 170a40 40 0 0 1 30 -18" fill="none" stroke="#ffa3a3" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <use href="#leafO" transform="translate(1124 190) rotate(-14) scale(0.55)"/>
+  <use href="#leafO" transform="translate(1066 240) rotate(18) scale(0.5)"/>
+  <use href="#leafO" transform="translate(1148 236) rotate(8) scale(0.45)"/>
+  <g fill="#ff6b6b"><ellipse cx="1044" cy="366" rx="8" ry="3.5" transform="rotate(-12 1044 366)"/><ellipse cx="1170" cy="374" rx="8" ry="3.5" transform="rotate(10 1170 374)"/></g>
+  <g fill="#ff9c57"><ellipse cx="1130" cy="360" rx="7" ry="3" transform="rotate(8 1130 360)"/><ellipse cx="1080" cy="384" rx="7" ry="3" transform="rotate(-8 1080 384)"/></g>
+
+  <!-- maple leaves floating down -->
+  <use href="#leafR" transform="translate(994 150) rotate(25) scale(0.9)"/>
+  <use href="#leafO" transform="translate(930 220) rotate(-35) scale(0.75)"/>
+  <use href="#leafR" transform="translate(846 262) rotate(60) scale(0.7)"/>
+  <use href="#leafR" transform="translate(690 196) rotate(-20) scale(0.65)"/>
+  <use href="#leafO" transform="translate(1032 300) rotate(15) scale(0.8)"/>
+  <use href="#leafR" transform="translate(694 330) scale(0.8 0.45)"/>
+  <path d="M674 336q20 -4 40 0" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+</svg>
