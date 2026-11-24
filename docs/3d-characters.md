@@ -247,7 +247,7 @@ every pose, voice and wearable working untouched:
 - `Look.sculpted` picks the detailed fox (`engine3d/characters/fox.ts`): cupped pointed ears, a white snout shaped with
   `sculpt` (`engine3d/geo.ts`), low puffy pink cheeks (flattened balls sunk into the face), brows, brown paws and a big tail bent
   along a curve. (White cheeks, a white chin and cheek tufts read as a white beard, and brown ear tips were too much:
-  the user had them removed.) The plain fox (Gan, Ken, the Arctic fox) is unchanged; add
+  the user had them removed.) Gan and Ken use it too (2026-11-23); the plain fox (the Arctic fox) is unchanged; add
   `sculpted: true` to a fox's look to move it over.
 - `hairdo: { style: 'long' }` is one smooth sheet wrapped round the head (`engine3d/characters/hair.ts`), not balls: a
   middle parting, curtains off the forehead, lighter strands painted into its vertex colors, an inside you see behind

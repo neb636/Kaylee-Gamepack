@@ -1,4 +1,4 @@
-// A fox sculpted in more detail for the shared chibi rig (`Look.sculpted`: Joy). The plain fox is a ball with two cones
+// A fox sculpted in more detail for the shared chibi rig (`Look.sculpted`: Joy, Gan and Ken). The plain fox is a ball with two cones
 // and two cheek balls; this one has cupped pointed ears, a white snout that narrows to a little turned-up nose (only
 // the snout is white: white cheeks and chin read as a beard, 2026-11-23), low puffy pink cheeks, soft brows, and a big bushy tail that sweeps out to one side and up, so its white tip shows from the front.
 // Head coordinates are in head radii R, the tail's in body heights H.
