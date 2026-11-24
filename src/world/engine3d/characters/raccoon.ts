@@ -62,7 +62,7 @@ export const egg = (a: number, b: number, turn: number, fat = 0) => (angle: numb
 
 /** A soft teardrop (an ear, a tuft of cheek fur): round at the bottom, narrowing to a rounded tip, flattened front to
  *  back. */
-export function teardrop(color: string, o: PartOpts, point = 0.62, flat = 0.4) {
+function teardrop(color: string, o: PartOpts, point = 0.62, flat = 0.4) {
   const g = new SphereGeometry(1, 20, 16)
   const pos = g.attributes.position
   for (let i = 0; i < pos.count; i++) {

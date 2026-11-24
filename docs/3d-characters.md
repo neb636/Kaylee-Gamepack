@@ -244,9 +244,10 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
 Not every family member needs Tripo. Joy stayed code-built and got the detail in code, which costs no credits and keeps
 every pose, voice and wearable working untouched:
 
-- `Look.sculpted` picks the detailed fox (`engine3d/characters/fox.ts`): tall cupped ears with brown tips, the white of
-  the face as flush patches (the raccoon's `patch`), cheek tufts, a snout shaped with `sculpt` (`engine3d/geo.ts`),
-  brows, brown paws and a big tail bent along a curve. The plain fox (Gan, Ken, the Arctic fox) is unchanged; add
+- `Look.sculpted` picks the detailed fox (`engine3d/characters/fox.ts`): cupped pointed ears, a white snout shaped with
+  `sculpt` (`engine3d/geo.ts`), blush as a flush patch (the raccoon's `patch`), brows, brown paws and a big tail bent
+  along a curve. (White cheeks, a white chin and cheek tufts read as a white beard, and brown ear tips were too much:
+  the user had them removed.) The plain fox (Gan, Ken, the Arctic fox) is unchanged; add
   `sculpted: true` to a fox's look to move it over.
 - `hairdo: { style: 'long' }` is one smooth sheet wrapped round the head (`engine3d/characters/hair.ts`), not balls: a
   middle parting, curtains off the forehead, lighter strands painted into its vertex colors, an inside you see behind
